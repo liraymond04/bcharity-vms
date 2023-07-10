@@ -1,0 +1,8 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>BCharity</ShortName>
+    <Description>BCharity Search</Description>
+    <Url type="text/html" method="get" template="https://lenster.xyz/search?q={searchTerms}&type=profiles"/>
+    <Image width="64" height="64">https://lenster.xyz/logo.jpg</Image>
+    <InputEncoding>UTF-8</InputEncoding>
+    <moz:SearchForm>https://lenster.xyz</moz:SearchForm>
+</OpenSearchDescription>
