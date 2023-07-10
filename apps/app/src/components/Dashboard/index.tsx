@@ -1,9 +1,14 @@
 import Navbar from '@components/Shared/Navbar'
 import { NextPage } from 'next'
-import { Button } from '../UI/Button'
+import SEO from '@components/utils/SEO'
 
 const Dashboard: NextPage = () => {
-  return <>Dashboard</>
+  return (
+    <>
+      <SEO title="Dashboard • BCharity VMS" />
+      Dashboard
+    </>
+  )
 }
 
 export default Dashboard
