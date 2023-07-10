@@ -1,3 +1,3 @@
-import Organizations from "./organizations";
+import Home from '@/components/Home'
 
-export default Organizations
+export default Home

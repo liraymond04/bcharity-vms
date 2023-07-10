@@ -50,7 +50,7 @@ table {
 
 .bg-hero {
   background: linear-gradient(90deg, #fff, #fff 50%, hsla(0, 0%, 100%, 0)),
-    url("../public/bg-hero.png");
+    url('../public/bg-hero.png');
   background-size: auto;
 }
 
@@ -124,9 +124,8 @@ table {
 }
 
 .react-autosuggest__suggestion--highlighted {
-  @apply bg-gray-300 dark:bg-gray-800
+  @apply bg-gray-300 dark:bg-gray-800;
 }
-
 
 .dropdown-active {
   @apply bg-gray-100 dark:bg-gray-800;

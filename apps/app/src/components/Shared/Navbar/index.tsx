@@ -1,8 +1,118 @@
-import { Button } from "@vercel/examples-ui";
-import { FC } from "react";
+import { Disclosure } from '@headlessui/react'
+import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import clsx from 'clsx'
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import TranslateButton from '@components/Shared/TranslateButton'
 
 const Navbar: FC = () => {
-  return <></>
+  const { t } = useTranslation('common')
+
+  interface NavItemProps {
+    url: string
+    name: string
+    current: boolean
+  }
+
+  const NavItem = ({ url, name, current }: NavItemProps) => {
+    return (
+      <Link href={url} aria-current={current ? 'page' : undefined}>
+        <Disclosure.Button
+          className={clsx(
+            'w-full text-left px-2 md:px-3 py-1 rounded-md font-black cursor-pointer text-sm tracking-wide',
+            {
+              'text-black dark:text-white bg-gray-200 dark:bg-gray-800':
+                current,
+              'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
+                !current
+            }
+          )}
+        >
+          {name}
+        </Disclosure.Button>
+      </Link>
+    )
+  }
+
+  const NavItems = () => {
+    const { pathname } = useRouter()
+
+    return (
+      <>
+        <NavItem
+          url="/opportunities"
+          name={t('Opportunities')}
+          current={pathname == '/opportunities'}
+        />
+
+        <NavItem
+          url="/organizations"
+          name={t('Organizations')}
+          current={pathname == '/organizations'}
+        />
+
+        <NavItem
+          url="/dashboard"
+          name={t('Dashboard')}
+          current={pathname == '/dashboard'}
+        />
+      </>
+    )
+  }
+
+  return (
+    <Disclosure
+      as="nav"
+      className="sticky top-0 z-10 w-full bg-white border-b dark:bg-gray-900 dark:border-b-gray-700/80"
+    >
+      {({ open }) => (
+        <>
+          <div className="container px-5 mx-auto max-w-screen-xl">
+            <div className="flex relative justify-between items-center h-14 sm:h-16">
+              <div className="flex justify-start items-center">
+                <Disclosure.Button className="inline-flex justify-center items-center mr-4 text-gray-500 rounded-md sm:hidden focus:outline-none">
+                  <span className="sr-only">{t('Open main menu')}</span>
+                  {open ? (
+                    <XIcon className="block w-6 h-6" aria-hidden="true" />
+                  ) : (
+                    <MenuIcon className="block w-6 h-6" aria-hidden="true" />
+                  )}
+                </Disclosure.Button>
+                <Link href="/">
+                  <div className="inline-flex flex-grow justify-between items-center font-bold text-blue-900">
+                    <div className="text-3xl font-black">
+                      <img className="w-8 h-8" src="/logo.jpg" alt="Logo" />
+                    </div>
+                    <span className="flex fle-grow ml-3 mr-3">BCharity</span>
+                  </div>
+                </Link>
+                <div className="hidden sm:block sm:ml-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="hidden lg:block">{/* <Search /> */}</div>
+                    <NavItems />
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-8 items-center">
+                <TranslateButton />
+              </div>
+            </div>
+          </div>
+
+          <Disclosure.Panel className="sm:hidden">
+            <div className="flex flex-col p-3 space-y-2">
+              <div className="mb-2">{/* <Search hideDrodown /> */}</div>
+              <NavItems />
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
+  )
 }
 
 export default Navbar

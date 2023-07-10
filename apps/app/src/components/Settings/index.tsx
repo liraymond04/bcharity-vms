@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { NextPage } from 'next'
 
 const Settings: NextPage = () => {
   return <>Settings</>

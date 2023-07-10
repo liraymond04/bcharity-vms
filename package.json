@@ -24,9 +24,15 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.4",
-    "app": "^0.1.0",
+    "@types/store": "^2.0.2",
+    "app": "workspace:^",
     "clsx": "^1.1.1",
+    "i18next": "^23.2.8",
+    "i18next-browser-languagedetector": "^7.1.0",
     "next-themes": "^0.2.1",
+    "react-hot-toast": "^2.4.1",
+    "react-i18next": "^13.0.2",
+    "store": "^2.0.12",
     "tailwindcss": "^3.2.1"
   }
 }

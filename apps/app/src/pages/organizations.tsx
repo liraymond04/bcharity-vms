@@ -1,3 +1,3 @@
-import Organizations from "@components/Organizations";
+import Organizations from '@components/Organizations'
 
 export default Organizations
