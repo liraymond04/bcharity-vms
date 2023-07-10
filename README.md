@@ -18,6 +18,7 @@ The monorepo is using [Turborepo](https://turborepo.org/) and [pnpm workspaces](
 ## Setup
 
 ```bash
+cd apps/app
 cp .env.example .env
 pnpm i
 ```
