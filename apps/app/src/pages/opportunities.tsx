@@ -1,3 +1,3 @@
-import Opportunities from '@components/Opportunities'
+import Causes from '@components/Causes'
 
-export default Opportunities
+export default Causes
