@@ -44,9 +44,9 @@ const Navbar: FC = () => {
     return (
       <>
         <NavItem
-          url="/opportunities"
-          name={t('Opportunities')}
-          current={pathname == '/opportunities'}
+          url="/causes"
+          name={t('Causes')}
+          current={pathname == '/causes'}
         />
 
         <NavItem
