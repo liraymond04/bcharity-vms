@@ -2,7 +2,7 @@
 
 ## About BCharity
 
-BCharity is a community-driven, decentralized, and permissionless public good social media Web3.0 built on blockchains.
+BCharity is a community-driven, decentralized, and permissionless public good Web3.0 built on blockchains.
 
 ## Project
 
