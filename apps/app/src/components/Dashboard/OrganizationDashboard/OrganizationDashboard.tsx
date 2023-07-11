@@ -9,30 +9,34 @@ import {
 
 import Sidebar from '@/components/Sidebar/Sidebar'
 import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
+import OrganizationHomeTab from './OrganizationHome'
+import OrganizationVHRTab from './OrganizationVHR'
+import OrganizationCausesTab from './OrganizationCauses'
+import OrganizationSettingsTab from './OrganizationSettings'
 
-const VolunteerDashboard: React.FC = () => {
+const OrganizationDashboard: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0)
 
   const tabs: IDashboardTab[] = [
     {
       label: 'Home',
       icon: <HomeIcon className="w-4 inline" />,
-      component: <></>
+      component: <OrganizationHomeTab />
     },
     {
       label: 'VHR',
       icon: <StarIcon className="w-4 inline" />,
-      component: <></>
+      component: <OrganizationVHRTab />
     },
     {
       label: 'Causes',
       icon: <GlobeIcon className="w-4 inline" />,
-      component: <></>
+      component: <OrganizationCausesTab />
     },
     {
       label: 'User Settings',
       icon: <LockClosedIcon className="w-4 inline" />,
-      component: <></>
+      component: <OrganizationSettingsTab />
     }
   ]
 
@@ -44,9 +48,9 @@ const VolunteerDashboard: React.FC = () => {
         setSelectedIndex={setSelectedTab}
         tabs={tabs}
       />
-      <div className="grow">Page Content</div>
+      <div className="grow">{tabs[selectedTab].component}</div>
     </div>
   )
 }
 
-export default VolunteerDashboard
+export default OrganizationDashboard
