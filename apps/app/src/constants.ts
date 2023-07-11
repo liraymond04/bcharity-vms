@@ -1,3 +1,5 @@
+import { polygon, polygonMumbai } from 'wagmi/chains'
+
 // Environments
 export const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 export const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
@@ -67,6 +69,7 @@ export const IMAGEKIT_URL_PROD = 'https://ik.imagekit.io/gznuz6k7b/'
 export const IMAGEKIT_URL_DEV = 'https://ik.imagekit.io/ivzeeb1pg/'
 export const ARWEAVE_GATEWAY = 'https://arweave.net'
 export const IMAGEKIT_URL = IS_PRODUCTION ? IMAGEKIT_URL_PROD : IMAGEKIT_URL_DEV
+export const IPFS_GATEWAY = 'https://lens.infura-ipfs.io/ipfs/'
 
 // Web3
 export const ALCHEMY_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -80,17 +83,17 @@ export const INFURA_PROJECT_SECRET =
 
 export const ARWEAVE_KEY = process.env.NEXT_PUBLIC_ARWEAVE_KEY
 
-// export const POLYGON_MAINNET = {
-//   ...chain.polygon,
-//   name: 'Polygon Mainnet',
-//   rpcUrls: { default: 'https://polygon-rpc.com' }
-// }
-// export const POLYGON_MUMBAI = {
-//   ...chain.polygonMumbai,
-//   name: 'Polygon Mumbai',
-//   rpcUrls: { default: 'https://rpc-mumbai.maticvigil.com' }
-// }
-// export const CHAIN_ID = IS_MAINNET ? POLYGON_MAINNET.id : POLYGON_MUMBAI.id
+export const POLYGON_MAINNET = {
+  ...polygon,
+  name: 'Polygon Mainnet',
+  rpcUrls: { default: 'https://polygon-rpc.com' }
+}
+export const POLYGON_MUMBAI = {
+  ...polygonMumbai,
+  name: 'Polygon Mumbai',
+  rpcUrls: { default: 'https://rpc-mumbai.maticvigil.com' }
+}
+export const CHAIN_ID = IS_MAINNET ? POLYGON_MAINNET.id : POLYGON_MUMBAI.id
 
 export const ERRORS = {
   notMined:

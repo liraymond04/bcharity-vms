@@ -21,18 +21,31 @@
   "dependencies": {
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "v1",
+    "@hookform/resolvers": "^3.1.1",
+    "@lens-protocol/react-web": "^1.2.1",
+    "@lens-protocol/wagmi": "^2.0.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@tippyjs/react": "^4.2.6",
+    "@types/js-cookie": "^3.0.3",
     "@types/store": "^2.0.2",
     "app": "workspace:^",
     "clsx": "^1.1.1",
+    "encoding": "^0.1.13",
+    "ethers": "^5.7.2",
     "i18next": "^23.2.8",
     "i18next-browser-languagedetector": "^7.1.0",
+    "js-cookie": "^3.0.5",
     "next-themes": "^0.2.1",
+    "react-hook-form": "^7.45.1",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^13.0.2",
     "store": "^2.0.12",
-    "tailwindcss": "^3.2.1"
+    "tailwindcss": "^3.2.1",
+    "viem": "^1.2.12",
+    "wagmi": "^1.3.8",
+    "zod": "^3.21.4",
+    "zustand": "^4.3.9"
   }
 }
