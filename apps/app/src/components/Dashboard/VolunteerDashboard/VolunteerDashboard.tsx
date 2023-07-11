@@ -7,6 +7,10 @@ import {
   StarIcon
 } from '@heroicons/react/outline'
 import Sidebar, { ITabProps } from '@/components/Sidebar/Sidebar'
+import VolunteerHomeTab from './VolunteerHome'
+import VolunteerVHRTab from './VolunteerVHR'
+import VolunteerCausesTab from './VolunteerCauses'
+import VolunteerSettingsTab from './VolunteerSettings'
 
 export interface IDashboardTab extends ITabProps {
   component: React.ReactElement
@@ -19,22 +23,22 @@ const VolunteerDashboard: React.FC = () => {
     {
       label: 'Home',
       icon: <HomeIcon className="w-4 inline" />,
-      component: <></>
+      component: <VolunteerHomeTab />
     },
     {
       label: 'VHR',
       icon: <StarIcon className="w-4 inline" />,
-      component: <></>
+      component: <VolunteerVHRTab />
     },
     {
       label: 'Causes',
       icon: <GlobeIcon className="w-4 inline" />,
-      component: <></>
+      component: <VolunteerCausesTab />
     },
     {
       label: 'User Settings',
       icon: <LockClosedIcon className="w-4 inline" />,
-      component: <></>
+      component: <VolunteerSettingsTab />
     }
   ]
 
@@ -46,7 +50,7 @@ const VolunteerDashboard: React.FC = () => {
         setSelectedIndex={setSelectedTab}
         tabs={tabs}
       />
-      <div className="grow">Page Content</div>
+      <div className="grow">{tabs[selectedTab].component}</div>
     </div>
   )
 }
