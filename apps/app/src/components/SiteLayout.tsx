@@ -54,7 +54,7 @@ const SiteLayout: FC<Props> = ({ children }) => {
     },
     loading: { className: 'border border-gray-300' }
   }
-
+  const Footer = dynamic(() => import('./Shared/Footer'), { suspense: true })
   return (
     <>
       <Head>
@@ -70,6 +70,9 @@ const SiteLayout: FC<Props> = ({ children }) => {
           {children}
         </div>
       </Suspense>
+      <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+        <Footer />
+      </div>
     </>
   )
 }
