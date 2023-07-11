@@ -1,13 +1,13 @@
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import clsx from 'clsx'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import TranslateButton from '@components/Shared/TranslateButton'
+import MenuItems from './MenuItems'
 
 const Navbar: FC = () => {
   const { t } = useTranslation('common')
@@ -99,6 +99,7 @@ const Navbar: FC = () => {
               </div>
               <div className="flex gap-8 items-center">
                 <TranslateButton />
+                <MenuItems />
               </div>
             </div>
           </div>
