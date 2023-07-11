@@ -18,14 +18,11 @@ const TabTitle: React.FC<ITabTitleProps> = ({
       <div
         className={`${
           selected ? 'bg-white bg-opacity-30' : 'bg-transparent'
-        } h-12 flex text-white items-center`}
+        } h-12 flex text-white items-center pl-8`}
         onClick={() => onClick()}
       >
-        {icon}
-        <p className={`pl-8 text-[20px] font-sans`}>
-          {` `}
-          {label}
-        </p>
+        <div className="pr-2">{icon}</div>
+        <p className={`text-[20px] font-sans`}>{label}</p>
       </div>
       {selected && (
         <span className="absolute h-12 bg-violet-600 ml-sidebar -mt-12 w-1 z-10" />
