@@ -1,6 +1,6 @@
-import { NextPage } from 'next'
 import SEO from '@components/utils/SEO'
-import VolunteerDashboard from './VolunteerDashboard/VolunteerDashboard'
+import { NextPage } from 'next'
+
 import OrganizationDashboard from './OrganizationDashboard/OrganizationDashboard'
 
 const Dashboard: NextPage = () => {

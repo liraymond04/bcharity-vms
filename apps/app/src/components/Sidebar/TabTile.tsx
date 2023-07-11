@@ -21,8 +21,8 @@ const TabTitle: React.FC<ITabTitleProps> = ({
         } h-12 flex text-white items-center`}
         onClick={() => onClick()}
       >
+        {icon}
         <p className={`pl-8 text-[20px] font-sans`}>
-          {icon}
           {` `}
           {label}
         </p>

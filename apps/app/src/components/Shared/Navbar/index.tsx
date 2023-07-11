@@ -1,3 +1,4 @@
+import TranslateButton from '@components/Shared/TranslateButton'
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import clsx from 'clsx'
@@ -6,7 +7,6 @@ import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import TranslateButton from '@components/Shared/TranslateButton'
 import MenuItems from './MenuItems'
 
 const Navbar: FC = () => {
@@ -23,9 +23,9 @@ const Navbar: FC = () => {
       <Link href={url} aria-current={current ? 'page' : undefined}>
         <Disclosure.Button
           className={clsx(
-            'w-full text-left px-2 md:px-3 py-1 rounded-md font-black cursor-pointer text-sm tracking-wide',
+            'w-full text-left px-5 py-3 rounded-md font-black text-1xl tracking-wide',
             {
-              'text-black dark:text-white bg-gray-200 dark:bg-gray-800':
+              'text-purple-500 dark:text-white bg-gray-200 dark:bg-gray-800':
                 current,
               'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
                 !current
@@ -45,19 +45,19 @@ const Navbar: FC = () => {
       <>
         <NavItem
           url="/causes"
-          name={t('Causes')}
+          name={t('CAUSES')}
           current={pathname == '/causes'}
         />
 
         <NavItem
           url="/organizations"
-          name={t('Organizations')}
+          name={t('ORGANIZATIONS')}
           current={pathname == '/organizations'}
         />
 
         <NavItem
           url="/dashboard"
-          name={t('Dashboard')}
+          name={t('DASHBOARD')}
           current={pathname == '/dashboard'}
         />
       </>

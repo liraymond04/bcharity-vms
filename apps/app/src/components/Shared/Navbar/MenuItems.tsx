@@ -1,6 +1,5 @@
 import { Button } from '@components/UI/Button'
 import { Modal } from '@components/UI/Modal'
-import { Profile } from '@lens-protocol/react-web'
 import { Menu, Transition } from '@headlessui/react'
 import {
   ArrowCircleRightIcon,
@@ -12,7 +11,7 @@ import {
   UserIcon
 } from '@heroicons/react/outline'
 import { CheckCircleIcon } from '@heroicons/react/solid'
-import getAvatar from '@/lib/getAvatar'
+import { Profile } from '@lens-protocol/react-web'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
@@ -22,6 +21,8 @@ import { useTranslation } from 'react-i18next'
 import { GIT_COMMIT_SHA } from 'src/constants'
 import { useAppPersistStore, useAppStore } from 'src/store/app'
 import { useDisconnect } from 'wagmi'
+
+import getAvatar from '@/lib/getAvatar'
 
 import Slug from '../Slug'
 import Login from './Login'
@@ -48,7 +49,7 @@ const MenuItems: FC = () => {
     if (isAuthenticated && currentUser) {
       setAuth(true)
     }
-  }, [currentUser])
+  }, [currentUser, isAuthenticated])
 
   return auth && currentUser ? (
     <Menu as="div">

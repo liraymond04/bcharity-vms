@@ -4,10 +4,10 @@ import { Form, useZodForm } from '@components/UI/Form'
 import { Input } from '@components/UI/Input'
 import { Spinner } from '@components/UI/Spinner'
 import { PlusIcon } from '@heroicons/react/outline'
+import { isValidHandle, useCreateProfile } from '@lens-protocol/react-web'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
-import { isValidHandle, useCreateProfile } from '@lens-protocol/react-web'
 
 interface Props {
   isModal?: boolean
