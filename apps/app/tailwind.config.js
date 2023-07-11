@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        'sidebar': "267px"
+        sidebar: '267px'
       },
       colors: {
         gray: colors.zinc,
