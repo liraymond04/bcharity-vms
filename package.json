@@ -11,11 +11,15 @@
     "dev": "turbo run dev",
     "start": "turbo run start",
     "lint": "turbo run lint",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "app": "workspace:^",
     "eslint": "^8.44.0",
     "eslint-config-turbo": "latest",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
     "turbo": "^1.10.7"
   },
   "dependencies": {
@@ -33,7 +37,6 @@
     "@types/store": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "app": "workspace:^",
     "clsx": "^1.1.1",
     "encoding": "^0.1.13",
     "eslint-plugin-prettier": "^5.0.0",
@@ -53,5 +56,14 @@
     "wagmi": "^1.3.8",
     "zod": "^3.21.4",
     "zustand": "^4.3.9"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "prettier --write",
+      "eslint --cache --fix"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
   }
 }
