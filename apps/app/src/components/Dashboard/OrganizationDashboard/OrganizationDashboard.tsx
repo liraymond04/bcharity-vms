@@ -7,6 +7,7 @@ import {
 import React from 'react'
 import { useState } from 'react'
 
+import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
 import Sidebar from '@/components/Sidebar/Sidebar'
 
 import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
@@ -49,7 +50,12 @@ const OrganizationDashboard: React.FC = () => {
         setSelectedIndex={setSelectedTab}
         tabs={tabs}
       />
-      <div className="grow">{tabs[selectedTab].component}</div>
+
+      <div className="grow">
+        <GradientWrapper>
+          <div className="min-h-screen">{tabs[selectedTab].component}</div>
+        </GradientWrapper>
+      </div>
     </div>
   )
 }

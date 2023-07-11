@@ -44,6 +44,7 @@ export const makeOrgColumnDefs: (params: IColumnDefParams) => any = (
     },
     ['VHR']: {
       field: 'vhr',
+      headerName: 'VHR',
       resizable: false,
       valueFormatter: (_: any) => {
         return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways

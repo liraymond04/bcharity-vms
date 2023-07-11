@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-
-import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
+
+import { AgGridReact } from 'ag-grid-react'
+import React, { useState } from 'react'
+
 import { defaultColumnDef, makeOrgColumnDefs } from './ColumnDefs'
 
 const makeFakeData = () => {
@@ -33,17 +34,18 @@ const OrganizationCausesTab: React.FC = () => {
   }
 
   return (
-    <div>
-      <div className="ag-theme-alpine" style={{ height: 600, width: 600 }}>
-        <AgGridReact
-          defaultColDef={defaultColumnDef}
-          rowData={rowData}
-          columnDefs={Object.values(
-            makeOrgColumnDefs({ onEditClick: onEdit, onDeleteClick: onDelete })
-          )}
-          pagination
-        />
-      </div>
+    <div className="ag-theme-alpine" style={{ height: 600, width: 600 }}>
+      <AgGridReact
+        defaultColDef={defaultColumnDef}
+        rowData={rowData}
+        columnDefs={Object.values(
+          makeOrgColumnDefs({
+            onEditClick: onEdit,
+            onDeleteClick: onDelete
+          })
+        )}
+        pagination
+      />
     </div>
   )
 }
