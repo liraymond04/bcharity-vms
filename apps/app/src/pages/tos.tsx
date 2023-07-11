@@ -4,16 +4,16 @@ export default function tos() {
   return (
     <div>
       <section className="flex flex-col justify-center text-center border-b-8 border-indigo-700 border-dotted py-10 mx-32">
-        <h1 className="m-4 flex justify-center text-4xl font-bold">
+        <div className="m-4 flex justify-center text-4xl font-bold">
           Terms of Service
-        </h1>
-        <h1 className="flex justify-center m-4 text-1 text-gray-400 font-bold">
+        </div>
+        <div className="flex justify-center m-4 text-1 text-gray-400 font-bold">
           Last updated July 11th, 2023
-        </h1>
+        </div>
       </section>
       <section className="flex justify-left items-center border rounded-lg my-10 mx-20">
         <div className="flex m-8 flex-col">
-          <h1 className="mb-2 text-3xl font-bold">Table of Contents</h1>
+          <div className="mb-2 text-3xl font-bold">Table of Contents</div>
           <ul className="mx-5 mb-5 list-decimal">
             <li>
               <Link className="text-blue-400" href="#Agreement">
@@ -151,9 +151,9 @@ export default function tos() {
               </Link>
             </li>
           </ul>
-          <h1 id="Agreement" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Agreement" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Agreement to our legal terms
-          </h1>
+          </div>
           <p className="mb-5">
             We are BCharity ('Company', 'we', 'us', or 'our'). We operate the
             website https://bcharity.vercel.app/ (the 'Site'), as well as any
@@ -189,9 +189,9 @@ export default function tos() {
             We recommend that you print a copy of these Legal Terms for your
             records.
           </p>
-          <h1 id="Services" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Services" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Our services
-          </h1>
+          </div>
           <p className="mb-5">
             The information provided when using the Services is not intended for
             distribution to or use by any person or entity in any jurisdiction
@@ -208,9 +208,9 @@ export default function tos() {
             use the Services. You may not use the Services in a way that would
             violate the Gramm-Leach-Bliley Act (GLBA).
           </p>
-          <h1 id="IP" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="IP" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Intellectual property rights
-          </h1>
+          </div>
           <p className="mb-5">
             Our intellectual property We are the owner or the licensee of all
             intellectual property rights in our Services, including all source
@@ -318,12 +318,12 @@ export default function tos() {
             you own or control, please immediately refer to the 'COPYRIGHT
             INFRINGEMENTS' section below.
           </p>
-          <h1
+          <div
             id="User representations"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             User representations
-          </h1>
+          </div>
           <p className="mb-5">
             By using the Services, you represent and warrant that: (1) all
             registration information you submit will be true, accurate, current,
@@ -342,12 +342,12 @@ export default function tos() {
             your account and refuse any and all current or future use of the
             Services (or any portion thereof).
           </p>
-          <h1
+          <div
             id="User registration"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             User registration
-          </h1>
+          </div>
           <p className="mb-5">
             You may be required to register to use the Services. You agree to
             keep your password confidential and will be responsible for all use
@@ -356,9 +356,9 @@ export default function tos() {
             sole discretion, that such username is inappropriate, obscene, or
             otherwise objectionable.
           </p>
-          <h1 id="Prohibited" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Prohibited" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Prohibited activities
-          </h1>
+          </div>
           <p className="mb-5">
             You may not access or use the Services for any purpose other than
             that for which we make the Services available. The Services may not
@@ -422,12 +422,12 @@ export default function tos() {
             or commercial enterprise. Sell or otherwise transfer your profile.
             Use the Services to advertise or offer to sell goods and services.
           </p>
-          <h1
+          <div
             id="User generated"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             User generated contributions
-          </h1>
+          </div>
           <p className="mb-5">
             The Services may invite you to chat, contribute to, or participate
             in blogs, message boards, online forums, and other functionality,
@@ -479,12 +479,12 @@ export default function tos() {
             things, termination or suspension of your rights to use the
             Services.
           </p>
-          <h1
+          <div
             id="Contribution"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             Contribution licence
-          </h1>
+          </div>
           <p className="mb-5">
             By posting your Contributions to any part of the Services or making
             Contributions accessible to the Services by linking your account
@@ -523,9 +523,9 @@ export default function tos() {
             time and for any reason, without notice. We have no obligation to
             monitor your Contributions.
           </p>
-          <h1 id="Guidelines" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Guidelines" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Guidelines for reviews
-          </h1>
+          </div>
           <p className="mb-5">
             We may provide you areas on the Services to leave reviews or
             ratings. When posting a review, you must comply with the following
@@ -553,9 +553,9 @@ export default function tos() {
             transmit by any means, display, perform, and/or distribute all
             content relating to review.
           </p>
-          <h1 id="Social" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Social" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Social media
-          </h1>
+          </div>
           <p className="mb-5">
             As part of the functionality of the Services, you may link your
             account with online accounts you have with third-party service
@@ -606,9 +606,12 @@ export default function tos() {
             was obtained through such Third-Party Account, except the username
             and profile picture that become associated with your account.
           </p>
-          <h1 id="Third-party" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div
+            id="Third-party"
+            className="pt-20 -mt-20 mb-5 text-3xl font-bold"
+          >
             Third-party websites and content
-          </h1>
+          </div>
           <p className="mb-5">
             The Services may contain (or you may be sent via the Site) links to
             other websites ('Third-Party Websites') as well as articles,
@@ -644,12 +647,12 @@ export default function tos() {
             from any Third-Party Content or any contact with Third-Party
             Websites.
           </p>
-          <h1
+          <div
             id="Services management"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             Services management
-          </h1>
+          </div>
           <p className="mb-5">
             We reserve the right, but not the obligation, to: (1) monitor the
             Services for violations of these Legal Terms; (2) take appropriate
@@ -666,9 +669,9 @@ export default function tos() {
             to protect our rights and property and to facilitate the proper
             functioning of the Services.
           </p>
-          <h1 id="Privacy" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Privacy" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Privacy policy
-          </h1>
+          </div>
           <p className="mb-5">
             We care about data privacy and security. Please review our Privacy
             Policy. By using the Services, you agree to be bound by our Privacy
@@ -687,9 +690,9 @@ export default function tos() {
             the requisite and verifiable parental consent, we will delete that
             information from the Services as quickly as is reasonably practical.
           </p>
-          <h1 id="Copyright" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Copyright" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Copyright infringements
-          </h1>
+          </div>
           <p className="mb-5">
             We respect the intellectual property rights of others. If you
             believe that any material available on or through the Services
@@ -703,9 +706,9 @@ export default function tos() {
             material located on or linked to by the Services infringes your
             copyright, you should consider first contacting an attorney.
           </p>
-          <h1 id="Term" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Term" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Term and termination
-          </h1>
+          </div>
           <p className="mb-5">
             These Legal Terms shall remain in full force and effect while you
             use the Services. WITHOUT LIMITING ANY OTHER PROVISION OF THESE
@@ -725,12 +728,12 @@ export default function tos() {
             the right to take appropriate legal action, including without
             limitation pursuing civil, criminal, and injunctive redress.
           </p>
-          <h1
+          <div
             id="Modifications"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             Modifications and interruptions
-          </h1>
+          </div>
           <p className="mb-5">
             We reserve the right to change, modify, or remove the contents of
             the Services at any time or for any reason at our sole discretion
@@ -751,18 +754,18 @@ export default function tos() {
             supply any corrections, updates, or releases in connection
             therewith.
           </p>
-          <h1 id="Governing" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Governing" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Governing law
-          </h1>
+          </div>
           <p className="mb-5">
             These Legal Terms shall be governed by and defined following the
             laws of Canada. BCharity and yourself irrevocably consent that the
             courts of Canada shall have exclusive jurisdiction to resolve any
             dispute which may arise in connection with these Legal Terms.
           </p>
-          <h1 id="Dispute" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Dispute" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Dispute resolution
-          </h1>
+          </div>
           <p className="mb-5">
             You agree to irrevocably submit all disputes related to these Legal
             Terms or the legal relationship established by these Legal Terms to
@@ -772,9 +775,12 @@ export default function tos() {
             are entered into in the course of your trade or profession, the
             state of your principal place of business.
           </p>
-          <h1 id="Corrections" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div
+            id="Corrections"
+            className="pt-20 -mt-20 mb-5 text-3xl font-bold"
+          >
             Corrections
-          </h1>
+          </div>
           <p className="mb-5">
             There may be information on the Services that contains typographical
             errors, inaccuracies, or omissions, including descriptions, pricing,
@@ -783,9 +789,9 @@ export default function tos() {
             update the information on the Services at any time, without prior
             notice.
           </p>
-          <h1 id="Disclaimer" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Disclaimer" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Disclaimer
-          </h1>
+          </div>
           <p className="mb-5">
             THE SERVICES ARE PROVIDED ON AN AS-IS AND AS-AVAILABLE BASIS. YOU
             AGREE THAT YOUR USE OF THE SERVICES WILL BE AT YOUR SOLE RISK. TO
@@ -819,9 +825,12 @@ export default function tos() {
             YOU SHOULD USE YOUR BEST JUDGEMENT AND EXERCISE CAUTION WHERE
             APPROPRIATE.
           </p>
-          <h1 id="Limitations" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div
+            id="Limitations"
+            className="pt-20 -mt-20 mb-5 text-3xl font-bold"
+          >
             Limitations of Liability
-          </h1>
+          </div>
           <p className="mb-5">
             IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE
             TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL,
@@ -830,12 +839,12 @@ export default function tos() {
             YOUR USE OF THE SERVICES, EVEN IF WE HAVE BEEN ADVISED OF THE
             POSSIBILITY OF SUCH DAMAGES.
           </p>
-          <h1
+          <div
             id="Indemnification"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             Indemnification
-          </h1>
+          </div>
           <p className="mb-5">
             You agree to defend, indemnify, and hold us harmless, including our
             subsidiaries, affiliates, and all of our respective officers,
@@ -855,9 +864,9 @@ export default function tos() {
             efforts to notify you of any such claim, action, or proceeding which
             is subject to this indemnification upon becoming aware of it.
           </p>
-          <h1 id="User data" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="User data" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             User data
-          </h1>
+          </div>
           <p className="mb-5">
             We will maintain certain data that you transmit to the Services for
             the purpose of managing the performance of the Services, as well as
@@ -869,9 +878,9 @@ export default function tos() {
             you hereby waive any right of action against us arising from any
             such loss or corruption of such data.
           </p>
-          <h1 id="Electronic" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Electronic" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Electronic communications, transactions, and signatures
-          </h1>
+          </div>
           <p className="mb-5">
             Visiting the Services, sending us emails, and completing online
             forms constitute electronic communications. You consent to receive
@@ -888,9 +897,9 @@ export default function tos() {
             retention of non-electronic records, or to payments or the granting
             of credits by any means other than electronic means.
           </p>
-          <h1 id="California" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="California" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             California users and residents
-          </h1>
+          </div>
           <p className="mb-5">
             If any complaint with us is not satisfactorily resolved, you can
             contact the Complaint Assistance Unit of the Division of Consumer
@@ -898,12 +907,12 @@ export default function tos() {
             at 1625 North Market Blvd., Suite N 112, Sacramento, California
             95834 or by telephone at (800) 952-5210 or (916) 445-1254.
           </p>
-          <h1
+          <div
             id="Miscellaneous"
             className="pt-20 -mt-20 mb-5 text-3xl font-bold"
           >
             Miscellaneous
-          </h1>
+          </div>
           <p className="mb-5">
             These Legal Terms and any policies or operating rules posted by us
             on the Services or in respect to the Services constitute the entire
@@ -926,9 +935,9 @@ export default function tos() {
             have based on the electronic form of these Legal Terms and the lack
             of signing by the parties hereto to execute these Legal Terms.
           </p>
-          <h1 id="Contact" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Contact" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
             Contact us
-          </h1>
+          </div>
           <p className="mb-5">
             In order to resolve a complaint regarding the Services or to receive
             further information regarding use of the Services, please contact us
