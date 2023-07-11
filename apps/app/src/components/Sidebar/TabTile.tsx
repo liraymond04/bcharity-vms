@@ -5,20 +5,22 @@ interface ITabTitleProps {
   label: string
   onClick: () => void
   icon: React.ReactElement
+  className?: string | undefined
 }
 
 const TabTitle: React.FC<ITabTitleProps> = ({
   selected,
   label,
   onClick,
-  icon
+  icon,
+  className
 }) => {
   return (
     <div>
       <div
-        className={`${
-          selected ? 'bg-white bg-opacity-30' : 'bg-transparent'
-        } h-12 flex text-white items-center pl-8`}
+        className={`bg-white ${
+          selected ? 'bg-opacity-30' : 'bg-opacity-0'
+        } hover:bg-opacity-20 hover:cursor-pointer h-12 flex text-white items-center pl-8 ${className}`}
         onClick={() => onClick()}
       >
         <div className="pr-2">{icon}</div>
