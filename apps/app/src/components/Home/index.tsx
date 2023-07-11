@@ -1,6 +1,5 @@
-import { NextPage } from 'next'
 import SEO from '@components/utils/SEO'
-import React from 'react';
+import { NextPage } from 'next'
 
 const Home: NextPage = () => {
   return (

@@ -17,16 +17,30 @@ The monorepo is using [Turborepo](https://turborepo.org/) and [pnpm workspaces](
 
 ## Setup
 
+Install the pnpm package manager,
+
 ```bash
-cd apps/app
-cp .env.example .env
+npm i -g pnpm
+```
+
+And install the project dependencies,
+
+```bash
 pnpm i
 ```
 
-Next, run `app` in development mode:
+Next, run `app` in development mode,
 
 ```bash
 pnpm dev
 ```
 
 The app should be up and running at http://localhost:3000.
+
+## Adding dependencies
+
+Add dependencies to the Next.js app,
+
+```bash
+pnpm i -w app [package-name]
+```
