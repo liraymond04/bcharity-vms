@@ -1,17 +1,17 @@
 import '../styles.css'
+
+import { development, LensConfig, LensProvider } from '@lens-protocol/react-web'
+import { bindings as wagmiBindings } from '@lens-protocol/wagmi'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
-import SiteLayout from '@/components/SiteLayout'
-
-import { WagmiConfig, createConfig, configureChains } from 'wagmi'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { polygon, polygonMumbai } from 'wagmi/chains'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
-import { IS_MAINNET } from '@/constants'
-import { polygon, polygonMumbai } from 'wagmi/chains'
 
-import { LensConfig, development, LensProvider } from '@lens-protocol/react-web'
-import { bindings as wagmiBindings } from '@lens-protocol/wagmi'
+import SiteLayout from '@/components/SiteLayout'
+import { IS_MAINNET } from '@/constants'
 
 const lensConfig: LensConfig = {
   bindings: wagmiBindings(),

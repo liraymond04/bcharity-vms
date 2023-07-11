@@ -1,12 +1,13 @@
-import { useTheme } from 'next-themes'
+import Loading from '@components/Loading'
+import { useProfilesOwnedBy } from '@lens-protocol/react-web'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import { useTheme } from 'next-themes'
 import { FC, ReactNode, Suspense, useEffect, useState } from 'react'
-import Loading from '@components/Loading'
 import { Toaster } from 'react-hot-toast'
 import { useAccount } from 'wagmi'
+
 import { useAppStore } from '@/store/app'
-import { useProfilesOwnedBy } from '@lens-protocol/react-web'
 
 const Navbar = dynamic(() => import('./Shared/Navbar'), { suspense: true })
 
@@ -30,7 +31,7 @@ const SiteLayout: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (profiles) setProfiles(profiles)
-  }, [profiles])
+  }, [profiles, setProfiles])
 
   const toastOptions = {
     style: {
