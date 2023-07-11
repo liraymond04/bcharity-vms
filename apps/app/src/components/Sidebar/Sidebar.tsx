@@ -23,7 +23,13 @@ const Sidebar: React.FC<ISidebarProps> = ({
   return (
     <div className="w-sidebar from-violet-400 to-violet-300 bg-gradient-to-b h-screen">
       {emptyTop && (
-        <TabTitle selected={false} onClick={() => {}} icon={<div />} label="" />
+        <TabTitle
+          selected={false}
+          onClick={() => {}}
+          icon={<div />}
+          label=""
+          className="hover:bg-opacity-0 hover:cursor-auto"
+        />
       )}
       <div className="flex flex-col">
         {tabs.map((tab, i) => {
