@@ -6,6 +6,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      spacing: {
+        'sidebar': "267px"
+      },
       colors: {
         gray: colors.zinc,
         green: colors.emerald,
