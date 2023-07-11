@@ -10,6 +10,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         <Component {...pageProps} />
       </SiteLayout>
     </ThemeProvider>
+
+
   )
 }
 

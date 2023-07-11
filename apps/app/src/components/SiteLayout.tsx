@@ -7,6 +7,8 @@ import { Toaster } from 'react-hot-toast'
 
 const Navbar = dynamic(() => import('./Shared/Navbar'), { suspense: true })
 
+
+
 interface Props {
   children: ReactNode
 }
@@ -35,7 +37,7 @@ const SiteLayout: FC<Props> = ({ children }) => {
     },
     loading: { className: 'border border-gray-300' }
   }
-
+  const Footer = dynamic(() => import('./Shared/Footer'), { suspense: true })
   return (
     <>
       <Head>
@@ -50,7 +52,13 @@ const SiteLayout: FC<Props> = ({ children }) => {
           <Navbar />
           {children}
         </div>
+
       </Suspense>
+      <div style={{ position: "absolute", bottom: 0, width:"100%" }}>
+        
+        <Footer/>
+    
+      </div>
     </>
   )
 }
