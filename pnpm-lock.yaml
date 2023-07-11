@@ -117,6 +117,12 @@ importers:
       '@types/react-dom':
         specifier: 18.2.6
         version: 18.2.6
+      ag-grid-community:
+        specifier: ^30.0.3
+        version: 30.0.3
+      ag-grid-react:
+        specifier: ^30.0.4
+        version: 30.0.4(ag-grid-community@30.0.3)(react-dom@18.2.0)(react@18.2.0)
       autoprefixer:
         specifier: 10.4.14
         version: 10.4.14(postcss@8.4.25)
@@ -2377,6 +2383,23 @@ packages:
 
   /aes-js@3.1.2:
     resolution: {integrity: sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==}
+    dev: false
+
+  /ag-grid-community@30.0.3:
+    resolution: {integrity: sha512-agfRVHELQqhnMfRplmYEYdxMxw3c8l5Bu7lNaCfIVOasyRlSAvH4Na8qru0ORaOUN3ClulfvKIuLSWwgGSwJJQ==}
+    dev: false
+
+  /ag-grid-react@30.0.4(ag-grid-community@30.0.3)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-6N3O0avco1BVt5jLe6tD3GepvsmoxV4gvqHQ4SguYwqkfvO9IzN8GEOiVScLlAn1zvWjhCeSpnIYRi44bP3wqQ==}
+    peerDependencies:
+      ag-grid-community: ~30.0.3
+      react: ^16.3.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      ag-grid-community: 30.0.3
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /agentkeepalive@4.3.0:
