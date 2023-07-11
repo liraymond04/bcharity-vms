@@ -1,8 +1,7 @@
 import SwitchNetwork from '@components/Shared/SwitchNetwork'
 import { Button } from '@components/UI/Button'
 import { XCircleIcon } from '@heroicons/react/solid'
-import getWalletLogo from '@/lib/getWalletLogo'
-import Logger from '@/lib/logger'
+import { useProfilesOwnedBy, useWalletLogin } from '@lens-protocol/react-web'
 import clsx from 'clsx'
 import React, { Dispatch, FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,10 +13,11 @@ import {
   useDisconnect,
   useNetwork
 } from 'wagmi'
-
-import { useProfilesOwnedBy, useWalletLogin } from '@lens-protocol/react-web'
 import { InjectedConnector } from 'wagmi/connectors/injected'
+
 import { CHAIN_ID } from '@/constants'
+import getWalletLogo from '@/lib/getWalletLogo'
+import Logger from '@/lib/logger'
 
 interface Props {
   setHasConnected: Dispatch<boolean>
@@ -32,16 +32,12 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
 
   const [mounted, setMounted] = useState(false)
 
-  const {
-    execute: login,
-    error: loginError,
-    isPending: isLoginPending
-  } = useWalletLogin()
+  const { execute: login, error: loginError } = useWalletLogin()
 
   const { isConnected, connector: activeConnector } = useAccount()
   const { disconnectAsync } = useDisconnect()
 
-  const { connectors, error, connectAsync } = useConnect()
+  const { connectors, connectAsync } = useConnect()
   const [authAddress, setAuthAddress] = useState<string>('')
   const { data: profiles } = useProfilesOwnedBy({
     address: authAddress
@@ -88,7 +84,7 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
         setCurrentUser(profiles[0])
       }
     }
-  }, [profiles])
+  }, [profiles, setCurrentUser, setHasProfile, setIsAuthenticated, setProfiles])
 
   return activeConnector?.id ? (
     <div className="space-y-3">

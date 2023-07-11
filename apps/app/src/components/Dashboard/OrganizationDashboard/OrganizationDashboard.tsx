@@ -1,18 +1,19 @@
-import React from 'react'
-import { useState } from 'react'
 import {
   GlobeIcon,
   HomeIcon,
   LockClosedIcon,
   StarIcon
 } from '@heroicons/react/outline'
+import React from 'react'
+import { useState } from 'react'
 
 import Sidebar from '@/components/Sidebar/Sidebar'
+
 import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
-import OrganizationHomeTab from './OrganizationHome'
-import OrganizationVHRTab from './OrganizationVHR'
 import OrganizationCausesTab from './OrganizationCauses'
+import OrganizationHomeTab from './OrganizationHome'
 import OrganizationSettingsTab from './OrganizationSettings'
+import OrganizationVHRTab from './OrganizationVHR'
 
 const OrganizationDashboard: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0)
