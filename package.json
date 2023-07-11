@@ -19,6 +19,7 @@
     "turbo": "^1.10.7"
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.22.7",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "v1",
     "@hookform/resolvers": "^3.1.1",
@@ -30,9 +31,14 @@
     "@tippyjs/react": "^4.2.6",
     "@types/js-cookie": "^3.0.3",
     "@types/store": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "app": "workspace:^",
     "clsx": "^1.1.1",
     "encoding": "^0.1.13",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "ethers": "^5.7.2",
     "i18next": "^23.2.8",
     "i18next-browser-languagedetector": "^7.1.0",
