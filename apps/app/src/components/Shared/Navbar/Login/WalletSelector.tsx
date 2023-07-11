@@ -80,7 +80,6 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
 
   useEffect(() => {
     if (profiles) {
-      console.log(profiles)
       if (profiles.length === 0) {
         setHasProfile(false)
       } else {

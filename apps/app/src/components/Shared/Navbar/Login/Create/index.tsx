@@ -15,7 +15,7 @@ interface Props {
 
 const Create: FC<Props> = ({ isModal = false }) => {
   const { t } = useTranslation('common')
-  const [avatar, setAvatar] = useState<string>()
+  const [success, setSuccess] = useState<boolean>(false)
 
   const { execute: create, error, isPending } = useCreateProfile()
 
@@ -38,7 +38,12 @@ const Create: FC<Props> = ({ isModal = false }) => {
       className="space-y-4"
       onSubmit={async ({ handle }) => {
         const username = handle.toLowerCase()
-        if (isValidHandle(username)) await create({ handle: username })
+        if (isValidHandle(username)) {
+          const result = await create({ handle: username })
+          if (result.isSuccess()) {
+            setSuccess(true)
+          }
+        }
       }}
     >
       {error && (
@@ -50,6 +55,19 @@ const Create: FC<Props> = ({ isModal = false }) => {
             message: error.message
           }}
         />
+      )}
+      {success && (
+        <div
+          className={`bg-green-50 dark:bg-green=-900 dark:bg-opacity-10 border-2 border-green-500 border-opacity-50 p-4 space-y-1 rounded-xl`}
+        >
+          <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
+            Profile creation successful!
+          </h3>
+          <div className="text-sm text-green-700 dark:text-green-200">
+            You can close the modal and try signing in again to use your new
+            profile
+          </div>
+        </div>
       )}
       {isModal && (
         <div className="mb-2 space-y-4">
@@ -69,22 +87,6 @@ const Create: FC<Props> = ({ isModal = false }) => {
         placeholder="gavin"
         {...form.register('handle')}
       />
-      <div className="space-y-1.5">
-        <div className="label">{t('Avatar')}</div>
-        <div className="space-y-3">
-          {avatar && (
-            <div>
-              <img
-                className="w-60 h-60 rounded-lg"
-                height={240}
-                width={240}
-                src={avatar}
-                alt={avatar}
-              />
-            </div>
-          )}
-        </div>
-      </div>
       <Button
         className="ml-auto"
         type="submit"
