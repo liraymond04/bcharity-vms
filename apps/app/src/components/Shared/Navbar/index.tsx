@@ -1,13 +1,24 @@
+import TranslateButton from '@components/Shared/TranslateButton'
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { Inter } from '@next/font/google'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import TranslateButton from '@components/Shared/TranslateButton'
 import MenuItems from './MenuItems'
+
+const inter500 = Inter({
+  subsets: ['latin'],
+  weight: ['500']
+})
+
+const inter700 = Inter({
+  subsets: ['latin'],
+  weight: ['700']
+})
 
 const Navbar: FC = () => {
   const { t } = useTranslation('common')
@@ -23,9 +34,9 @@ const Navbar: FC = () => {
       <Link href={url} aria-current={current ? 'page' : undefined}>
         <Disclosure.Button
           className={clsx(
-            'w-full text-left px-2 md:px-3 py-1 rounded-md font-black cursor-pointer text-sm tracking-wide',
+            'w-full text-left px-5 py-3 rounded-md font-black text-1xl tracking-wide ',
             {
-              'text-black dark:text-white bg-gray-200 dark:bg-gray-800':
+              'text-purple-500 dark:text-white bg-gray-200 dark:bg-gray-800':
                 current,
               'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
                 !current
@@ -45,19 +56,19 @@ const Navbar: FC = () => {
       <>
         <NavItem
           url="/causes"
-          name={t('Causes')}
+          name={t('CAUSES')}
           current={pathname == '/causes'}
         />
 
         <NavItem
           url="/organizations"
-          name={t('Organizations')}
+          name={t('ORGANIZATIONS')}
           current={pathname == '/organizations'}
         />
 
         <NavItem
           url="/dashboard"
-          name={t('Dashboard')}
+          name={t('DASHBOARD')}
           current={pathname == '/dashboard'}
         />
       </>
@@ -67,13 +78,13 @@ const Navbar: FC = () => {
   return (
     <Disclosure
       as="nav"
-      className="sticky top-0 z-10 w-full bg-white border-b dark:bg-gray-900 dark:border-b-gray-700/80"
+      className="sticky h-21 w-full bg-white border-b dark:bg-gray-900 dark:border-b-gray-700/80"
     >
       {({ open }) => (
         <>
-          <div className="container px-5 mx-auto max-w-screen-xl">
-            <div className="flex relative justify-between items-center h-14 sm:h-16">
-              <div className="flex justify-start items-center">
+          <div className={inter500.className}>
+            <div className="flex h-[110px] justify-between ">
+              <div className="flex items-center">
                 <Disclosure.Button className="inline-flex justify-center items-center mr-4 text-gray-500 rounded-md sm:hidden focus:outline-none">
                   <span className="sr-only">{t('Open main menu')}</span>
                   {open ? (
@@ -85,12 +96,20 @@ const Navbar: FC = () => {
                 <Link href="/">
                   <div className="inline-flex flex-grow justify-between items-center font-bold text-blue-900">
                     <div className="text-3xl font-black">
-                      <img className="w-8 h-8" src="/logo.jpg" alt="Logo" />
+                      <img
+                        className="ml-10 w-20 h-100"
+                        src="/logo.jpg"
+                        alt="Logo"
+                      />
                     </div>
-                    <span className="flex fle-grow ml-3 mr-3">BCharity</span>
+                    <div className={inter700.className}>
+                      <span className="flex text-indigo-800 fle-grow ml-3 mr-3 text-3xl">
+                        BCharity
+                      </span>
+                    </div>
                   </div>
                 </Link>
-                <div className="hidden sm:block sm:ml-6">
+                <div className="hidden sm:block sm:ml-10">
                   <div className="flex items-center space-x-4">
                     <div className="hidden lg:block">{/* <Search /> */}</div>
                     <NavItems />
