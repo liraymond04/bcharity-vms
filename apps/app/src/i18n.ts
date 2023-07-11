@@ -1,10 +1,10 @@
+import store from '@components/utils/store'
 import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
-import en from '../public/locales/common_en.json'
 import zhCN from '../public/locales/common_chZN.json'
-import store from '@components/utils/store'
+import en from '../public/locales/common_en.json'
 
 i18n
   .use(initReactI18next)
