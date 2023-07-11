@@ -6,8 +6,6 @@ const Home: NextPage = () => {
     <>
       <SEO title="Home • BCharity VMS" />
       Home
-   
-
     </>
   )
 }

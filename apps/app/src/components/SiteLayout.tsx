@@ -11,8 +11,6 @@ import { useAppStore } from '@/store/app'
 
 const Navbar = dynamic(() => import('./Shared/Navbar'), { suspense: true })
 
-
-
 interface Props {
   children: ReactNode
 }
@@ -71,12 +69,9 @@ const SiteLayout: FC<Props> = ({ children }) => {
           <Navbar />
           {children}
         </div>
-
       </Suspense>
-      <div style={{ position: "absolute", bottom: 0, width:"100%" }}>
-        
-        <Footer/>
-    
+      <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+        <Footer />
       </div>
     </>
   )
