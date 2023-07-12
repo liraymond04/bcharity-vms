@@ -1,3 +1,4 @@
+import ThemeButton from '@components/Shared/ThemeButton'
 import TranslateButton from '@components/Shared/TranslateButton'
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
@@ -93,6 +94,7 @@ const Navbar: FC = () => {
                     <MenuIcon className="block w-6 h-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
+
                 <Link href="/">
                   <div className="inline-flex flex-grow justify-between items-center font-bold text-blue-900">
                     <div className="text-3xl font-black">
@@ -118,6 +120,8 @@ const Navbar: FC = () => {
               </div>
               <div className="flex gap-8 items-center">
                 <TranslateButton />
+                <ThemeButton />
+
                 <MenuItems />
               </div>
             </div>

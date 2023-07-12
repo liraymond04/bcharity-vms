@@ -5,8 +5,6 @@ import {
   ArrowCircleRightIcon,
   CogIcon,
   LogoutIcon,
-  MoonIcon,
-  SunIcon,
   SwitchHorizontalIcon,
   UserIcon
 } from '@heroicons/react/outline'
@@ -15,7 +13,6 @@ import { Profile } from '@lens-protocol/react-web'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
-import { useTheme } from 'next-themes'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GIT_COMMIT_SHA } from 'src/constants'
@@ -35,7 +32,7 @@ export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
 
 const MenuItems: FC = () => {
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false)
-  const { theme, setTheme } = useTheme()
+
   const { disconnect } = useDisconnect()
 
   const { profiles } = useAppStore()
@@ -172,30 +169,7 @@ const MenuItems: FC = () => {
                   </div>
                 </>
               )}
-              <div className="divider" />
-              <Menu.Item
-                as="a"
-                onClick={() => {
-                  setTheme(theme === 'light' ? 'dark' : 'light')
-                }}
-                className={({ active }: { active: boolean }) =>
-                  clsx({ 'dropdown-active': active }, 'menu-item')
-                }
-              >
-                <div className="flex items-center space-x-1.5">
-                  {theme === 'light' ? (
-                    <>
-                      <MoonIcon className="w-4 h-4" />
-                      <div>{t('Dark mode')}</div>
-                    </>
-                  ) : (
-                    <>
-                      <SunIcon className="w-4 h-4" />
-                      <div>{t('Light mode')}</div>
-                    </>
-                  )}
-                </div>
-              </Menu.Item>
+
               {currentUser && GIT_COMMIT_SHA && (
                 <>
                   <div className="divider" />
