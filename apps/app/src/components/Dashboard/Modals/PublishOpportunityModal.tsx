@@ -12,6 +12,7 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
+import uploadToArweave from '@/lib/uploadToArweave'
 
 interface IPublishOpportunityModalProps {
   open: boolean
@@ -35,19 +36,13 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
-  const uploadMetadata = async (data: any) => {
-    return new Promise<string>(() => {
-      return 'test'
-    })
-  }
-
   const {
     execute,
     error: lensError,
     isPending
   } = useCreatePost({
     publisher,
-    upload: uploadMetadata
+    upload: uploadToArweave
   })
 
   const form = useForm<IFormProps>()
