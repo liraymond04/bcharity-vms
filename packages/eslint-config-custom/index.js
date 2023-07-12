@@ -11,7 +11,6 @@ module.exports = {
     'simple-import-sort',
     'prettier'
   ],
-  extends: ['next', 'next/core-web-vitals'],
   rules: {
     'prettier/prettier': 'error',
     'react/prop-types': 'off',
