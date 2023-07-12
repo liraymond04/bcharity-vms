@@ -12,7 +12,7 @@ export default function tos() {
         </div>
       </section>
       <section className="flex justify-left items-center border rounded-lg my-10 mx-20">
-        <div className="flex m-8 flex-col">
+        <div className="flex m-8 flex-col space-y-5">
           <div className="mb-2 text-3xl font-bold">Table of Contents</div>
           <ul className="mx-5 mb-5 list-decimal">
             <li>
@@ -151,7 +151,7 @@ export default function tos() {
               </Link>
             </li>
           </ul>
-          <div id="Agreement" className="pt-20 -mt-20 mb-5 text-3xl font-bold">
+          <div id="Agreement" className="-mt-20 mb-5 text-3xl font-bold">
             Agreement to our legal terms
           </div>
           <p className="mb-5">
