@@ -1,0 +1,7 @@
+.gradient {
+  background-color: rgba(242, 241, 241);
+  background-image: radial-gradient(ellipse at 89% 27%, rgba(206, 187, 248, 1) 5%, rgba(206, 187, 248, 0.16) 33%),
+                    radial-gradient(ellipse at 12% 57%, rgba(229, 214, 238, 1) 9%, rgba(206, 187, 248, 0.16) 33%),
+                    radial-gradient(ellipse at 46% 96%, rgba(223, 230, 254, 0.72) 5%, rgba(206, 187, 248, 0.16) 33%);
+  
+}
