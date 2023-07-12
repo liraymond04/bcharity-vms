@@ -1,5 +1,5 @@
-import { NextPage } from 'next'
 import SEO from '@components/utils/SEO'
+import { NextPage } from 'next'
 import React from 'react'
 
 const Privacypolicy: NextPage = () => {
@@ -64,8 +64,8 @@ const Privacypolicy: NextPage = () => {
             How we update our policy
           </div>
           <div className="mb-2 text-base">
-            We reserve the right to update this Policy online from time to
-            time, and the new policy will immediately replace the older one once
+            We reserve the right to update this Policy online from time to time,
+            and the new policy will immediately replace the older one once
             posted.
           </div>
           <div className="mb-2 text-base">

@@ -1,10 +1,4 @@
 {
   "root": true,
-  "extends": [
-    "next/babel",
-    "next/core-web-vitals",
-    "turbo",
-    "eslint:recommended",
-    "prettier"
-  ]
+  "extends": ["next", "turbo", "eslint:recommended", "prettier"]
 }
