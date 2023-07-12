@@ -10,15 +10,13 @@ interface IColumnDefParams {
   onDeleteClick: (id: string) => void
 }
 
-export const makeOrgColumnDefs: (params: IColumnDefParams) => any = (
-  params: IColumnDefParams
-) => {
+export const makeOrgColumnDefs = (params: IColumnDefParams) => {
   return {
     ['EditRow']: {
       field: 'id',
       headerName: '',
       resizable: false,
-      cellRenderer: (_: any) => {
+      cellRenderer: () => {
         return <PencilIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
@@ -30,7 +28,7 @@ export const makeOrgColumnDefs: (params: IColumnDefParams) => any = (
       field: 'id',
       headerName: '',
       resizable: false,
-      cellRenderer: (_: any) => {
+      cellRenderer: () => {
         return <TrashIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
@@ -46,24 +44,24 @@ export const makeOrgColumnDefs: (params: IColumnDefParams) => any = (
       field: 'vhr',
       headerName: 'VHR',
       resizable: false,
-      valueFormatter: (_: any) => {
+      valueFormatter: () => {
         return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways
       },
       cellRenderer: (params: any) => {
         console.log('value ', params.value)
+        const progress = params.value?.current
+        const total = params.value?.goal
         return (
           <div>
-            <meter
-              className="progress progress-success w-full"
-              value={params.value?.current}
-              min={0}
-              max={params.value?.goal}
-              low={Math.trunc(params.value?.goal / 2)}
-              high={params.value?.goal - 1}
-              optimum={params.value?.goal}
-            >
-              {/* <p>{`${params.value?.current} / ${params.value?.goal}`}</p> */}
-            </meter>
+            <div className="flex justify-between mb-1">
+              <span className="text-sm font-medium text-blue-700">{`${progress} / ${total}`}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-blue-600 h-2.5 rounded-full"
+                style={{ width: `${Math.trunc((progress / total) * 100)}%` }}
+              ></div>
+            </div>
           </div>
         )
       },
