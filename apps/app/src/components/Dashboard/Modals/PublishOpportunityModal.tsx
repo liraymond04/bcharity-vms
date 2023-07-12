@@ -59,25 +59,43 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         >
           <Input
             label="Volunteer opportunity name"
+            placeholder="Medial internship"
             {...register('opportunityName', { required: true })}
           />
-          <Input label="Date(s)" {...register('dates', { required: true })} />
           <Input
+            label="Date(s)"
+            placeholder="yy-mm-dd"
+            {...register('dates', { required: true })}
+          />
+          <Input
+            placeholder="5"
             label="Expected number of hours"
             {...register('numHours', { required: true })}
           />
-          <Input label="Program" {...register('program', { required: true })} />
+          <Input
+            label="Program"
+            placeholder="Volunteer program names(s)"
+            {...register('program', { required: true })}
+          />
           <Input
             label="City/region"
+            placeholder="Calgary"
             {...register('program', { required: true })}
           />
           <Input
             label="Category"
+            placeholder="Healthcare"
             {...register('category', { required: true })}
           />
-          <Input label="Website" {...register('website', { required: true })} />
+          <Input
+            label="Website (leave empty if not linking to external opportunity)"
+            placeholder="https://ecssen.ca/opportunity-link"
+            {...register('website')}
+          />
           <Input
             label="Activity Description"
+            placeholder="Tell us more about this volunteer opportunity"
+            resizeable
             {...register('description', { required: true })}
           />
         </Form>

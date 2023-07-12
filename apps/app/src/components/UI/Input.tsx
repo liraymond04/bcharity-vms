@@ -14,10 +14,20 @@ interface Props extends Omit<ComponentProps<'input'>, 'prefix'> {
   helper?: ReactNode
   error?: boolean
   change?: Function
+  resizeable?: boolean
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(
-  { label, prefix, type = 'text', error, className = '', helper, ...props },
+  {
+    label,
+    prefix,
+    type = 'text',
+    error,
+    className = '',
+    helper,
+    resizeable,
+    ...props
+  },
   ref
 ) {
   const id = useId()
@@ -59,19 +69,33 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             {prefix}
           </span>
         )}
-        <input
-          id={id}
-          className={clsx(
-            { '!border-red-500 placeholder-red-500': error },
-            { 'rounded-r-xl': prefix },
-            { 'rounded-xl': !prefix },
-            'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
-            className
-          )}
-          type={type === 'startDate' ? 'date' : type}
-          ref={ref}
-          {...props}
-        />
+        {!resizeable ? (
+          <input
+            id={id}
+            className={clsx(
+              { '!border-red-500 placeholder-red-500': error },
+              { 'rounded-r-xl': prefix },
+              { 'rounded-xl': !prefix },
+              'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
+              className
+            )}
+            type={type === 'startDate' ? 'date' : type}
+            ref={ref}
+            {...props}
+          />
+        ) : (
+          <textarea
+            id={id}
+            className={clsx(
+              { '!border-red-500 placeholder-red-500': error },
+              { 'rounded-r-xl': prefix },
+              { 'rounded-xl': !prefix },
+              'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
+              className
+            )}
+            {...props}
+          />
+        )}
       </div>
       {props.name && <FieldError name={props.name} />}
     </label>

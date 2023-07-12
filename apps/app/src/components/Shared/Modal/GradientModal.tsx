@@ -23,7 +23,11 @@ const GradientModal: React.FC<IGradientModalProps> = ({
 }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10" onClose={onCancel}>
+      <Dialog
+        as="div"
+        className="fixed inset-0 z-10 overflow-scroll"
+        onClose={onCancel}
+      >
         <div className="flex justify-center items-center mx-16 min-h-screen sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
