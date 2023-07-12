@@ -29,8 +29,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const {
     handleSubmit,
     reset,
-    formState: { errors },
-    register
+    register,
+    formState: { errors }
   } = form
 
   const onCancel = () => {
@@ -60,41 +60,49 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           <Input
             label="Volunteer opportunity name"
             placeholder="Medial internship"
+            error={!!errors.description?.type}
             {...register('opportunityName', { required: true })}
           />
           <Input
             label="Date(s)"
             placeholder="yy-mm-dd"
+            error={!!errors.dates?.type}
             {...register('dates', { required: true })}
           />
           <Input
-            placeholder="5"
             label="Expected number of hours"
+            placeholder="5"
+            error={!!errors.numHours?.type}
             {...register('numHours', { required: true })}
           />
           <Input
             label="Program"
             placeholder="Volunteer program names(s)"
+            error={!!errors.program?.type}
             {...register('program', { required: true })}
           />
           <Input
             label="City/region"
             placeholder="Calgary"
+            error={!!errors.region?.type}
             {...register('program', { required: true })}
           />
           <Input
             label="Category"
             placeholder="Healthcare"
+            error={!!errors.category?.type}
             {...register('category', { required: true })}
           />
           <Input
             label="Website (leave empty if not linking to external opportunity)"
             placeholder="https://ecssen.ca/opportunity-link"
+            error={!!errors.website?.type}
             {...register('website')}
           />
           <Input
             label="Activity Description"
             placeholder="Tell us more about this volunteer opportunity"
+            error={!!errors.description?.type}
             resizeable
             {...register('description', { required: true })}
           />
