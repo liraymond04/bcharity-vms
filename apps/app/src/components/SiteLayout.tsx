@@ -2,6 +2,7 @@ import Loading from '@components/Loading'
 import { useProfilesOwnedBy } from '@lens-protocol/react-web'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { FC, ReactNode, Suspense, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
@@ -75,14 +76,46 @@ const SiteLayout: FC<Props> = ({ children }) => {
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
       </Head>
-      <Modal title="Cookies" show={showCookiesPopup} onClose={() => {}}>
-        <Button
-          onClick={() => {
-            setHasCookies(true)
-          }}
-        >
-          Allow cookies
-        </Button>
+      <Modal
+        title=""
+        size="md"
+        show={showCookiesPopup}
+        onClose={() => {
+          setShowCookiesPopup(false)
+        }}
+      >
+        <img
+          className="mt-5 object-scale-down h-36 w-48 mx-auto"
+          src="Cookie.jpg"
+          alt="image description"
+        ></img>
+        <div className="mt-8 mb-16 mx-16 justify-center">
+          We use cookies to improve your browsing experience, save your
+          preferences and collect information on how you use our website. You
+          can decline these cookies for a less personalized experience. For more
+          information about cookies, please see our{' '}
+          <Link className="text-blue-400" href="/cookies">
+            Cookie Policy.
+          </Link>
+        </div>
+        <div className="flex justify-center items-center">
+          <Button
+            className="mb-8 mr-16 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br"
+            onClick={() => {
+              setHasCookies(true)
+            }}
+          >
+            Accept cookies
+          </Button>
+          <Button
+            className="mb-8 ml-16 bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:bg-gradient-to-br border-red-600"
+            onClick={() => {
+              setShowCookiesPopup(false)
+            }}
+          >
+            Decline cookies
+          </Button>
+        </div>
       </Modal>
       <Toaster position="bottom-right" toastOptions={toastOptions} />
       <Suspense fallback={<Loading />}>
