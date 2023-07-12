@@ -7,7 +7,10 @@ import { FC, ReactNode, Suspense, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useAccount } from 'wagmi'
 
-import { useAppStore } from '@/store/app'
+import { useAppPersistStore, useAppStore } from '@/store/app'
+
+import { Button } from './UI/Button'
+import { Modal } from './UI/Modal'
 
 const Navbar = dynamic(() => import('./Shared/Navbar'), { suspense: true })
 const Footer = dynamic(() => import('./Shared/Footer'), { suspense: true })
@@ -26,6 +29,9 @@ const SiteLayout: FC<Props> = ({ children }) => {
     address: authAddress
   })
 
+  const { hasCookies, setHasCookies } = useAppPersistStore()
+  const [showCookiesPopup, setShowCookiesPopup] = useState<boolean>(true)
+
   useEffect(() => {
     if (address) setAuthAddress(address)
   }, [address])
@@ -33,6 +39,12 @@ const SiteLayout: FC<Props> = ({ children }) => {
   useEffect(() => {
     if (profiles) setProfiles(profiles)
   }, [profiles, setProfiles])
+
+  useEffect(() => {
+    if (hasCookies) {
+      setShowCookiesPopup(false)
+    }
+  }, [hasCookies])
 
   const toastOptions = {
     style: {
@@ -63,6 +75,15 @@ const SiteLayout: FC<Props> = ({ children }) => {
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
       </Head>
+      <Modal title="Cookies" show={showCookiesPopup} onClose={() => {}}>
+        <Button
+          onClick={() => {
+            setHasCookies(true)
+          }}
+        >
+          Allow cookies
+        </Button>
+      </Modal>
       <Toaster position="bottom-right" toastOptions={toastOptions} />
       <Suspense fallback={<Loading />}>
         <div className="flex flex-col h-screen">
