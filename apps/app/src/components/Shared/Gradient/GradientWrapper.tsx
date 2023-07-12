@@ -3,6 +3,7 @@ import React from 'react'
 import * as styles from './gradient.module.css'
 interface IGradientWrapperProps {
   children: React.ReactNode
+  className?: string
 }
 
 // rgba(242, 241, 241, 1) base
@@ -10,8 +11,13 @@ interface IGradientWrapperProps {
 // rgba(229, 214, 238, 0.4) left
 // rgba(223, 230, 254, 0.72) bottom
 
-const GradientWrapper: React.FC<IGradientWrapperProps> = ({ children }) => {
-  return <div className={styles.gradient}>{children}</div>
+const GradientWrapper: React.FC<IGradientWrapperProps> = ({
+  className,
+  children
+}) => {
+  return (
+    <div className={`${styles.gradient} ${className ?? ''}`}>{children}</div>
+  )
 }
 
 export default GradientWrapper
