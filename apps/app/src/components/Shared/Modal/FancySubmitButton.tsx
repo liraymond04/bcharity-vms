@@ -8,7 +8,6 @@ const FancySubmitButton = () => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        Submit
         <path
           d="M1.5 23.5C1.5 11.3497 11.3497 1.5 23.5 1.5H97.5C109.65 1.5 119.5 11.3497 119.5 23.5C119.5 35.6503 109.65 45.5 97.5 45.5H23.5C11.3497 45.5 1.5 35.6503 1.5 23.5Z"
           fill="url(#paint0_linear_248_3394)"

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
+import { TextArea } from '@/components/UI/TextArea'
 
 interface IPublishOpportunityModalProps {
   open: boolean
@@ -60,7 +61,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           <Input
             label="Volunteer opportunity name"
             placeholder="Medial internship"
-            error={!!errors.description?.type}
+            error={!!errors.opportunityName?.type}
             {...register('opportunityName', { required: true })}
           />
           <Input
@@ -99,11 +100,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             error={!!errors.website?.type}
             {...register('website')}
           />
-          <Input
+          <TextArea
             label="Activity Description"
             placeholder="Tell us more about this volunteer opportunity"
             error={!!errors.description?.type}
-            resizeable
             {...register('description', { required: true })}
           />
         </Form>
