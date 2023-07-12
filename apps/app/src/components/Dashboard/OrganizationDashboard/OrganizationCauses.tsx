@@ -5,6 +5,8 @@ import { PlusSmIcon } from '@heroicons/react/solid'
 import { AgGridReact } from 'ag-grid-react'
 import React, { useState } from 'react'
 
+import { useAppPersistStore } from '@/store/app'
+
 import PublishOpportunityModal from '../Modals/PublishOpportunityModal'
 import { defaultColumnDef, makeOrgColumnDefs } from './ColumnDefs'
 
@@ -28,11 +30,12 @@ const makeFakeData = () => {
 const OrganizationCausesTab: React.FC = () => {
   const [rowData] = useState(makeFakeData())
 
+  const { currentUser: profile } = useAppPersistStore()
+
   const [publishModalOpen, setPublishModalOpen] = useState(false)
 
   const onNew = () => {
     setPublishModalOpen(true)
-    console.log('create new opportunity modal')
   }
 
   const onEdit = (id: string) => {
@@ -76,6 +79,7 @@ const OrganizationCausesTab: React.FC = () => {
       <PublishOpportunityModal
         open={publishModalOpen}
         onClose={() => setPublishModalOpen(false)}
+        publisher={{ ...profile!, ownedByMe: true }}
       />
     </>
   )

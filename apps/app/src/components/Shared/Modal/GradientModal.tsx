@@ -11,6 +11,7 @@ interface IGradientModalProps {
   open: boolean
   onCancel: () => void
   onSubmit: () => void
+  submitDisabled?: boolean
   children: React.ReactNode
 }
 
@@ -19,6 +20,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
   open,
   onCancel,
   onSubmit,
+  submitDisabled = false,
   children
 }) => {
   return (
@@ -75,7 +77,15 @@ const GradientModal: React.FC<IGradientModalProps> = ({
               <div className="py-4 divider">{children}</div>
               <div className="flex px-4 py-3 justify-between">
                 {/* <FancySubmitButton /> */}
-                <Button onClick={onSubmit} className="px-6 py-2 font-medium">
+                <Button
+                  onClick={onSubmit}
+                  className={`${
+                    submitDisabled
+                      ? 'bg-gray-400 hover:bg-gray-400 !border-black'
+                      : ''
+                  } px-6 py-2 font-medium`}
+                  disabled={submitDisabled}
+                >
                   Submit
                 </Button>
                 <Button
