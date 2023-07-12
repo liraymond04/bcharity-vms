@@ -73,6 +73,12 @@ const Navbar: FC = () => {
         />
 
         <NavItem
+          url="/volunteers"
+          name={t('VOLUNTEERS')}
+          current={pathname == '/volunteers'}
+        />
+
+        <NavItem
           url="/organizations"
           name={t('ORGANIZATIONS')}
           current={pathname == '/organizations'}
