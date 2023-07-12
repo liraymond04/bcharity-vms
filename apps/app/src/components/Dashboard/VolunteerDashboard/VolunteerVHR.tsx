@@ -11,16 +11,14 @@ const VolunteerVHRTab: React.FC = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [searchAddress, setSearchAddress] = useState<string>('')
-  const [vhrBalance, setVhrBalance] = useState(0)
 
-  const { data, isError, isLoading } = useBalance({
+  const { data, isLoading } = useBalance({
     address: `0x${searchAddress.substring(2)}`,
     token: `0x${VHR_TOKEN.substring(2)}`
   })
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
-      console.log(currentUser.ownedBy.substring(2))
       setSearchAddress(currentUser.ownedBy)
     }
   }, [currentUser, isAuthenticated])
