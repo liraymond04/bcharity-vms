@@ -128,7 +128,6 @@ const Footer: FC = () => {
           </div>
         </div>
       </div>
-
       <hr className="h-px my-0 bg-gray-200 border-0 dark:bg-gray-700"></hr>
       <div className="overflow-y-auto h-20 flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
         <div className="mr-12 hidden lg:block">
