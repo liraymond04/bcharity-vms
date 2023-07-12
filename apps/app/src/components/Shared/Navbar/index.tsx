@@ -5,8 +5,10 @@ import { Inter } from '@next/font/google'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useAppPersistStore } from '@/store/app'
 
 import MenuItems from './MenuItems'
 
@@ -22,6 +24,16 @@ const inter700 = Inter({
 
 const Navbar: FC = () => {
   const { t } = useTranslation('common')
+  const { isAuthenticated, currentUser } = useAppPersistStore()
+  const [auth, setAuth] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      setAuth(true)
+    } else {
+      setAuth(false)
+    }
+  }, [currentUser, isAuthenticated])
 
   interface NavItemProps {
     url: string
@@ -66,11 +78,13 @@ const Navbar: FC = () => {
           current={pathname == '/organizations'}
         />
 
-        <NavItem
-          url="/dashboard"
-          name={t('DASHBOARD')}
-          current={pathname == '/dashboard'}
-        />
+        {auth && (
+          <NavItem
+            url="/dashboard"
+            name={t('DASHBOARD')}
+            current={pathname == '/dashboard'}
+          />
+        )}
       </>
     )
   }
