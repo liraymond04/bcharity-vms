@@ -142,10 +142,12 @@ const Footer: FC = () => {
                 <img
                   className="object-scale-down h-65 w-65 p-5 "
                   src="https://bcharity.vercel.app/logo.jpg "
+                  alt=""
                 ></img>
                 <img
                   className="object-scale-down h-52 w-52 p-5 mt-3"
                   src="https://i.ibb.co/FB9NQk5/ecssen.png"
+                  alt=""
                 ></img>
               </div>
             </div>

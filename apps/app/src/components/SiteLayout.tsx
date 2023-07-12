@@ -10,6 +10,7 @@ import { useAccount } from 'wagmi'
 import { useAppStore } from '@/store/app'
 
 const Navbar = dynamic(() => import('./Shared/Navbar'), { suspense: true })
+const Footer = dynamic(() => import('./Shared/Footer'), { suspense: true })
 
 interface Props {
   children: ReactNode
@@ -54,7 +55,6 @@ const SiteLayout: FC<Props> = ({ children }) => {
     },
     loading: { className: 'border border-gray-300' }
   }
-  const Footer = dynamic(() => import('./Shared/Footer'), { suspense: true })
   return (
     <>
       <Head>
@@ -65,14 +65,14 @@ const SiteLayout: FC<Props> = ({ children }) => {
       </Head>
       <Toaster position="bottom-right" toastOptions={toastOptions} />
       <Suspense fallback={<Loading />}>
-        <div>
+        <div className="flex flex-col h-screen">
           <Navbar />
-          {children}
+          <div className="flex-grow">{children}</div>
+          <div>
+            <Footer />
+          </div>
         </div>
       </Suspense>
-      <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-        <Footer />
-      </div>
     </>
   )
 }
