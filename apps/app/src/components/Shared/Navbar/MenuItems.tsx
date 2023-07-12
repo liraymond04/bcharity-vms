@@ -45,6 +45,8 @@ const MenuItems: FC = () => {
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       setAuth(true)
+    } else {
+      setAuth(false)
     }
   }, [currentUser, isAuthenticated])
 
