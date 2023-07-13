@@ -147,6 +147,9 @@ importers:
       '@heroicons/react':
         specifier: ^1.0.6
         version: 1.0.6(react@18.2.0)
+      '@lens-protocol/client':
+        specifier: ^1.2.0
+        version: 1.2.0(encoding@0.1.13)(ethers@5.7.2)
       '@types/node':
         specifier: 20.4.1
         version: 20.4.1
@@ -241,7 +244,7 @@ importers:
     devDependencies:
       '@types/react':
         specifier: latest
-        version: 18.2.15
+        version: 18.2.14
       eslint:
         specifier: ^8.11.0
         version: 8.28.0
@@ -1074,6 +1077,23 @@ packages:
       - jest-mock-extended
       - jest-when
       - utf-8-validate
+    dev: false
+
+  /@lens-protocol/client@1.2.0(encoding@0.1.13)(ethers@5.7.2):
+    resolution: {integrity: sha512-1SAumc7P8JHJuoNgHCiRw6jK/OPRicNEzHiKxpe4C7DsQSeTbz/Q81uCo+rnLHAKX/wn8AGPx9IFOabd7+fh9A==}
+    dependencies:
+      '@lens-protocol/shared-kernel': 0.9.0(ethers@5.7.2)
+      '@lens-protocol/storage': 0.7.3(ethers@5.7.2)
+      dotenv: 16.0.3
+      graphql: 16.7.1
+      graphql-request: 5.2.0(encoding@0.1.13)(graphql@16.7.1)
+      graphql-tag: 2.12.6(graphql@16.7.1)
+      jwt-decode: 3.1.2
+      tslib: 2.6.0
+      zod: 3.21.4
+    transitivePeerDependencies:
+      - encoding
+      - ethers
     dev: false
 
   /@lens-protocol/domain@0.9.0(ethers@5.7.2):
@@ -2098,15 +2118,6 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
-    dev: false
-
-  /@types/react@18.2.15:
-    resolution: {integrity: sha512-oEjE7TQt1fFTFSbf8kkNuc798ahTUzn3Le67/PWjE8MAfYAD/qB7O8hSTcromLFqHCt9bcdOg5GXMokzTjJ5SA==}
-    dependencies:
-      '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.3
-      csstype: 3.1.2
-    dev: true
 
   /@types/scheduler@0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
@@ -4613,6 +4624,11 @@ packages:
     resolution: {integrity: sha512-/wSgNMxFusiYRy1rd19LT2SQlIXDppHpumpWo06wxjflD1OYxDLbl6rMVw+U3bxD5Nuhex4TKqv9Aem4D0lVzQ==}
     dev: false
 
+  /extract-files@9.0.0:
+    resolution: {integrity: sha512-CvdFfHkC95B4bBBk36hcEmvdR2awOdhhVUYH6S/zrVj3477zven/fJMYg7121h4T1xHZC+tetUpubpAhxwI7hQ==}
+    engines: {node: ^10.17.0 || ^12.0.0 || >= 13.7.0}
+    dev: false
+
   /eyes@0.1.8:
     resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
     engines: {node: '> 0.1.90'}
@@ -4710,6 +4726,15 @@ packages:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
     dependencies:
       is-callable: 1.2.7
+    dev: false
+
+  /form-data@3.0.1:
+    resolution: {integrity: sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==}
+    engines: {node: '>= 6'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
     dev: false
 
   /form-data@4.0.0:
@@ -4910,6 +4935,20 @@ packages:
 
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+
+  /graphql-request@5.2.0(encoding@0.1.13)(graphql@16.7.1):
+    resolution: {integrity: sha512-pLhKIvnMyBERL0dtFI3medKqWOz/RhHdcgbZ+hMMIb32mEPa5MJSzS4AuXxfI4sRAu6JVVk5tvXuGfCWl9JYWQ==}
+    peerDependencies:
+      graphql: 14 - 16
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.7.1)
+      cross-fetch: 3.1.8(encoding@0.1.13)
+      extract-files: 9.0.0
+      form-data: 3.0.1
+      graphql: 16.7.1
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /graphql-tag@2.12.6(graphql@16.7.1):
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}

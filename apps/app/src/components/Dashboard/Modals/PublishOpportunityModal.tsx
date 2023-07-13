@@ -17,9 +17,11 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import uploadToIPFS from '@/lib/ipfsUpload'
 
+import Error from './Error'
+
 interface IPublishOpportunityModalProps {
   open: boolean
-  onClose: () => void
+  onClose: (shouldRefetch: boolean) => void
   publisher: ProfileOwnedByMe
 }
 
@@ -59,7 +61,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
   const onCancel = () => {
     reset()
-    onClose()
+    onClose(false)
   }
 
   const onSubmit = async (data: IFormProps) => {
@@ -92,7 +94,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       .then((result) => {
         if (result.isSuccess()) {
           reset()
-          onClose()
+          onClose(true)
         } else {
           throw result.error
         }
@@ -170,11 +172,9 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         )}
 
         {lensError && (
-          <div className="text-red-500 border-2 border-red-500 rounded-md mt-6">
-            <p className="my-2 mx-4">
-              An error occured: {lensError.message}. Please try again.
-            </p>
-          </div>
+          <Error
+            message={`An error occured: ${lensError.message}. Please try again.`}
+          />
         )}
       </div>
     </GradientModal>

@@ -7,32 +7,24 @@ import React, { useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
+import { Spinner } from '@/components/UI/Spinner'
+import { OpportunityMetadata } from '@/lib/types'
+import usePostData from '@/lib/usePostData'
 import { useAppPersistStore } from '@/store/app'
 
+import Error from '../Modals/Error'
 import PublishOpportunityModal from '../Modals/PublishOpportunityModal'
-import { defaultColumnDef, makeOrgColumnDefs } from './ColumnDefs'
-
-const makeFakeData = () => {
-  let n = 120
-  const data = []
-  for (let i = 0; i < n + 1; i++) {
-    data.push({
-      id: i,
-      activityName: `activity ${i}`,
-      vhr: {
-        current: i,
-        goal: n
-      },
-      assigned: i
-    })
-  }
-  return data
-}
+import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
-  const [rowData] = useState(makeFakeData())
-
   const { currentUser: profile } = useAppPersistStore()
+
+  const { data, error, loading, refetch } = usePostData<OpportunityMetadata>({
+    profileId: profile!.id,
+    metadata: {
+      tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
+    }
+  })
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
 
@@ -63,22 +55,33 @@ const OrganizationVHRTab: React.FC = () => {
               className="ag-theme-alpine"
               style={{ height: '800px', width: '90%' }}
             >
-              <AgGridReact
-                defaultColDef={defaultColumnDef}
-                rowData={rowData}
-                columnDefs={Object.values(
-                  makeOrgColumnDefs({
-                    onEditClick: onEdit,
-                    onDeleteClick: onDelete
-                  })
-                )}
-                pagination
-                paginationPageSize={20}
-              />
+              {loading ? (
+                <Spinner />
+              ) : (
+                <AgGridReact
+                  defaultColDef={defaultColumnDef}
+                  rowData={data}
+                  columnDefs={Object.values(
+                    makeOrgVHRColumnDefs({
+                      onEditClick: onEdit,
+                      onDeleteClick: onDelete
+                    })
+                  )}
+                  pagination
+                  paginationPageSize={20}
+                />
+              )}
             </div>
+            {error && <Error message="An error occured. Please try again." />}
             <PublishOpportunityModal
               open={publishModalOpen}
-              onClose={() => setPublishModalOpen(false)}
+              onClose={(shouldRefetch) => {
+                setPublishModalOpen(false)
+
+                if (shouldRefetch) {
+                  refetch()
+                }
+              }}
               publisher={{ ...profile!, ownedByMe: true }}
             />
           </div>
