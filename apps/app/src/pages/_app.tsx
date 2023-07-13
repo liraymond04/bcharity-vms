@@ -11,7 +11,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 
 import SiteLayout from '@/components/SiteLayout'
-import { IS_MAINNET } from '@/constants'
+import { IS_MAINNET, WALLET_CONNECT_PROJECT_ID } from '@/constants'
 
 const lensConfig: LensConfig = {
   bindings: wagmiBindings(),
@@ -31,7 +31,10 @@ const connectors = () => {
     }),
     new WalletConnectConnector({
       chains: [polygon, polygonMumbai],
-      options: { projectId: '...', showQrModal: true }
+      options: {
+        projectId: WALLET_CONNECT_PROJECT_ID ? WALLET_CONNECT_PROJECT_ID : '',
+        showQrModal: true
+      }
     })
   ]
 }
