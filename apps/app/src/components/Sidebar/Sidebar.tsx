@@ -21,7 +21,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
   tabs
 }) => {
   return (
-    <div className="w-sidebar from-violet-400 to-violet-300 bg-gradient-to-b min-h-screen">
+    <div className="w-sidebar from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen">
       {emptyTop && (
         <TabTitle
           selected={false}

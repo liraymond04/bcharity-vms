@@ -56,10 +56,10 @@ const VolunteerVHRTab: React.FC = () => {
             ) : (
               <>
                 <div className="flex items-center">
-                  <div className="text-2xl font-bold text-black sm:text-4xl">
+                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
                     VHR Amount:
                   </div>
-                  <div className="text-2xl font-extrabold text-black sm:text-7xl pl-10">
+                  <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
                     {Number(data?.value)} / {vhrGoal}
                   </div>
                 </div>
@@ -78,11 +78,11 @@ const VolunteerVHRTab: React.FC = () => {
                   className="mt-10 mb-10"
                 />
                 {Number(data?.value) < vhrGoal ? (
-                  <div className="text-2xl font-normal text-black sm:text-2xl">
+                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2x l">
                     {vhrGoal - Number(data?.value)} away from goal!
                   </div>
                 ) : (
-                  <div className="text-2xl font-normal text-black sm:text-2xl">
+                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2xl">
                     Reached goal!
                   </div>
                 )}
