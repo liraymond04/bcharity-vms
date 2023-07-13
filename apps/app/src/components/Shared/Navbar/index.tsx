@@ -1,16 +1,11 @@
-import ThemeButton from '@components/Shared/ThemeButton'
-import TranslateButton from '@components/Shared/TranslateButton'
-import { Disclosure } from '@headlessui/react'
-import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { Inter } from '@next/font/google'
-import clsx from 'clsx'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppPersistStore } from '@/store/app'
 
+import TranslateButton from '../TranslateButton'
 import MenuItems from './MenuItems'
 
 const inter500 = Inter({
@@ -25,6 +20,7 @@ const inter700 = Inter({
 
 const Navbar: FC = () => {
   const { t } = useTranslation('common')
+  const { pathname } = useRouter()
   const { isAuthenticated, currentUser } = useAppPersistStore()
   const [auth, setAuth] = useState<boolean>(false)
 
@@ -36,126 +32,87 @@ const Navbar: FC = () => {
     }
   }, [currentUser, isAuthenticated])
 
-  interface NavItemProps {
-    url: string
-    name: string
-    current: boolean
-  }
-
-  const NavItem = ({ url, name, current }: NavItemProps) => {
-    return (
-      <Link href={url} aria-current={current ? 'page' : undefined}>
-        <Disclosure.Button
-          className={clsx(
-            'w-full text-left px-5 py-3 rounded-md font-black text-1xl tracking-wide ',
-            {
-              'text-purple-500 dark:text-white bg-gray-200 dark:bg-gray-800':
-                current,
-              'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
-                !current
-            }
-          )}
-        >
-          {name}
-        </Disclosure.Button>
-      </Link>
-    )
-  }
-
-  const NavItems = () => {
-    const { pathname } = useRouter()
-
-    return (
-      <>
-        <NavItem
-          url="/causes"
-          name={t('CAUSES')}
-          current={pathname == '/causes'}
-        />
-
-        <NavItem
-          url="/volunteers"
-          name={t('VOLUNTEERS')}
-          current={pathname == '/volunteers'}
-        />
-
-        <NavItem
-          url="/organizations"
-          name={t('ORGANIZATIONS')}
-          current={pathname == '/organizations'}
-        />
-
-        {auth && (
-          <NavItem
-            url="/dashboard"
-            name={t('DASHBOARD')}
-            current={pathname == '/dashboard'}
-          />
-        )}
-      </>
-    )
-  }
-
   return (
-    <Disclosure
-      as="nav"
-      className="sticky h-21 w-full bg-white border-b dark:bg-gray-900 dark:border-b-gray-700/80"
-    >
-      {({ open }) => (
-        <>
-          <div className={inter500.className}>
-            <div className="flex h-[110px] justify-between ">
-              <div className="flex items-center">
-                <Disclosure.Button className="inline-flex justify-center items-center mr-4 text-gray-500 rounded-md sm:hidden focus:outline-none">
-                  <span className="sr-only">{t('Open main menu')}</span>
-                  {open ? (
-                    <XIcon className="block w-6 h-6" aria-hidden="true" />
-                  ) : (
-                    <MenuIcon className="block w-6 h-6" aria-hidden="true" />
-                  )}
-                </Disclosure.Button>
-
-                <Link href="/">
-                  <div className="inline-flex flex-grow justify-between items-center font-bold text-blue-900">
-                    <div className="text-3xl font-black">
-                      <img
-                        className="ml-10 w-20 h-100"
-                        src="/logo.jpg"
-                        alt="Logo"
-                      />
-                    </div>
-                    <div className={inter700.className}>
-                      <span className="flex text-indigo-800 fle-grow ml-3 mr-3 text-3xl">
-                        BCharity
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-                <div className="hidden sm:block sm:ml-10">
-                  <div className="flex items-center space-x-4">
-                    <div className="hidden lg:block">{/* <Search /> */}</div>
-                    <NavItems />
-                  </div>
+    <div className="sticky z-20 top-0 flex justify-between bg-white bg-opacity-80 max-h-[100vh] border-b-2 border-gray-100">
+      <div className="flex items-center">
+        <a href="/">
+          <img
+            className="m-5 h-10 w-10"
+            src="https://bcharity.vercel.app/logo.jpg "
+            alt="BCharity logo"
+          ></img>
+        </a>
+        <div
+          className={`m-5 text-2xl text-violet-800 tracking-wider ${inter500.className}`}
+        >
+          BCharity
+        </div>
+      </div>
+      <div className="flex">
+        <div className="flex w-[60] justify-around items-center">
+          <a href="/causes">
+            <button>
+              <div
+                className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
+                  pathname == '/causes'
+                    ? 'text-purple-500 bg-white'
+                    : 'text-black'
+                } ${inter500.className}`}
+              >
+                CAUSES
+              </div>
+            </button>
+          </a>
+          <a href="/volunteers">
+            <button>
+              <div
+                className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
+                  pathname == '/volunteers'
+                    ? 'text-purple-500 bg-white'
+                    : 'text-black'
+                } ${inter500.className}`}
+              >
+                VOLUNTEERS
+              </div>
+            </button>
+          </a>
+          <a href="/organizations">
+            <button>
+              <div
+                className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
+                  pathname == '/organizations'
+                    ? 'text-purple-500 bg-white'
+                    : 'text-black'
+                } ${inter500.className} ${auth ? '' : 'mr-10'}`}
+              >
+                ORGANIZATIONS
+              </div>
+            </button>
+          </a>
+          {auth && (
+            <a href="/dashboard">
+              <button>
+                <div
+                  className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 tracking-wider ${
+                    pathname == '/dashboard'
+                      ? 'text-purple-500 bg-white'
+                      : 'text-black'
+                  } ${inter500.className}`}
+                >
+                  DASHBOARD
                 </div>
-              </div>
-              <div className="flex gap-8 items-center">
-                <TranslateButton />
-                <ThemeButton />
-
-                <MenuItems />
-              </div>
-            </div>
-          </div>
-
-          <Disclosure.Panel className="sm:hidden">
-            <div className="flex flex-col p-3 space-y-2">
-              <div className="mb-2">{/* <Search hideDrodown /> */}</div>
-              <NavItems />
-            </div>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
+              </button>
+            </a>
+          )}
+        </div>
+        <div className="my-auto mr-10">
+          <TranslateButton />
+        </div>
+        <div className="my-auto mr-10">
+          <MenuItems />
+        </div>
+      </div>
+    </div>
   )
 }
 
