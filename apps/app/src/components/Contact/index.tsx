@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import { useState } from 'react'
 
 const Contact: NextPage = () => {
-  const [fullname, setFullname] = useState('')
+  const [subject, setSubject] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   return (
@@ -33,26 +33,26 @@ const Contact: NextPage = () => {
           </label>
           <input
             type="text"
-            value={fullname}
+            value={subject}
             onChange={(e) => {
-              setFullname(e.target.value)
+              setSubject(e.target.value)
             }}
-            name="fullname"
+            name="subject"
             className="bg-transparent border-b py-2 pl-4 focus:outline-none focus:rounded-md focus:ring-1 ring-green-500 font-light text-gray-500"
           />
 
           <label
-            htmlFor="email"
+            htmlFor="message"
             className="text-gray-500 font-light mt-4 dark:text-gray-50"
           >
-            E-mail<span className="text-red-500">*</span>
+            Message<span className="text-red-500">*</span>
           </label>
           <input
             type="email"
-            name="email"
-            value={email}
+            name="message"
+            value={message}
             onChange={(e) => {
-              setEmail(e.target.value)
+              setMessage(e.target.value)
             }}
             className="bg-transparent border-b py-2 pl-4 focus:outline-none focus:rounded-md focus:ring-1 ring-green-500 font-light text-gray-500"
           />
@@ -67,16 +67,13 @@ const Contact: NextPage = () => {
               </div>
             </a>
 
-            <button
-              onClick={() =>
-                (window.location.href = 'mailto:admin@bcharity.net')
-              }
-              type="submit"
+            <a
+              href={`mailto:example@gmail.com?subject=${subject}&body=${message}`}
               className="px-10 mt-8 py-2 bg-[#9969FF] text-gray-50
-                font-light rounded-md text-lg flex flex-row float-right"
+            font-light rounded-md text-lg flex flex-row float-right"
             >
-              Submit
-            </button>
+              Submit email
+            </a>
           </div>
         </form>
       </div>
