@@ -1,3 +1,4 @@
+import ThemeButton from '@components/Shared/ThemeButton'
 import TranslateButton from '@components/Shared/TranslateButton'
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
@@ -5,8 +6,10 @@ import { Inter } from '@next/font/google'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useAppPersistStore } from '@/store/app'
 
 import MenuItems from './MenuItems'
 
@@ -22,6 +25,16 @@ const inter700 = Inter({
 
 const Navbar: FC = () => {
   const { t } = useTranslation('common')
+  const { isAuthenticated, currentUser } = useAppPersistStore()
+  const [auth, setAuth] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      setAuth(true)
+    } else {
+      setAuth(false)
+    }
+  }, [currentUser, isAuthenticated])
 
   interface NavItemProps {
     url: string
@@ -61,16 +74,24 @@ const Navbar: FC = () => {
         />
 
         <NavItem
+          url="/volunteers"
+          name={t('VOLUNTEERS')}
+          current={pathname == '/volunteers'}
+        />
+
+        <NavItem
           url="/organizations"
           name={t('ORGANIZATIONS')}
           current={pathname == '/organizations'}
         />
 
-        <NavItem
-          url="/dashboard"
-          name={t('DASHBOARD')}
-          current={pathname == '/dashboard'}
-        />
+        {auth && (
+          <NavItem
+            url="/dashboard"
+            name={t('DASHBOARD')}
+            current={pathname == '/dashboard'}
+          />
+        )}
       </>
     )
   }
@@ -93,6 +114,7 @@ const Navbar: FC = () => {
                     <MenuIcon className="block w-6 h-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
+
                 <Link href="/">
                   <div className="inline-flex flex-grow justify-between items-center font-bold text-blue-900">
                     <div className="text-3xl font-black">
@@ -118,6 +140,8 @@ const Navbar: FC = () => {
               </div>
               <div className="flex gap-8 items-center">
                 <TranslateButton />
+                <ThemeButton />
+
                 <MenuItems />
               </div>
             </div>
