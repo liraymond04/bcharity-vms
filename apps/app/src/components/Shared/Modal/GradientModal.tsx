@@ -1,10 +1,12 @@
-import * as styles from '@components/Shared/Gradient/gradient.module.css'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
+import { useTheme } from 'next-themes'
 import React from 'react'
 import { Fragment } from 'react'
 
 import { Button } from '@/components/UI/Button'
+
+import GradientWrapper from '../Gradient/GradientWrapper'
 
 interface IGradientModalProps {
   title: string
@@ -23,11 +25,13 @@ const GradientModal: React.FC<IGradientModalProps> = ({
   submitDisabled = false,
   children
 }) => {
+  const { theme } = useTheme()
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-10 overflow-scroll"
+        className="fixed inset-0 z-20 overflow-scroll"
         onClose={onCancel}
       >
         <div className="flex justify-center items-center mx-16 min-h-screen sm:block sm:p-0">
@@ -40,9 +44,11 @@ const GradientModal: React.FC<IGradientModalProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay
-              className={`fixed inset-0 transition-opacity ${styles.gradient}`}
-            />
+            <Dialog.Overlay className="fixed inset-0 transition-opacity">
+              <GradientWrapper className="h-full">
+                <div className="fixed inset-0 transition-opacity h-full"></div>
+              </GradientWrapper>
+            </Dialog.Overlay>
           </Transition.Child>
           <span
             className="hidden sm:inline-block sm:h-screen sm:align-middle"
@@ -76,7 +82,6 @@ const GradientModal: React.FC<IGradientModalProps> = ({
               </div>
               <div className="py-4 divider">{children}</div>
               <div className="flex px-4 py-3 justify-between">
-                {/* <FancySubmitButton /> */}
                 <Button
                   onClick={onSubmit}
                   className={`${
