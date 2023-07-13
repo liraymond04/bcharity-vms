@@ -16,7 +16,6 @@ import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import uploadToIPFS from '@/lib/ipfsUpload'
-// import uploadToArweave from '@/lib/uploadToArweave'
 
 interface IPublishOpportunityModalProps {
   open: boolean
@@ -94,10 +93,12 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         if (result.isSuccess()) {
           reset()
           onClose()
+        } else {
+          throw result.error
         }
       })
       .catch((err) => {
-        console.log('create post error:', err)
+        console.error('Create post error:', err)
       })
   }
 
