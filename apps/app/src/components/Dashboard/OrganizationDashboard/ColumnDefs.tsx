@@ -48,7 +48,6 @@ export const makeOrgColumnDefs = (params: IColumnDefParams) => {
         return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways
       },
       cellRenderer: (params: any) => {
-        console.log('value ', params.value)
         const progress = params.value?.current
         const total = params.value?.goal
         return (
