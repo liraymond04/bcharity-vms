@@ -38,9 +38,19 @@ export const FieldError: FC<FieldErrorProps> = ({ name }) => {
   const error = errors[name]
   if (!error) return null
 
+  const getErrorMessage = () => {
+    switch (error.type) {
+      case 'required':
+        return 'This field is required'
+
+      default:
+        return 'Unknown error'
+    }
+  }
+
   return (
-    <div className="mt-1 text-sm font-bold text-red-500">
-      {error.message as any}
+    <div className="mt-1 text-sm font-medium text-red-500">
+      {getErrorMessage()}
     </div>
   )
 }

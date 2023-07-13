@@ -5,3 +5,10 @@
                     radial-gradient(ellipse at 46% 96%, rgba(223, 230, 254, 0.72) 5%, rgba(206, 187, 248, 0.16) 33%);
   
 }
+.darkgradient {
+
+  background-color: rgb(177, 156, 179);
+  background-image: radial-gradient(ellipse at 89% 27%, rgb(150, 113, 230) 5%, rgba(137, 137, 137, 0.3) 38%),
+                    radial-gradient(ellipse at 12% 57%, rgb(159, 135, 173) 9%, rgba(206, 187, 248, 0.3) 38%),
+                    radial-gradient(ellipse at 46% 96%, rgba(2, 54, 225, 0.72) 5%, rgba(206, 187, 248, 0.3) 38%); 
+}
