@@ -10,7 +10,7 @@ interface IColumnDefParams {
   onDeleteClick: (id: string) => void
 }
 
-export const makeOrgColumnDefs = (params: IColumnDefParams) => {
+export const makeOrgVHRColumnDefs = (params: IColumnDefParams) => {
   return {
     ['EditRow']: {
       field: 'id',
@@ -37,38 +37,58 @@ export const makeOrgColumnDefs = (params: IColumnDefParams) => {
       width: 50
     },
     ['ActivityName']: {
-      field: 'activityName',
+      field: 'name',
       filter: 'agTextColumnFilter'
     },
-    ['VHR']: {
-      field: 'vhr',
-      headerName: 'VHR',
-      resizable: false,
-      valueFormatter: () => {
-        return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways
-      },
-      cellRenderer: (params: any) => {
-        const progress = params.value?.current
-        const total = params.value?.goal
-        return (
-          <div>
-            <div className="flex justify-between mb-1">
-              <span className="text-sm font-medium text-blue-700">{`${progress} / ${total}`}</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-blue-600 h-2.5 rounded-full"
-                style={{ width: `${Math.trunc((progress / total) * 100)}%` }}
-              ></div>
-            </div>
-          </div>
-        )
-      },
-      width: 110
+    // ['VHR']: {
+    //   field: 'vhr',
+    //   headerName: 'VHR',
+    //   resizable: false,
+    //   valueFormatter: () => {
+    //     return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways
+    //   },
+    //   cellRenderer: (params: any) => {
+    //     const progress = params.value?.current
+    //     const total = params.value?.goal
+    //     return (
+    //       <div>
+    //         <div className="flex justify-between mb-1">
+    //           <span className="text-sm font-medium text-blue-700">{`${progress} / ${total}`}</span>
+    //         </div>
+    //         <div className="w-full bg-gray-200 rounded-full h-2.5">
+    //           <div
+    //             className="bg-blue-600 h-2.5 rounded-full"
+    //             style={{ width: `${Math.trunc((progress / total) * 100)}%` }}
+    //           ></div>
+    //         </div>
+    //       </div>
+    //     )
+    //   },
+    //   width: 110
+    // },
+    ['date']: {
+      field: 'date',
+      filter: 'agTextColumnFilter'
     },
-    ['Assigned']: {
-      field: 'assigned',
-      filter: 'agNumberColumnFilter'
+    ['hours']: {
+      field: 'hours',
+      filter: 'agTextColumnFilter'
+    },
+    ['program']: {
+      field: 'program',
+      filter: 'agTextColumnFilter'
+    },
+    ['category']: {
+      field: 'category',
+      filter: 'agTextColumnFilter'
+    },
+    ['website']: {
+      field: 'website',
+      filter: 'agTextColumnFilter'
+    },
+    ['description']: {
+      field: 'description',
+      filter: 'agTextColumnFilter'
     }
   }
 }

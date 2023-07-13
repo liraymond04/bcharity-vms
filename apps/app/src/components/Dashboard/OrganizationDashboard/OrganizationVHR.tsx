@@ -2,39 +2,47 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
+import { Post, usePublications } from '@lens-protocol/react-web'
 import { AgGridReact } from 'ag-grid-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
+import { Spinner } from '@/components/UI/Spinner'
+import { OpportunityMetadata } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import PublishOpportunityModal from '../Modals/PublishOpportunityModal'
-import { defaultColumnDef, makeOrgColumnDefs } from './ColumnDefs'
-
-const makeFakeData = () => {
-  let n = 120
-  const data = []
-  for (let i = 0; i < n + 1; i++) {
-    data.push({
-      id: i,
-      activityName: `activity ${i}`,
-      vhr: {
-        current: i,
-        goal: n
-      },
-      assigned: i
-    })
-  }
-  return data
-}
+import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
-  const [rowData] = useState(makeFakeData())
-
   const { currentUser: profile } = useAppPersistStore()
 
+  const { data, error, loading } = usePublications({
+    profileId: profile!.id,
+    observerId: profile!.id,
+    metadataFilter: {
+      restrictPublicationTagsTo: {
+        all: ['ORG_PUBLISH_OPPORTUNITY']
+      }
+    }
+  })
+
+  const [rowData, setRowData] = useState<OpportunityMetadata[]>([])
+
   const [publishModalOpen, setPublishModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (data || (data && publishModalOpen === false)) {
+      const d: OpportunityMetadata[] = data.map((publication) => {
+        return JSON.parse((publication as Post).metadata.content!)
+      })
+      setRowData(d)
+    }
+  }, [data, publishModalOpen])
+
+  console.log('data', data)
+  console.log('error', error)
 
   const onNew = () => {
     setPublishModalOpen(true)
@@ -63,18 +71,22 @@ const OrganizationVHRTab: React.FC = () => {
               className="ag-theme-alpine"
               style={{ height: '800px', width: '90%' }}
             >
-              <AgGridReact
-                defaultColDef={defaultColumnDef}
-                rowData={rowData}
-                columnDefs={Object.values(
-                  makeOrgColumnDefs({
-                    onEditClick: onEdit,
-                    onDeleteClick: onDelete
-                  })
-                )}
-                pagination
-                paginationPageSize={20}
-              />
+              {loading ? (
+                <Spinner />
+              ) : (
+                <AgGridReact
+                  defaultColDef={defaultColumnDef}
+                  rowData={rowData}
+                  columnDefs={Object.values(
+                    makeOrgVHRColumnDefs({
+                      onEditClick: onEdit,
+                      onDeleteClick: onDelete
+                    })
+                  )}
+                  pagination
+                  paginationPageSize={20}
+                />
+              )}
             </div>
             <PublishOpportunityModal
               open={publishModalOpen}
