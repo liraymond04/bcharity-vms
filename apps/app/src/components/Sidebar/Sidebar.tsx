@@ -28,7 +28,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
           onClick={() => {}}
           icon={<div />}
           label=""
-          className="hover:bg-opacity-0 hover:cursor-auto"
+          className="hover:bg-opacity-0 hover:cursor-default"
         />
       )}
       <div className="flex flex-col">
