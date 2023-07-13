@@ -28,8 +28,6 @@ const OrganizationVHRTab: React.FC = () => {
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
 
-  console.log(error)
-
   const onNew = () => {
     setPublishModalOpen(true)
   }
