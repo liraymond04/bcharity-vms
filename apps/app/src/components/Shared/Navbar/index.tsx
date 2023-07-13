@@ -145,7 +145,7 @@ const Navbar: FC = () => {
                     </div>
                   </a>
                 )}
-                {showMenu && (
+                {showMenu && auth && (
                   <a href="/dashboard">
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
