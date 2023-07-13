@@ -14,8 +14,8 @@ const Contact: NextPage = () => {
       </h1>
       <div className="container mx-auto px-40 py-8">
         <form
-          // onSubmit={handleSubmit}
-          className="rounded-lg shadow-l flex flex-col px-8 py-8 bg-white dark:bg-blue-500"
+          className="rounded-lg shadow-l flex flex-col px-8 py-8 
+          bg-white dark:bg-blue-500 outline outline-1 outline-gray-200 outline-offset-2"
         >
           <h1 className="text-2xl font-bold dark:text-gray-50 text-center">
             Contact us
@@ -58,14 +58,14 @@ const Contact: NextPage = () => {
           />
 
           <div className="flex flex-row items-center justify-start justify-between">
-            <button
-              onClick={() => (window.location.href = '/')}
-              type="submit"
-              className="px-10 mt-8 py-2 bg-[#9969FF] text-gray-50 font-light 
+            <a href="../">
+              <div
+                className="px-10 mt-8 py-2 bg-[#9969FF] text-gray-50 font-light 
                 float-right rounded-md text-lg flex flex-row items-center"
-            >
-              Cancel
-            </button>
+              >
+                Cancel
+              </div>
+            </a>
 
             <button
               onClick={() =>
