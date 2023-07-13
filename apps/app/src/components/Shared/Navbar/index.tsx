@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppPersistStore } from '@/store/app'
 
+import TranslateButton from '../TranslateButton'
 import MenuItems from './MenuItems'
 
 const inter500 = Inter({
@@ -103,6 +104,9 @@ const Navbar: FC = () => {
               </button>
             </a>
           )}
+        </div>
+        <div className="my-auto mr-10">
+          <TranslateButton />
         </div>
         <div className="my-auto mr-10">
           <MenuItems />
