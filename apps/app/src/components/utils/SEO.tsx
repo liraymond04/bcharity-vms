@@ -33,7 +33,7 @@ const SEO: FC<Props> = ({ title = APP_NAME, description = DESCRIPTION }) => {
       <link
         rel="apple-touch-icon"
         sizes="192x192"
-        href={`${STATIC_ASSETS}/images/icons/apple-touch-icon.png`}
+        href={`${STATIC_ASSETS}/icons/apple-touch-icon.png`}
       />
 
       <meta property="og:url" content="https://bcharity.xyz" />
