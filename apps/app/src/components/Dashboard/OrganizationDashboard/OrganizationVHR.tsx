@@ -2,47 +2,33 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
-import { Post, usePublications } from '@lens-protocol/react-web'
 import { AgGridReact } from 'ag-grid-react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { OpportunityMetadata } from '@/lib/types'
+import usePostData from '@/lib/usePostData'
 import { useAppPersistStore } from '@/store/app'
 
+import Error from '../Modals/Error'
 import PublishOpportunityModal from '../Modals/PublishOpportunityModal'
 import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
 
-  const { data, error, loading } = usePublications({
+  const { data, error, loading, refetch } = usePostData<OpportunityMetadata>({
     profileId: profile!.id,
-    observerId: profile!.id,
-    metadataFilter: {
-      restrictPublicationTagsTo: {
-        all: ['ORG_PUBLISH_OPPORTUNITY']
-      }
+    metadata: {
+      tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
     }
   })
 
-  const [rowData, setRowData] = useState<OpportunityMetadata[]>([])
-
   const [publishModalOpen, setPublishModalOpen] = useState(false)
 
-  useEffect(() => {
-    if (data || (data && publishModalOpen === false)) {
-      const d: OpportunityMetadata[] = data.map((publication) => {
-        return JSON.parse((publication as Post).metadata.content!)
-      })
-      setRowData(d)
-    }
-  }, [data, publishModalOpen])
-
-  console.log('data', data)
-  console.log('error', error)
+  console.log(error)
 
   const onNew = () => {
     setPublishModalOpen(true)
@@ -76,7 +62,7 @@ const OrganizationVHRTab: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={rowData}
+                  rowData={data}
                   columnDefs={Object.values(
                     makeOrgVHRColumnDefs({
                       onEditClick: onEdit,
@@ -88,9 +74,16 @@ const OrganizationVHRTab: React.FC = () => {
                 />
               )}
             </div>
+            {error && <Error message="An error occured. Please try again." />}
             <PublishOpportunityModal
               open={publishModalOpen}
-              onClose={() => setPublishModalOpen(false)}
+              onClose={(shouldRefetch) => {
+                setPublishModalOpen(false)
+
+                if (shouldRefetch) {
+                  refetch()
+                }
+              }}
               publisher={{ ...profile!, ownedByMe: true }}
             />
           </div>
