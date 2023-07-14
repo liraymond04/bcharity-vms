@@ -1,5 +1,7 @@
 import ThemeButton from '@components/Shared/ThemeButton'
 import { PhotographIcon } from '@heroicons/react/outline'
+import { SunIcon } from '@heroicons/react/solid'
+import { MoonIcon } from '@heroicons/react/solid'
 import React from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
@@ -19,8 +21,13 @@ const VolunteerSettingsTab: React.FC = () => {
             <div className="text-2xl m-10">
               Toggle between light and dark mode.
             </div>
-            <div className="text-2xl">
-              <ThemeButton />
+            <div className="text-2xl flex justify-center">
+              <SunIcon className="w-10 h-10 mr-3" />
+              <div>
+                {' '}
+                <ThemeButton />
+              </div>
+              <MoonIcon className="w-10 h-10 ml-3" />
             </div>
           </section>
         </Card>
