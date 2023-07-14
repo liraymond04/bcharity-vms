@@ -1,3 +1,4 @@
+import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useBalance } from 'wagmi'
@@ -8,11 +9,22 @@ import { Spinner } from '@/components/UI/Spinner'
 import { VHR_TOKEN } from '@/constants'
 import { useAppPersistStore } from '@/store/app'
 
+const inter500 = Inter({
+  subsets: ['latin'],
+  weight: ['500']
+})
+
 const VolunteerVHRTab: React.FC = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [searchAddress, setSearchAddress] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
+  const opportunityNames = [
+    'Professional Hamburger Machine Operator 1',
+    'Professional Hamburger Machine Operator 2',
+    'Professional Hamburger Machine Operator 3',
+    'Professional Hamburger Machine Operator 4'
+  ] //use hardcoded names for now
 
   const { data, isLoading } = useBalance({
     address: `0x${searchAddress.substring(2)}`,
@@ -47,51 +59,76 @@ const VolunteerVHRTab: React.FC = () => {
   )
 
   return (
-    <GridLayout>
-      <GridItemTwelve>
-        <Card>
-          <div className="p-10 m-10">
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <>
-                <div className="flex items-center">
-                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
-                    VHR Amount:
+    <>
+      <GridLayout>
+        <GridItemTwelve>
+          <Card>
+            <div className="p-10 m-10">
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  <div className="flex items-center">
+                    <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
+                      VHR Amount:
+                    </div>
+                    <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
+                      {Number(data?.value)} / {vhrGoal}
+                    </div>
                   </div>
-                  <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
-                    {Number(data?.value)} / {vhrGoal}
-                  </div>
-                </div>
-                <Link
-                  href=""
-                  className="text-brand-500 hover:text-brand-600"
-                  onClick={() => {
-                    console.log('Set a goal')
-                  }}
-                >
-                  Set a goal
-                </Link>
-                <Progress
-                  progress={Number(data?.value)}
-                  total={vhrGoal}
-                  className="mt-10 mb-10"
-                />
-                {Number(data?.value) < vhrGoal ? (
-                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2x l">
-                    {vhrGoal - Number(data?.value)} away from goal!
-                  </div>
-                ) : (
-                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2xl">
-                    Reached goal!
-                  </div>
-                )}
-              </>
-            )}
+                  <Link
+                    href=""
+                    className="text-brand-500 hover:text-brand-600"
+                    onClick={() => {
+                      console.log('Set a goal')
+                    }}
+                  >
+                    Set a goal
+                  </Link>
+                  <Progress
+                    progress={Number(data?.value)}
+                    total={vhrGoal}
+                    className="mt-10 mb-10"
+                  />
+                  {Number(data?.value) < vhrGoal ? (
+                    <div className="text-2xl font-normal text-black dark:text-white sm:text-2x l">
+                      {vhrGoal - Number(data?.value)} away from goal!
+                    </div>
+                  ) : (
+                    <div className="text-2xl font-normal text-black dark:text-white sm:text-2xl">
+                      Reached goal!
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </Card>
+        </GridItemTwelve>
+      </GridLayout>
+      <div className="flex flex-wrap justify-around mx-auto">
+        {opportunityNames.map((name, id) => (
+          <div
+            key={id}
+            className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
+          >
+            <div className="w-full h-[200px] bg-black"></div>
+            <div
+              className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
+            >
+              {name}
+            </div>
+            <div
+              className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
+            >
+              APPLY
+            </div>
           </div>
-        </Card>
-      </GridItemTwelve>
-    </GridLayout>
+        ))}
+        <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
+        <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
+        <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
+      </div>
+    </>
   )
 }
 
