@@ -25,6 +25,7 @@ const VolunteerVHRTab: React.FC = () => {
     'Professional Hamburger Machine Operator 3',
     'Professional Hamburger Machine Operator 4'
   ] //use hardcoded names for now
+  const [searchValue, setSearchValue] = useState('')
 
   const { data, isLoading } = useBalance({
     address: `0x${searchAddress.substring(2)}`,
@@ -57,6 +58,36 @@ const VolunteerVHRTab: React.FC = () => {
       </div>
     </div>
   )
+
+  function filterOpportunity(name: string, search: string): boolean {
+    const nameArr = name.split(' ')
+    const searchArr = search.split(' ')
+    let result = true
+    searchArr.map((search) => {
+      let found = false
+      nameArr.map((name) => {
+        let p0 = 0
+        let p1 = 0
+        while (p0 < name.length && p1 < search.length) {
+          if (
+            name.charAt(p0).toLowerCase() == search.charAt(p1).toLowerCase()
+          ) {
+            p0++, p1++
+          } else {
+            p0++
+          }
+        }
+        if (p1 == search.length) {
+          found = true
+        }
+      })
+      if (!found) {
+        result = false
+      }
+    })
+
+    return result
+  }
 
   return (
     <>
@@ -105,25 +136,37 @@ const VolunteerVHRTab: React.FC = () => {
           </Card>
         </GridItemTwelve>
       </GridLayout>
+      <div>
+        <input
+          type="text"
+          value={searchValue}
+          placeholder="search"
+          onChange={(e) => {
+            setSearchValue(e.target.value)
+          }}
+        />
+      </div>
       <div className="flex flex-wrap justify-around mx-auto">
-        {opportunityNames.map((name, id) => (
-          <div
-            key={id}
-            className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
-          >
-            <div className="w-full h-[200px] bg-black"></div>
+        {opportunityNames
+          .filter((name) => filterOpportunity(name, searchValue))
+          .map((filterName, id) => (
             <div
-              className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
+              key={id}
+              className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
             >
-              {name}
+              <div className="w-full h-[200px] bg-black"></div>
+              <div
+                className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
+              >
+                {filterName}
+              </div>
+              <div
+                className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
+              >
+                APPLY
+              </div>
             </div>
-            <div
-              className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
-            >
-              APPLY
-            </div>
-          </div>
-        ))}
+          ))}
         <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
         <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
         <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
