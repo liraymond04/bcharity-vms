@@ -122,6 +122,7 @@ const SiteLayout: FC<Props> = ({ children }) => {
         <div className="flex flex-col h-screen">
           <Navbar />
           <div className="flex-grow">{children}</div>
+
           <div>
             <Footer />
           </div>

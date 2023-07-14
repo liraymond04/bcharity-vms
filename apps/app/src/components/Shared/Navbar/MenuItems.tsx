@@ -103,6 +103,7 @@ const MenuItems: FC = () => {
                   <div>{t('Your Profile')}</div>
                 </div>
               </Menu.Item>
+
               <Menu.Item
                 as={NextLink}
                 href="/settings"
@@ -115,6 +116,7 @@ const MenuItems: FC = () => {
                   <div>{t('Settings')}</div>
                 </div>
               </Menu.Item>
+
               <Menu.Item
                 as={NextLink}
                 href="/"
