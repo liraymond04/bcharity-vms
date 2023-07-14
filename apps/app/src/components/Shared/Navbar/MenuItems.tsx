@@ -13,7 +13,6 @@ import { Profile } from '@lens-protocol/react-web'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GIT_COMMIT_SHA } from 'src/constants'
@@ -33,7 +32,7 @@ export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
 
 const MenuItems: FC = () => {
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false)
-  const { pathname } = useRouter()
+
   const { disconnect } = useDisconnect()
 
   const { profiles } = useAppStore()

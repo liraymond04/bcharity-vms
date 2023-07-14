@@ -1,19 +1,11 @@
-import { useRouter } from 'next/router'
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useAppPersistStore, useAppStore } from 'src/store/app'
-import { useDisconnect } from 'wagmi'
+import { useAppPersistStore } from 'src/store/app'
 
 import getAvatar from '@/lib/getAvatar'
 
+import { ITabProps } from './Sidebar'
 import TabTitle from './TabTile'
-
-export interface ITabProps {
-  icon: React.ReactElement
-  label: string
-}
-
 interface ISidebarProps {
   emptyTop?: boolean
   selectedIndex: number
@@ -27,16 +19,9 @@ const Sidebar2: React.FC<ISidebarProps> = ({
   setSelectedIndex,
   tabs
 }) => {
-  const [showLoginModal, setShowLoginModal] = useState<boolean>(false)
-  const { pathname } = useRouter()
-  const { disconnect } = useDisconnect()
-
-  const { profiles } = useAppStore()
   const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
-
-  const { t } = useTranslation('common')
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {

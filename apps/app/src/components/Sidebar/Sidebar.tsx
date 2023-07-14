@@ -6,7 +6,6 @@ export interface ITabProps {
   icon: React.ReactElement
   label: string
 }
-
 interface ISidebarProps {
   emptyTop?: boolean
   selectedIndex: number
