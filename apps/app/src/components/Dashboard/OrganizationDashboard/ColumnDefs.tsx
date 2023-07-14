@@ -1,5 +1,5 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
-import { CellClickedEvent } from 'ag-grid-community'
+import { CellClickedEvent, ColDef } from 'ag-grid-community'
 
 export const defaultColumnDef = {
   resizable: true
@@ -10,10 +10,10 @@ interface IColumnDefParams {
   onDeleteClick: (id: string) => void
 }
 
-export const makeOrgVHRColumnDefs = (params: IColumnDefParams) => {
-  return {
-    ['EditRow']: {
-      field: 'id',
+export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
+  return [
+    {
+      field: 'edit',
       headerName: '',
       resizable: false,
       cellRenderer: () => {
@@ -24,8 +24,8 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams) => {
       },
       width: 50
     },
-    ['DeleteRow']: {
-      field: 'id',
+    {
+      field: 'delete',
       headerName: '',
       resizable: false,
       cellRenderer: () => {
@@ -36,11 +36,11 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams) => {
       },
       width: 50
     },
-    ['ActivityName']: {
+    {
       field: 'name',
       filter: 'agTextColumnFilter'
     },
-    // ['VHR']: {
+    // {
     //   field: 'vhr',
     //   headerName: 'VHR',
     //   resizable: false,
@@ -66,29 +66,29 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams) => {
     //   },
     //   width: 110
     // },
-    ['date']: {
+    {
       field: 'date',
       filter: 'agTextColumnFilter'
     },
-    ['hours']: {
+    {
       field: 'hours',
       filter: 'agTextColumnFilter'
     },
-    ['program']: {
+    {
       field: 'program',
       filter: 'agTextColumnFilter'
     },
-    ['category']: {
+    {
       field: 'category',
       filter: 'agTextColumnFilter'
     },
-    ['website']: {
+    {
       field: 'website',
       filter: 'agTextColumnFilter'
     },
-    ['description']: {
+    {
       field: 'description',
       filter: 'agTextColumnFilter'
     }
-  }
+  ]
 }
