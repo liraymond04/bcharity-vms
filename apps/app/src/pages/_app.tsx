@@ -1,7 +1,5 @@
 import '../styles.css'
 
-import { development, LensConfig, LensProvider } from '@lens-protocol/react-web'
-import { bindings as wagmiBindings } from '@lens-protocol/wagmi'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
@@ -12,11 +10,6 @@ import { publicProvider } from 'wagmi/providers/public'
 
 import SiteLayout from '@/components/SiteLayout'
 import { IS_MAINNET, WALLET_CONNECT_PROJECT_ID } from '@/constants'
-
-const lensConfig: LensConfig = {
-  bindings: wagmiBindings(),
-  environment: development
-}
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [IS_MAINNET ? polygon : polygonMumbai],
@@ -49,13 +42,11 @@ const config = createConfig({
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <WagmiConfig config={config}>
-      <LensProvider config={lensConfig}>
-        <ThemeProvider defaultTheme="light" attribute="class">
-          <SiteLayout>
-            <Component {...pageProps} />
-          </SiteLayout>
-        </ThemeProvider>
-      </LensProvider>
+      <ThemeProvider defaultTheme="light" attribute="class">
+        <SiteLayout>
+          <Component {...pageProps} />
+        </SiteLayout>
+      </ThemeProvider>
     </WagmiConfig>
   )
 }

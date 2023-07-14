@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Profile } from '@lens-protocol/react-web'
+import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 

@@ -4,10 +4,12 @@ import { Form, useZodForm } from '@components/UI/Form'
 import { Input } from '@components/UI/Input'
 import { Spinner } from '@components/UI/Spinner'
 import { PlusIcon } from '@heroicons/react/outline'
-import { isValidHandle, useCreateProfile } from '@lens-protocol/react-web'
+import { isRelayerResult } from '@lens-protocol/client'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
+
+import createProfile, { isValidHandle } from '@/lib/lens-protocol/createProfile'
 
 interface Props {
   isModal?: boolean
@@ -16,8 +18,9 @@ interface Props {
 const Create: FC<Props> = ({ isModal = false }) => {
   const { t } = useTranslation('common')
   const [success, setSuccess] = useState<boolean>(false)
-
-  const { execute: create, error, isPending } = useCreateProfile()
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isPending, setIsPending] = useState<boolean>(false)
 
   const newUserSchema = object({
     handle: string()
@@ -37,13 +40,19 @@ const Create: FC<Props> = ({ isModal = false }) => {
       form={form}
       className="space-y-4"
       onSubmit={async ({ handle }) => {
+        setIsPending(true)
+        setError(false)
         const username = handle.toLowerCase()
         if (isValidHandle(username)) {
-          const result = await create({ handle: username })
-          if (result.isSuccess()) {
+          const result = await createProfile(username)
+          if (!isRelayerResult(result)) {
+            setErrorMessage(`Something went wrong: ${result}`)
+            setError(true)
+          } else {
             setSuccess(true)
           }
         }
+        setIsPending
       }}
     >
       {error && (
@@ -52,7 +61,7 @@ const Create: FC<Props> = ({ isModal = false }) => {
           title="Create profile failed!"
           error={{
             name: 'Create profile failed!',
-            message: error.message
+            message: errorMessage
           }}
         />
       )}

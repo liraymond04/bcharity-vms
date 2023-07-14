@@ -1,5 +1,4 @@
 import Loading from '@components/Loading'
-import { useProfilesOwnedBy } from '@lens-protocol/react-web'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -8,6 +7,7 @@ import { FC, ReactNode, Suspense, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useAccount } from 'wagmi'
 
+import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
 import { useAppPersistStore, useAppStore } from '@/store/app'
 
 import { Button } from './UI/Button'
@@ -25,21 +25,16 @@ const SiteLayout: FC<Props> = ({ children }) => {
   const { setProfiles } = useAppStore()
   const { address } = useAccount()
 
-  const [authAddress, setAuthAddress] = useState<string>('')
-  const { data: profiles } = useProfilesOwnedBy({
-    address: authAddress
-  })
-
   const { hasCookies, setHasCookies } = useAppPersistStore()
   const [showCookiesPopup, setShowCookiesPopup] = useState<boolean>(true)
 
   useEffect(() => {
-    if (address) setAuthAddress(address)
-  }, [address])
-
-  useEffect(() => {
-    if (profiles) setProfiles(profiles)
-  }, [profiles, setProfiles])
+    if (address) {
+      getProfilesOwnedBy(address).then((profiles) => {
+        setProfiles(profiles)
+      })
+    }
+  }, [address, setProfiles])
 
   useEffect(() => {
     if (hasCookies) {
