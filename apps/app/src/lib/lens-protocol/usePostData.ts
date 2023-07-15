@@ -10,12 +10,10 @@ const usePostData = <T>(params: PublicationsQueryRequest) => {
 
   const refetch = () => {
     setLoading(true)
-    lensClient.publication
-      .fetchAll(params)
+    lensClient()
+      .publication.fetchAll(params)
       .then((data) => {
-        const d: T[] = data.items.map((p: any) =>
-          JSON.parse(p.metadata.content)
-        )
+        const d: T[] = data.items.map((p: any) => p.metadata)
         setData(d)
       })
       .catch((error) => {

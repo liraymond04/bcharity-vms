@@ -2,14 +2,15 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
+import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { AgGridReact } from 'ag-grid-react'
 import React, { useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
+import usePostData from '@/lib/lens-protocol/usePostData'
 import { OpportunityMetadata } from '@/lib/types'
-import usePostData from '@/lib/usePostData'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
@@ -19,12 +20,13 @@ import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 const OrganizationVHRTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
 
-  const { data, error, loading, refetch } = usePostData<OpportunityMetadata>({
-    profileId: profile!.id,
-    metadata: {
-      tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
-    }
-  })
+  const { data, error, loading, refetch } =
+    usePostData<PublicationMetadataV2Input>({
+      profileId: profile!.id,
+      metadata: {
+        tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
+      }
+    })
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
 
@@ -60,7 +62,20 @@ const OrganizationVHRTab: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={data}
+                  rowData={data.map((post): OpportunityMetadata => {
+                    const attributes = post.attributes
+                    return {
+                      opportunity_id: attributes[1].value,
+                      name: attributes[2].value,
+                      date: attributes[3].value,
+                      hours: attributes[4].value,
+                      program: attributes[5].value,
+                      region: attributes[6].value,
+                      category: attributes[7].value,
+                      website: attributes[8].value,
+                      description: attributes[9].value
+                    }
+                  })}
                   columnDefs={Object.values(
                     makeOrgVHRColumnDefs({
                       onEditClick: onEdit,
@@ -82,7 +97,7 @@ const OrganizationVHRTab: React.FC = () => {
                   refetch()
                 }
               }}
-              publisher={{ ...profile!, ownedByMe: true }}
+              publisher={profile}
             />
           </div>
         </Card>

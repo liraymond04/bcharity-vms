@@ -1,7 +1,9 @@
 import { PublicationMetadataV2Input } from '@lens-protocol/client'
-import { Profile } from '@lens-protocol/client/dist/declarations/src/graphql/types.generated'
+import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { signTypedData } from '@wagmi/core'
 
 import uploadToIPFS from '../ipfsUpload'
+import getSignature from './getSignature'
 import lensClient from './lensClient'
 
 const createPost = async (
@@ -25,7 +27,7 @@ const createPost = async (
   const profileId: string = profile.id
 
   // or with typedData that require signature and broadcasting
-  const typedDataResult = await lensClient.publication.createPostTypedData({
+  const typedDataResult = await lensClient().publication.createPostTypedData({
     profileId,
     contentURI,
     collectModule: {
@@ -38,7 +40,16 @@ const createPost = async (
     }
   })
 
-  return typedDataResult
+  const signature = await signTypedData(
+    getSignature(typedDataResult.unwrap().typedData)
+  )
+
+  const broadcastResult = await lensClient().transaction.broadcast({
+    id: typedDataResult.unwrap().id,
+    signature: signature
+  })
+
+  return broadcastResult
 }
 
 export default createPost

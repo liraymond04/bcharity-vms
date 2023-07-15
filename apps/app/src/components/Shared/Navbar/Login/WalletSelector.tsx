@@ -70,14 +70,14 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
         const walletClient = await connect.getWalletClient()
         const address = walletClient.account.address
 
-        const challenge = await lensClient.authentication.generateChallenge(
+        const challenge = await lensClient().authentication.generateChallenge(
           address
         )
         const signature = await signMessage({ message: challenge })
 
-        await lensClient.authentication.authenticate(address, signature)
+        await lensClient().authentication.authenticate(address, signature)
 
-        if (await lensClient.authentication.isAuthenticated) {
+        if (await lensClient().authentication.isAuthenticated()) {
           const profiles = await getProfilesOwnedBy(address)
           _setProfiles(profiles)
         } else {

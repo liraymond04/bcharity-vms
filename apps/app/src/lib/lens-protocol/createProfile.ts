@@ -9,7 +9,7 @@ export const isValidHandle = (handle: string) => {
 }
 
 const createProfile = async (handle: string) => {
-  const profileCreateResult = await lensClient.profile.create({
+  const profileCreateResult = await lensClient().profile.create({
     handle
     // other request args
   })

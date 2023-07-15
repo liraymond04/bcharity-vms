@@ -46,7 +46,7 @@ const Create: FC<Props> = ({ isModal = false }) => {
         if (isValidHandle(username)) {
           const result = await createProfile(username)
           if (!isRelayerResult(result)) {
-            setErrorMessage(`Something went wrong: ${result}`)
+            setErrorMessage(`${result}`)
             setError(true)
           } else {
             setSuccess(true)
