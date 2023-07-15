@@ -1,15 +1,8 @@
 import { useTheme } from 'next-themes'
 import React, { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
-import i18n from '@/i18n'
-
-const TranslateButton: FC = () => {
-  const { t } = useTranslation('common')
+const ThemeButton: FC = () => {
   const { theme, setTheme } = useTheme()
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(theme)
-  }
   const [lightTheme, setLightTheme] = useState<boolean>(true)
   useEffect(() => {
     if (theme === 'light') {
@@ -36,4 +29,4 @@ const TranslateButton: FC = () => {
   )
 }
 
-export default TranslateButton
+export default ThemeButton
