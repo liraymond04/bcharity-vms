@@ -1,7 +1,8 @@
 import SwitchNetwork from '@components/Shared/SwitchNetwork'
 import { Button } from '@components/UI/Button'
 import { XCircleIcon } from '@heroicons/react/solid'
-import { useProfilesOwnedBy, useWalletLogin } from '@lens-protocol/react-web'
+import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { signMessage } from '@wagmi/core'
 import clsx from 'clsx'
 import React, { Dispatch, FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +18,8 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { CHAIN_ID } from '@/constants'
 import getWalletLogo from '@/lib/getWalletLogo'
+import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import Logger from '@/lib/logger'
 
 interface Props {
@@ -32,16 +35,13 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
 
   const [mounted, setMounted] = useState(false)
 
-  const { execute: login, error: loginError } = useWalletLogin()
-
   const { isConnected, connector: activeConnector } = useAccount()
   const { disconnectAsync } = useDisconnect()
 
   const { connectors, connectAsync } = useConnect()
-  const [authAddress, setAuthAddress] = useState<string>('')
-  const { data: profiles } = useProfilesOwnedBy({
-    address: authAddress
-  })
+  const [loginError, setLoginError] = useState<boolean>(false)
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>('')
+  const [profiles, _setProfiles] = useState<Profile[]>()
 
   const { t } = useTranslation('common')
 
@@ -64,11 +64,30 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
     const { connector: connect } = await connectAsync({ connector })
 
     if (connect instanceof InjectedConnector) {
-      const walletClient = await connect.getWalletClient()
-      const auth = await login({
-        address: walletClient.account.address
-      })
-      if (auth.isSuccess()) setAuthAddress(walletClient.account.address)
+      try {
+        setLoginError(false)
+
+        const walletClient = await connect.getWalletClient()
+        const address = walletClient.account.address
+
+        const challenge = await lensClient().authentication.generateChallenge(
+          address
+        )
+        const signature = await signMessage({ message: challenge })
+
+        await lensClient().authentication.authenticate(address, signature)
+
+        if (await lensClient().authentication.isAuthenticated()) {
+          const profiles = await getProfilesOwnedBy(address)
+          _setProfiles(profiles)
+        } else {
+          setLoginErrorMessage('Could not get profiles')
+          setLoginError(true)
+        }
+      } catch (e: any) {
+        setLoginErrorMessage(e.message)
+        setLoginError(true)
+      }
     }
   }
 
@@ -110,7 +129,7 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
       {loginError && (
         <div className="flex items-center space-x-1 font-bold text-red-500">
           <XCircleIcon className="w-5 h-5" />
-          <div>{loginError.message}</div>
+          <div>{loginErrorMessage}</div>
         </div>
       )}
     </div>
