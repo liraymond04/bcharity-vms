@@ -28,10 +28,22 @@ const VolunteerVHRTab: React.FC = () => {
   const generateHardCodedData = () => {
     //use hardcoded names for now
     let data = []
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 25; i++) {
       data.push({
-        name: `Professional Hamburger Machine Operator ${i}`,
+        name: `Vancouver ${i}`,
         region: `Vancouver`
+      })
+    }
+    for (let i = 0; i < 25; i++) {
+      data.push({
+        name: `Calgary ${i}`,
+        region: `Calgary`
+      })
+    }
+    for (let i = 0; i < 25; i++) {
+      data.push({
+        name: `Toronto ${i}`,
+        region: `Toronto`
       })
     }
     return data
