@@ -71,7 +71,9 @@ const Volunteers: NextPage = () => {
         Browse volunteer opportunities
       </div>
       {loading ? (
-        <Spinner />
+        <div className="flex justify-center m-5">
+          <Spinner />
+        </div>
       ) : (
         <GridLayout>
           {posts
