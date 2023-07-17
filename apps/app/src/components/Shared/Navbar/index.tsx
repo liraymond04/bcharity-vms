@@ -76,7 +76,7 @@ const Navbar: FC = () => {
         <a href="/">
           <img
             className="m-5 h-10 w-10"
-            src="https://bcharity.vercel.app/logo.jpg "
+            src="/logo.jpg "
             alt="BCharity logo"
           ></img>
         </a>
