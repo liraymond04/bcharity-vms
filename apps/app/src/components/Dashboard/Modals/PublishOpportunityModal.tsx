@@ -32,8 +32,6 @@ interface IFormProps {
   opportunityName: string
   dates: string
   numHours: string
-  program: string
-  region: string
   category: string
   website: string
   description: string
@@ -100,16 +98,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         traitType: 'hours',
         displayType: PublicationMetadataDisplayTypes.String,
         value: data.numHours
-      },
-      {
-        traitType: 'program',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.program
-      },
-      {
-        traitType: 'region',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.region
       },
       {
         traitType: 'category',
@@ -180,7 +168,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           >
             <Input
               label="Volunteer opportunity name"
-              placeholder="Medial internship"
+              placeholder="Medical internship"
               error={!!errors.opportunityName?.type}
               {...register('opportunityName', { required: true })}
             />
@@ -196,18 +184,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="5"
               error={!!errors.numHours?.type}
               {...register('numHours', { required: true })}
-            />
-            <Input
-              label="Program"
-              placeholder="Volunteer program names(s)"
-              error={!!errors.program?.type}
-              {...register('program', { required: true })}
-            />
-            <Input
-              label="City/region"
-              placeholder="Calgary"
-              error={!!errors.region?.type}
-              {...register('region', { required: true })}
             />
             <Input
               label="Category"
