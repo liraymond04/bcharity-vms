@@ -105,6 +105,7 @@ const Volunteers: NextPage = () => {
                       {post?.website && (
                         <Link
                           href={post?.website}
+                          target="_blank"
                           className="absolute bottom-0 flex text-brand-600 text-sm"
                         >
                           <div className="flex items-center">
