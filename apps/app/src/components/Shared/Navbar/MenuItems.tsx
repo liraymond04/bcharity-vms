@@ -9,7 +9,7 @@ import {
   UserIcon
 } from '@heroicons/react/outline'
 import { CheckCircleIcon } from '@heroicons/react/solid'
-import { Profile } from '@lens-protocol/react-web'
+import { ProfileFragment as Profile } from '@lens-protocol/client'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
@@ -103,6 +103,7 @@ const MenuItems: FC = () => {
                   <div>{t('Your Profile')}</div>
                 </div>
               </Menu.Item>
+
               <Menu.Item
                 as={NextLink}
                 href="/settings"
@@ -115,6 +116,7 @@ const MenuItems: FC = () => {
                   <div>{t('Settings')}</div>
                 </div>
               </Menu.Item>
+
               <Menu.Item
                 as={NextLink}
                 href="/"

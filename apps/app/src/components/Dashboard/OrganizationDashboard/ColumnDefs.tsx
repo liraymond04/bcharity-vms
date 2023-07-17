@@ -1,5 +1,5 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
-import { CellClickedEvent } from 'ag-grid-community'
+import { CellClickedEvent, ColDef } from 'ag-grid-community'
 
 export const defaultColumnDef = {
   resizable: true
@@ -10,10 +10,10 @@ interface IColumnDefParams {
   onDeleteClick: (id: string) => void
 }
 
-export const makeOrgColumnDefs = (params: IColumnDefParams) => {
-  return {
-    ['EditRow']: {
-      field: 'id',
+export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
+  return [
+    {
+      field: 'edit',
       headerName: '',
       resizable: false,
       cellRenderer: () => {
@@ -24,8 +24,8 @@ export const makeOrgColumnDefs = (params: IColumnDefParams) => {
       },
       width: 50
     },
-    ['DeleteRow']: {
-      field: 'id',
+    {
+      field: 'delete',
       headerName: '',
       resizable: false,
       cellRenderer: () => {
@@ -36,40 +36,55 @@ export const makeOrgColumnDefs = (params: IColumnDefParams) => {
       },
       width: 50
     },
-    ['ActivityName']: {
-      field: 'activityName',
+    {
+      field: 'name',
       filter: 'agTextColumnFilter'
     },
-    ['VHR']: {
-      field: 'vhr',
-      headerName: 'VHR',
-      resizable: false,
-      valueFormatter: () => {
-        return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways
-      },
-      cellRenderer: (params: any) => {
-        console.log('value ', params.value)
-        const progress = params.value?.current
-        const total = params.value?.goal
-        return (
-          <div>
-            <div className="flex justify-between mb-1">
-              <span className="text-sm font-medium text-blue-700">{`${progress} / ${total}`}</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-blue-600 h-2.5 rounded-full"
-                style={{ width: `${Math.trunc((progress / total) * 100)}%` }}
-              ></div>
-            </div>
-          </div>
-        )
-      },
-      width: 110
+    // {
+    //   field: 'vhr',
+    //   headerName: 'VHR',
+    //   resizable: false,
+    //   valueFormatter: () => {
+    //     return '' // gets rid of ag-grid warning due to object data type, we use a custom cell renderer anyways
+    //   },
+    //   cellRenderer: (params: any) => {
+    //     const progress = params.value?.current
+    //     const total = params.value?.goal
+    //     return (
+    //       <div>
+    //         <div className="flex justify-between mb-1">
+    //           <span className="text-sm font-medium text-blue-700">{`${progress} / ${total}`}</span>
+    //         </div>
+    //         <div className="w-full bg-gray-200 rounded-full h-2.5">
+    //           <div
+    //             className="bg-blue-600 h-2.5 rounded-full"
+    //             style={{ width: `${Math.trunc((progress / total) * 100)}%` }}
+    //           ></div>
+    //         </div>
+    //       </div>
+    //     )
+    //   },
+    //   width: 110
+    // },
+    {
+      field: 'date',
+      filter: 'agTextColumnFilter'
     },
-    ['Assigned']: {
-      field: 'assigned',
-      filter: 'agNumberColumnFilter'
+    {
+      field: 'hours',
+      filter: 'agTextColumnFilter'
+    },
+    {
+      field: 'category',
+      filter: 'agTextColumnFilter'
+    },
+    {
+      field: 'website',
+      filter: 'agTextColumnFilter'
+    },
+    {
+      field: 'description',
+      filter: 'agTextColumnFilter'
     }
-  }
+  ]
 }

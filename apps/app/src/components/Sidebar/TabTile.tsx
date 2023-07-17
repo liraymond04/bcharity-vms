@@ -18,9 +18,9 @@ const TabTitle: React.FC<ITabTitleProps> = ({
   return (
     <div>
       <div
-        className={`bg-white ${
-          selected ? 'bg-opacity-30' : 'bg-opacity-0'
-        } hover:bg-opacity-20 hover:cursor-pointer h-12 flex text-white items-center pl-8 ${className}`}
+        className={`bg-white ${selected ? 'bg-opacity-30' : 'bg-opacity-0'} ${
+          className ? '' : 'hover:bg-opacity-20'
+        } hover:cursor-pointer h-12 flex text-white items-center pl-8 ${className}`}
         onClick={() => onClick()}
       >
         <div className="pr-2">{icon}</div>
