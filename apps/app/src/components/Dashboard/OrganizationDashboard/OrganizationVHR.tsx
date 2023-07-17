@@ -47,9 +47,9 @@ const OrganizationVHRTab: React.FC = () => {
           <div className="p-5">
             <button
               onClick={onNew}
-              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black"
+              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
-              <PlusSmIcon className="w-8 text-white" />
+              <PlusSmIcon className="w-8 text-white dark:text-black" />
             </button>
             <div
               className="ag-theme-alpine"
