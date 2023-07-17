@@ -4,15 +4,15 @@ import React, { useState } from 'react'
 interface props {
   onClick: (string: string) => void
   region: string
+  className: string
 }
 
 const RegionDropdown = (props) => {
   const [open, setOpen] = useState<boolean>(false)
   const options = ['Any', 'Calgary', 'Vancouver', 'Toronto']
-  const [searchValue, setSearchValue] = useState<string>('')
 
   return (
-    <>
+    <div className={props.className}>
       <div
         onClick={() => setOpen(!open)}
         className={`relative flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white border-2 border-violet-300 ${
@@ -40,7 +40,7 @@ const RegionDropdown = (props) => {
             {value}
           </div>
         ))}
-    </>
+    </div>
   )
 }
 

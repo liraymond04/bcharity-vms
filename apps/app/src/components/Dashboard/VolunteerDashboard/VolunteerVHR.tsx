@@ -1,3 +1,4 @@
+import { SearchIcon } from '@heroicons/react/outline'
 import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -71,7 +72,7 @@ const VolunteerVHRTab: React.FC = () => {
   )
 
   const filterRegion = (name: string, search: string) => {
-    if (search == 'Any') return true
+    if (search == 'Any' || search == 'Region') return true
     if (search.length > name.length) return false
     for (let i = 0; i < search.length; i++) {
       if (search.charAt(i) != name.charAt(i)) return false
@@ -156,23 +157,31 @@ const VolunteerVHRTab: React.FC = () => {
           </Card>
         </GridItemTwelve>
       </GridLayout>
-      <div>
-        <input
-          type="text"
-          value={searchValue}
-          placeholder="search"
-          onChange={(e) => {
-            setSearchValue(e.target.value)
-          }}
-        />
-      </div>
-      <div>
-        <RegionDropdown
-          onClick={(value: string) => {
-            setRegion(value)
-          }}
-          region={region}
-        />
+      <div className="flex w-full justify-between">
+        <div className="ml-5 w-[200px]"></div>
+        <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
+          <input
+            className="border-none bg-transparent rounded-2xl w-[250px]"
+            type="text"
+            value={searchValue}
+            placeholder="search"
+            onChange={(e) => {
+              setSearchValue(e.target.value)
+            }}
+          />
+          <div className="h-5 w-5 mr-5">
+            <SearchIcon />
+          </div>
+        </div>
+        <div>
+          <RegionDropdown
+            className="mr-10"
+            onClick={(value: string) => {
+              setRegion(value)
+            }}
+            region={region}
+          />
+        </div>
       </div>
       <div className="flex flex-wrap justify-around mx-auto">
         {opportunities
