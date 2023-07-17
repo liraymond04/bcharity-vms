@@ -19,13 +19,21 @@ const VolunteerVHRTab: React.FC = () => {
 
   const [searchAddress, setSearchAddress] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
-  const opportunityNames = [
-    'Professional Hamburger Machine Operator 1',
-    'Professional Hamburger Machine Operator 2',
-    'Professional Hamburger Machine Operator 3',
-    'Professional Hamburger Machine Operator 4'
-  ] //use hardcoded names for now
   const [searchValue, setSearchValue] = useState('')
+
+  const generateHardCodedData = () => {
+    //use hardcoded names for now
+    let data = []
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        name: `Professional Hamburger Machine Operator ${i}`,
+        region: `New York`
+      })
+    }
+    return data
+  }
+
+  const opportunities = generateHardCodedData()
 
   const { data, isLoading } = useBalance({
     address: `0x${searchAddress.substring(2)}`,
@@ -147,9 +155,11 @@ const VolunteerVHRTab: React.FC = () => {
         />
       </div>
       <div className="flex flex-wrap justify-around mx-auto">
-        {opportunityNames
-          .filter((name) => filterOpportunity(name, searchValue))
-          .map((filterName, id) => (
+        {opportunities
+          .filter((opportunity) =>
+            filterOpportunity(opportunity.name, searchValue)
+          )
+          .map((filterOpportunity, id) => (
             <div
               key={id}
               className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
@@ -158,7 +168,7 @@ const VolunteerVHRTab: React.FC = () => {
               <div
                 className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
               >
-                {filterName}
+                {filterOpportunity.name}
               </div>
               <div
                 className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
