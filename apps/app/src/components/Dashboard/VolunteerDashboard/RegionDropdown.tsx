@@ -32,7 +32,10 @@ const RegionDropdown = (props) => {
         options.map((value, index) => (
           <div
             key={index}
-            onClick={() => props.onClick(value)}
+            onClick={() => {
+              props.onClick(value)
+              setOpen(false)
+            }}
             className={`relative flex w-[200px] h-[50px] items-center justify-around bg-white border-b-2 border-l-2 border-r-2 border-violet-300 hover:bg-violet-500 cursor-pointer hover:text-white
                 ${index == options.length - 1 ? 'rounded-b-2xl' : ''}
             `}
