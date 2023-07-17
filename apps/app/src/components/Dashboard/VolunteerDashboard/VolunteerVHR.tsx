@@ -9,6 +9,8 @@ import { Spinner } from '@/components/UI/Spinner'
 import { VHR_TOKEN } from '@/constants'
 import { useAppPersistStore } from '@/store/app'
 
+import RegionDropdown from './RegionDropdown'
+
 const inter500 = Inter({
   subsets: ['latin'],
   weight: ['500']
@@ -153,6 +155,9 @@ const VolunteerVHRTab: React.FC = () => {
             setSearchValue(e.target.value)
           }}
         />
+      </div>
+      <div>
+        <RegionDropdown />
       </div>
       <div className="flex flex-wrap justify-around mx-auto">
         {opportunities
