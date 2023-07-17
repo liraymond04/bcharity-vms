@@ -4,7 +4,6 @@ import { Card } from '@components/UI/Card'
 import SEO from '@components/utils/SEO'
 import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
-import { useEffect } from 'react'
 
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
@@ -20,11 +19,6 @@ const Volunteers: NextPage = () => {
       }
     }
   })
-
-  useEffect(() => {
-    console.log(data)
-    console.log(getOpportunityMetadata(data))
-  }, [data])
 
   return (
     <>
@@ -45,6 +39,11 @@ const Volunteers: NextPage = () => {
             </GridItemFour>
           ))}
         </GridLayout>
+      )}
+      {error && (
+        <div className="text-sm text-red-700 dark:text-red-200">
+          Something went wrong
+        </div>
       )}
     </>
   )
