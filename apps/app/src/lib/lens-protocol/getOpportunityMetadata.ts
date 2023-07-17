@@ -1,12 +1,14 @@
 import { PublicationFragment } from '@lens-protocol/client'
 
+import { OpportunityMetadata } from '../types'
+
 const getOpportunityMetadata = (data: PublicationFragment[]) =>
   data
     .filter(
       (post) =>
         post.__typename === 'Post' && post.metadata.attributes.length !== 0
     )
-    .map((post) => {
+    .map((post): OpportunityMetadata | undefined => {
       if (post.__typename === 'Post' && post.metadata.attributes.length !== 0) {
         const attributes = post.metadata.attributes
         return {
