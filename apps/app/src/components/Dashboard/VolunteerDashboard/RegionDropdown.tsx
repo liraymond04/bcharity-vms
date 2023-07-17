@@ -1,7 +1,12 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import React, { useState } from 'react'
 
-const RegionDropdown = () => {
+interface props {
+  onClick: (string: string) => void
+  region: string
+}
+
+const RegionDropdown = (props) => {
   const [open, setOpen] = useState<boolean>(false)
   const options = ['Any', 'Calgary', 'Vancouver', 'Toronto']
   const [searchValue, setSearchValue] = useState<string>('')
@@ -10,12 +15,13 @@ const RegionDropdown = () => {
     <>
       <div
         onClick={() => setOpen(!open)}
-        className={`relative flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-violet-300 ${
+        className={`relative flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white border-2 border-violet-300 ${
           open ? 'rounded-t-2xl' : 'rounded-2xl'
         }
         `}
       >
-        <button className="flex ml-[75px]">Region</button>
+        <div className="w-5 h-5 ml-2"></div>
+        <button className="flex ">{props.region}</button>
         {open ? (
           <ChevronUpIcon className="w-5 h-5 mr-2" />
         ) : (
@@ -26,7 +32,8 @@ const RegionDropdown = () => {
         options.map((value, index) => (
           <div
             key={index}
-            className={`relative flex w-[200px] h-[50px] items-center justify-around bg-violet-300 
+            onClick={() => props.onClick(value)}
+            className={`relative flex w-[200px] h-[50px] items-center justify-around bg-white border-b-2 border-l-2 border-r-2 border-violet-300 hover:bg-violet-500 cursor-pointer hover:text-white
                 ${index == options.length - 1 ? 'rounded-b-2xl' : ''}
             `}
           >

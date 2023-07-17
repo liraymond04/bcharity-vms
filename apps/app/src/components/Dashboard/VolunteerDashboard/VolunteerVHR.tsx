@@ -22,6 +22,7 @@ const VolunteerVHRTab: React.FC = () => {
   const [searchAddress, setSearchAddress] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
+  const [region, setRegion] = useState<string>('Region')
 
   const generateHardCodedData = () => {
     //use hardcoded names for now
@@ -29,7 +30,7 @@ const VolunteerVHRTab: React.FC = () => {
     for (let i = 0; i < 100; i++) {
       data.push({
         name: `Professional Hamburger Machine Operator ${i}`,
-        region: `New York`
+        region: `Vancouver`
       })
     }
     return data
@@ -69,7 +70,16 @@ const VolunteerVHRTab: React.FC = () => {
     </div>
   )
 
-  function filterOpportunity(name: string, search: string): boolean {
+  const filterRegion = (name: string, search: string) => {
+    if (search == 'Any') return true
+    if (search.length > name.length) return false
+    for (let i = 0; i < search.length; i++) {
+      if (search.charAt(i) != name.charAt(i)) return false
+    }
+    return true
+  }
+
+  const filterOpportunity = (name: string, search: string) => {
     const nameArr = name.split(' ')
     const searchArr = search.split(' ')
     let result = true
@@ -157,12 +167,19 @@ const VolunteerVHRTab: React.FC = () => {
         />
       </div>
       <div>
-        <RegionDropdown />
+        <RegionDropdown
+          onClick={(value: string) => {
+            setRegion(value)
+          }}
+          region={region}
+        />
       </div>
       <div className="flex flex-wrap justify-around mx-auto">
         {opportunities
-          .filter((opportunity) =>
-            filterOpportunity(opportunity.name, searchValue)
+          .filter(
+            (opportunity) =>
+              filterOpportunity(opportunity.name, searchValue) &&
+              filterRegion(opportunity.region, region)
           )
           .map((filterOpportunity, id) => (
             <div
