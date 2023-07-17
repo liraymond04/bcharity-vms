@@ -1,4 +1,5 @@
 import { Inter } from '@next/font/google'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -73,13 +74,13 @@ const Navbar: FC = () => {
   return (
     <div className="sticky z-20 top-0 flex justify-between bg-white bg-opacity-80 max-h-20 border-b-2 border-gray-100">
       <div className="flex items-center">
-        <a href="/">
+        <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
             className="m-5 h-10 w-10"
             src="/logo.jpg "
             alt="BCharity logo"
           ></img>
-        </a>
+        </Link>
         {screenSize == 'wideDesktop' && (
           <div
             className={`m-5 text-2xl text-violet-800 tracking-wider ${inter500.className}`}
@@ -109,7 +110,10 @@ const Navbar: FC = () => {
                   ></div>
                 </li>
                 {showMenu && (
-                  <a href="/causes">
+                  <Link
+                    href="/causes"
+                    aria-current={pathname == '/causes' ? 'page' : undefined}
+                  >
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] ${
                         pathname == '/causes' ? 'text-purple-600' : 'text-black'
@@ -117,10 +121,15 @@ const Navbar: FC = () => {
                     >
                       CAUSES
                     </div>
-                  </a>
+                  </Link>
                 )}
                 {showMenu && (
-                  <a href="/volunteers">
+                  <Link
+                    href="/volunteers"
+                    aria-current={
+                      pathname == '/volunteers' ? 'page' : undefined
+                    }
+                  >
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/volunteers'
@@ -130,10 +139,15 @@ const Navbar: FC = () => {
                     >
                       VOLUNTEERS
                     </div>
-                  </a>
+                  </Link>
                 )}
                 {showMenu && (
-                  <a href="/organizations">
+                  <Link
+                    href="/organizations"
+                    aria-current={
+                      pathname == '/organizations' ? 'page' : undefined
+                    }
+                  >
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/organizations'
@@ -143,10 +157,13 @@ const Navbar: FC = () => {
                     >
                       ORGANIZATIONS
                     </div>
-                  </a>
+                  </Link>
                 )}
                 {showMenu && auth && (
-                  <a href="/dashboard">
+                  <Link
+                    href="/dashboard"
+                    aria-current={pathname == '/dashboard' ? 'page' : undefined}
+                  >
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/dashboard'
@@ -156,7 +173,7 @@ const Navbar: FC = () => {
                     >
                       DASHBOARD
                     </div>
-                  </a>
+                  </Link>
                 )}
               </ul>
             </div>
@@ -167,7 +184,10 @@ const Navbar: FC = () => {
       <div className="flex">
         {!(screenSize == 'phone') && (
           <div className="flex w-[60] justify-around items-center">
-            <a href="/causes">
+            <Link
+              href="/causes"
+              aria-current={pathname == '/causes' ? 'page' : undefined}
+            >
               <button>
                 <div
                   className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
@@ -179,8 +199,11 @@ const Navbar: FC = () => {
                   CAUSES
                 </div>
               </button>
-            </a>
-            <a href="/volunteers">
+            </Link>
+            <Link
+              href="/volunteers"
+              aria-current={pathname == '/volunteers' ? 'page' : undefined}
+            >
               <button>
                 <div
                   className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
@@ -192,8 +215,11 @@ const Navbar: FC = () => {
                   VOLUNTEERS
                 </div>
               </button>
-            </a>
-            <a href="/organizations">
+            </Link>
+            <Link
+              href="/organizations"
+              aria-current={pathname == '/organizations' ? 'page' : undefined}
+            >
               <button>
                 <div
                   className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
@@ -205,9 +231,12 @@ const Navbar: FC = () => {
                   ORGANIZATIONS
                 </div>
               </button>
-            </a>
+            </Link>
             {auth && (
-              <a href="/dashboard">
+              <Link
+                href="/dashboard"
+                aria-current={pathname == '/dashboard' ? 'page' : undefined}
+              >
                 <button>
                   <div
                     className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 tracking-wider ${
@@ -219,7 +248,7 @@ const Navbar: FC = () => {
                     DASHBOARD
                   </div>
                 </button>
-              </a>
+              </Link>
             )}
           </div>
         )}
