@@ -34,7 +34,7 @@ const Volunteers: NextPage = () => {
       ) : (
         <GridLayout>
           {getOpportunityMetadata(data).map((post) => (
-            <GridItemFour key={'pub'}>
+            <GridItemFour key={post?.opportunity_id}>
               <Card>{post?.category}</Card>
             </GridItemFour>
           ))}
