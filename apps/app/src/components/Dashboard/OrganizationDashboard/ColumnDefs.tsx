@@ -75,14 +75,6 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
       filter: 'agTextColumnFilter'
     },
     {
-      field: 'program',
-      filter: 'agTextColumnFilter'
-    },
-    {
-      field: 'region',
-      filter: 'agTextColumnFilter'
-    },
-    {
       field: 'category',
       filter: 'agTextColumnFilter'
     },
