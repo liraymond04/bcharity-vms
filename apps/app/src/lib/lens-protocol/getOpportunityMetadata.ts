@@ -16,7 +16,8 @@ const getOpportunityMetadata = (data: PublicationFragment[]) =>
           hours: attributes[4].value,
           category: attributes[5].value,
           website: attributes[6].value,
-          description: attributes[7].value
+          description: attributes[7].value,
+          from: post.profile
         }
       }
     })

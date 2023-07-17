@@ -42,6 +42,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@wagmi/core": "^1.3.7",
     "ag-grid.css": "link:ag-grid-community/styles/ag-grid.css",
+    "app": "workspace:^",
     "clsx": "^1.1.1",
     "encoding": "^0.1.13",
     "eslint-plugin-prettier": "^5.0.0",
