@@ -31,7 +31,6 @@ const OrganizationVHRTab: React.FC = () => {
   })
 
   const postMetadata = getOpportunityMetadata(data)
-  console.log(postMetadata)
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
@@ -42,7 +41,6 @@ const OrganizationVHRTab: React.FC = () => {
     setPublishModalOpen(false)
 
     if (shouldRefetch) {
-      console.log('refetch')
       refetch()
     }
   }
@@ -51,7 +49,6 @@ const OrganizationVHRTab: React.FC = () => {
     setModifyModalOpen(false)
 
     if (shouldRefetch) {
-      console.log('refetch')
       refetch()
     }
   }
