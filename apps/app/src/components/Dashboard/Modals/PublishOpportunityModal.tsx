@@ -37,15 +37,25 @@ interface IFormProps {
   description: string
 }
 
+const checkAuth = async (address: string) => {
+  const authenticated = await lensClient().authentication.isAuthenticated()
+
+  if (!authenticated) {
+    console.log('not authed')
+    const challenge = await lensClient().authentication.generateChallenge(
+      address
+    )
+    const signature = await signMessage({ message: challenge })
+    await lensClient().authentication.authenticate(address, signature)
+  }
+}
+
 const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   open,
   onClose,
   publisher
 }) => {
   const [isPending, setIsPending] = useState<boolean>(false)
-
-  lensClient().modules.approvedAllowanceAmount
-
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
@@ -130,28 +140,23 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       appId: APP_NAME
     }
 
-    try {
-      setIsPending(true)
+    setIsPending(true)
 
-      const authenticated = await lensClient().authentication.isAuthenticated()
-      if (!authenticated) {
-        console.log('not authed')
-        const address = publisher.ownedBy
-
-        const challenge = await lensClient().authentication.generateChallenge(
-          address
-        )
-        const signature = await signMessage({ message: challenge })
-
-        await lensClient().authentication.authenticate(address, signature)
-      }
-
-      await createPost(publisher, metadata)
-    } catch (e: any) {
-      setErrorMessage(e.message)
-      setError(true)
-    }
-    setIsPending(false)
+    checkAuth(publisher.ownedBy)
+      .then(() => createPost(publisher, metadata))
+      .then((res) => {
+        if (res.isFailure()) {
+          setError(true)
+          setErrorMessage(res.error.message)
+        }
+      })
+      .catch((e) => {
+        setErrorMessage(e.message)
+        setError(true)
+      })
+      .finally(() => {
+        setIsPending(false)
+      })
   }
 
   return (
