@@ -10,3 +10,7 @@ export interface OpportunityMetadata {
   description: string | null
   from: ProfileFragment
 }
+
+export const PostTags = {
+  OrgPublish: 'ORG_PUBLISH_OPPORTUNITY'
+}

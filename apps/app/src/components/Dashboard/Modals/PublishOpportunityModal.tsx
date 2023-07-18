@@ -18,14 +18,9 @@ import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
+import { PostTags } from '@/lib/types'
 
 import Error from './Error'
-
-interface IPublishOpportunityModalProps {
-  open: boolean
-  onClose: (shouldRefetch: boolean) => void
-  publisher: Profile | null
-}
 
 export interface IPublishOpportunityFormProps {
   opportunityName: string
@@ -43,6 +38,62 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   category: '',
   website: '',
   description: ''
+}
+
+export const createPublishAttributes = (
+  id: string,
+  data: IPublishOpportunityFormProps
+) => {
+  const attributes: MetadataAttributeInput[] = [
+    {
+      traitType: 'type',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: 'ORG_PUBLISH_OPPORTUNITY'
+    },
+    {
+      traitType: 'opportunity_id',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: id
+    },
+    {
+      traitType: 'opportunity_name',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.opportunityName
+    },
+    {
+      traitType: 'dates',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.dates
+    },
+    {
+      traitType: 'hours',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.numHours
+    },
+    {
+      traitType: 'category',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.category
+    },
+    {
+      traitType: 'website',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.website
+    },
+    {
+      traitType: 'description',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.description
+    }
+  ]
+
+  return attributes
+}
+
+interface IPublishOpportunityModalProps {
+  open: boolean
+  onClose: (shouldRefetch: boolean) => void
+  publisher: Profile | null
 }
 
 const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
@@ -80,62 +131,19 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const attributes: MetadataAttributeInput[] = [
-      {
-        traitType: 'type',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: 'ORG_PUBLISH_OPPORTUNITY'
-      },
-      {
-        traitType: 'opportunity_id',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: v4()
-      },
-      {
-        traitType: 'opportunity_name',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.opportunityName
-      },
-      {
-        traitType: 'dates',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.dates
-      },
-      {
-        traitType: 'hours',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.numHours
-      },
-      {
-        traitType: 'category',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.category
-      },
-      {
-        traitType: 'website',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.website
-      },
-      {
-        traitType: 'description',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.description
-      }
-    ]
+    const attributes = createPublishAttributes(v4(), data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: v4(),
-      content: '#ORG_PUBLISH_OPPORTUNITY',
+      content: `#${PostTags.OrgPublish}`,
       locale: getUserLocale(),
-      tags: ['ORG_PUBLISH_OPPORTUNITY'],
+      tags: [PostTags.OrgPublish],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `ORG_PUBLISH_OPPORTUNITY by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
-
-    setIsPending(true)
 
     checkAuth(publisher.ownedBy)
       .then(() => createPost(publisher, metadata))

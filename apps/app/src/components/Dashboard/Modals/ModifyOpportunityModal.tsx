@@ -1,7 +1,5 @@
 import {
-  MetadataAttributeInput,
   PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
@@ -15,11 +13,13 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
+import { PostTags } from '@/lib/types'
 
 import Error from './Error'
 import {
-  checkAuth,
+  createPublishAttributes,
   IPublishOpportunityFormProps
 } from './PublishOpportunityModal'
 
@@ -69,62 +69,19 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const attributes: MetadataAttributeInput[] = [
-      {
-        traitType: 'type',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: 'ORG_PUBLISH_OPPORTUNITY'
-      },
-      {
-        traitType: 'opportunity_id',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: id
-      },
-      {
-        traitType: 'opportunity_name',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.opportunityName
-      },
-      {
-        traitType: 'dates',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.dates
-      },
-      {
-        traitType: 'hours',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.numHours
-      },
-      {
-        traitType: 'category',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.category
-      },
-      {
-        traitType: 'website',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.website
-      },
-      {
-        traitType: 'description',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.description
-      }
-    ]
+    const attributes = createPublishAttributes(id, data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: id,
-      content: '#ORG_PUBLISH_OPPORTUNITY',
+      content: `#${PostTags.OrgPublish}`,
       locale: getUserLocale(),
-      tags: ['ORG_PUBLISH_OPPORTUNITY'],
+      tags: [PostTags.OrgPublish],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `ORG_PUBLISH_OPPORTUNITY by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
-
-    setIsPending(true)
 
     checkAuth(publisher.ownedBy)
       .then(() => createPost(publisher, metadata))
