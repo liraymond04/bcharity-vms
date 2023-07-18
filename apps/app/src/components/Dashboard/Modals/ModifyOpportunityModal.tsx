@@ -3,7 +3,7 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
@@ -45,6 +45,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
 
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues])
+
   const {
     handleSubmit,
     reset,
@@ -53,7 +57,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   } = form
 
   const onCancel = () => {
-    reset()
+    reset(defaultValues)
     onClose(false)
   }
 
@@ -93,7 +97,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         }
       })
       .then(() => {
-        reset()
+        reset(data)
         onClose(true)
       })
       .catch((e) => {
@@ -124,7 +128,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Volunteer opportunity name"
               placeholder="Medical internship"
               error={!!errors.opportunityName?.type}
-              defaultValue={defaultValues.opportunityName}
               {...register('opportunityName', {
                 required: true,
                 maxLength: 100
@@ -135,7 +138,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               type="date"
               placeholder="yyyy-mm-dd"
               error={!!errors.dates?.type}
-              defaultValue={defaultValues.dates}
               {...register('dates', {
                 required: true
               })}
@@ -144,7 +146,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Expected number of hours"
               placeholder="5.5"
               error={!!errors.numHours?.type}
-              defaultValue={defaultValues.numHours}
               {...register('numHours', {
                 required: true,
                 pattern: {
@@ -158,21 +159,18 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Category"
               placeholder="Healthcare"
               error={!!errors.category?.type}
-              defaultValue={defaultValues.category}
               {...register('category', { required: true, maxLength: 40 })}
             />
             <Input
               label="Website (leave empty if not linking to external opportunity)"
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
-              defaultValue={defaultValues.website}
               {...(register('website'), { maxLength: 2000 })}
             />
             <TextArea
               label="Activity Description"
               placeholder="Tell us more about this volunteer opportunity"
               error={!!errors.description?.type}
-              defaultValue={defaultValues.description}
               {...register('description', { required: true, maxLength: 250 })}
             />
           </Form>
