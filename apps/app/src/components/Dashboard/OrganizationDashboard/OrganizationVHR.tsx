@@ -31,6 +31,7 @@ const OrganizationVHRTab: React.FC = () => {
   })
 
   const postMetadata = getOpportunityMetadata(data)
+  console.log(postMetadata)
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
@@ -80,7 +81,7 @@ const OrganizationVHRTab: React.FC = () => {
           numHours: d.hours ?? '',
           category: d.category ?? '',
           website: d.website ?? '',
-          description: d.hours ?? ''
+          description: d.description ?? ''
         }
       : { ...emptyPublishFormData }
   }
