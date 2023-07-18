@@ -23,7 +23,6 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
       }
     })
 
-  console.log('metadata', allMetadata)
   const opportunityIdCreatedAtMap: Record<string, number> = {}
 
   allMetadata.forEach((val) => {
