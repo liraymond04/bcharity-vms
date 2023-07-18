@@ -187,7 +187,7 @@ const VolunteerVHRTab: React.FC = () => {
         </div>
         <div>
           <RegionDropdown
-            className="mr-10"
+            className="relative mr-10 h-[20px] z-30"
             onClick={(value: string) => {
               setRegion(value)
             }}
