@@ -6,14 +6,14 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { polygon, polygonMumbai } from 'wagmi/chains'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { publicProvider } from 'wagmi/providers/public'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import SiteLayout from '@/components/SiteLayout'
-import { IS_MAINNET, WALLET_CONNECT_PROJECT_ID } from '@/constants'
+import { ALCHEMY_KEY, IS_MAINNET, WALLET_CONNECT_PROJECT_ID } from '@/constants'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [IS_MAINNET ? polygon : polygonMumbai],
-  [publicProvider()]
+  [alchemyProvider({ apiKey: ALCHEMY_KEY ? ALCHEMY_KEY : '' })]
 )
 
 const connectors = () => {
