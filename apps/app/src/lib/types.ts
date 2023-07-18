@@ -1,10 +1,12 @@
+import { ProfileFragment } from '@lens-protocol/client'
+
 export interface OpportunityMetadata {
-  'opportunity-id': string
-  name: string
-  date: string
-  hours: string
-  program: string
-  category: string
-  website: string
-  description: string
+  opportunity_id: string | null
+  name: string | null
+  date: string | null
+  hours: string | null
+  category: string | null
+  website: string | null
+  description: string | null
+  from: ProfileFragment
 }

@@ -8,8 +8,8 @@ import React, { useState } from 'react'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { OpportunityMetadata } from '@/lib/types'
-import usePostData from '@/lib/usePostData'
+import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
+import usePostData from '@/lib/lens-protocol/usePostData'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
@@ -19,7 +19,7 @@ import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 const OrganizationVHRTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
 
-  const { data, error, loading, refetch } = usePostData<OpportunityMetadata>({
+  const { data, error, loading, refetch } = usePostData({
     profileId: profile!.id,
     metadata: {
       tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
@@ -47,9 +47,9 @@ const OrganizationVHRTab: React.FC = () => {
           <div className="p-5">
             <button
               onClick={onNew}
-              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black"
+              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
-              <PlusSmIcon className="w-8 text-white" />
+              <PlusSmIcon className="w-8 text-white dark:text-black" />
             </button>
             <div
               className="ag-theme-alpine"
@@ -60,7 +60,7 @@ const OrganizationVHRTab: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={data}
+                  rowData={getOpportunityMetadata(data)}
                   columnDefs={Object.values(
                     makeOrgVHRColumnDefs({
                       onEditClick: onEdit,
@@ -82,7 +82,7 @@ const OrganizationVHRTab: React.FC = () => {
                   refetch()
                 }
               }}
-              publisher={{ ...profile!, ownedByMe: true }}
+              publisher={profile}
             />
           </div>
         </Card>

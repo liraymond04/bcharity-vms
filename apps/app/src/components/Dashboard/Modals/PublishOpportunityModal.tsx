@@ -1,12 +1,12 @@
 import {
-  CollectPolicyType,
-  ContentFocus,
-  CreatePostArgs,
-  ProfileOwnedByMe,
-  ReferencePolicyType,
-  useCreatePost
-} from '@lens-protocol/react-web'
-import React from 'react'
+  MetadataAttributeInput,
+  PublicationMainFocus,
+  PublicationMetadataDisplayTypes,
+  PublicationMetadataV2Input
+} from '@lens-protocol/client'
+import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { signMessage } from '@wagmi/core'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
 
@@ -15,22 +15,23 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import uploadToIPFS from '@/lib/ipfsUpload'
+import { APP_NAME } from '@/constants'
+import getUserLocale from '@/lib/getUserLocale'
+import createPost from '@/lib/lens-protocol/createPost'
+import lensClient from '@/lib/lens-protocol/lensClient'
 
 import Error from './Error'
 
 interface IPublishOpportunityModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
-  publisher: ProfileOwnedByMe
+  publisher: Profile | null
 }
 
 interface IFormProps {
   opportunityName: string
   dates: string
   numHours: string
-  program: string
-  region: string
   category: string
   website: string
   description: string
@@ -41,14 +42,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
-  const {
-    execute,
-    error: lensError,
-    isPending
-  } = useCreatePost({
-    publisher,
-    upload: uploadToIPFS
-  })
+  const [isPending, setIsPending] = useState<boolean>(false)
+
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const form = useForm<IFormProps>()
 
@@ -65,43 +62,94 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   }
 
   const onSubmit = async (data: IFormProps) => {
-    const metadata = {
-      'opportunity-id': v4(),
-      name: data.opportunityName,
-      date: data.dates,
-      hours: data.numHours,
-      program: data.program,
-      city: data.region,
-      category: data.category,
-      website: data.website,
-      description: data.description
+    setError(false)
+    setIsPending(true)
+    console.log('test')
+
+    if (!publisher) {
+      setErrorMessage('No publisher provided')
+      setError(true)
+      setIsPending(false)
+      return
     }
 
-    const postData: CreatePostArgs = {
-      content: JSON.stringify(metadata),
-      contentFocus: ContentFocus.TEXT_ONLY,
-      locale: 'en',
-      collect: {
-        type: CollectPolicyType.NO_COLLECT
+    const attributes: MetadataAttributeInput[] = [
+      {
+        traitType: 'type',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: 'ORG_PUBLISH_OPPORTUNITY'
       },
-      reference: {
-        type: ReferencePolicyType.ANYONE
+      {
+        traitType: 'opportunity_id',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: v4()
       },
-      tags: ['ORG_PUBLISH_OPPORTUNITY']
+      {
+        traitType: 'opportunity_name',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.opportunityName
+      },
+      {
+        traitType: 'dates',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.dates
+      },
+      {
+        traitType: 'hours',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.numHours
+      },
+      {
+        traitType: 'category',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.category
+      },
+      {
+        traitType: 'website',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.website
+      },
+      {
+        traitType: 'description',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.description
+      }
+    ]
+
+    const metadata: PublicationMetadataV2Input = {
+      version: '2.0.0',
+      metadata_id: v4(),
+      content: '#ORG_PUBLISH_OPPORTUNITY',
+      locale: getUserLocale(),
+      tags: ['ORG_PUBLISH_OPPORTUNITY'],
+      mainContentFocus: PublicationMainFocus.TextOnly,
+      name: `ORG_PUBLISH_OPPORTUNITY by ${publisher?.handle}`,
+      attributes,
+      appId: APP_NAME
     }
 
-    execute(postData)
-      .then((result) => {
-        if (result.isSuccess()) {
-          reset()
-          onClose(true)
-        } else {
-          throw result.error
-        }
-      })
-      .catch((err) => {
-        console.error('Create post error:', err)
-      })
+    try {
+      setIsPending(true)
+
+      const authenticated = await lensClient().authentication.isAuthenticated()
+      if (!authenticated) {
+        console.log('not authed')
+        const address = publisher.ownedBy
+
+        const challenge = await lensClient().authentication.generateChallenge(
+          address
+        )
+        const signature = await signMessage({ message: challenge })
+
+        await lensClient().authentication.authenticate(address, signature)
+      }
+
+      await createPost(publisher, metadata)
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setError(true)
+    }
+    setIsPending(false)
   }
 
   return (
@@ -120,13 +168,14 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           >
             <Input
               label="Volunteer opportunity name"
-              placeholder="Medial internship"
+              placeholder="Medical internship"
               error={!!errors.opportunityName?.type}
               {...register('opportunityName', { required: true })}
             />
             <Input
               label="Date(s)"
-              placeholder="yy-mm-dd"
+              type="date"
+              placeholder="yyyy-mm-dd"
               error={!!errors.dates?.type}
               {...register('dates', { required: true })}
             />
@@ -135,18 +184,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="5"
               error={!!errors.numHours?.type}
               {...register('numHours', { required: true })}
-            />
-            <Input
-              label="Program"
-              placeholder="Volunteer program names(s)"
-              error={!!errors.program?.type}
-              {...register('program', { required: true })}
-            />
-            <Input
-              label="City/region"
-              placeholder="Calgary"
-              error={!!errors.region?.type}
-              {...register('program', { required: true })}
             />
             <Input
               label="Category"
@@ -171,9 +208,9 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           <Spinner />
         )}
 
-        {lensError && (
+        {error && (
           <Error
-            message={`An error occured: ${lensError.message}. Please try again.`}
+            message={`An error occured: ${errorMessage}. Please try again.`}
           />
         )}
       </div>

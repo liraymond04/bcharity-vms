@@ -1,22 +1,22 @@
-import { PublicationsQueryRequest } from '@lens-protocol/client'
+import {
+  ExplorePublicationRequest,
+  PublicationFragment
+} from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
 import lensClient from './lensClient'
 
-const usePostData = <T>(params: PublicationsQueryRequest) => {
+const useExplorePublications = (params: ExplorePublicationRequest) => {
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState<T[]>([])
+  const [data, setData] = useState<PublicationFragment[]>([])
   const [error, setError] = useState('')
 
   const refetch = () => {
     setLoading(true)
-    lensClient.publication
-      .fetchAll(params)
+    lensClient()
+      .explore.publications(params)
       .then((data) => {
-        const d: T[] = data.items.map((p: any) =>
-          JSON.parse(p.metadata.content)
-        )
-        setData(d)
+        setData(data.items)
       })
       .catch((error) => {
         setError(error)
@@ -36,4 +36,4 @@ const usePostData = <T>(params: PublicationsQueryRequest) => {
   }
 }
 
-export default usePostData
+export default useExplorePublications
