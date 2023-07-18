@@ -1,15 +1,15 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import { Inter } from '@next/font/google'
+import { FetchBalanceResult } from '@wagmi/core'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { useBalance } from 'wagmi'
+import React, { useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHR_TOKEN } from '@/constants'
 import { useAppPersistStore } from '@/store/app'
 
+import GetBalance from './GetBalance'
 import RegionDropdown from './RegionDropdown'
 
 const inter500 = Inter({
@@ -18,9 +18,7 @@ const inter500 = Inter({
 })
 
 const VolunteerVHRTab: React.FC = () => {
-  const { isAuthenticated, currentUser } = useAppPersistStore()
-
-  const [searchAddress, setSearchAddress] = useState<string>('')
+  const { currentUser } = useAppPersistStore()
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
   const [region, setRegion] = useState<string>('Region')
@@ -51,16 +49,8 @@ const VolunteerVHRTab: React.FC = () => {
 
   const opportunities = generateHardCodedData()
 
-  const { data, isLoading } = useBalance({
-    address: `0x${searchAddress.substring(2)}`,
-    token: `0x${VHR_TOKEN.substring(2)}`
-  })
-
-  useEffect(() => {
-    if (isAuthenticated && currentUser) {
-      setSearchAddress(currentUser.ownedBy)
-    }
-  }, [currentUser, isAuthenticated])
+  const [data, setData] = useState<FetchBalanceResult>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const Progress = ({
     progress,
@@ -127,6 +117,15 @@ const VolunteerVHRTab: React.FC = () => {
       <GridLayout>
         <GridItemTwelve>
           <Card>
+            {currentUser && (
+              <GetBalance
+                address={currentUser.ownedBy}
+                callback={(data: FetchBalanceResult, isLoading: boolean) => {
+                  setData(data)
+                  setIsLoading(isLoading)
+                }}
+              />
+            )}
             <div className="p-10 m-10">
               {isLoading ? (
                 <Spinner />
