@@ -122,7 +122,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const onSubmit = async (data: IPublishOpportunityFormProps) => {
     setError(false)
     setIsPending(true)
-    console.log('test')
 
     if (!publisher) {
       setErrorMessage('No publisher provided')

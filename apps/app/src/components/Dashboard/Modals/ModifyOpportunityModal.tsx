@@ -38,7 +38,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   publisher,
   defaultValues
 }) => {
-  console.log('default', defaultValues)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -64,7 +63,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const onSubmit = async (data: IPublishOpportunityFormProps) => {
     setError(false)
     setIsPending(true)
-    console.log('test')
 
     if (!publisher) {
       setErrorMessage('No publisher provided')

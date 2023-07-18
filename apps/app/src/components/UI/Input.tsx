@@ -23,8 +23,6 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
   const id = useId()
   const { t } = useTranslation('common')
 
-  console.log('defaultValue', props.name, props.defaultValue)
-
   return (
     <label className="w-full" htmlFor={id}>
       {label && (
