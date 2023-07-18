@@ -42,7 +42,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   publisher
 }) => {
   const [isPending, setIsPending] = useState<boolean>(false)
-
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
@@ -127,17 +126,23 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       appId: APP_NAME
     }
 
-    try {
-      setIsPending(true)
+    setIsPending(true)
 
-      await checkAuth(publisher.ownedBy)
-
-      await createPost(publisher, metadata)
-    } catch (e: any) {
-      setErrorMessage(e.message)
-      setError(true)
-    }
-    setIsPending(false)
+    checkAuth(publisher.ownedBy)
+      .then(() => createPost(publisher, metadata))
+      .then((res) => {
+        if (res.isFailure()) {
+          setError(true)
+          setErrorMessage(res.error.message)
+        }
+      })
+      .catch((e) => {
+        setErrorMessage(e.message)
+        setError(true)
+      })
+      .finally(() => {
+        setIsPending(false)
+      })
   }
 
   return (
@@ -158,38 +163,50 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Volunteer opportunity name"
               placeholder="Medical internship"
               error={!!errors.opportunityName?.type}
-              {...register('opportunityName', { required: true })}
+              {...register('opportunityName', {
+                required: true,
+                maxLength: 100
+              })}
             />
             <Input
               label="Date(s)"
               type="date"
               placeholder="yyyy-mm-dd"
               error={!!errors.dates?.type}
-              {...register('dates', { required: true })}
+              {...register('dates', {
+                required: true
+              })}
             />
             <Input
               label="Expected number of hours"
-              placeholder="5"
+              placeholder="5.5"
               error={!!errors.numHours?.type}
-              {...register('numHours', { required: true })}
+              {...register('numHours', {
+                required: true,
+                pattern: {
+                  value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
+                  message:
+                    'Hours should be a positive number with at most one decimal place'
+                }
+              })}
             />
             <Input
               label="Category"
               placeholder="Healthcare"
               error={!!errors.category?.type}
-              {...register('category', { required: true })}
+              {...register('category', { required: true, maxLength: 40 })}
             />
             <Input
               label="Website (leave empty if not linking to external opportunity)"
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
-              {...register('website')}
+              {...(register('website'), { maxLength: 2000 })}
             />
             <TextArea
               label="Activity Description"
               placeholder="Tell us more about this volunteer opportunity"
               error={!!errors.description?.type}
-              {...register('description', { required: true })}
+              {...register('description', { required: true, maxLength: 250 })}
             />
           </Form>
         ) : (
