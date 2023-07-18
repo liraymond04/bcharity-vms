@@ -63,11 +63,11 @@ const DeleteProfileSection: React.FC = () => {
               >
                 WARNING: This will permanently delete your account.
               </div>
-              <div className="mb-4 text-base">
+              <div className="mb-4 text-gray-900 text-base">
                 Deleting your account is permanent. Your data will be wiped and
                 will not be recoverable.
               </div>
-              <div className="mb-2 text-base">Upon deletion:</div>
+              <div className="mb-2 text-gray-900 text-base">Upon deletion:</div>
               <ul className="mx-8 mb-5 text-gray-500 justify-left list-disc">
                 <li>Your account will no longer be recoverable</li>
                 <li>Your @handle will be immediately released</li>
