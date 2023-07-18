@@ -1,17 +1,17 @@
 import { TrashIcon } from '@heroicons/react/outline'
-import { signMessage } from '@wagmi/core'
 import Cookies from 'js-cookie'
 import React from 'react'
 import { useDisconnect } from 'wagmi'
 
 import { Card } from '@/components/UI/Card'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import { useAppPersistStore } from '@/store/app'
 
 import GradientWrapper from '../Shared/Gradient/GradientWrapper'
 
 const DeleteProfileSection: React.FC = () => {
-  const { isAuthenticated, currentUser, setCurrentUser, setIsAuthenticated } =
+  const { currentUser, setCurrentUser, setIsAuthenticated } =
     useAppPersistStore()
   const { disconnect } = useDisconnect()
   const handleClick = (): void => {
@@ -24,18 +24,7 @@ const DeleteProfileSection: React.FC = () => {
 
   const burnProfileTypedDataResult = async () => {
     console.log(currentUser!.id)
-    const authenticated = await lensClient().authentication.isAuthenticated()
-    if (!authenticated) {
-      console.log('not authed')
-      const address = currentUser!.ownedBy
-
-      const challenge = await lensClient().authentication.generateChallenge(
-        address
-      )
-      const signature = await signMessage({ message: challenge })
-
-      await lensClient().authentication.authenticate(address, signature)
-    }
+    await checkAuth(currentUser!.ownedBy)
     return lensClient().profile.createBurnProfileTypedData({
       profileId: currentUser!.id
     })

@@ -5,7 +5,6 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
-import { signMessage } from '@wagmi/core'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
@@ -17,8 +16,8 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import lensClient from '@/lib/lens-protocol/lensClient'
 
 import Error from './Error'
 
@@ -44,19 +43,6 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   category: '',
   website: '',
   description: ''
-}
-
-export const checkAuth = async (address: string) => {
-  const authenticated = await lensClient().authentication.isAuthenticated()
-
-  if (!authenticated) {
-    console.log('not authed')
-    const challenge = await lensClient().authentication.generateChallenge(
-      address
-    )
-    const signature = await signMessage({ message: challenge })
-    await lensClient().authentication.authenticate(address, signature)
-  }
 }
 
 const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
