@@ -7,7 +7,7 @@ import { useAppPersistStore } from '@/store/app'
 
 const UserDispatcher: React.FC = () => {
   const { currentUser } = useAppPersistStore()
-  const [isEnabled, setIsEnabled] = useState(currentUser!.dispatcher !== null)
+  const [isEnabled, setIsEnabled] = useState(currentUser?.dispatcher !== null)
 
   const handleDispatch = async () => {
     const params: SetDispatcherRequest = {
