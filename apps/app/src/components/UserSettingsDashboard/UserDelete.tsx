@@ -14,20 +14,20 @@ const DeleteProfileSection: React.FC = () => {
   const { currentUser, setCurrentUser, setIsAuthenticated } =
     useAppPersistStore()
   const { disconnect } = useDisconnect()
-  const handleClick = (): void => {
-    burnProfileTypedDataResult()
-      .then((res) => {
-        onCompleted()
-      })
-      .catch((err) => console.log(err))
-  }
 
-  const burnProfileTypedDataResult = async () => {
-    console.log(currentUser!.id)
-    await checkAuth(currentUser!.ownedBy)
-    return lensClient().profile.createBurnProfileTypedData({
-      profileId: currentUser!.id
-    })
+  const handleClick = () => {
+    if (currentUser) {
+      checkAuth(currentUser.ownedBy)
+        .then(() =>
+          lensClient().profile.createBurnProfileTypedData({
+            profileId: currentUser!.id
+          })
+        )
+        .then((res) => {
+          onCompleted()
+        })
+        .catch((err) => console.log(err))
+    }
   }
 
   const onCompleted = () => {

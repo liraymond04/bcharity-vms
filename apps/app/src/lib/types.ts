@@ -1,12 +1,16 @@
 import { ProfileFragment } from '@lens-protocol/client'
 
 export interface OpportunityMetadata {
-  opportunity_id: string | null
-  name: string | null
-  date: string | null
-  hours: string | null
-  category: string | null
-  website: string | null
-  description: string | null
+  opportunity_id: string
+  name: string
+  date: string
+  hours: string
+  category: string
+  website: string
+  description: string
   from: ProfileFragment
+}
+
+export const PostTags = {
+  OrgPublish: 'ORG_PUBLISH_OPPORTUNITY'
 }

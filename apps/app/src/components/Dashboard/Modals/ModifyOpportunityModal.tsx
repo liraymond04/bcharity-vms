@@ -1,13 +1,10 @@
 import {
-  MetadataAttributeInput,
   PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { v4 } from 'uuid'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
@@ -21,91 +18,35 @@ import createPost from '@/lib/lens-protocol/createPost'
 import { PostTags } from '@/lib/types'
 
 import Error from './Error'
-
-export interface IPublishOpportunityFormProps {
-  opportunityName: string
-  dates: string
-  numHours: string
-  category: string
-  website: string
-  description: string
-}
-
-export const emptyPublishFormData: IPublishOpportunityFormProps = {
-  opportunityName: '',
-  dates: '',
-  numHours: '',
-  category: '',
-  website: '',
-  description: ''
-}
-
-export const createPublishAttributes = (
-  id: string,
-  data: IPublishOpportunityFormProps
-) => {
-  const attributes: MetadataAttributeInput[] = [
-    {
-      traitType: 'type',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: 'ORG_PUBLISH_OPPORTUNITY'
-    },
-    {
-      traitType: 'opportunity_id',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: id
-    },
-    {
-      traitType: 'opportunity_name',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.opportunityName
-    },
-    {
-      traitType: 'dates',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.dates
-    },
-    {
-      traitType: 'hours',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.numHours
-    },
-    {
-      traitType: 'category',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.category
-    },
-    {
-      traitType: 'website',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.website
-    },
-    {
-      traitType: 'description',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.description
-    }
-  ]
-
-  return attributes
-}
+import {
+  createPublishAttributes,
+  IPublishOpportunityFormProps
+} from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
+  id: string
   publisher: Profile | null
+  defaultValues: IPublishOpportunityFormProps
 }
 
-const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
+const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   open,
   onClose,
-  publisher
+  id,
+  publisher,
+  defaultValues
 }) => {
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const form = useForm<IPublishOpportunityFormProps>()
+  const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
+
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues])
 
   const {
     handleSubmit,
@@ -115,7 +56,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   } = form
 
   const onCancel = () => {
-    reset()
+    reset(defaultValues)
     onClose(false)
   }
 
@@ -130,11 +71,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes(v4(), data)
+    const attributes = createPublishAttributes(id, data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
-      metadata_id: v4(),
+      metadata_id: id,
       content: `#${PostTags.OrgPublish}`,
       locale: getUserLocale(),
       tags: [PostTags.OrgPublish],
@@ -154,7 +95,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         }
       })
       .then(() => {
-        reset()
+        reset(data)
         onClose(true)
       })
       .catch((e) => {
@@ -168,7 +109,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Volunteer Opportunity'}
+      title={'Modify Volunteer Opportunity'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -181,6 +122,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
+              key={`${Math.floor(Math.random() * 1000)}-min`}
               label="Volunteer opportunity name"
               placeholder="Medical internship"
               error={!!errors.opportunityName?.type}
@@ -244,4 +186,4 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   )
 }
 
-export default PublishOpportunityModal
+export default ModifyOpportunityModal
