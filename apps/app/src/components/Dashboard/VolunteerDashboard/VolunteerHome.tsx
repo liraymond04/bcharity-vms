@@ -143,9 +143,9 @@ const VolunteerHome: React.FC = () => {
                           if (post.__typename === 'Post')
                             return (
                               <div className=" w-full lg:flex ">
-                                <div className="border-r border-b border-l  border-gray-400 p-5 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
+                                <div className="border-r border-b border-l dark:border-black border-gray-400 p-5 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white dark:bg-slate-600 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
                                   <div className="mb-8">
-                                    <div className="text-gray-900 font-bold text-xl mb-2">
+                                    <div className="text-gray-900 dark:text-white font-bold text-xl mb-2">
                                       <div className=" clearfix">
                                         <img
                                           className=" w-8 h-8  mr-3 rounded-full"
@@ -157,7 +157,7 @@ const VolunteerHome: React.FC = () => {
                                           <a href={`/u/${currentUser?.handle}`}>
                                             <div className="text-sm float-right top-0 mb-5">
                                               <p className="text-gray-900 leading-none"></p>
-                                              <p className="text-gray-600">
+                                              <p className="text-gray-600 dark:text-white">
                                                 {post.createdAt}
                                               </p>
                                             </div>
@@ -172,7 +172,7 @@ const VolunteerHome: React.FC = () => {
                                         </div>
                                       </div>
                                     </div>
-                                    <p className="text-gray-700 text-sm mt-10 ">
+                                    <p className="text-gray-700 text-sm mt-10  dark:text-gray-50">
                                       {post.metadata.content}
                                     </p>
                                   </div>
