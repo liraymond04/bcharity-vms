@@ -13,33 +13,77 @@ import usePostData from '@/lib/lens-protocol/usePostData'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
-import PublishOpportunityModal from '../Modals/PublishOpportunityModal'
+import ModifyOpportunityModal from '../Modals/ModifyOpportunityModal'
+import PublishOpportunityModal, {
+  emptyPublishFormData,
+  IPublishOpportunityFormProps
+} from '../Modals/PublishOpportunityModal'
 import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
 
   const { data, error, loading, refetch } = usePostData({
-    profileId: profile!.id,
+    profileId: profile?.id,
     metadata: {
       tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
     }
   })
 
+  const postMetadata = getOpportunityMetadata(data)
+
   const [publishModalOpen, setPublishModalOpen] = useState(false)
+  const [modifyModalOpen, setModifyModalOpen] = useState(false)
+
+  const [currentModifyId, setCurrentModifyId] = useState('')
+
+  const onPublishClose = (shouldRefetch: boolean) => {
+    setPublishModalOpen(false)
+
+    if (shouldRefetch) {
+      console.log('refetch')
+      refetch()
+    }
+  }
+
+  const onModifyClose = (shouldRefetch: boolean) => {
+    setModifyModalOpen(false)
+
+    if (shouldRefetch) {
+      console.log('refetch')
+      refetch()
+    }
+  }
 
   const onNew = () => {
     setPublishModalOpen(true)
   }
 
   const onEdit = (id: string) => {
-    console.log('edit id ', id)
+    setCurrentModifyId(id)
+    setModifyModalOpen(true)
   }
 
   const onDelete = (id: string) => {
     console.log('delete id ', id)
   }
 
+  const getFormDefaults = (): IPublishOpportunityFormProps => {
+    const d = postMetadata.find(
+      (val) => val?.opportunity_id === currentModifyId
+    )
+
+    return d
+      ? {
+          opportunityName: d.name ?? '',
+          dates: d.date ?? '',
+          numHours: d.hours ?? '',
+          category: d.category ?? '',
+          website: d.website ?? '',
+          description: d.hours ?? ''
+        }
+      : { ...emptyPublishFormData }
+  }
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -60,13 +104,11 @@ const OrganizationVHRTab: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={getOpportunityMetadata(data)}
-                  columnDefs={Object.values(
-                    makeOrgVHRColumnDefs({
-                      onEditClick: onEdit,
-                      onDeleteClick: onDelete
-                    })
-                  )}
+                  rowData={postMetadata}
+                  columnDefs={makeOrgVHRColumnDefs({
+                    onEditClick: onEdit,
+                    onDeleteClick: onDelete
+                  })}
                   pagination
                   paginationPageSize={20}
                 />
@@ -75,14 +117,15 @@ const OrganizationVHRTab: React.FC = () => {
             {error && <Error message="An error occured. Please try again." />}
             <PublishOpportunityModal
               open={publishModalOpen}
-              onClose={(shouldRefetch) => {
-                setPublishModalOpen(false)
-
-                if (shouldRefetch) {
-                  refetch()
-                }
-              }}
+              onClose={onPublishClose}
               publisher={profile}
+            />
+            <ModifyOpportunityModal
+              open={modifyModalOpen}
+              onClose={onModifyClose}
+              publisher={profile}
+              id={currentModifyId}
+              defaultValues={getFormDefaults()}
             />
           </div>
         </Card>

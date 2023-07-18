@@ -5,10 +5,8 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
-import { signMessage } from '@wagmi/core'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { v4 } from 'uuid'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
@@ -18,57 +16,34 @@ import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
 import createPost from '@/lib/lens-protocol/createPost'
-import lensClient from '@/lib/lens-protocol/lensClient'
 
 import Error from './Error'
+import {
+  checkAuth,
+  IPublishOpportunityFormProps
+} from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
+  id: string
   publisher: Profile | null
+  defaultValues: IPublishOpportunityFormProps
 }
 
-export interface IPublishOpportunityFormProps {
-  opportunityName: string
-  dates: string
-  numHours: string
-  category: string
-  website: string
-  description: string
-}
-
-export const emptyPublishFormData: IPublishOpportunityFormProps = {
-  opportunityName: '',
-  dates: '',
-  numHours: '',
-  category: '',
-  website: '',
-  description: ''
-}
-
-export const checkAuth = async (address: string) => {
-  const authenticated = await lensClient().authentication.isAuthenticated()
-
-  if (!authenticated) {
-    console.log('not authed')
-    const challenge = await lensClient().authentication.generateChallenge(
-      address
-    )
-    const signature = await signMessage({ message: challenge })
-    await lensClient().authentication.authenticate(address, signature)
-  }
-}
-
-const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
+const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   open,
   onClose,
-  publisher
+  id,
+  publisher,
+  defaultValues
 }) => {
+  console.log('default', defaultValues)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-  const form = useForm<IPublishOpportunityFormProps>()
+  const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
 
   const {
     handleSubmit,
@@ -103,7 +78,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       {
         traitType: 'opportunity_id',
         displayType: PublicationMetadataDisplayTypes.String,
-        value: v4()
+        value: id
       },
       {
         traitType: 'opportunity_name',
@@ -139,7 +114,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
-      metadata_id: v4(),
+      metadata_id: id,
       content: '#ORG_PUBLISH_OPPORTUNITY',
       locale: getUserLocale(),
       tags: ['ORG_PUBLISH_OPPORTUNITY'],
@@ -175,7 +150,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Volunteer Opportunity'}
+      title={'Modify Volunteer Opportunity'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -188,9 +163,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
+              key={`${Math.floor(Math.random() * 1000)}-min`}
               label="Volunteer opportunity name"
               placeholder="Medical internship"
               error={!!errors.opportunityName?.type}
+              defaultValue={defaultValues.opportunityName}
               {...register('opportunityName', {
                 required: true,
                 maxLength: 100
@@ -201,6 +178,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               type="date"
               placeholder="yyyy-mm-dd"
               error={!!errors.dates?.type}
+              defaultValue={defaultValues.dates}
               {...register('dates', {
                 required: true
               })}
@@ -209,6 +187,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Expected number of hours"
               placeholder="5.5"
               error={!!errors.numHours?.type}
+              defaultValue={defaultValues.numHours}
               {...register('numHours', {
                 required: true,
                 pattern: {
@@ -222,18 +201,21 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Category"
               placeholder="Healthcare"
               error={!!errors.category?.type}
+              defaultValue={defaultValues.category}
               {...register('category', { required: true, maxLength: 40 })}
             />
             <Input
               label="Website (leave empty if not linking to external opportunity)"
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
+              defaultValue={defaultValues.website}
               {...(register('website'), { maxLength: 2000 })}
             />
             <TextArea
               label="Activity Description"
               placeholder="Tell us more about this volunteer opportunity"
               error={!!errors.description?.type}
+              defaultValue={defaultValues.description}
               {...register('description', { required: true, maxLength: 250 })}
             />
           </Form>
@@ -251,4 +233,4 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   )
 }
 
-export default PublishOpportunityModal
+export default ModifyOpportunityModal
