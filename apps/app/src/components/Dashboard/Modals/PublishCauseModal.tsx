@@ -103,6 +103,11 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
         value: data.causeName
       },
       {
+        traitType: 'category',
+        displayType: PublicationMetadataDisplayTypes.String,
+        value: data.category
+      },
+      {
         traitType: 'currency',
         displayType: PublicationMetadataDisplayTypes.String,
         value: selectedCurrency
@@ -146,7 +151,24 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
       await checkAuth(publisher.ownedBy)
 
-      await createPost(publisher, metadata)
+      await createPost(
+        publisher,
+        metadata,
+        {
+          feeCollectModule: {
+            amount: {
+              currency: selectedCurrency,
+              value: data.contribution
+            },
+            recipient: data.recipient,
+            referralFee: 0,
+            followerOnly: false
+          }
+        },
+        {
+          followerOnlyReferenceModule: false
+        }
+      )
     } catch (e: any) {
       setErrorMessage(e.message)
       setError(true)

@@ -129,7 +129,18 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     setIsPending(true)
 
     checkAuth(publisher.ownedBy)
-      .then(() => createPost(publisher, metadata))
+      .then(() =>
+        createPost(
+          publisher,
+          metadata,
+          {
+            freeCollectModule: {
+              followerOnly: false
+            }
+          },
+          { followerOnlyReferenceModule: false }
+        )
+      )
       .then((res) => {
         if (res.isFailure()) {
           setError(true)
