@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
+import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { useAppPersistStore } from '@/store/app'
 
@@ -57,7 +57,7 @@ const OrganizationCausesTab: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={getOpportunityMetadata(data)}
+                  rowData={getCauseMetadata(data)}
                   columnDefs={Object.values(
                     makeOrgCauseColumnDefs({
                       onEditClick: onEdit,
