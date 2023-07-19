@@ -2,7 +2,6 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
-import { FetchBalanceResult } from '@wagmi/core'
 import { AgGridReact } from 'ag-grid-react'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
@@ -99,9 +98,7 @@ const OrganizationVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
   const [vhrGoal] = useState(600) // use hardcoded goal for now
 
-  const [data2, setData] = useState<FetchBalanceResult>()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
+  const { isLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
   return (
