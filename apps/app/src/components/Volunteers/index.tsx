@@ -26,7 +26,7 @@ const Volunteers: NextPage = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: {
-        oneOf: [PostTags.OrgPublishOpp]
+        oneOf: [PostTags.OrgPublish.Opportuntiy]
       }
     }
   })

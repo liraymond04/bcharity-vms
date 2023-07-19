@@ -38,9 +38,7 @@ const VolunteerVHRTab: React.FC = () => {
   } = useExplorePublications({
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublishOpp]
-      }
+      tags: { oneOf: [PostTags.OrgPublish.Opportuntiy] }
     }
   })
 

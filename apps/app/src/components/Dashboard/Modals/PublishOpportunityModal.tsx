@@ -48,7 +48,7 @@ export const createPublishAttributes = (
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: PostTags.OrgPublishOpp
+      value: PostTags.OrgPublish.Opportuntiy
     },
     {
       traitType: 'opportunity_id',
@@ -135,17 +135,28 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: v4(),
-      content: `#${PostTags.OrgPublishOpp}`,
+      content: `#${PostTags.OrgPublish.Opportuntiy}`,
       locale: getUserLocale(),
-      tags: [PostTags.OrgPublishOpp],
+      tags: [PostTags.OrgPublish.Opportuntiy],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublishOpp} by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
 
     checkAuth(publisher.ownedBy)
-      .then(() => createPost(publisher, metadata))
+      .then(() =>
+        createPost(
+          publisher,
+          metadata,
+          {
+            freeCollectModule: {
+              followerOnly: false
+            }
+          },
+          { followerOnlyReferenceModule: false }
+        )
+      )
       .then((res) => {
         if (res.isFailure()) {
           setError(true)
@@ -200,7 +211,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
             <Input
               label="Expected number of hours"
+              type="number"
               placeholder="5.5"
+              step="0.1"
+              min="0.1"
               error={!!errors.numHours?.type}
               {...register('numHours', {
                 required: true,
