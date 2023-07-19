@@ -42,7 +42,11 @@ export const FieldError: FC<FieldErrorProps> = ({ name }) => {
     switch (error.type) {
       case 'required':
         return 'This field is required'
-
+      case 'maxLength':
+        return 'Length exceeds maximum number of characters'
+      case 'pattern': {
+        return error.message?.toString() ?? 'Unknown error'
+      }
       default:
         return 'Unknown error'
     }

@@ -1,9 +1,4 @@
-import {
-  GlobeIcon,
-  HomeIcon,
-  LockClosedIcon,
-  StarIcon
-} from '@heroicons/react/outline'
+import { GlobeIcon, HomeIcon, StarIcon } from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
 
@@ -12,7 +7,6 @@ import Sidebar, { ITabProps } from '@/components/Sidebar/Sidebar'
 
 import VolunteerCausesTab from './VolunteerCauses'
 import VolunteerHomeTab from './VolunteerHome'
-import VolunteerSettingsTab from './VolunteerSettings'
 import VolunteerVHRTab from './VolunteerVHR'
 
 export interface IDashboardTab extends ITabProps {
@@ -37,11 +31,6 @@ const VolunteerDashboard: React.FC = () => {
       label: 'Causes',
       icon: <GlobeIcon className="w-4 inline" />,
       component: <VolunteerCausesTab />
-    },
-    {
-      label: 'User Settings',
-      icon: <LockClosedIcon className="w-4 inline" />,
-      component: <VolunteerSettingsTab />
     }
   ]
 

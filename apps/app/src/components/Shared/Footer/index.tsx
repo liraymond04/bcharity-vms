@@ -119,10 +119,10 @@ const Footer: FC = () => {
 
             <div className="flex justify-center space-x-5 py-3">
               <a className="w-20" href="../../../">
-                <img src="https://bcharity.vercel.app/logo.jpg " alt=""></img>
+                <img src="/logo.jpg " alt="bcharity-logo"></img>
               </a>
-              <a className="w-20 mt-2" href="ecssen.ca">
-                <img src="https://i.ibb.co/FB9NQk5/ecssen.png" alt=""></img>
+              <a className="w-20 mt-2" href="https://ecssen.ca">
+                <img src="/ecssen.png" alt="ecssen-logo"></img>
               </a>
             </div>
           </div>

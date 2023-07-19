@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast'
 import { useAccount } from 'wagmi'
 
 import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
-import { useAppPersistStore, useAppStore } from '@/store/app'
+import { useAppStore, useCookies } from '@/store/app'
 
 import { Button } from './UI/Button'
 import { Modal } from './UI/Modal'
@@ -25,7 +25,7 @@ const SiteLayout: FC<Props> = ({ children }) => {
   const { setProfiles } = useAppStore()
   const { address } = useAccount()
 
-  const { hasCookies, setHasCookies } = useAppPersistStore()
+  const { hasCookies, setHasCookies } = useCookies()
   const [showCookiesPopup, setShowCookiesPopup] = useState<boolean>(true)
 
   useEffect(() => {
@@ -84,7 +84,10 @@ const SiteLayout: FC<Props> = ({ children }) => {
           src="Cookie.jpg"
           alt="image description"
         ></img>
-        <div className="mt-8 mb-16 mx-16 justify-center">
+        <div className="mt-8 mx-16 flex justify-center text-xl text-red-600">
+          Warning: Some functionality may not work without cookies
+        </div>
+        <div className="mt-4 mb-16 mx-16 justify-center">
           We use cookies to improve your browsing experience, save your
           preferences and collect information on how you use our website. You
           can decline these cookies for a less personalized experience. For more
