@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
-import FilterDropdown from '@/components/Shared/SearchDropdown'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -17,6 +16,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
+import RegionDropdown from './RegionDropdown'
 
 const inter500 = Inter({
   subsets: ['latin'],
@@ -27,7 +27,7 @@ const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedCategory, setSelectedCategory] = useState<string>('None')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
 
@@ -149,12 +149,13 @@ const VolunteerVHRTab: React.FC = () => {
               <SearchIcon />
             </div>
           </div>
-          <div>
-            <FilterDropdown
+          <div className="h-[60px] z-30">
+            <RegionDropdown
               label="Filter:"
               options={Array.from(categories)}
-              onChange={(c) => setSelectedCategory(c)}
-            ></FilterDropdown>
+              onClick={(c) => setSelectedCategory(c)}
+              selected={selectedCategory}
+            ></RegionDropdown>
           </div>
         </div>
         <div className="flex flex-wrap justify-around">
@@ -163,7 +164,8 @@ const VolunteerVHRTab: React.FC = () => {
               .filter((op) => filterOpportunity(op.name, searchValue))
               .filter(
                 (op) =>
-                  selectedCategory === '' || op.category === selectedCategory
+                  selectedCategory === 'None' ||
+                  op.category === selectedCategory
               )
               .map((op, id) => (
                 <div
