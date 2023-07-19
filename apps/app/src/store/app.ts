@@ -24,8 +24,6 @@ interface AppPersistState {
   setIsAuthenticated: (isAuthenticated: boolean) => void
   currentUser: Profile | null
   setCurrentUser: (currentUser: Profile | null) => void
-  hasCookies: boolean
-  setHasCookies: (hasCookies: boolean) => void
 }
 
 export const useAppPersistStore = create(
@@ -36,10 +34,23 @@ export const useAppPersistStore = create(
       isAuthenticated: false,
       setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
       currentUser: null,
-      setCurrentUser: (currentUser) => set(() => ({ currentUser })),
+      setCurrentUser: (currentUser) => set(() => ({ currentUser }))
+    }),
+    { name: 'bcharity.store' }
+  )
+)
+
+interface CookieState {
+  hasCookies: boolean
+  setHasCookies: (hasCookies: boolean) => void
+}
+
+export const useCookies = create(
+  persist<CookieState>(
+    (set) => ({
       hasCookies: false,
       setHasCookies: (hasCookies) => set(() => ({ hasCookies }))
     }),
-    { name: 'bcharity.store' }
+    { name: 'bcharity.cookies' }
   )
 )
