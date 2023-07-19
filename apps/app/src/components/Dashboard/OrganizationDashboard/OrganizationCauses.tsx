@@ -1,6 +1,7 @@
 import { PlusSmIcon } from '@heroicons/react/outline'
 import { AgGridReact } from 'ag-grid-react'
-import React, { useState } from 'react'
+import { useTheme } from 'next-themes'
+import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
@@ -16,6 +17,8 @@ import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
 
 const OrganizationCausesTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
+  const { resolvedTheme } = useTheme()
+  const [gridTheme, setGridTheme] = useState<string>()
 
   const { data, error, loading, refetch } = usePostData({
     profileId: profile!.id,
@@ -38,6 +41,12 @@ const OrganizationCausesTab: React.FC = () => {
     console.log('delete id ', id)
   }
 
+  useEffect(() => {
+    setGridTheme(
+      resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
+    )
+  }, [resolvedTheme])
+
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -50,7 +59,7 @@ const OrganizationCausesTab: React.FC = () => {
               <PlusSmIcon className="w-8 text-white dark:text-black" />
             </button>
             <div
-              className="ag-theme-alpine"
+              className={gridTheme}
               style={{ height: '800px', width: '90%' }}
             >
               {loading ? (
