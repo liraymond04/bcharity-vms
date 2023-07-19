@@ -12,10 +12,11 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { PostTags } from '@/lib/types'
+import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import DeleteOpportunityModal from '../Modals/DeleteOpportunityModal'
 import Error from '../Modals/Error'
 import ModifyOpportunityModal from '../Modals/ModifyOpportunityModal'
 import PublishOpportunityModal, {
@@ -36,12 +37,14 @@ const OrganizationVHRTab: React.FC = () => {
     }
   })
 
-  const postMetadata = getOpportunityMetadata(data)
+  const [postMetadata, setPostMetadata] = useState<OpportunityMetadata[]>([])
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const [currentModifyId, setCurrentModifyId] = useState('')
+  const [currentDeleteId, setCurrentDeleteId] = useState('')
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
@@ -59,6 +62,13 @@ const OrganizationVHRTab: React.FC = () => {
     }
   }
 
+  const onDeleteClose = (shouldRefetch: boolean) => {
+    setDeleteModalOpen(false)
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+
   const onNew = () => {
     setPublishModalOpen(true)
   }
@@ -69,7 +79,8 @@ const OrganizationVHRTab: React.FC = () => {
   }
 
   const onDelete = (id: string) => {
-    console.log('delete id ', id)
+    setCurrentDeleteId(id)
+    setDeleteModalOpen(true)
   }
 
   useEffect(() => {
@@ -78,10 +89,12 @@ const OrganizationVHRTab: React.FC = () => {
     )
   }, [resolvedTheme])
 
-  const getFormDefaults = (): IPublishOpportunityFormProps => {
-    const d = postMetadata.find(
-      (val) => val?.opportunity_id === currentModifyId
-    )
+  useEffect(() => {
+    setPostMetadata(getOpportunityMetadata(data))
+  }, [data])
+
+  const getFormDefaults = (id: string): IPublishOpportunityFormProps => {
+    const d = postMetadata.find((val) => val?.opportunity_id === id)
 
     return d
       ? {
@@ -205,7 +218,15 @@ const OrganizationVHRTab: React.FC = () => {
               onClose={onModifyClose}
               publisher={profile}
               id={currentModifyId}
-              defaultValues={getFormDefaults()}
+              defaultValues={getFormDefaults(currentModifyId)}
+            />
+            <DeleteOpportunityModal
+              open={deleteModalOpen}
+              onClose={onDeleteClose}
+              publisher={profile}
+              id={currentDeleteId}
+              postData={data}
+              values={getFormDefaults(currentDeleteId)}
             />
           </div>
         </Card>
