@@ -35,9 +35,6 @@ importers:
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.2.4)
-      '@tailwindcss/line-clamp':
-        specifier: ^0.4.4
-        version: 0.4.4(tailwindcss@3.2.4)
       '@thirdweb-dev/storage':
         specifier: ^1.1.8
         version: 1.1.8(encoding@0.1.13)
@@ -134,7 +131,7 @@ importers:
         version: 8.8.0(eslint@8.44.0)
       eslint-config-turbo:
         specifier: latest
-        version: 1.10.8(eslint@8.44.0)
+        version: 1.10.9(eslint@8.44.0)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -1995,14 +1992,6 @@ packages:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.2.4(postcss@8.4.25)
-    dev: false
-
-  /@tailwindcss/line-clamp@0.4.4(tailwindcss@3.2.4):
-    resolution: {integrity: sha512-5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==}
-    peerDependencies:
-      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
-    dependencies:
       tailwindcss: 3.2.4(postcss@8.4.25)
     dev: false
 
@@ -3938,13 +3927,13 @@ packages:
       eslint-plugin-turbo: 1.10.7(eslint@8.45.0)
     dev: false
 
-  /eslint-config-turbo@1.10.8(eslint@8.44.0):
-    resolution: {integrity: sha512-fDJTyM04N9XUcvYFlM4r7Byvjx27TuO68iOnMNjtKF7vBtrJuBBBGtNM0aQIWGg0oTqjjcNTNQw9sQK+IcA5Gw==}
+  /eslint-config-turbo@1.10.9(eslint@8.44.0):
+    resolution: {integrity: sha512-YA5QWxWte/NiRJL0/Cv7aATfIvS5sUAuyD6ZuyTZEzwyU7E6FUXGo44amjf9INkyj96HrJ2nYWoFkCRx3vs6Ag==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
       eslint: 8.44.0
-      eslint-plugin-turbo: 1.10.8(eslint@8.44.0)
+      eslint-plugin-turbo: 1.10.9(eslint@8.44.0)
     dev: true
 
   /eslint-import-resolver-node@0.3.7:
@@ -4343,8 +4332,8 @@ packages:
       eslint: 8.45.0
     dev: false
 
-  /eslint-plugin-turbo@1.10.8(eslint@8.44.0):
-    resolution: {integrity: sha512-0ULCoR0Zj/ec4mjmfeYhDa5OtqCvSgDkQdSD/tqLUSHM0GzcUrNvGPclVmsoCb5kmawzeqtlqnS2FKILc862qw==}
+  /eslint-plugin-turbo@1.10.9(eslint@8.44.0):
+    resolution: {integrity: sha512-o8Nga4WFMvzF0lo3d3UyjGli2JOUn/4SRtRdvcf4EA9/TPotU/NUHqO16Cp0SHZJG/tGYIy5LY1O/EO7Mxbd1A==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
