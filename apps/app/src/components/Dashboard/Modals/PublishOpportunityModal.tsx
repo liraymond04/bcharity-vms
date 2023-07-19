@@ -48,7 +48,7 @@ export const createPublishAttributes = (
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: 'ORG_PUBLISH_OPPORTUNITY'
+      value: PostTags.OrgPublishOpp
     },
     {
       traitType: 'opportunity_id',
@@ -135,11 +135,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: v4(),
-      content: `#${PostTags.OrgPublish}`,
+      content: `#${PostTags.OrgPublishOpp}`,
       locale: getUserLocale(),
-      tags: [PostTags.OrgPublish],
+      tags: [PostTags.OrgPublishOpp],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish} by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublishOpp} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }

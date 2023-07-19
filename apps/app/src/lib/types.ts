@@ -12,5 +12,5 @@ export interface OpportunityMetadata {
 }
 
 export const PostTags = {
-  OrgPublish: 'ORG_PUBLISH_OPPORTUNITY'
+  OrgPublishOpp: 'ORG_PUBLISH_OPPORTUNITY'
 }

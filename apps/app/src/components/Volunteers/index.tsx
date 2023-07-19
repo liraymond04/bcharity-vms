@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { STATIC_ASSETS } from '@/constants'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { OpportunityMetadata } from '@/lib/types'
+import { OpportunityMetadata, PostTags } from '@/lib/types'
 
 import { Spinner } from '../UI/Spinner'
 
@@ -25,7 +25,7 @@ const Volunteers: NextPage = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: {
-        oneOf: ['ORG_PUBLISH_OPPORTUNITY']
+        oneOf: [PostTags.OrgPublishOpp]
       }
     }
   })
@@ -33,13 +33,12 @@ const Volunteers: NextPage = () => {
   useEffect(() => {
     let _posts: OpportunityMetadata[] = []
     let _categories: Set<string> = new Set()
-    getOpportunityMetadata(data).forEach((post) => {
-      if (post) {
-        _posts.push(post)
-        if (post?.category) _categories.add(post.category)
-      }
+    const metadata = getOpportunityMetadata(data)
+    metadata.forEach((post) => {
+      _posts.push(post)
+      if (post.category) _categories.add(post.category)
     })
-    setPosts(_posts)
+    setPosts(metadata)
     setCategories(_categories)
   }, [data])
 
