@@ -211,7 +211,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
             <Input
               label="Expected number of hours"
+              type="number"
               placeholder="5.5"
+              step="0.1"
+              min="0.1"
               error={!!errors.numHours?.type}
               {...register('numHours', {
                 required: true,
