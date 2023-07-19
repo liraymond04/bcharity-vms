@@ -21,7 +21,7 @@
     "eslint-config-turbo": "latest",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "turbo": "^1.10.7"
+    "turbo": "^1.10.9"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.22.7",
