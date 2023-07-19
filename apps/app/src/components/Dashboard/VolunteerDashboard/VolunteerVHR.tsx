@@ -149,7 +149,7 @@ const VolunteerVHRTab: React.FC = () => {
               <SearchIcon />
             </div>
           </div>
-          <div className="h-[60px] z-30">
+          <div className="h-[60px] z-10">
             <RegionDropdown
               label="Filter:"
               options={Array.from(categories)}
