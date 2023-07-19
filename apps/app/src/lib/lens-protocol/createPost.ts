@@ -1,4 +1,8 @@
-import { PublicationMetadataV2Input } from '@lens-protocol/client'
+import {
+  CollectModuleParams,
+  PublicationMetadataV2Input,
+  ReferenceModuleParams
+} from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 
@@ -8,7 +12,9 @@ import lensClient from './lensClient'
 
 const createPost = async (
   profile: Profile,
-  metadata: PublicationMetadataV2Input
+  metadata: PublicationMetadataV2Input,
+  collectModule: CollectModuleParams,
+  referenceModule: ReferenceModuleParams
 ) => {
   const contentURI = await uploadToIPFS(metadata)
 
@@ -30,14 +36,8 @@ const createPost = async (
   const typedDataResult = await lensClient().publication.createPostTypedData({
     profileId,
     contentURI,
-    collectModule: {
-      freeCollectModule: {
-        followerOnly: false
-      }
-    },
-    referenceModule: {
-      followerOnlyReferenceModule: false // anybody can comment or mirror
-    }
+    collectModule,
+    referenceModule
   })
 
   const signature = await signTypedData(
