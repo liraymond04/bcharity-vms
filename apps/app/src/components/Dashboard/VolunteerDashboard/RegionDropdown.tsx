@@ -1,18 +1,18 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 
-interface props {
+interface Props {
   onClick: (string: string) => void
   region: string
   className: string
 }
 
-const RegionDropdown = (props) => {
+const RegionDropdown: FC<Props> = ({ onClick, region, className }) => {
   const [open, setOpen] = useState<boolean>(false)
   const options = ['Any', 'Calgary', 'Vancouver', 'Toronto']
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div
         onClick={() => setOpen(!open)}
         className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white border-2 border-violet-300 ${
@@ -21,7 +21,7 @@ const RegionDropdown = (props) => {
         `}
       >
         <div className="w-5 h-5 ml-2"></div>
-        <button className="flex ">{props.region}</button>
+        <button className="flex ">{region}</button>
         {open ? (
           <ChevronUpIcon className="w-5 h-5 mr-2" />
         ) : (
@@ -36,7 +36,7 @@ const RegionDropdown = (props) => {
             }`}
             key={index}
             onClick={() => {
-              props.onClick(value)
+              onClick(value)
               setOpen(false)
             }}
           >

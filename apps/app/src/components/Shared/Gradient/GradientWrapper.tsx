@@ -1,7 +1,7 @@
 import { useTheme } from 'next-themes'
 import React from 'react'
 
-import * as styles from './gradient.module.css'
+import styles from './gradient.module.css'
 interface IGradientWrapperProps {
   children: React.ReactNode
   className?: string

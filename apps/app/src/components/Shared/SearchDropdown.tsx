@@ -3,7 +3,7 @@ import React from 'react'
 interface IFilterDropdownProps {
   label: string
   options: string[]
-  onChange: (string) => void
+  onChange: (string: string) => void
 }
 
 const FilterDropdown: React.FC<IFilterDropdownProps> = ({
