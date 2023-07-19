@@ -7,7 +7,7 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { useAppPersistStore } from '@/store/app'
 
-import GetBalance from './GetBalance'
+import GetBalance from '../GetBalance'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
