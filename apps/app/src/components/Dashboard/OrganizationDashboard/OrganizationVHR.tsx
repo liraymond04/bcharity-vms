@@ -11,7 +11,7 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { PostTags } from '@/lib/types'
+import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import DeleteOpportunityModal from '../Modals/DeleteOpportunityModal'
@@ -35,7 +35,7 @@ const OrganizationVHRTab: React.FC = () => {
     }
   })
 
-  const postMetadata = getOpportunityMetadata(data)
+  const [postMetadata, setPostMetadata] = useState<OpportunityMetadata[]>([])
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
@@ -86,6 +86,10 @@ const OrganizationVHRTab: React.FC = () => {
       resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
     )
   }, [resolvedTheme])
+
+  useEffect(() => {
+    setPostMetadata(getOpportunityMetadata(data))
+  }, [data])
 
   const getFormDefaults = (id: string): IPublishOpportunityFormProps => {
     const d = postMetadata.find((val) => val?.opportunity_id === id)
@@ -149,6 +153,7 @@ const OrganizationVHRTab: React.FC = () => {
               onClose={onDeleteClose}
               publisher={profile}
               id={currentDeleteId}
+              postData={data}
               values={getFormDefaults(currentDeleteId)}
             />
           </div>

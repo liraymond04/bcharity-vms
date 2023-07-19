@@ -1,4 +1,8 @@
-import { PostFragment, ProfileFragment } from '@lens-protocol/client'
+import {
+  PostFragment,
+  ProfileFragment,
+  PublicationFragment
+} from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
@@ -7,8 +11,6 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import usePostData from '@/lib/lens-protocol/usePostData'
-import { PostTags } from '@/lib/types'
 
 import Error from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
@@ -19,6 +21,7 @@ interface IDeleteOpportunityModalProps {
   id: string
   publisher: ProfileFragment | null
   values: IPublishOpportunityFormProps
+  postData: PublicationFragment[]
 }
 
 const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
@@ -26,19 +29,9 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   onClose,
   id,
   publisher,
-  values
+  values,
+  postData
 }) => {
-  const {
-    data: postData,
-    error: dataFetchError,
-    loading
-  } = usePostData({
-    profileId: publisher?.id ?? '',
-    metadata: {
-      tags: { all: [PostTags.OrgPublish.Opportuntiy] }
-    }
-  })
-
   const [publicationIds, setPublicationIds] = useState<string[]>([])
 
   const [pending, setPending] = useState(false)
@@ -54,8 +47,6 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
         (post) => (post as PostFragment).metadata.attributes[1].value === id
       )
       .map((post) => post.id)
-
-    console.log(ids)
 
     setPublicationIds(ids)
   }, [id, postData])
@@ -100,23 +91,16 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
       })
   }
 
-  const isReady = () => !pending && !loading
-  const hasError = () => !!dataFetchError || !!errorMessage
-  const getErrorMessage = () => {
-    if (errorMessage) return errorMessage
-    return dataFetchError
-  }
-
   return (
     <GradientModal
       title={'Delete Volunteer Opportunity'}
       open={open}
       onCancel={onCancel}
       onSubmit={onSubmit}
-      submitDisabled={!isReady()}
+      submitDisabled={pending}
     >
       <div className="mx-12">
-        {isReady() ? (
+        {!pending ? (
           <>
             <Input
               label="Volunteer opportunity name"
@@ -150,9 +134,9 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
           <Spinner />
         )}
 
-        {hasError() && (
+        {!!errorMessage && (
           <Error
-            message={`An error occured: ${getErrorMessage()}. Please try again.`}
+            message={`An error occured: ${errorMessage}. Please try again.`}
           />
         )}
       </div>
