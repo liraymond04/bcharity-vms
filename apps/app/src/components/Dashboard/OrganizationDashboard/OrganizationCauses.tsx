@@ -4,9 +4,8 @@ import React, { useState } from 'react'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
+import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
-
-import GetBalance from '../GetBalance'
 
 const OrganizationCauses: React.FC = () => {
   const { currentUser } = useAppPersistStore()
@@ -14,7 +13,9 @@ const OrganizationCauses: React.FC = () => {
 
   const [data, setData] = useState<FetchBalanceResult>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+  const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
+    currentUser?.ownedBy ?? ''
+  )
   const Progress = ({
     progress,
     total,
@@ -40,15 +41,6 @@ const OrganizationCauses: React.FC = () => {
     <GridLayout>
       <GridItemTwelve>
         <Card>
-          {currentUser && (
-            <GetBalance
-              address={currentUser.ownedBy}
-              callback={(data: FetchBalanceResult, isLoading: boolean) => {
-                setData(data)
-                setIsLoading(isLoading)
-              }}
-            />
-          )}
           <div className="p-10 m-10">
             {isLoading ? (
               <Spinner />
@@ -56,7 +48,7 @@ const OrganizationCauses: React.FC = () => {
               <>
                 <div className="flex items-center">
                   <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
-                    {Number(data?.value)}
+                    {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
                     VHR raised out of {vhrGoal}
@@ -64,7 +56,7 @@ const OrganizationCauses: React.FC = () => {
                 </div>
 
                 <Progress
-                  progress={Number(data?.value)}
+                  progress={Number(balanceData?.value)}
                   total={vhrGoal}
                   className="mt-10 mb-10"
                 />

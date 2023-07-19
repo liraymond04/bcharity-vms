@@ -4,8 +4,9 @@ import React from 'react'
 import { useState } from 'react'
 
 import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
-import SideBar2, { ITabProps } from '@/components/Sidebar/SideBar2'
+import SideBar2 from '@/components/Sidebar/SideBar2'
 
+import { ITabProps } from '../Sidebar/Sidebar'
 import UserDelete from './UserDelete'
 import UserDispatcher from './UserDispatcher'
 import UserHome from './UserHome'
