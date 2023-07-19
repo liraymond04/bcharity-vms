@@ -1,5 +1,4 @@
-import { SunIcon } from '@heroicons/react/solid'
-import { MoonIcon } from '@heroicons/react/solid'
+import { MoonIcon, SunIcon } from '@heroicons/react/outline'
 import { useTheme } from 'next-themes'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -14,26 +13,33 @@ const ThemeButton: FC = () => {
     }
   }, [theme])
   return (
-    <div className="text-2xl flex justify-center">
-      <SunIcon className="w-10 h-10 mr-3" />
-      <div>
-        <button
-          onClick={() => {
-            if (lightTheme) {
-              setTheme('dark')
-            } else {
-              setTheme('light')
-            }
-          }}
-          className={`flex ${
-            lightTheme ? '' : 'justify-end'
-          } rounded-full w-16 dark:bg-white bg-black`}
+    <button
+      onClick={() => {
+        if (lightTheme) {
+          setTheme('dark')
+        } else {
+          setTheme('light')
+        }
+      }}
+    >
+      <div
+        className={`flex items-center w-[70px] h-fit rounded-full ${
+          lightTheme ? 'justify-start bg-gray-200' : 'justify-end bg-gray-600'
+        }`}
+      >
+        <div
+          className={`flex items-center justify-around w-[30px] h-[30px] my-1 rounded-full mx-1 ${
+            lightTheme ? 'bg-white' : 'bg-black'
+          }`}
         >
-          <div className="bg-gray-300 dark:bg-gray-600 rounded-full w-6 h-6 m-1" />
-        </button>
+          {lightTheme ? (
+            <SunIcon className="h-5 w-5" />
+          ) : (
+            <MoonIcon className="h-5 w-5" />
+          )}
+        </div>
       </div>
-      <MoonIcon className="w-10 h-10 ml-3" />
-    </div>
+    </button>
   )
 }
 
