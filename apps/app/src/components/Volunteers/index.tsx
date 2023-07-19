@@ -13,6 +13,7 @@ import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 
+import FilterDropdown from '../Shared/SearchDropdown'
 import { Spinner } from '../UI/Spinner'
 
 const Volunteers: NextPage = () => {
@@ -48,24 +49,11 @@ const Volunteers: NextPage = () => {
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-bold text-2xl">
         <div className="flex justify-between my-5">
           <Search />
-          <div className="flex items-center">
-            <div className="text-md mr-3">Filter:</div>
-            <select
-              className="w-30 h-10 bg-white rounded-xl border border-gray-300 outline-none dark:bg-gray-800 disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
-              onChange={(e) => {
-                setSelectedCategory(e.target.value)
-              }}
-            >
-              <option key="_none" value="">
-                None
-              </option>
-              {Array.from(categories).map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => setSelectedCategory(c)}
+            options={Array.from(categories)}
+          ></FilterDropdown>
         </div>
         Browse volunteer opportunities
       </div>

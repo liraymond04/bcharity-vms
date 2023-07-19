@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
+import FilterDropdown from '@/components/Shared/SearchDropdown'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -15,6 +16,8 @@ import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import Error from '../Modals/Error'
+
 const inter500 = Inter({
   subsets: ['latin'],
   weight: ['500']
@@ -23,12 +26,14 @@ const inter500 = Inter({
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
+  const [categories, setCategories] = useState<Set<string>>(new Set())
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
 
   const {
     data: postData,
-    error,
+    error: postDataError,
     loading
   } = useExplorePublications({
     sortCriteria: PublicationSortCriteria.Latest,
@@ -39,17 +44,20 @@ const VolunteerVHRTab: React.FC = () => {
     }
   })
 
-  useEffect(() => {
-    // let _categories: Set<string> = new Set()
-    const p = getOpportunityMetadata(postData)
-    setPosts(getOpportunityMetadata(postData))
-    // if (post.category) _categories.add(post.category)
-    // setCategories(_categories)
-  }, [postData])
-
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
+
+  useEffect(() => {
+    let _categories: Set<string> = new Set()
+    const _posts = getOpportunityMetadata(postData)
+    _posts.forEach((post) => {
+      if (post.category) _categories.add(post.category)
+    })
+
+    setCategories(_categories)
+    setPosts(_posts)
+  }, [postData])
 
   const filterOpportunity = (name: string, search: string) => {
     const nameArr = name.split(' ')
@@ -127,7 +135,7 @@ const VolunteerVHRTab: React.FC = () => {
         </Card>
       </GridItemTwelve>
       <GridItemTwelve>
-        <div className="flex w-full justify-between">
+        <div className="flex justify-between">
           <div className="ml-5 w-[200px]"></div>
           <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
             <input
@@ -143,17 +151,32 @@ const VolunteerVHRTab: React.FC = () => {
               <SearchIcon />
             </div>
           </div>
+          <div>
+            <FilterDropdown
+              label="Filter:"
+              options={Array.from(categories)}
+              onChange={(c) => setSelectedCategory(c)}
+            ></FilterDropdown>
+          </div>
         </div>
         <div className="flex flex-wrap justify-around">
           {!loading ? (
             posts
               .filter((op) => filterOpportunity(op.name, searchValue))
+              .filter(
+                (op) =>
+                  selectedCategory === '' || op.category === selectedCategory
+              )
               .map((op, id) => (
                 <div
                   key={id}
                   className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
                 >
-                  <img src={getAvatar(op.from)} className="h-[200px] w-full" />
+                  <img
+                    src={getAvatar(op.from)}
+                    className="h-[200px] w-full"
+                    alt="organization profile picture"
+                  />
                   <div
                     className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
                   >
@@ -172,10 +195,12 @@ const VolunteerVHRTab: React.FC = () => {
           ) : (
             <Spinner />
           )}
-          <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
-          <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
-          <div className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md opacity-0"></div>
         </div>
+        {postDataError && (
+          <Error
+            message={`An error occured: ${postDataError}. Please try again`}
+          />
+        )}
       </GridItemTwelve>
     </GridLayout>
   )
