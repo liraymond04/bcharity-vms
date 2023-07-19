@@ -3,7 +3,8 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
 import { AgGridReact } from 'ag-grid-react'
-import React, { useState } from 'react'
+import { useTheme } from 'next-themes'
+import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
@@ -22,6 +23,8 @@ import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
+  const { resolvedTheme } = useTheme()
+  const [gridTheme, setGridTheme] = useState<string>()
 
   const { data, error, loading, refetch } = usePostData({
     profileId: profile?.id,
@@ -66,6 +69,12 @@ const OrganizationVHRTab: React.FC = () => {
     console.log('delete id ', id)
   }
 
+  useEffect(() => {
+    setGridTheme(
+      resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
+    )
+  }, [resolvedTheme])
+
   const getFormDefaults = (): IPublishOpportunityFormProps => {
     const d = postMetadata.find(
       (val) => val?.opportunity_id === currentModifyId
@@ -94,7 +103,7 @@ const OrganizationVHRTab: React.FC = () => {
               <PlusSmIcon className="w-8 text-white dark:text-black" />
             </button>
             <div
-              className="ag-theme-alpine"
+              className={gridTheme}
               style={{ height: '800px', width: '90%' }}
             >
               {loading ? (
