@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast'
 import { useAccount } from 'wagmi'
 
 import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
-import { useAppPersistStore, useAppStore } from '@/store/app'
+import { useAppStore, useCookies } from '@/store/app'
 
 import { Button } from './UI/Button'
 import { Modal } from './UI/Modal'
@@ -25,7 +25,7 @@ const SiteLayout: FC<Props> = ({ children }) => {
   const { setProfiles } = useAppStore()
   const { address } = useAccount()
 
-  const { hasCookies, setHasCookies } = useAppPersistStore()
+  const { hasCookies, setHasCookies } = useCookies()
   const [showCookiesPopup, setShowCookiesPopup] = useState<boolean>(true)
 
   useEffect(() => {
