@@ -25,13 +25,7 @@ import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 
 import Error from './Error'
 
-interface IPublishCauseModalProps {
-  open: boolean
-  onClose: (shouldRefetch: boolean) => void
-  publisher: Profile | null
-}
-
-interface IFormProps {
+export interface IPublishCauseFormProps {
   causeName: string
   category: string
   currency: string
@@ -39,6 +33,78 @@ interface IFormProps {
   goal: string
   recipient: string
   description: string
+}
+
+export const emptyPublishFormData: IPublishCauseFormProps = {
+  causeName: '',
+  category: '',
+  currency: '',
+  contribution: '',
+  goal: '',
+  recipient: '',
+  description: ''
+}
+
+export const createPublishAttributes = (
+  id: string,
+  selectedCurrency: string,
+  data: IPublishCauseFormProps
+) => {
+  const attributes: MetadataAttributeInput[] = [
+    {
+      traitType: 'type',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: 'ORG_PUBLISH_CAUSE'
+    },
+    {
+      traitType: 'cause_id',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: id
+    },
+    {
+      traitType: 'cause_name',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.causeName
+    },
+    {
+      traitType: 'category',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.category
+    },
+    {
+      traitType: 'currency',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: selectedCurrency
+    },
+    {
+      traitType: 'contribution',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.contribution
+    },
+    {
+      traitType: 'goal',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.goal
+    },
+    {
+      traitType: 'recipient',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.recipient
+    },
+    {
+      traitType: 'description',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.description
+    }
+  ]
+
+  return attributes
+}
+
+interface IPublishCauseModalProps {
+  open: boolean
+  onClose: (shouldRefetch: boolean) => void
+  publisher: Profile | null
 }
 
 const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
@@ -60,7 +126,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
 
-  const form = useForm<IFormProps>()
+  const form = useForm<IPublishCauseFormProps>()
 
   const {
     handleSubmit,
@@ -74,7 +140,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
     onClose(false)
   }
 
-  const onSubmit = async (data: IFormProps) => {
+  const onSubmit = async (data: IPublishCauseFormProps) => {
     setError(false)
     setIsPending(true)
     console.log('test')
@@ -86,53 +152,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const attributes: MetadataAttributeInput[] = [
-      {
-        traitType: 'type',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: 'ORG_PUBLISH_CAUSE'
-      },
-      {
-        traitType: 'cause_id',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: v4()
-      },
-      {
-        traitType: 'cause_name',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.causeName
-      },
-      {
-        traitType: 'category',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.category
-      },
-      {
-        traitType: 'currency',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: selectedCurrency
-      },
-      {
-        traitType: 'contribution',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.contribution
-      },
-      {
-        traitType: 'goal',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.goal
-      },
-      {
-        traitType: 'recipient',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.recipient
-      },
-      {
-        traitType: 'description',
-        displayType: PublicationMetadataDisplayTypes.String,
-        value: data.description
-      }
-    ]
+    const attributes = createPublishAttributes(v4(), selectedCurrency, data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
@@ -194,13 +214,19 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               label="Cause name"
               placeholder="Medical internship"
               error={!!errors.causeName?.type}
-              {...register('causeName', { required: true })}
+              {...register('causeName', {
+                required: true,
+                maxLength: 255
+              })}
             />
             <Input
               label="Category"
               placeholder="Healthcare"
               error={!!errors.category?.type}
-              {...register('category', { required: true })}
+              {...register('category', {
+                required: true,
+                maxLength: 40
+              })}
             />
             <div>
               <div className="label">{t('Select currency')}</div>
@@ -238,7 +264,13 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 />
               }
               placeholder="5"
-              {...register('contribution', { required: true })}
+              {...register('contribution', {
+                required: true,
+                min: {
+                  value: 1,
+                  message: 'Invalid amount'
+                }
+              })}
             />
             <Input
               label={t('Funding goal')}
@@ -262,13 +294,19 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               label={t('Recipient')}
               type="text"
               placeholder="0x3A5bd...5e3"
-              {...register('recipient', { required: true })}
+              {...register('recipient', {
+                required: true,
+                pattern: {
+                  value: /^0x[a-fA-F0-9]{40}$/,
+                  message: 'Invalid Ethereum address'
+                }
+              })}
             />
             <TextArea
               label="Description"
               placeholder="Tell us more about this cause"
               error={!!errors.description?.type}
-              {...register('description', { required: true })}
+              {...register('description', { required: true, maxLength: 1000 })}
             />
             {/* <Input
               label="Date(s)"
