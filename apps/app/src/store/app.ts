@@ -3,6 +3,13 @@ import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+const getHasCookies = () => {
+  const store = localStorage.getItem('bcharity.cookies')
+  const store_obj = JSON.parse(store ? store : '')
+  if (store_obj.state) return store_obj.state.hasCookies
+  return false
+}
+
 interface AppState {
   profiles: Profile[] | []
   setProfiles: (profiles: Profile[]) => void
@@ -30,11 +37,17 @@ export const useAppPersistStore = create(
   persist<AppPersistState>(
     (set) => ({
       isConnected: false,
-      setIsConnected: (isConnected) => set(() => ({ isConnected })),
+      setIsConnected: (isConnected) => {
+        if (getHasCookies()) set(() => ({ isConnected }))
+      },
       isAuthenticated: false,
-      setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
+      setIsAuthenticated: (isAuthenticated) => {
+        if (getHasCookies()) set(() => ({ isAuthenticated }))
+      },
       currentUser: null,
-      setCurrentUser: (currentUser) => set(() => ({ currentUser }))
+      setCurrentUser: (currentUser) => {
+        if (getHasCookies()) set(() => ({ currentUser }))
+      }
     }),
     { name: 'bcharity.store' }
   )
