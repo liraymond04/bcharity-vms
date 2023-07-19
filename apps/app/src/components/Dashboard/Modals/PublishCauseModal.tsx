@@ -55,7 +55,7 @@ export const createPublishAttributes = (
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: 'ORG_PUBLISH_CAUSE'
+      value: PostTags.OrgPublish.Cause
     },
     {
       traitType: 'cause_id',

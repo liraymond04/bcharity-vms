@@ -10,6 +10,7 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
+import { PostTags } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
@@ -26,7 +27,7 @@ const OrganizationVHRTab: React.FC = () => {
   const { data, error, loading, refetch } = usePostData({
     profileId: profile?.id,
     metadata: {
-      tags: { all: ['ORG_PUBLISH_OPPORTUNITY'] }
+      tags: { all: [PostTags.OrgPublish.Opportuntiy] }
     }
   })
 

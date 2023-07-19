@@ -76,17 +76,28 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: id,
-      content: `#${PostTags.OrgPublish}`,
+      content: `#${PostTags.OrgPublish.Opportuntiy}`,
       locale: getUserLocale(),
-      tags: [PostTags.OrgPublish],
+      tags: [PostTags.OrgPublish.Opportuntiy],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish} by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
 
     checkAuth(publisher.ownedBy)
-      .then(() => createPost(publisher, metadata))
+      .then(() =>
+        createPost(
+          publisher,
+          metadata,
+          {
+            freeCollectModule: {
+              followerOnly: false
+            }
+          },
+          { followerOnlyReferenceModule: false }
+        )
+      )
       .then((res) => {
         if (res.isFailure()) {
           setError(true)

@@ -48,7 +48,7 @@ export const createPublishAttributes = (
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: 'ORG_PUBLISH_OPPORTUNITY'
+      value: PostTags.OrgPublish.Opportuntiy
     },
     {
       traitType: 'opportunity_id',
