@@ -18,7 +18,7 @@ export const Card: FC<CardProps> = ({
     <div
       className={clsx(
         forceRounded ? 'rounded-xl' : 'rounded-none sm:rounded-xl',
-        'border dark:border-gray-700/80 bg-white dark:bg-gray-900',
+        'border dark:border-gray-700/80 bg-purple-50 dark:bg-gray-900 drop-shadow-md',
         className
       )}
       data-test={testId}
