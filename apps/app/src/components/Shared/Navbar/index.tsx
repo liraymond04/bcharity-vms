@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppPersistStore } from '@/store/app'
 
+import ThemeButton from '../ThemeButton'
 import TranslateButton from '../TranslateButton'
 import MenuItems from './MenuItems'
 
@@ -254,6 +255,9 @@ const Navbar: FC = () => {
         )}
         <div className="my-auto mr-10">
           <TranslateButton />
+        </div>
+        <div className="my-auto mr-10">
+          <ThemeButton />
         </div>
         <div className="my-auto mr-10">
           <MenuItems />
