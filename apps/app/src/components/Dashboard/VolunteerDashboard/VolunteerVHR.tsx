@@ -16,7 +16,7 @@ import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
-import Error from '.../Modals/Error'
+import Error from '../Modals/Error'
 
 const inter500 = Inter({
   subsets: ['latin'],

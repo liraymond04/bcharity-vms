@@ -54,19 +54,6 @@ const OrganizationCauses: React.FC = () => {
                     VHR raised out of {vhrGoal}
                   </div>
                 </div>
-                import {PlusSmIcon} from '@heroicons/react/outline' import{' '}
-                {AgGridReact} from 'ag-grid-react' import {useTheme} from
-                'next-themes' import React, {(useEffect, useState)} from 'react'
-                import {(GridItemTwelve, GridLayout)} from
-                '@/components/GridLayout' import {Card} from
-                '@/components/UI/Card' import {Spinner} from
-                '@/components/UI/Spinner' import getCauseMetadata from
-                '@/lib/lens-protocol/getCauseMetadata' import usePostData from
-                '@/lib/lens-protocol/usePostData' import {PostTags} from
-                '@/lib/types' import {useAppPersistStore} from '@/store/app'
-                import Error from '../Modals/Error' import PublishCauseModal
-                from '../Modals/PublishCauseModal' import{' '}
-                {(defaultColumnDef, makeOrgCauseColumnDefs)} from './ColumnDefs'
                 <Progress
                   progress={Number(balanceData?.value)}
                   total={vhrGoal}
