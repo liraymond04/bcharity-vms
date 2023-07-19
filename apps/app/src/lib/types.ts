@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ProfileFragment } from '@lens-protocol/client'
 
 export interface OpportunityMetadata {
@@ -23,6 +24,11 @@ export interface CauseMetadata {
   from: ProfileFragment
 }
 
+enum OrgPublish {
+  Opportuntiy = 'ORG_PUBLISH_OPPORTUNITY',
+  Cause = 'ORG_PUBLISH_CAUSE'
+}
+
 export const PostTags = {
-  OrgPublish: 'ORG_PUBLISH_OPPORTUNITY'
+  OrgPublish
 }

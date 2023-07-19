@@ -22,6 +22,7 @@ import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
+import { PostTags } from '@/lib/types'
 
 import Error from './Error'
 
@@ -157,11 +158,11 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: v4(),
-      content: '#ORG_PUBLISH_CAUSE',
+      content: `#${PostTags.OrgPublish.Cause}`,
       locale: getUserLocale(),
-      tags: ['ORG_PUBLISH_CAUSE'],
+      tags: [PostTags.OrgPublish.Cause],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `ORG_PUBLISH_CAUSE by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish.Cause} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
