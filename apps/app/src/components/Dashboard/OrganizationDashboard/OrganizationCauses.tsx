@@ -94,7 +94,6 @@ const OrganizationCauses: React.FC = () => {
                     VHR raised out of {vhrGoal}
                   </div>
                 </div>
-
                 <Progress
                   progress={Number(balanceData?.value)}
                   total={vhrGoal}
