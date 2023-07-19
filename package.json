@@ -21,7 +21,7 @@
     "eslint-config-turbo": "latest",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "turbo": "^1.10.7"
+    "turbo": "^1.10.9"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.22.7",
@@ -33,7 +33,6 @@
     "@next/font": "^13.4.9",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/line-clamp": "^0.4.4",
     "@thirdweb-dev/storage": "^1.1.8",
     "@tippyjs/react": "^4.2.6",
     "@types/js-cookie": "^3.0.3",
@@ -42,6 +41,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@wagmi/core": "^1.3.7",
     "ag-grid.css": "link:ag-grid-community/styles/ag-grid.css",
+    "app": "workspace:^",
     "clsx": "^1.1.1",
     "encoding": "^0.1.13",
     "eslint-plugin-prettier": "^5.0.0",

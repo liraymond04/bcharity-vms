@@ -1,5 +1,11 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
-import { CellClickedEvent, ColDef } from 'ag-grid-community'
+import {
+  CellClickedEvent,
+  ColDef,
+  IDateFilterParams,
+  INumberFilterParams,
+  ITextFilterParams
+} from 'ag-grid-community'
 
 export const defaultColumnDef = {
   resizable: true
@@ -20,7 +26,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <PencilIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onEditClick(event.data.id)
+        params.onEditClick(event.data['opportunity_id'])
       },
       width: 50
     },
@@ -32,13 +38,16 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <TrashIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onDeleteClick(event.data.id)
+        params.onDeleteClick(event.data['opportunity_id'])
       },
       width: 50
     },
     {
       field: 'name',
-      filter: 'agTextColumnFilter'
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
     },
     // {
     //   field: 'vhr',
@@ -68,31 +77,116 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     // },
     {
       field: 'date',
-      filter: 'agTextColumnFilter'
+      filter: 'agDateColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as IDateFilterParams
     },
     {
       field: 'hours',
-      filter: 'agTextColumnFilter'
-    },
-    {
-      field: 'program',
-      filter: 'agTextColumnFilter'
-    },
-    {
-      field: 'region',
-      filter: 'agTextColumnFilter'
+      filter: 'agNumberColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as INumberFilterParams
     },
     {
       field: 'category',
-      filter: 'agTextColumnFilter'
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
     },
     {
       field: 'website',
-      filter: 'agTextColumnFilter'
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
     },
     {
       field: 'description',
-      filter: 'agTextColumnFilter'
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
+    }
+  ]
+}
+
+export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
+  return [
+    {
+      field: 'edit',
+      headerName: '',
+      resizable: false,
+      cellRenderer: () => {
+        return <PencilIcon className="w-4 inline" />
+      },
+      onCellClicked: (event: CellClickedEvent) => {
+        params.onEditClick(event.data.id)
+      },
+      width: 50
+    },
+    {
+      field: 'delete',
+      headerName: '',
+      resizable: false,
+      cellRenderer: () => {
+        return <TrashIcon className="w-4 inline" />
+      },
+      onCellClicked: (event: CellClickedEvent) => {
+        params.onDeleteClick(event.data.id)
+      },
+      width: 50
+    },
+    {
+      field: 'name',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
+    },
+    {
+      field: 'category',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
+    },
+    {
+      field: 'currency',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
+    },
+    {
+      field: 'contribution',
+      filter: 'agNumberColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as INumberFilterParams
+    },
+    {
+      field: 'goal',
+      filter: 'agNumberColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as INumberFilterParams
+    },
+    {
+      field: 'recipient',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
+    },
+    {
+      field: 'description',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
     }
   ]
 }
