@@ -13,6 +13,7 @@ import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 
+import Divider from '../Shared/Divider'
 import FilterDropdown from '../Shared/SearchDropdown'
 import { Spinner } from '../UI/Spinner'
 
@@ -47,7 +48,7 @@ const Volunteers: NextPage = () => {
     <>
       <SEO title="Volunteers • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-bold text-2xl">
-        <div className="flex justify-between my-5">
+        <div className="flex justify-between py-5">
           <Search />
           <FilterDropdown
             label="Filter:"
@@ -55,7 +56,8 @@ const Volunteers: NextPage = () => {
             options={Array.from(categories)}
           ></FilterDropdown>
         </div>
-        Browse volunteer opportunities
+        <Divider />
+        <p>Browse volunteer opportunities</p>
       </div>
       {loading ? (
         <div className="flex justify-center m-5">
