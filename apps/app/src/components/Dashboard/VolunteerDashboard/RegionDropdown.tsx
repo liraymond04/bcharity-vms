@@ -20,7 +20,7 @@ const RegionDropdown: React.FC<props> = ({
   return (
     <div className="flex">
       <div className={`mx-5 mt-3`}>{label}</div>
-      <div>
+      <div className={`${open && 'shadow-2xl'}`}>
         <div
           onClick={() => setOpen(!open)}
           className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white border-[1px] hover:border-black duration-500  ${
