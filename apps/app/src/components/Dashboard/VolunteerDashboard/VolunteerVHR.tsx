@@ -130,7 +130,7 @@ const VolunteerVHRTab: React.FC = () => {
               ></RegionDropdown>
             </div>
             <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer duration-500"
+              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
               onClick={() => {
                 setSelectedCategory('None')
               }}
