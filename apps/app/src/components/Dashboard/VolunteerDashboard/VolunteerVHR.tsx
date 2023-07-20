@@ -107,7 +107,7 @@ const VolunteerVHRTab: React.FC = () => {
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
           <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10">
             <input
-              className="border-none bg-transparent rounded-2xl w-[250px]"
+              className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
               placeholder="Search"
@@ -132,7 +132,6 @@ const VolunteerVHRTab: React.FC = () => {
             <button
               className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer duration-500"
               onClick={() => {
-                setSearchValue('')
                 setSelectedCategory('None')
               }}
             >
