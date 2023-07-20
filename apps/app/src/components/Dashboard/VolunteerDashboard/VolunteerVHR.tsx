@@ -1,6 +1,5 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
-import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -17,11 +16,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
-
-const inter500 = Inter({
-  subsets: ['latin'],
-  weight: ['500']
-})
+import BrowseCard from './BrowseCard'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
@@ -140,7 +135,7 @@ const VolunteerVHRTab: React.FC = () => {
               className="border-none bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="search"
+              placeholder="Search"
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -165,30 +160,14 @@ const VolunteerVHRTab: React.FC = () => {
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
               )
-              .map((op, id) => (
-                <div
-                  key={id}
-                  className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
-                >
-                  <img
-                    src={getAvatar(op.from)}
-                    className="h-[200px] w-full"
-                    alt="organization profile picture"
-                  />
-                  <div
-                    className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
-                  >
-                    {op.name}
-                  </div>
-                  <Link
-                    className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="." // external link or /volunteer/[post-id] here
-                  >
-                    APPLY
-                  </Link>
-                </div>
+              .map((op) => (
+                <BrowseCard
+                  key={op.opportunity_id}
+                  imageSrc={getAvatar(op.from)}
+                  name={op.name}
+                  buttonText="APPLY"
+                  buttonHref="."
+                />
               ))
           ) : (
             <Spinner />
