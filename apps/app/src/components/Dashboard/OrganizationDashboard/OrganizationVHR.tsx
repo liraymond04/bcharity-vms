@@ -127,7 +127,7 @@ const OrganizationVHRTab: React.FC = () => {
                   <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
                     {Number(balanceData?.value)}
                   </div>
-                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
+                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
                     VHR raised out of {vhrGoal}
                   </div>
                 </div>
