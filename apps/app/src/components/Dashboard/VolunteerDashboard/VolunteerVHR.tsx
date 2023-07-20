@@ -42,11 +42,6 @@ const VolunteerVHRTab: React.FC = () => {
     currentUser?.ownedBy ?? ''
   )
 
-  const clear = () => {
-    setSelectedCategory('')
-    setSearchValue('')
-  }
-
   useEffect(() => {
     let _categories: Set<string> = new Set()
     const _posts = getOpportunityMetadata(postData)
