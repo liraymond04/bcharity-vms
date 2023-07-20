@@ -15,7 +15,6 @@ import { PostTags } from '@/lib/types'
 
 import { GridItemFour, GridLayout } from '../GridLayout'
 import Divider from '../Shared/Divider'
-import GradientWrapper from '../Shared/Gradient/GradientWrapper'
 import Search from '../Shared/Search'
 import FilterDropdown from '../Shared/SearchDropdown'
 import { Spinner } from '../UI/Spinner'
@@ -85,41 +84,36 @@ const Organizations: NextPage = () => {
   return (
     <>
       <SEO title="Organizations • BCharity VMS" />
-      <GradientWrapper>
-        <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-bold text-2xl">
-          <div className="flex justify-between py-5">
-            <Search />
-            <FilterDropdown
-              label="Filter:"
-              onChange={(c) => console.log('filter', c)}
-              options={['Option 1', 'Option 2', 'Option 3']}
-            />
-          </div>
-          <Divider />
-          <p>Browse Organizations</p>
+      <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-bold text-2xl">
+        <div className="flex justify-between py-5">
+          <Search />
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => console.log('filter', c)}
+            options={['Option 1', 'Option 2', 'Option 3']}
+          />
         </div>
-        {loading ? (
-          <div className="flex justify-center p-5">
-            <Spinner />
-          </div>
-        ) : (
-          <GridLayout>
-            {profiles.map((profile, index) => (
-              <GridItemFour key={profile.id}>
-                <OrganizationCard
-                  profile={profile}
-                  postings={postings[index]}
-                />
-              </GridItemFour>
-            ))}
-          </GridLayout>
-        )}
-        {(exploreError || otherError) && (
-          <div className="text-sm text-red-700 dark:text-red-200">
-            Something went wrong
-          </div>
-        )}
-      </GradientWrapper>
+        <Divider />
+        <p>Browse Organizations</p>
+      </div>
+      {loading ? (
+        <div className="flex justify-center p-5">
+          <Spinner />
+        </div>
+      ) : (
+        <GridLayout>
+          {profiles.map((profile, index) => (
+            <GridItemFour key={profile.id}>
+              <OrganizationCard profile={profile} postings={postings[index]} />
+            </GridItemFour>
+          ))}
+        </GridLayout>
+      )}
+      {(exploreError || otherError) && (
+        <div className="text-sm text-red-700 dark:text-red-200">
+          Something went wrong
+        </div>
+      )}
     </>
   )
 }
