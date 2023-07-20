@@ -25,7 +25,7 @@ const UserSettingsDashboard: NextPage = () => {
 
   return (
     <>
-      <SEO title="Dashboard • BCharity VMS" />
+      <SEO title="Settings • BCharity VMS" />
       <UserDashboard />
     </>
   )
