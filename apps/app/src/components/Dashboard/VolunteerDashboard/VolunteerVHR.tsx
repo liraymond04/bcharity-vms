@@ -168,7 +168,7 @@ const VolunteerVHRTab: React.FC = () => {
               .map((op, id) => (
                 <div
                   key={id}
-                  className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
+                  className="relative my-5 mx-5 w-[300px] h-[350px] dark:bg-gray-800 dark:border-gray-700 bg-slate-100 border-8 border-white rounded-md"
                 >
                   <img
                     src={getAvatar(op.from)}
