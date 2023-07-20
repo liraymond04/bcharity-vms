@@ -2,20 +2,25 @@ import {
   ApprovedAllowanceAmountFragment,
   CollectModules,
   FollowModules,
-  GenerateModuleCurrencyApprovalFragment,
   ReferenceModules
 } from '@lens-protocol/client'
-import { signMessage } from '@wagmi/core'
+import {
+  prepareSendTransaction,
+  sendTransaction,
+  signMessage
+} from '@wagmi/core'
 import clsx from 'clsx'
 import React, { FC, useEffect } from 'react'
 import { useState } from 'react'
-import { usePrepareSendTransaction, useSendTransaction } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import HelpTooltip from '@/components/UI/HelpTooltip'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import { useAppPersistStore } from '@/store/app'
+
+import { Button } from '../UI/Button'
+import { Spinner } from '../UI/Spinner'
 interface Props {
   currency: string
   collectModule?: CollectModules
@@ -58,15 +63,9 @@ const AllowanceButton: FC<Props> = ({
   initValue
 }) => {
   const [isCollectActive, setIsCollectActive] = useState(initValue !== '0x00')
-  const [data, setData] = useState<GenerateModuleCurrencyApprovalFragment>()
-  const { config } = usePrepareSendTransaction({
-    account: `0x${data?.from.substring(2)}`,
-    to: data?.to,
-    value: BigInt(data?.data ? data.data : BigInt(0))
-  })
-  const { isLoading, isSuccess, sendTransaction } = useSendTransaction(config)
-  useEffect(() => {}, [data])
-  const GenerateAllowence = async (value: string) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const GenerateAllowance = async (value: string) => {
     const currencyData =
       await lensClient().modules.generateCurrencyApprovalData({
         currency,
@@ -76,29 +75,40 @@ const AllowanceButton: FC<Props> = ({
         referenceModule
       })
     const data = currencyData.unwrap()
-    setData(data)
+
+    const config = await prepareSendTransaction({
+      to: data.to,
+      data: `0x${data.data.substring(2)}`
+    })
+
+    const { hash } = await sendTransaction(config)
+
+    return hash
   }
 
   return (
-    <button
+    <Button
       disabled={isLoading}
       className={clsx(
         'bg-green-500', // Initial appearance
         isCollectActive && 'bg-red-400 focus:ring-red-400 border-red-700', // Apply this class when isActive is true
         'border border-green-600 text-white focus:ring-green-400 px-3 py-1 flex items-center space-x-1.5 rounded-lg font-bold disabled:opacity-50 shadow-sm focus:ring-2 focus:ring-opacity-50 focus:ring-offset-1 outline-none'
       )}
-      onClick={() => {
-        setIsCollectActive(!isCollectActive)
-        GenerateAllowence(
-          isCollectActive ? '0' : Number.MAX_SAFE_INTEGER.toString()
-        ).then(() => {
-          console.log('sendTransaction')
-          sendTransaction?.(config)
-        })
+      onClick={async () => {
+        setIsLoading(true)
+        try {
+          await GenerateAllowance(
+            !isCollectActive ? Number.MAX_SAFE_INTEGER.toString() : '0'
+          )
+          setIsCollectActive(!isCollectActive)
+        } catch (e) {
+          console.log(e)
+        }
+        setIsLoading(false)
       }}
     >
-      {!isCollectActive ? '+ allow' : '- revoke'}
-    </button>
+      {isLoading ? <Spinner /> : !isCollectActive ? '+ allow' : '- revoke'}
+    </Button>
   )
 }
 
