@@ -1,5 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import React, { useState } from 'react'
+import { CheckmarkIcon } from 'react-hot-toast'
 
 interface Props {
   onClick: (string: string) => void
@@ -40,18 +41,21 @@ const RegionDropdown: React.FC<props> = ({
         {open &&
           options.map((value, index) => (
             <div
-              className={`flex items-center w-[200px] h-[35px] justify-around bg-white border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 cursor-pointer  ${
+              className={`flex items-center w-[200px] h-[35px] justify-around bg-white border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 hover:border-l-[5px] hover:border-l-purple-800 cursor-pointer  ${
                 index == options.length - 1
-                  ? 'rounded-b-md border-b-violet-300 shadow-black shadow-2xl'
+                  ? 'rounded-b-md border-b-violet-300'
                   : ''
-              }`}
+              }
+                  `}
               key={index}
               onClick={() => {
                 onClick(value)
                 setOpen(false)
               }}
             >
+              {value == selected && <CheckmarkIcon className="w-5 h-5" />}
               <div className="w-fit">{value}</div>
+              {value == selected && <div className="w-5"></div>}
             </div>
           ))}
       </div>
