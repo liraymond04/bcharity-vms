@@ -60,7 +60,7 @@ const Contact: NextPage = () => {
               className="bg-transparent border-b py-2 pl-4 focus:outline-none focus:rounded-md focus:ring-1 ring-green-500 font-light text-black dark:text-white"
             />
 
-            <div className="flex flex-row items-center justify-start justify-between">
+            <div className="flex flex-row items-center justify-between">
               <a href="../">
                 <div
                   className="px-10 mt-8 py-2 bg-[#9969FF] text-gray-50 font-light 
