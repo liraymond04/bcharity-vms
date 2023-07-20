@@ -6,7 +6,9 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
   const allMetadata: (OpportunityMetadata & { createdAt: number })[] = data
     .filter(
       (post) =>
-        post.__typename === 'Post' && post.metadata.attributes.length !== 0
+        post.__typename === 'Post' &&
+        post.metadata.attributes.length !== 0 &&
+        !post.hidden
     )
     .map((post) => {
       const attributes = (post as PostFragment).metadata.attributes
