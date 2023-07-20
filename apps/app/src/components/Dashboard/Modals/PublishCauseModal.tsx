@@ -217,7 +217,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               error={!!errors.causeName?.type}
               {...register('causeName', {
                 required: true,
-                maxLength: 255
+                maxLength: 100
               })}
             />
             <Input
@@ -252,7 +252,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             <Input
               label={t('Contribution')}
               type="number"
-              step="0.0001"
+              step="1"
               min="0"
               max="100000"
               prefix={
@@ -270,13 +270,17 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 min: {
                   value: 1,
                   message: 'Invalid amount'
+                },
+                pattern: {
+                  value: /^0*[1-9]\d*$/,
+                  message: 'Contribution value should be a whole number'
                 }
               })}
             />
             <Input
               label={t('Funding goal')}
               type="number"
-              step="0.0001"
+              step="1"
               min="0"
               max="100000"
               prefix={
@@ -289,7 +293,17 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 />
               }
               placeholder="420"
-              {...register('goal', { required: true })}
+              {...register('goal', {
+                required: true,
+                min: {
+                  value: 1,
+                  message: 'Invalid amount'
+                },
+                pattern: {
+                  value: /^0*[1-9]\d*$/,
+                  message: 'Funding goal should be a whole number'
+                }
+              })}
             />
             <Input
               label={t('Recipient')}
