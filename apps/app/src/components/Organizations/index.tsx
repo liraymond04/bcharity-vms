@@ -1,7 +1,12 @@
 import SEO from '@components/utils/SEO'
 import { LocationMarkerIcon } from '@heroicons/react/outline'
 import { DotsHorizontalIcon, StarIcon } from '@heroicons/react/solid'
-import { ProfileFragment, PublicationSortCriteria } from '@lens-protocol/client'
+import {
+  ProfileFragment,
+  PublicationSortCriteria,
+  PublicationsQueryRequest,
+  PublicationTypes
+} from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -20,7 +25,11 @@ import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 
 const Organizations: NextPage = () => {
-  const { data, error, loading } = useExplorePublications({
+  const {
+    data,
+    error: exploreError,
+    loading
+  } = useExplorePublications({
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: {
@@ -29,9 +38,12 @@ const Organizations: NextPage = () => {
     }
   })
 
+  const [otherError, setOtherError] = useState(false)
+
   const posts = useMemo(() => getOpportunityMetadata(data), [data])
 
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
+  const [postings, setPostings] = useState<number[]>([])
 
   useEffect(() => {
     const uniqueIds: Set<string> = new Set()
@@ -41,12 +53,37 @@ const Organizations: NextPage = () => {
     if (uniqueIds.size > 0)
       lensClient()
         .profile.fetchAll({ profileIds: Array.from(uniqueIds) })
-        .then((res) => {
-          setProfiles(res.items)
-          console.log(res)
+        .then((res) => setProfiles(res.items))
+        .catch((err) => {
+          console.log(err)
+          setOtherError(true)
         })
-        .catch((err) => console.log(err))
   }, [posts])
+
+  const generateRequest = (profileId: string) => {
+    const param: PublicationsQueryRequest = {
+      profileId,
+      publicationTypes: [PublicationTypes.Post],
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportuntiy]
+        }
+      }
+    }
+
+    return lensClient()
+      .publication.fetchAll(param)
+      .then((result) => result.items.filter((res) => !res.hidden).length)
+  }
+
+  useEffect(() => {
+    Promise.all(profiles.map((profile) => generateRequest(profile.id)))
+      .then((lengths) => setPostings(lengths))
+      .catch((err) => {
+        setOtherError(true)
+        console.log(err)
+      })
+  }, [profiles])
 
   return (
     <>
@@ -70,7 +107,7 @@ const Organizations: NextPage = () => {
           </div>
         ) : (
           <GridLayout>
-            {profiles.map((profile) => (
+            {profiles.map((profile, index) => (
               <GridItemFour key={profile.id}>
                 <Card>
                   <div className="flex m-1 mr-2">
@@ -84,7 +121,16 @@ const Organizations: NextPage = () => {
                         <p>{profile.handle}</p>
                         <DotsHorizontalIcon className="w-4 text-zinc-400" />
                       </div>
-                      <p>{5} postings</p>
+                      <div className="flex">
+                        {!!!postings[index] && (
+                          <div className="inline">
+                            <Spinner size="xs" className="mr-2" />
+                          </div>
+                        )}
+                        <p className="inline">{`${
+                          postings[index] ?? ''
+                        } postings`}</p>
+                      </div>
                       <div className="flex justify-between grow">
                         <div>
                           <LocationMarkerIcon className="w-4 inline" />
@@ -101,7 +147,7 @@ const Organizations: NextPage = () => {
             ))}
           </GridLayout>
         )}
-        {error && (
+        {(exploreError || otherError) && (
           <div className="text-sm text-red-700 dark:text-red-200">
             Something went wrong
           </div>
