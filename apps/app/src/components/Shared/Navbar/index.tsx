@@ -253,7 +253,7 @@ const Navbar: FC = () => {
             )}
           </div>
         )}
-        <div className="my-auto mr-10">
+        <div className="relative my-auto mr-10">
           <TranslateButton />
         </div>
         <div className="my-auto mr-10">

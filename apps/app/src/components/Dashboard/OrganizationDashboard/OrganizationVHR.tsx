@@ -127,7 +127,7 @@ const OrganizationVHRTab: React.FC = () => {
                   <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
                     {Number(balanceData?.value)}
                   </div>
-                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
+                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
                     VHR raised out of {vhrGoal}
                   </div>
                 </div>
@@ -184,9 +184,12 @@ const OrganizationVHRTab: React.FC = () => {
           <div className="p-5">
             <button
               onClick={onNew}
-              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
+              className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
               <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <div className="text-white mr-3 mt-1 font-bold">
+                Create new opportunity
+              </div>
             </button>
             <div
               className={gridTheme}
