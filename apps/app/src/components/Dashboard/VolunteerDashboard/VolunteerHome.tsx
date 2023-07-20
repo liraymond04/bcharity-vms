@@ -4,15 +4,14 @@ import {
   PublicationTypes
 } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
-import { useBalance } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Slug from '@/components/Shared/Slug'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHR_TOKEN } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const VolunteerHome: React.FC = () => {
@@ -43,10 +42,7 @@ const VolunteerHome: React.FC = () => {
 
   const [searchAddress, setSearchAddress] = useState<string>('')
 
-  const { data, isLoading } = useBalance({
-    address: `0x${searchAddress.substring(2)}`,
-    token: `0x${VHR_TOKEN.substring(2)}`
-  })
+  const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {

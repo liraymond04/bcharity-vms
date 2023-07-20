@@ -7,6 +7,7 @@ import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
 import SideBar2 from '@/components/Sidebar/SideBar2'
 
 import { ITabProps } from '../Sidebar/Sidebar'
+import Permissons from './Permissons'
 import UserDelete from './UserDelete'
 import UserDispatcher from './UserDispatcher'
 import UserHome from './UserHome'
@@ -37,7 +38,7 @@ const UserDashboard: React.FC = () => {
     {
       label: 'Permissions',
       icon: <LockClosedIcon className="w-4 inline" />,
-      component: <UserSettings />
+      component: <Permissons />
     },
     {
       label: 'Delete Account',
