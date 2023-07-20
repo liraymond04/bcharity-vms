@@ -46,6 +46,11 @@ const VolunteerVHRTab: React.FC = () => {
     currentUser?.ownedBy ?? ''
   )
 
+  const clear = () => {
+    setSelectedCategory('None')
+    setSearchValue('')
+  }
+
   useEffect(() => {
     let _categories: Set<string> = new Set()
     const _posts = getOpportunityMetadata(postData)
@@ -133,9 +138,8 @@ const VolunteerVHRTab: React.FC = () => {
         </Card>
       </GridItemTwelve>
       <GridItemTwelve>
-        <div className="flex justify-between">
-          <div className="ml-5 w-[200px]"></div>
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
+        <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10">
             <input
               className="border-none bg-transparent rounded-2xl w-[250px]"
               type="text"
@@ -149,13 +153,25 @@ const VolunteerVHRTab: React.FC = () => {
               <SearchIcon />
             </div>
           </div>
-          <div className="h-[60px] z-10">
-            <RegionDropdown
-              label="Filter:"
-              options={Array.from(categories)}
-              onClick={(c) => setSelectedCategory(c)}
-              selected={selectedCategory}
-            ></RegionDropdown>
+
+          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
+            <div className="h-[50px] z-10 ">
+              <RegionDropdown
+                label="Filter:"
+                options={Array.from(categories)}
+                onClick={(c) => setSelectedCategory(c)}
+                selected={selectedCategory}
+              ></RegionDropdown>
+            </div>
+            <button
+              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer duration-500"
+              onClick={() => {
+                setSearchValue('')
+                setSelectedCategory('None')
+              }}
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
         <div className="flex flex-wrap justify-around">

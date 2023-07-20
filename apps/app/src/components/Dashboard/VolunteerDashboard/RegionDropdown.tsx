@@ -22,8 +22,10 @@ const RegionDropdown: React.FC<props> = ({
       <div>
         <div
           onClick={() => setOpen(!open)}
-          className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white border-2 border-violet-300 border-b-gray-300 ${
-            open ? 'rounded-t-md' : 'rounded-md border-b-violet-300'
+          className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white border-[1px] hover:border-black duration-500  ${
+            open
+              ? 'rounded-t-md border-violet-300 border-b-gray-300'
+              : 'rounded-md'
           }
         `}
         >
@@ -38,9 +40,9 @@ const RegionDropdown: React.FC<props> = ({
         {open &&
           options.map((value, index) => (
             <div
-              className={`flex items-center w-[200px] h-[35px] justify-around bg-white border-b-2 border-l-2 border-r-2 border-violet-300 border-b-gray-300 hover:bg-gray-200 cursor-pointer  ${
+              className={`flex items-center w-[200px] h-[35px] justify-around bg-white border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 cursor-pointer  ${
                 index == options.length - 1
-                  ? 'rounded-b-md border-b-violet-300'
+                  ? 'rounded-b-md border-b-violet-300 shadow-black shadow-2xl'
                   : ''
               }`}
               key={index}
