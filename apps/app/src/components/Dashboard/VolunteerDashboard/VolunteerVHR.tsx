@@ -11,6 +11,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import testSearch from '@/lib/search'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
@@ -51,36 +52,6 @@ const VolunteerVHRTab: React.FC = () => {
     setCategories(_categories)
     setPosts(_posts)
   }, [postData])
-
-  const filterOpportunity = (name: string, search: string) => {
-    const nameArr = name.split(' ')
-    const searchArr = search.split(' ')
-    let result = true
-    searchArr.map((search) => {
-      let found = false
-      nameArr.map((name) => {
-        let p0 = 0
-        let p1 = 0
-        while (p0 < name.length && p1 < search.length) {
-          if (
-            name.charAt(p0).toLowerCase() == search.charAt(p1).toLowerCase()
-          ) {
-            p0++, p1++
-          } else {
-            p0++
-          }
-        }
-        if (p1 == search.length) {
-          found = true
-        }
-      })
-      if (!found) {
-        result = false
-      }
-    })
-
-    return result
-  }
 
   return (
     <GridLayout>
@@ -155,7 +126,7 @@ const VolunteerVHRTab: React.FC = () => {
         <div className="flex flex-wrap justify-around">
           {!loading ? (
             posts
-              .filter((op) => filterOpportunity(op.name, searchValue))
+              .filter((op) => testSearch(op.name, searchValue))
               .filter(
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
