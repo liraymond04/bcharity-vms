@@ -15,8 +15,8 @@ import { PostTags } from '@/lib/types'
 
 import { GridItemFour, GridLayout } from '../GridLayout'
 import Divider from '../Shared/Divider'
+import FilterDropdown from '../Shared/FilterDropdown'
 import Search from '../Shared/Search'
-import FilterDropdown from '../Shared/SearchDropdown'
 import { Spinner } from '../UI/Spinner'
 import OrganizationCard from './OrganizationCard'
 
@@ -40,6 +40,8 @@ const Organizations: NextPage = () => {
 
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
   const [postings, setPostings] = useState<number[]>([])
+
+  const [searchValue, setSearchValue] = useState('')
 
   useEffect(() => {
     const uniqueIds: Set<string> = new Set()
@@ -86,7 +88,7 @@ const Organizations: NextPage = () => {
       <SEO title="Organizations • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-bold text-2xl">
         <div className="flex justify-between py-5">
-          <Search />
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
           <FilterDropdown
             label="Filter:"
             onChange={(c) => console.log('filter', c)}

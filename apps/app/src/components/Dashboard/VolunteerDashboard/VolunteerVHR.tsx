@@ -1,10 +1,11 @@
-import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import FilterDropdown from '@/components/Shared/FilterDropdown'
 import Progress from '@/components/Shared/Progress'
+import Search from '@/components/Shared/Search'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -17,7 +18,6 @@ import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
 import BrowseCard from './BrowseCard'
-import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
@@ -99,40 +99,13 @@ const VolunteerVHRTab: React.FC = () => {
         </Card>
       </GridItemTwelve>
       <GridItemTwelve>
-        <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10">
-            <input
-              className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
-              type="text"
-              value={searchValue}
-              placeholder="Search"
-              onChange={(e) => {
-                setSearchValue(e.target.value)
-              }}
-            />
-            <div className="h-5 w-5 mr-5">
-              <SearchIcon />
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
-            <div className="h-[50px] z-10 ">
-              <DashboardDropDown
-                label="Filter:"
-                options={Array.from(categories)}
-                onClick={(c) => setSelectedCategory(c)}
-                selected={selectedCategory}
-              ></DashboardDropDown>
-            </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
-              onClick={() => {
-                setSelectedCategory('None')
-              }}
-            >
-              Clear Filters
-            </button>
-          </div>
+        <div className="flex justify-between py-5">
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => setSelectedCategory(c)}
+            options={Array.from(categories)}
+          />
         </div>
         <div className="flex flex-wrap justify-around">
           {!loading ? (
