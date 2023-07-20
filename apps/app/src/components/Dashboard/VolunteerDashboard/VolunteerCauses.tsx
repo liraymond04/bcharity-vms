@@ -14,7 +14,6 @@ import getAvatar from '@/lib/getAvatar'
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata, PostTags } from '@/lib/types'
-import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 const inter500 = Inter({
   subsets: ['latin'],
@@ -24,7 +23,6 @@ const VolunteerCauses: React.FC = () => {
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
 
   const { isAuthenticated, currentUser } = useAppPersistStore()
@@ -47,10 +45,6 @@ const VolunteerCauses: React.FC = () => {
       tags: { oneOf: [PostTags.OrgPublish.Cause] }
     }
   })
-
-  const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
-    currentUser?.ownedBy ?? ''
-  )
 
   useEffect(() => {
     let _categories: Set<string> = new Set()
