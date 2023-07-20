@@ -17,13 +17,13 @@ import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
 import BrowseCard from './BrowseCard'
-import RegionDropdown from './RegionDropdown'
+import RegionDropdown from './FilterDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
-  const [selectedCategory, setSelectedCategory] = useState<string>('None')
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
 
@@ -145,8 +145,7 @@ const VolunteerVHRTab: React.FC = () => {
               .filter((op) => testSearch(op.name, searchValue))
               .filter(
                 (op) =>
-                  selectedCategory === 'None' ||
-                  op.category === selectedCategory
+                  selectedCategory === '' || op.category === selectedCategory
               )
               .map((op) => (
                 <BrowseCard
