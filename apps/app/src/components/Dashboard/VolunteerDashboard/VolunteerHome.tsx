@@ -39,7 +39,7 @@ const VolunteerHome: React.FC = () => {
       .then((data) => {
         setpostdata(data.items)
       })
-  }, [])
+  }, [currentUser])
 
   const [searchAddress, setSearchAddress] = useState<string>('')
 

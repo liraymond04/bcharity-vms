@@ -10,6 +10,7 @@ import { useAccount } from 'wagmi'
 import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
 import { useAppStore, useCookies } from '@/store/app'
 
+import GradientWrapper from './Shared/Gradient/GradientWrapper'
 import { Button } from './UI/Button'
 import { Modal } from './UI/Modal'
 
@@ -119,7 +120,8 @@ const SiteLayout: FC<Props> = ({ children }) => {
       <Suspense fallback={<Loading />}>
         <div className="flex flex-col h-screen">
           <Navbar />
-          <div className="flex-grow">{children}</div>
+
+          <GradientWrapper className="grow">{children}</GradientWrapper>
 
           <div>
             <Footer />

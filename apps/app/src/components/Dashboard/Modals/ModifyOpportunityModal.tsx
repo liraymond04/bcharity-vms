@@ -173,7 +173,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Website (leave empty if not linking to external opportunity)"
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
-              {...(register('website'), { maxLength: 2000 })}
+              {...register('website')}
             />
             <TextArea
               label="Activity Description"
