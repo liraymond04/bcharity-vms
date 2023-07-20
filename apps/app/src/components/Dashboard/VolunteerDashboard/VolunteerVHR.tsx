@@ -43,7 +43,7 @@ const VolunteerVHRTab: React.FC = () => {
   )
 
   const clear = () => {
-    setSelectedCategory('None')
+    setSelectedCategory('')
     setSearchValue('')
   }
 
