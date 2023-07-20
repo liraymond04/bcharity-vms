@@ -15,7 +15,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import BrowseCard from './BrowseCard'
-import RegionDropdown from './DashboardDropDown'
+import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
   const [posts, setPosts] = useState<CauseMetadata[]>([])
@@ -147,12 +147,12 @@ const VolunteerCauses: React.FC = () => {
 
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
-              <RegionDropdown
+              <DashboardDropDown
                 label="Filter:"
                 options={Array.from(categories)}
                 onClick={(c) => setSelectedCategory(c)}
                 selected={selectedCategory}
-              ></RegionDropdown>
+              ></DashboardDropDown>
             </div>
             <button
               className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
