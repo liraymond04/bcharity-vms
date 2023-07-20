@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { v4 } from 'uuid'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import { Spinner } from '@/components/UI/Spinner'
 import uploadToIPFS from '@/lib/ipfsUpload'
 import getSignature from '@/lib/lens-protocol/getSignature'
-//import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import {
   AttributeData,
@@ -22,6 +22,10 @@ const UserSetting = () => {
     const [bio, setBio] = useState<string>('')
     const [website, setWebsite] = useState<string>('')
     const [avatar, setAvatar] = useState<File | null>(null)
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [error, setError] = useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string>('')
 
     useEffect(() => {
       const fetchProfileData = async () => {
@@ -56,6 +60,16 @@ const UserSetting = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+
+      setError(false)
+      setIsLoading(true)
+
+      if (!name || !bio || !location || !website || !avatar) {
+        setErrorMessage('Please fill the required fields.')
+        setError(true)
+        setIsLoading(false)
+        return
+      }
 
       try {
         const attributes: AttributeData[] = [
@@ -105,53 +119,57 @@ const UserSetting = () => {
     return (
       <GridLayout>
         <GridItemTwelve>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="name">Name: </label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="location">Location: </label>
-              <input
-                type="text"
-                id="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="bio">Bio: </label>
-              <textarea
-                id="bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="website">Website: </label>
-              <input
-                type="text"
-                id="website"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="avatar">Avatar: </label>
-              <input
-                type="file"
-                id="avatar"
-                onChange={(e) => setAvatar(e.target.files?.[0] || null)}
-              />
-            </div>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="name">Name: </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="location">Location: </label>
+                <input
+                  type="text"
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="bio">Bio: </label>
+                <textarea
+                  id="bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="website">Website: </label>
+                <input
+                  type="text"
+                  id="website"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="avatar">Avatar: </label>
+                <input
+                  type="file"
+                  id="avatar"
+                  onChange={(e) => setAvatar(e.target.files?.[0] || null)}
+                />
+              </div>
 
-            <button type="submit">Save</button>
-          </form>
+              <button type="submit">Save</button>
+            </form>
+          )}
         </GridItemTwelve>
       </GridLayout>
     )
