@@ -83,12 +83,12 @@ const Volunteers: NextPage = () => {
                       }}
                     />
                     <div className="relative mx-5 mt-3 mb-1">
-                      <div className="font-bold text-2xl">{post?.name}</div>
-                      <div className="flex justify-between mb-1">
-                        <div className="text-sm">{post?.from.handle}</div>
-                        <div className="text-sm">{post?.date}</div>
+                      <div className="font-bold text-2xl line-clamp-1">
+                        {post?.name}
                       </div>
-                      <div className="line-clamp-2 text-sm">
+                      <div className="text-xs">{post?.from.handle}</div>
+                      <div className="text-xs">{post?.date}</div>
+                      <div className="line-clamp-2 text-sm mt-1">
                         {post?.description}
                       </div>
                       {post?.website && (
