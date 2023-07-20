@@ -12,7 +12,7 @@ interface Props {
   options: string[]
 }
 
-const RegionDropdown: React.FC<props> = ({
+const DashboardDropDown: React.FC<props> = ({
   onClick,
   selected,
   label,
@@ -66,4 +66,4 @@ const RegionDropdown: React.FC<props> = ({
   )
 }
 
-export default RegionDropdown
+export default DashboardDropDown

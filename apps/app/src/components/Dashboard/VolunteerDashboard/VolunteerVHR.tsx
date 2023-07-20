@@ -17,7 +17,7 @@ import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
 import BrowseCard from './BrowseCard'
-import RegionDropdown from './FilterDropDown'
+import RegionDropdown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()

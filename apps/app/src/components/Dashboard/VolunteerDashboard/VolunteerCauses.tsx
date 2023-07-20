@@ -15,7 +15,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import BrowseCard from './BrowseCard'
-import RegionDropdown from './FilterDropDown'
+import RegionDropdown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
   const [posts, setPosts] = useState<CauseMetadata[]>([])
