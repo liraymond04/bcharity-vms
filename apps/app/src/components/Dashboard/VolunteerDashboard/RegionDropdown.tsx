@@ -1,6 +1,9 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon
+} from '@heroicons/react/outline'
 import React, { useState } from 'react'
-import { CheckmarkIcon } from 'react-hot-toast'
 
 interface Props {
   onClick: (string: string) => void
@@ -53,7 +56,7 @@ const RegionDropdown: React.FC<props> = ({
                 setOpen(false)
               }}
             >
-              {value == selected && <CheckmarkIcon className="w-5 h-5" />}
+              {value == selected && <CheckIcon className="w-5 h-5" />}
               <div className="w-fit">{value}</div>
               {value == selected && <div className="w-5"></div>}
             </div>
