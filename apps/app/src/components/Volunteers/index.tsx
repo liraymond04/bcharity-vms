@@ -89,8 +89,7 @@ const Volunteers: NextPage = () => {
                       <div className="text-xs">{post?.from.handle}</div>
                       <div className="text-xs">{post?.date}</div>
                       <div className="line-clamp-2 text-sm mt-1">
-                        {post?.description +
-                          'adfads adsf asd fa sdf asd f asd fa sdf as df as df  asd f sdf  sdf a sd fs d'}
+                        {post?.description}
                       </div>
                       {post?.website && (
                         <Link
