@@ -2,7 +2,7 @@ import {
   PublicationMainFocus,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
-import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { ProfileFragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -27,7 +27,7 @@ interface IPublishOpportunityModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
   id: string
-  publisher: Profile | null
+  publisher: ProfileFragment | null
   defaultValues: IPublishOpportunityFormProps
 }
 
@@ -133,7 +133,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              key={`${Math.floor(Math.random() * 1000)}-min`}
               label="Volunteer opportunity name"
               placeholder="Medical internship"
               error={!!errors.opportunityName?.type}

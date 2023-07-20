@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import React, { useState } from 'react'
 
-interface props {
+interface Props {
   onClick: (string: string) => void
   selected: string
   label: string
