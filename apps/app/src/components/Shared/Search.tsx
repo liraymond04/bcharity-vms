@@ -25,6 +25,7 @@ const Search: FC<Props> = ({ className }) => {
   const handleKeyDown = (evt: ChangeEvent<HTMLFormElement>) => {
     const keyword = evt.target.value
     setSearchText('')
+    evt.preventDefault()
   }
 
   return (
