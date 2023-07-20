@@ -4,7 +4,6 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
-import FilterDropdown from '@/components/Shared/SearchDropdown'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -16,6 +15,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import BrowseCard from './BrowseCard'
+import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
   const [posts, setPosts] = useState<CauseMetadata[]>([])
@@ -129,11 +129,10 @@ const VolunteerCauses: React.FC = () => {
       </GridItemTwelve>
 
       <GridItemTwelve>
-        <div className="flex justify-between">
-          <div className="ml-5 w-[200px]"></div>
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
+        <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10">
             <input
-              className="border-none bg-transparent rounded-2xl w-[250px]"
+              className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
               placeholder="Search"
@@ -145,12 +144,24 @@ const VolunteerCauses: React.FC = () => {
               <SearchIcon />
             </div>
           </div>
-          <div>
-            <FilterDropdown
-              label="Filter:"
-              options={Array.from(categories)}
-              onChange={(c) => setSelectedCategory(c)}
-            ></FilterDropdown>
+
+          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
+            <div className="h-[50px] z-10 ">
+              <DashboardDropDown
+                label="Filter:"
+                options={Array.from(categories)}
+                onClick={(c) => setSelectedCategory(c)}
+                selected={selectedCategory}
+              ></DashboardDropDown>
+            </div>
+            <button
+              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+              onClick={() => {
+                setSelectedCategory('')
+              }}
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
         <div className="flex flex-wrap justify-around">
