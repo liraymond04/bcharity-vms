@@ -19,7 +19,7 @@ const Sidebar2: React.FC<ISidebarProps> = ({
   setSelectedIndex,
   tabs
 }) => {
-  const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
+  const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
 

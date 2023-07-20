@@ -1,4 +1,9 @@
-import { GlobeIcon, HomeIcon, StarIcon } from '@heroicons/react/outline'
+import {
+  GlobeIcon,
+  HomeIcon,
+  LockClosedIcon,
+  StarIcon
+} from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
 
@@ -31,6 +36,12 @@ const VolunteerDashboard: React.FC = () => {
       label: 'Causes',
       icon: <GlobeIcon className="w-4 inline" />,
       component: <VolunteerCausesTab />
+    },
+    {
+      label: 'User Settings',
+      icon: <LockClosedIcon className="w-4 inline" />,
+      component: <div />,
+      redirect: '/settings'
     }
   ]
 

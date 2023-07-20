@@ -1,27 +1,23 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
-import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
-import FilterDropdown from '@/components/Shared/SearchDropdown'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import testSearch from '@/lib/search'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
-
-const inter500 = Inter({
-  subsets: ['latin'],
-  weight: ['500']
-})
+import BrowseCard from './BrowseCard'
+import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
@@ -56,36 +52,6 @@ const VolunteerVHRTab: React.FC = () => {
     setCategories(_categories)
     setPosts(_posts)
   }, [postData])
-
-  const filterOpportunity = (name: string, search: string) => {
-    const nameArr = name.split(' ')
-    const searchArr = search.split(' ')
-    let result = true
-    searchArr.map((search) => {
-      let found = false
-      nameArr.map((name) => {
-        let p0 = 0
-        let p1 = 0
-        while (p0 < name.length && p1 < search.length) {
-          if (
-            name.charAt(p0).toLowerCase() == search.charAt(p1).toLowerCase()
-          ) {
-            p0++, p1++
-          } else {
-            p0++
-          }
-        }
-        if (p1 == search.length) {
-          found = true
-        }
-      })
-      if (!found) {
-        result = false
-      }
-    })
-
-    return result
-  }
 
   return (
     <GridLayout>
@@ -133,14 +99,13 @@ const VolunteerVHRTab: React.FC = () => {
         </Card>
       </GridItemTwelve>
       <GridItemTwelve>
-        <div className="flex justify-between">
-          <div className="ml-5 w-[200px]"></div>
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
+        <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10">
             <input
-              className="border-none bg-transparent rounded-2xl w-[250px]"
+              className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="search"
+              placeholder="Search"
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -149,46 +114,42 @@ const VolunteerVHRTab: React.FC = () => {
               <SearchIcon />
             </div>
           </div>
-          <div>
-            <FilterDropdown
-              label="Filter:"
-              options={Array.from(categories)}
-              onChange={(c) => setSelectedCategory(c)}
-            ></FilterDropdown>
+
+          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
+            <div className="h-[50px] z-10 ">
+              <DashboardDropDown
+                label="Filter:"
+                options={Array.from(categories)}
+                onClick={(c) => setSelectedCategory(c)}
+                selected={selectedCategory}
+              ></DashboardDropDown>
+            </div>
+            <button
+              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+              onClick={() => {
+                setSelectedCategory('None')
+              }}
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
         <div className="flex flex-wrap justify-around">
           {!loading ? (
             posts
-              .filter((op) => filterOpportunity(op.name, searchValue))
+              .filter((op) => testSearch(op.name, searchValue))
               .filter(
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
               )
-              .map((op, id) => (
-                <div
-                  key={id}
-                  className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
-                >
-                  <img
-                    src={getAvatar(op.from)}
-                    className="h-[200px] w-full"
-                    alt="organization profile picture"
-                  />
-                  <div
-                    className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
-                  >
-                    {op.name}
-                  </div>
-                  <Link
-                    className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="." // external link or /volunteer/[post-id] here
-                  >
-                    APPLY
-                  </Link>
-                </div>
+              .map((op) => (
+                <BrowseCard
+                  key={op.opportunity_id}
+                  imageSrc={getAvatar(op.from)}
+                  name={op.name}
+                  buttonText="APPLY"
+                  buttonHref="."
+                />
               ))
           ) : (
             <Spinner />
