@@ -1,3 +1,4 @@
+import Router from 'next/router'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useAppPersistStore } from 'src/store/app'
@@ -19,7 +20,7 @@ const Sidebar2: React.FC<ISidebarProps> = ({
   setSelectedIndex,
   tabs
 }) => {
-  const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
+  const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
 
@@ -36,6 +37,9 @@ const Sidebar2: React.FC<ISidebarProps> = ({
       <div className="flex flex-row ...">
         <button
           type="button"
+          onClick={() => {
+            Router.push('dashboard')
+          }}
           className="text-white ml-5 mt-5 mb-5 w-10 h-10 bg-opacity-0 bg-transparent hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-100 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-transparent dark:hover:bg-blue-200 dark:focus:ring-blue-300"
         >
           <svg

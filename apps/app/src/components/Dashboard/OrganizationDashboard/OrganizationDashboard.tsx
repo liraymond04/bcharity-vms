@@ -13,7 +13,6 @@ import Sidebar from '@/components/Sidebar/Sidebar'
 import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
 import OrganizationCausesTab from './OrganizationCauses'
 import OrganizationHomeTab from './OrganizationHome'
-import OrganizationSettingsTab from './OrganizationSettings'
 import OrganizationVHRTab from './OrganizationVHR'
 
 const OrganizationDashboard: React.FC = () => {
@@ -38,7 +37,8 @@ const OrganizationDashboard: React.FC = () => {
     {
       label: 'User Settings',
       icon: <LockClosedIcon className="w-4 inline" />,
-      component: <OrganizationSettingsTab />
+      component: <div />,
+      redirect: '/settings'
     }
   ]
 

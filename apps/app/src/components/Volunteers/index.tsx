@@ -14,7 +14,7 @@ import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 
 import Divider from '../Shared/Divider'
-import FilterDropdown from '../Shared/SearchDropdown'
+import FilterDropdown from '../Shared/FilterDropdown'
 import { Spinner } from '../UI/Spinner'
 
 const Volunteers: NextPage = () => {
@@ -22,6 +22,8 @@ const Volunteers: NextPage = () => {
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
+
+  const [searchValue, setSearchValue] = useState('')
 
   const { data, error, loading } = useExplorePublications({
     sortCriteria: PublicationSortCriteria.Latest,
@@ -49,12 +51,12 @@ const Volunteers: NextPage = () => {
       <SEO title="Volunteers • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-bold text-2xl">
         <div className="flex justify-between py-5">
-          <Search />
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
           <FilterDropdown
             label="Filter:"
             onChange={(c) => setSelectedCategory(c)}
             options={Array.from(categories)}
-          ></FilterDropdown>
+          />
         </div>
         <Divider />
         <p>Browse volunteer opportunities</p>
