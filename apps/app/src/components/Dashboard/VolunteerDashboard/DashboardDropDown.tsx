@@ -12,7 +12,7 @@ interface Props {
   options: string[]
 }
 
-const DashboardDropDown: React.FC<props> = ({
+const DashboardDropDown: React.FC<Props> = ({
   onClick,
   selected,
   label,
