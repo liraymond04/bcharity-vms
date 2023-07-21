@@ -78,7 +78,7 @@ const Navbar: FC = () => {
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
             className="m-5 h-10 w-10"
-            src="/logo.jpg "
+            src="/logo.png"
             alt="BCharity logo"
           ></img>
         </Link>
