@@ -38,7 +38,8 @@ const VolunteerCauses: React.FC = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: { oneOf: [PostTags.OrgPublish.Cause] }
-    }
+    },
+    noRandomize: true
   })
 
   useEffect(() => {
