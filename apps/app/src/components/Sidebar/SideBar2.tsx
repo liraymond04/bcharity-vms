@@ -33,7 +33,7 @@ const Sidebar2: React.FC<ISidebarProps> = ({
   }, [currentUser, isAuthenticated])
 
   return auth && currentUser ? (
-    <div className="w-sidebar from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen">
+    <div className="w-sidebar shrink-0 from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen">
       <div className="flex flex-row ...">
         <button
           type="button"
