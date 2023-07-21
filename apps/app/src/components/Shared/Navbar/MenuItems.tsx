@@ -93,7 +93,7 @@ const MenuItems: FC = () => {
               <div className="divider" />
               <Menu.Item
                 as={NextLink}
-                href={`/u/${currentUser?.handle}`}
+                href="../../../settings"
                 className={({ active }: { active: boolean }) =>
                   clsx({ 'dropdown-active': active }, 'menu-item')
                 }
