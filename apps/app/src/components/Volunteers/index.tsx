@@ -28,7 +28,8 @@ const Volunteers: NextPage = () => {
       tags: {
         oneOf: [PostTags.OrgPublish.Opportuntiy]
       }
-    }
+    },
+    noRandomize: true
   })
 
   useEffect(() => {

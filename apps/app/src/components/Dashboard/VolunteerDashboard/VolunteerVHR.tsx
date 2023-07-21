@@ -35,7 +35,8 @@ const VolunteerVHRTab: React.FC = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: { oneOf: [PostTags.OrgPublish.Opportuntiy] }
-    }
+    },
+    noRandomize: true
   })
 
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
