@@ -48,7 +48,7 @@ const Volunteers: NextPage = () => {
       <SEO title="Volunteers • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5">
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-black">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
