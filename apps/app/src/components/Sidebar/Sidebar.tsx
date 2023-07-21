@@ -26,7 +26,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
   return (
     <div
       className={`w-sidebar shrink-0 from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen ${
-        openSidebar ? '' : 'w-0'
+        openSidebar ? '' : 'w-12'
       }`}
     >
       {emptyTop && (
