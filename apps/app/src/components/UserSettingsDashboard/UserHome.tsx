@@ -18,6 +18,9 @@ import {
 } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
+import { Button } from '../UI/Button'
+import { Card } from '../UI/Card'
+
 const VolunteerHomeTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
   const [name, setName] = useState<string>('')
@@ -115,73 +118,73 @@ const VolunteerHomeTab: React.FC = () => {
   return (
     <GridLayout>
       <GridItemTwelve>
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <form className="my-5 mx-5" onSubmit={handleSubmit}>
-            <div>
-              <Input
-                label="Profile ID: "
-                type="profileId"
-                id="profileId"
-                value={currentUser?.id}
-                readOnly
-              />
-            </div>
-            <div>
-              <Input
-                label="Name: "
-                type="text"
-                id="name"
-                value={currentUser?.handle}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div>
-              <Input
-                label="Location: "
-                type="text"
-                id="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-            <div>
-              <TextArea
-                label="Bio: "
-                id="bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                rows={5}
-              />
-            </div>
-            <div>
-              <Input
-                label="Website: "
-                type="text"
-                id="website"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-              />
-            </div>
-            <div>
-              <Input
-                label="Avatar: "
-                type="file"
-                id="avatar"
-                onChange={(e) => setAvatar(e.target.files?.[0] || null)}
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="flex justify-center bg-purple-600 hover:bg-purple-800 text-white font-bold my-5 py-2 px-6 rounded"
-                type="submit"
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        )}
+        <Card>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <form className="my-5 mx-5" onSubmit={handleSubmit}>
+              <div>
+                <Input
+                  label="Profile ID: "
+                  type="text"
+                  id="profileId"
+                  className="text-gray-600 dark:text-gray-500"
+                  value={currentUser?.id}
+                  readOnly
+                />
+              </div>
+              <div>
+                <Input
+                  label="Name: "
+                  type="text"
+                  id="name"
+                  value={currentUser?.handle}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Input
+                  label="Location: "
+                  type="text"
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </div>
+              <div>
+                <TextArea
+                  label="Bio: "
+                  id="bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  rows={5}
+                />
+              </div>
+              <div>
+                <Input
+                  label="Website: "
+                  type="text"
+                  id="website"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
+              <div>
+                <Input
+                  label="Avatar: "
+                  type="file"
+                  id="avatar"
+                  onChange={(e) => setAvatar(e.target.files?.[0] || null)}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button className="my-5" type="submit">
+                  Save
+                </Button>
+              </div>
+            </form>
+          )}
+        </Card>
       </GridItemTwelve>
     </GridLayout>
   )
