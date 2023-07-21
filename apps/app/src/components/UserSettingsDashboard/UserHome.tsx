@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { v4 } from 'uuid'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
+import { TextArea } from '@/components/UI/TextArea'
 import uploadToIPFS from '@/lib/ipfsUpload'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import {
@@ -13,10 +16,10 @@ import {
   MetadataVersions,
   ProfileMetadata
 } from '@/lib/types'
-
-import { Card } from '../UI/Card'
+import { useAppPersistStore } from '@/store/app'
 
 const VolunteerHomeTab: React.FC = () => {
+  const { currentUser } = useAppPersistStore()
   const [profileId, setProfileId] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [location, setLocation] = useState<string>('')
@@ -25,52 +28,43 @@ const VolunteerHomeTab: React.FC = () => {
   const [avatar, setAvatar] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [error, setError] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string>('')
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        if (profileId) {
-          const userProfile = await lensClient().profile.fetch({
-            profileId: profileId
-          })
+        if (currentUser) {
+          checkAuth(currentUser?.ownedBy).then(async () => {
+            const userProfile = await lensClient().profile.fetch({
+              profileId: profileId
+            })
 
-          if (userProfile) {
-            setName(userProfile.name || '')
+            if (userProfile) {
+              setName(userProfile.name || '')
 
-            if (userProfile.attributes) {
-              const locationAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'location'
-              )
-              setLocation(locationAttribute?.value || '')
-              const websiteAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'website'
-              )
-              setWebsite(websiteAttribute?.value || '')
+              if (userProfile.attributes) {
+                const locationAttribute = userProfile.attributes.find(
+                  (attr) => attr.key === 'location'
+                )
+                setLocation(locationAttribute?.value || '')
+                const websiteAttribute = userProfile.attributes.find(
+                  (attr) => attr.key === 'website'
+                )
+                setWebsite(websiteAttribute?.value || '')
+              }
+              setBio(userProfile.bio || '')
             }
-            setBio(userProfile.bio || '')
-          }
+          })
         }
       } catch (error) {
         console.error('Error fetching profile data:', error)
       }
     }
     fetchProfileData()
-  }, [profileId])
+  }, [currentUser, profileId])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    setError(false)
+    event.preventDefault
     setIsLoading(true)
-
-    if (!name || !bio || !location || !website || !avatar) {
-      setErrorMessage('Please fill the required fields.')
-      setError(true)
-      setIsLoading(false)
-      return
-    }
 
     try {
       const attributes: AttributeData[] = [
@@ -120,78 +114,73 @@ const VolunteerHomeTab: React.FC = () => {
   return (
     <GridLayout>
       <GridItemTwelve>
-        <Card>
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <form
-              className="flex flex-col justity-left mx-12 my-5"
-              onSubmit={handleSubmit}
-            >
-              <div className="flex flex-col my-5 mx-5 w-1/5">
-                <label htmlFor="profileId">Profile ID: </label>
-                <input
-                  type="profileId"
-                  id="profileId"
-                  value={profileId}
-                  readOnly
-                />
-              </div>
-              <div className="flex flex-col my-5 mx-5 w-2/3">
-                <label htmlFor="name">Name: </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col my-5 mx-5 w-2/3">
-                <label htmlFor="location">Location: </label>
-                <input
-                  type="text"
-                  id="location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col my-5 mx-5 w-2/3">
-                <label htmlFor="bio">Bio: </label>
-                <textarea
-                  id="bio"
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  rows={5}
-                />
-              </div>
-              <div className="flex flex-col my-5 mx-5 w-2/3">
-                <label htmlFor="website">Website: </label>
-                <input
-                  type="text"
-                  id="website"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col my-5 mx-5 w-2/3">
-                <label htmlFor="avatar">Avatar: </label>
-                <input
-                  type="file"
-                  id="avatar"
-                  onChange={(e) => setAvatar(e.target.files?.[0] || null)}
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  className="flex justify-center bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded"
-                  type="submit"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          )}
-        </Card>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div>
+              <Input
+                label="Profile ID: "
+                type="profileId"
+                id="profileId"
+                value={currentUser?.id}
+                readOnly
+              />
+            </div>
+            <div>
+              <Input
+                label="Name: "
+                type="text"
+                id="name"
+                value={currentUser?.handle}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div>
+              <Input
+                label="Location: "
+                type="text"
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+            <div>
+              <TextArea
+                label="Bio: "
+                id="bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                rows={5}
+              />
+            </div>
+            <div>
+              <Input
+                label="Website: "
+                type="text"
+                id="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </div>
+            <div>
+              <Input
+                label="Avatar: "
+                type="file"
+                id="avatar"
+                onChange={(e) => setAvatar(e.target.files?.[0] || null)}
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                className="flex justify-center bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded"
+                type="submit"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        )}
       </GridItemTwelve>
     </GridLayout>
   )
