@@ -3,6 +3,7 @@ import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
@@ -125,7 +126,7 @@ const VolunteerHome: React.FC = () => {
                         {currentUser?.handle}
                       </p>
                       <div>
-                        <a href={`/u/${currentUser?.handle}`}>
+                        <Link href="">
                           <div className="truncate">
                             <Slug
                               className="font-bold"
@@ -133,7 +134,7 @@ const VolunteerHome: React.FC = () => {
                               prefix="@"
                             />
                           </div>
-                        </a>
+                        </Link>
                       </div>
                     </div>
 
@@ -160,9 +161,7 @@ const VolunteerHome: React.FC = () => {
                                           />
                                           <div>
                                             {currentUser.handle}
-                                            <a
-                                              href={`/u/${currentUser?.handle}`}
-                                            >
+                                            <Link href="">
                                               <div className="text-sm float-right top-0 mb-5">
                                                 <p className="text-gray-900 leading-none"></p>
                                                 <p className="text-gray-600 dark:text-white">
@@ -176,7 +175,7 @@ const VolunteerHome: React.FC = () => {
                                                   prefix="@"
                                                 />
                                               </div>
-                                            </a>
+                                            </Link>
                                           </div>
                                         </div>
                                       </div>
