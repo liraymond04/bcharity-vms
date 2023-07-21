@@ -1,26 +1,19 @@
 import '../styles.css'
 
-import { development, LensConfig, LensProvider } from '@lens-protocol/react-web'
-import { bindings as wagmiBindings } from '@lens-protocol/wagmi'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { polygon, polygonMumbai } from 'wagmi/chains'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { publicProvider } from 'wagmi/providers/public'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import SiteLayout from '@/components/SiteLayout'
-import { IS_MAINNET } from '@/constants'
-
-const lensConfig: LensConfig = {
-  bindings: wagmiBindings(),
-  environment: development
-}
+import { ALCHEMY_KEY, IS_MAINNET, WALLET_CONNECT_PROJECT_ID } from '@/constants'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [IS_MAINNET ? polygon : polygonMumbai],
-  [publicProvider()]
+  [alchemyProvider({ apiKey: ALCHEMY_KEY ? ALCHEMY_KEY : '' })]
 )
 
 const connectors = () => {
@@ -31,7 +24,10 @@ const connectors = () => {
     }),
     new WalletConnectConnector({
       chains: [polygon, polygonMumbai],
-      options: { projectId: '...', showQrModal: true }
+      options: {
+        projectId: WALLET_CONNECT_PROJECT_ID ? WALLET_CONNECT_PROJECT_ID : '',
+        showQrModal: true
+      }
     })
   ]
 }
@@ -46,13 +42,11 @@ const config = createConfig({
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <WagmiConfig config={config}>
-      <LensProvider config={lensConfig}>
-        <ThemeProvider defaultTheme="light" attribute="class">
-          <SiteLayout>
-            <Component {...pageProps} />
-          </SiteLayout>
-        </ThemeProvider>
-      </LensProvider>
+      <ThemeProvider defaultTheme="light" attribute="class">
+        <SiteLayout>
+          <Component {...pageProps} />
+        </SiteLayout>
+      </ThemeProvider>
     </WagmiConfig>
   )
 }

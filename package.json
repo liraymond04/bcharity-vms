@@ -1,5 +1,5 @@
 {
-  "repository": "https://github.com/vercel/examples.git",
+  "repository": "https://github.com/liraymond04/bcharity-vms.git",
   "license": "MIT",
   "private": true,
   "workspaces": [
@@ -8,36 +8,41 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "dotenv -- turbo run dev",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "clean": "turbo run clean",
     "prepare": "husky install"
   },
   "devDependencies": {
-    "app": "workspace:^",
+    "dotenv-cli": "^7.2.1",
     "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-config-turbo": "latest",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "turbo": "^1.10.7"
+    "turbo": "^1.10.9"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.22.7",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "v1",
     "@hookform/resolvers": "^3.1.1",
-    "@lens-protocol/react-web": "^1.2.1",
+    "@lens-protocol/client": "^1.2.0",
     "@lens-protocol/wagmi": "^2.0.1",
     "@next/font": "^13.4.9",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@thirdweb-dev/storage": "^1.1.8",
     "@tippyjs/react": "^4.2.6",
     "@types/js-cookie": "^3.0.3",
     "@types/store": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "@wagmi/core": "^1.3.7",
+    "ag-grid.css": "link:ag-grid-community/styles/ag-grid.css",
+    "app": "workspace:^",
     "clsx": "^1.1.1",
     "encoding": "^0.1.13",
     "eslint-plugin-prettier": "^5.0.0",

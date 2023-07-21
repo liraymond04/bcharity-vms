@@ -1,3 +1,4 @@
+import Router from 'next/router'
 import React from 'react'
 
 import TabTitle from './TabTile'
@@ -5,8 +6,8 @@ import TabTitle from './TabTile'
 export interface ITabProps {
   icon: React.ReactElement
   label: string
+  redirect?: string
 }
-
 interface ISidebarProps {
   emptyTop?: boolean
   selectedIndex: number
@@ -21,14 +22,14 @@ const Sidebar: React.FC<ISidebarProps> = ({
   tabs
 }) => {
   return (
-    <div className="w-sidebar from-violet-400 to-violet-300 bg-gradient-to-b min-h-screen">
+    <div className="w-sidebar shrink-0 from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen">
       {emptyTop && (
         <TabTitle
           selected={false}
           onClick={() => {}}
           icon={<div />}
           label=""
-          className="hover:bg-opacity-0 hover:cursor-auto"
+          className="hover:bg-opacity-0 hover:cursor-default"
         />
       )}
       <div className="flex flex-col">
@@ -37,7 +38,10 @@ const Sidebar: React.FC<ISidebarProps> = ({
             <TabTitle
               key={i}
               selected={i === selectedIndex}
-              onClick={() => setSelectedIndex(i)}
+              onClick={() => {
+                if (tab.redirect) Router.push(tab.redirect)
+                setSelectedIndex(i)
+              }}
               {...tab}
             />
           )
