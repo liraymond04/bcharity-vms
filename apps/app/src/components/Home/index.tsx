@@ -30,7 +30,8 @@ const Home: NextPage = () => {
       tags: {
         oneOf: [PostTags.OrgPublish.Opportuntiy, PostTags.OrgPublish.Cause]
       }
-    }
+    },
+    noRandomize: true
   })
 
   const [otherError, setOtherError] = useState(false)
