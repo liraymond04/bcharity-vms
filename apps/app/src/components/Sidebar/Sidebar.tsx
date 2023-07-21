@@ -1,5 +1,5 @@
 import Router from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 
 import TabTitle from './TabTile'
 
@@ -21,8 +21,14 @@ const Sidebar: React.FC<ISidebarProps> = ({
   setSelectedIndex,
   tabs
 }) => {
+  const [openSidebar, setOpenSidebar] = useState<boolean>(true)
+
   return (
-    <div className="w-sidebar shrink-0 from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen">
+    <div
+      className={`w-sidebar shrink-0 from-violet-400 to-violet-300 dark:from-violet-800 dark:to-violet-500 bg-gradient-to-b min-h-screen ${
+        openSidebar ? '' : 'w-0'
+      }`}
+    >
       {emptyTop && (
         <TabTitle
           selected={false}
@@ -30,6 +36,8 @@ const Sidebar: React.FC<ISidebarProps> = ({
           icon={<div />}
           label=""
           className="hover:bg-opacity-0 hover:cursor-default"
+          changeOpen={() => setOpenSidebar(!openSidebar)}
+          open={openSidebar}
         />
       )}
       <div className="flex flex-col">
@@ -42,6 +50,8 @@ const Sidebar: React.FC<ISidebarProps> = ({
                 if (tab.redirect) Router.push(tab.redirect)
                 setSelectedIndex(i)
               }}
+              changeOpen={() => {}}
+              open={openSidebar}
               {...tab}
             />
           )
