@@ -7,6 +7,8 @@ import {
   ITextFilterParams
 } from 'ag-grid-community'
 
+import CurrencyCell from './CurrencyCell'
+
 export const defaultColumnDef = {
   resizable: true
 }
@@ -156,6 +158,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     {
       field: 'currency',
       filter: 'agTextColumnFilter',
+      cellRenderer: CurrencyCell,
       filterParams: {
         buttons: ['reset', 'apply']
       } as ITextFilterParams

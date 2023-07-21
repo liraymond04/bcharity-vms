@@ -76,10 +76,16 @@ const VolunteerHome: React.FC = () => {
                   </div>
 
                   <div className="inset-0 flex justify-left items-center ml-20 mt-20">
-                    <h1>Followers</h1>
+                    <h1>Followers: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowers}
+                    </div>
                   </div>
                   <div className="relative inset-0 flex justify-left items-center ml-20 mt-10">
-                    <h1>Following</h1>
+                    <h1>Following: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowing}
+                    </div>
                   </div>
 
                   <div className="ml-12 flex flex-row">
