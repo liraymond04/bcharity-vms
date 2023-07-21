@@ -1,3 +1,4 @@
+import Router from 'next/router'
 import React from 'react'
 
 import TabTitle from './TabTile'
@@ -5,6 +6,7 @@ import TabTitle from './TabTile'
 export interface ITabProps {
   icon: React.ReactElement
   label: string
+  redirect?: string
 }
 interface ISidebarProps {
   emptyTop?: boolean
@@ -36,7 +38,10 @@ const Sidebar: React.FC<ISidebarProps> = ({
             <TabTitle
               key={i}
               selected={i === selectedIndex}
-              onClick={() => setSelectedIndex(i)}
+              onClick={() => {
+                if (tab.redirect) Router.push(tab.redirect)
+                setSelectedIndex(i)
+              }}
               {...tab}
             />
           )

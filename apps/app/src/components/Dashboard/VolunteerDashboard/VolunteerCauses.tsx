@@ -1,10 +1,10 @@
-import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
-import FilterDropdown from '@/components/Shared/SearchDropdown'
+import FilterDropdown from '@/components/Shared/FilterDropdown'
+import Search from '@/components/Shared/Search'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -129,29 +129,13 @@ const VolunteerCauses: React.FC = () => {
       </GridItemTwelve>
 
       <GridItemTwelve>
-        <div className="flex justify-between">
-          <div className="ml-5 w-[200px]"></div>
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
-            <input
-              className="border-none bg-transparent rounded-2xl w-[250px]"
-              type="text"
-              value={searchValue}
-              placeholder="Search"
-              onChange={(e) => {
-                setSearchValue(e.target.value)
-              }}
-            />
-            <div className="h-5 w-5 mr-5">
-              <SearchIcon />
-            </div>
-          </div>
-          <div>
-            <FilterDropdown
-              label="Filter:"
-              options={Array.from(categories)}
-              onChange={(c) => setSelectedCategory(c)}
-            ></FilterDropdown>
-          </div>
+        <div className="flex justify-between py-5">
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => setSelectedCategory(c)}
+            options={Array.from(categories)}
+          />
         </div>
         <div className="flex flex-wrap justify-around">
           {!loading ? (

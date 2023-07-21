@@ -8,19 +8,28 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { PostTags } from '@/lib/types'
+import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import DeleteCauseModal from '../Modals/DeleteCauseModal'
 import Error from '../Modals/Error'
-import PublishCauseModal from '../Modals/PublishCauseModal'
+import PublishCauseModal, {
+  emptyPublishFormData,
+  IPublishCauseFormProps
+} from '../Modals/PublishCauseModal'
 import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
 
 const OrganizationCauses: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
+  const [postMetadata, setPostMetadata] = useState<CauseMetadata[]>([])
 
+  const [modifyModalOpen, setModifyModalOpen] = useState(false)
+
+  const [currentModifyId, setCurrentModifyId] = useState('')
+  const [currentDeleteId, setCurrentDeleteId] = useState('')
   const { data, error, loading, refetch } = usePostData({
     profileId: profile!.id,
     metadata: {
@@ -34,14 +43,24 @@ const OrganizationCauses: React.FC = () => {
     setPublishModalOpen(true)
   }
 
+  const onDeleteClose = (shouldRefetch: boolean) => {
+    setDeleteModalOpen(false)
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
   const onEdit = (id: string) => {
     console.log('edit id ', id)
   }
+  const onDelete = (id: string) => {
+    console.log('delete id ', id)
+    setCurrentDeleteId(id)
 
-  const onDelete = () => {
     setDeleteModalOpen(true)
   }
-
+  useEffect(() => {
+    setPostMetadata(getCauseMetadata(data))
+  }, [data])
   const [vhrGoal] = useState(600) // use hardcoded goal for now
   useEffect(() => {
     setGridTheme(
@@ -72,6 +91,24 @@ const OrganizationCauses: React.FC = () => {
       </div>
     </div>
   )
+  const getFormDefaults = (id: string): IPublishCauseFormProps => {
+    const d = postMetadata.find((val) => val?.cause_id === id)
+    console.log('d', d)
+
+    return d
+      ? {
+          selectedCurrency: d.currency ?? '',
+          causeName: d.name ?? '',
+          goal: d.goal ?? '',
+          contribution: d.contribution ?? '',
+          OrgPublish: d.from ?? '',
+          category: d.category ?? '',
+          description: d.description ?? '',
+          currency: d.currency ?? '',
+          recipient: d.recipient ?? ''
+        }
+      : { ...emptyPublishFormData }
+  }
 
   return (
     <GridLayout>
@@ -173,6 +210,14 @@ const OrganizationCauses: React.FC = () => {
                 }
               }}
               publisher={profile}
+            />
+            <DeleteCauseModal
+              open={deleteModalOpen}
+              onClose={onDeleteClose}
+              publisher={profile}
+              id={currentDeleteId}
+              postData={data}
+              values={getFormDefaults(currentDeleteId)}
             />
           </div>
         </Card>

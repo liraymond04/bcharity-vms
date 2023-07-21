@@ -119,7 +119,7 @@ const Footer: FC = () => {
 
             <div className="flex justify-center space-x-5 py-3">
               <a className="w-20" href="../../../">
-                <img src="/logo.jpg " alt="bcharity-logo"></img>
+                <img src="/logo.png " alt="bcharity-logo"></img>
               </a>
               <a className="w-20 mt-2" href="https://ecssen.ca">
                 <img src="/ecssen.png" alt="ecssen-logo"></img>

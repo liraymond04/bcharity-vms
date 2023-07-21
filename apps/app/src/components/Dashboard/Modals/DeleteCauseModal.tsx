@@ -11,7 +11,6 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { PostTags } from '@/lib/types'
 
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
@@ -91,7 +90,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
         setPending(false)
       })
   }
-
+  console.log('delte', postData)
   return (
     <GradientModal
       title={'Delete Volunteer Opportunity'}
@@ -103,28 +102,22 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
       <div className="mx-12">
         {!pending ? (
           <>
-            <Input
-              label="Type"
-              type="Type"
-              defaultValue={PostTags.OrgPublish.Cause}
-              disabled
-            />
-            <Input label="Cause ID" defaultValue={id} disabled />
-            <Input
-              label="Cause name"
-              defaultValue={values.causeName}
-              disabled
-            />
+            <Input label="Name" defaultValue={values.causeName} disabled />
 
-            <Input label="Category" defaultValue={values.category} disabled />
+            <Input label="Categiry" defaultValue={values.category} disabled />
+
             <Input
               label="Currency"
               defaultValue={values.selectedCurrency}
               disabled
             />
-            <Input label="Category" defaultValue={values.category} disabled />
-            <Input label="Category" defaultValue={values.category} disabled />
-
+            <Input
+              label="Contribution"
+              defaultValue={values.contribution}
+              disabled
+            />
+            <Input label="Funding Goal" defaultValue={values.goal} disabled />
+            <Input label="Recipient" defaultValue={values.recipient} disabled />
             <TextArea
               label="Activity Description"
               defaultValue={values.description}
