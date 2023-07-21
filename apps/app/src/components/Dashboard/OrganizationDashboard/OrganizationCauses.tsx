@@ -12,6 +12,7 @@ import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import DeleteCauseModal from '../Modals/DeleteCauseModal'
 import Error from '../Modals/Error'
 import ModifyCauseModal from '../Modals/ModifyCauseModal'
 import PublishCauseModal, {
@@ -24,18 +25,21 @@ const OrganizationCauses: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
+  const [postMetadata, setPostMetadata] = useState<CauseMetadata[]>([])
 
+  const [modifyModalOpen, setModifyModalOpen] = useState(false)
+
+  const [currentModifyId, setCurrentModifyId] = useState('')
+  const [currentDeleteId, setCurrentDeleteId] = useState('')
   const { data, error, loading, refetch } = usePostData({
     profileId: profile?.id,
     metadata: {
       tags: { all: [PostTags.OrgPublish.Cause] }
     }
   })
-  const [postMetadata, setPostMetadata] = useState<CauseMetadata[]>([])
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
-  const [modifyModalOpen, setModifyModalOpen] = useState(false)
-  const [currentModifyId, setCurrentModifyId] = useState('')
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
@@ -51,6 +55,14 @@ const OrganizationCauses: React.FC = () => {
       refetch()
     }
   }
+
+  const onDeleteClose = (shouldRefetch: boolean) => {
+    setDeleteModalOpen(false)
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+
   const onNew = () => {
     setPublishModalOpen(true)
   }
@@ -62,36 +74,26 @@ const OrganizationCauses: React.FC = () => {
 
   const onDelete = (id: string) => {
     console.log('delete id ', id)
+    setCurrentDeleteId(id)
+
+    setDeleteModalOpen(true)
   }
+
+  useEffect(() => {
+    setPostMetadata(getCauseMetadata(data))
+  }, [data])
 
   useEffect(() => {
     setGridTheme(
       resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
     )
   }, [resolvedTheme])
+
   const { currentUser } = useAppPersistStore()
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
-  useEffect(() => {
-    setPostMetadata(getCauseMetadata(data))
-  }, [data])
 
-  const getFormDefaults = (id: string): IPublishCauseFormProps => {
-    const d = postMetadata.find((val) => val?.cause_id === id)
-
-    return d
-      ? {
-          causeName: d.name ?? '',
-          category: d.category ?? '',
-          currency: d.currency ?? '',
-          contribution: d.contribution ?? '',
-          goal: d.goal ?? '',
-          recipient: d.recipient ?? '',
-          description: d.description ?? ''
-        }
-      : { ...emptyPublishFormData }
-  }
   const [vhrGoal] = useState(600) // use hardcoded goal for now
 
   const Progress = ({
@@ -114,6 +116,25 @@ const OrganizationCauses: React.FC = () => {
       </div>
     </div>
   )
+
+  const getFormDefaults = (id: string): IPublishCauseFormProps => {
+    const d = postMetadata.find((val) => val?.cause_id === id)
+    console.log('d', d)
+
+    return d
+      ? {
+          selectedCurrency: d.currency ?? '',
+          causeName: d.name ?? '',
+          goal: d.goal ?? '',
+          contribution: d.contribution ?? '',
+          OrgPublish: d.from ?? '',
+          category: d.category ?? '',
+          description: d.description ?? '',
+          currency: d.currency ?? '',
+          recipient: d.recipient ?? ''
+        }
+      : { ...emptyPublishFormData }
+  }
 
   return (
     <GridLayout>
@@ -210,6 +231,14 @@ const OrganizationCauses: React.FC = () => {
               open={publishModalOpen}
               onClose={onPublishClose}
               publisher={profile}
+            />
+            <DeleteCauseModal
+              open={deleteModalOpen}
+              onClose={onDeleteClose}
+              publisher={profile}
+              id={currentDeleteId}
+              postData={data}
+              values={getFormDefaults(currentDeleteId)}
             />
             <ModifyCauseModal
               open={modifyModalOpen}
