@@ -20,7 +20,6 @@ import { useAppPersistStore } from '@/store/app'
 
 const VolunteerHomeTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
-  const [profileId, setProfileId] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [location, setLocation] = useState<string>('')
   const [bio, setBio] = useState<string>('')
@@ -33,78 +32,79 @@ const VolunteerHomeTab: React.FC = () => {
     const fetchProfileData = async () => {
       try {
         if (currentUser) {
-          checkAuth(currentUser?.ownedBy).then(async () => {
-            const userProfile = await lensClient().profile.fetch({
-              profileId: profileId
-            })
-
-            if (userProfile) {
-              setName(userProfile.name || '')
-
-              if (userProfile.attributes) {
-                const locationAttribute = userProfile.attributes.find(
-                  (attr) => attr.key === 'location'
-                )
-                setLocation(locationAttribute?.value || '')
-                const websiteAttribute = userProfile.attributes.find(
-                  (attr) => attr.key === 'website'
-                )
-                setWebsite(websiteAttribute?.value || '')
-              }
-              setBio(userProfile.bio || '')
-            }
+          const userProfile = await lensClient().profile.fetch({
+            profileId: currentUser?.id
           })
+
+          if (userProfile) {
+            setName(userProfile.name || '')
+
+            if (userProfile.attributes) {
+              const locationAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'location'
+              )
+              setLocation(locationAttribute?.value || '')
+              const websiteAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'website'
+              )
+              setWebsite(websiteAttribute?.value || '')
+            }
+            setBio(userProfile.bio || '')
+          }
         }
       } catch (error) {
         console.error('Error fetching profile data:', error)
       }
     }
     fetchProfileData()
-  }, [currentUser, profileId])
+  }, [currentUser])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault
     setIsLoading(true)
 
     try {
-      const attributes: AttributeData[] = [
-        {
-          displayType: MetadataDisplayType.string,
-          traitType: 'website',
-          value: website,
-          key: 'website'
-        }
-      ]
+      if (currentUser) {
+        checkAuth(currentUser?.ownedBy).then(async () => {
+          const attributes: AttributeData[] = [
+            {
+              displayType: MetadataDisplayType.string,
+              traitType: 'website',
+              value: website,
+              key: 'website'
+            }
+          ]
 
-      const avatarUrl = avatar ? await uploadToIPFS(avatar) : null
+          const avatarUrl = avatar ? await uploadToIPFS(avatar) : null
 
-      const metadata: ProfileMetadata = {
-        version: MetadataVersions.one,
-        metadata_id: v4(),
-        name,
-        bio,
-        cover_picture: avatarUrl,
-        attributes,
-        location
-      }
+          const metadata: ProfileMetadata = {
+            version: MetadataVersions.one,
+            metadata_id: v4(),
+            name,
+            bio,
+            cover_picture: avatarUrl,
+            attributes,
+            location
+          }
 
-      const metadataUrl = await uploadToIPFS(metadata)
+          const metadataUrl = await uploadToIPFS(metadata)
 
-      const typedDataResult =
-        await lensClient().profile.createSetProfileMetadataTypedData({
-          metadata: metadataUrl,
-          profileId: profileId
+          const typedDataResult =
+            await lensClient().profile.createSetProfileMetadataTypedData({
+              metadata: metadataUrl,
+              profileId: currentUser?.id
+            })
+
+          const signature = await signTypedData(
+            getSignature(typedDataResult.unwrap().typedData)
+          )
+
+          const broadcastResult = await lensClient().transaction.broadcast({
+            id: typedDataResult.unwrap().id,
+            signature: signature
+          })
         })
-
-      const signature = await signTypedData(
-        getSignature(typedDataResult.unwrap().typedData)
-      )
-
-      const broadcastResult = await lensClient().transaction.broadcast({
-        id: typedDataResult.unwrap().id,
-        signature: signature
-      })
-
+      }
       console.log('Profile saved successfully')
     } catch (error) {
       console.error('Error updating profile:', error)
@@ -117,7 +117,7 @@ const VolunteerHomeTab: React.FC = () => {
         {isLoading ? (
           <Spinner />
         ) : (
-          <form onSubmit={handleSubmit}>
+          <form className="my-5 mx-5" onSubmit={handleSubmit}>
             <div>
               <Input
                 label="Profile ID: "
@@ -173,7 +173,7 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div className="flex justify-end">
               <button
-                className="flex justify-center bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded"
+                className="flex justify-center bg-purple-600 hover:bg-purple-800 text-white font-bold my-5 py-2 px-6 rounded"
                 type="submit"
               >
                 Save
