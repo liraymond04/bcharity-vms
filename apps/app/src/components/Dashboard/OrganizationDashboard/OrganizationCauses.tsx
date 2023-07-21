@@ -4,7 +4,6 @@ import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
-import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
@@ -15,6 +14,7 @@ import { useAppPersistStore } from '@/store/app'
 
 import DeleteCauseModal from '../Modals/DeleteCauseModal'
 import Error from '../Modals/Error'
+import ModifyCauseModal from '../Modals/ModifyCauseModal'
 import PublishCauseModal, {
   emptyPublishFormData,
   IPublishCauseFormProps
@@ -25,6 +25,21 @@ const OrganizationCauses: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
+
+  const onPublishClose = (shouldRefetch: boolean) => {
+    setPublishModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+  const onModifyClose = (shouldRefetch: boolean) => {
+    setModifyModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
 
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
 
@@ -60,21 +75,44 @@ const OrganizationCauses: React.FC = () => {
 
     setDeleteModalOpen(true)
   }
+
   useEffect(() => {
     setPostMetadata(getCauseMetadata(data))
   }, [data])
+
   useEffect(() => {
     setGridTheme(
       resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
     )
   }, [resolvedTheme])
+
   const { currentUser } = useAppPersistStore()
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
-  useEffect(() => {
-    setPostMetadata(getCauseMetadata(data))
-  }, [data])
+
+  const [vhrGoal] = useState(600) // use hardcoded goal for now
+
+  const Progress = ({
+    progress,
+    total,
+    className
+  }: {
+    progress: number
+    total: number
+    className?: string
+  }) => (
+    <div className={className}>
+      <div className="w-full bg-gray-200 rounded-full h-5 ">
+        <div
+          className="bg-green-400 h-5 rounded-full"
+          style={{
+            width: `${Math.min(Math.trunc((progress / total) * 100), 100)}%`
+          }}
+        ></div>
+      </div>
+    </div>
+  )
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
     const d = postMetadata.find((val) => val?.cause_id === id)
@@ -106,12 +144,12 @@ const OrganizationCauses: React.FC = () => {
                   ${Number(balanceData?.value)}
                 </div>
                 <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl bottom-0 mt-8">
-                  raised out of $10
+                  raised out of ${vhrGoal}
                 </div>
               </div>
               <Progress
                 progress={Number(balanceData?.value)}
-                total={10}
+                total={vhrGoal}
                 className="mt-10 mb-10"
               />
               <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
@@ -159,9 +197,12 @@ const OrganizationCauses: React.FC = () => {
           <div className="p-5">
             <button
               onClick={onNew}
-              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
+              className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
               <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <div className="text-white mr-3 mt-1 font-bold">
+                Create new cause
+              </div>
             </button>
             <div
               className={gridTheme}
@@ -185,13 +226,7 @@ const OrganizationCauses: React.FC = () => {
             {error && <Error message="An error occured. Please try again." />}
             <PublishCauseModal
               open={publishModalOpen}
-              onClose={(shouldRefetch) => {
-                setPublishModalOpen(false)
-
-                if (shouldRefetch) {
-                  refetch()
-                }
-              }}
+              onClose={onPublishClose}
               publisher={profile}
             />
             <DeleteCauseModal
@@ -201,6 +236,13 @@ const OrganizationCauses: React.FC = () => {
               id={currentDeleteId}
               postData={data}
               values={getFormDefaults(currentDeleteId)}
+            />
+            <ModifyCauseModal
+              open={modifyModalOpen}
+              onClose={onModifyClose}
+              publisher={profile}
+              id={currentModifyId}
+              defaultValues={getFormDefaults(currentModifyId)}
             />
           </div>
         </Card>
