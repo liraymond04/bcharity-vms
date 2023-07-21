@@ -103,6 +103,7 @@ const VolunteerHomeTab: React.FC = () => {
             id: typedDataResult.unwrap().id,
             signature: signature
           })
+          setIsLoading(false)
         })
       }
       console.log('Profile saved successfully')
