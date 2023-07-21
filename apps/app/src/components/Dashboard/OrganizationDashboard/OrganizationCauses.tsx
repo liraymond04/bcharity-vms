@@ -29,7 +29,7 @@ const OrganizationCauses: React.FC = () => {
   })
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const onNew = () => {
     setPublishModalOpen(true)
   }
@@ -38,8 +38,8 @@ const OrganizationCauses: React.FC = () => {
     console.log('edit id ', id)
   }
 
-  const onDelete = (id: string) => {
-    console.log('delete id ', id)
+  const onDelete = () => {
+    setDeleteModalOpen(true)
   }
 
   const [vhrGoal] = useState(600) // use hardcoded goal for now
