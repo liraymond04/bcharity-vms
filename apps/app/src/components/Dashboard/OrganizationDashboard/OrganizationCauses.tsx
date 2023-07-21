@@ -8,12 +8,16 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { PostTags } from '@/lib/types'
+import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
-import PublishCauseModal from '../Modals/PublishCauseModal'
+import ModifyCauseModal from '../Modals/ModifyCauseModal'
+import PublishCauseModal, {
+  emptyPublishFormData,
+  IPublishCauseFormProps
+} from '../Modals/PublishCauseModal'
 import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
 
 const OrganizationCauses: React.FC = () => {
@@ -22,27 +26,44 @@ const OrganizationCauses: React.FC = () => {
   const [gridTheme, setGridTheme] = useState<string>()
 
   const { data, error, loading, refetch } = usePostData({
-    profileId: profile!.id,
+    profileId: profile?.id,
     metadata: {
       tags: { all: [PostTags.OrgPublish.Cause] }
     }
   })
+  const [postMetadata, setPostMetadata] = useState<CauseMetadata[]>([])
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
+  const [modifyModalOpen, setModifyModalOpen] = useState(false)
+  const [currentModifyId, setCurrentModifyId] = useState('')
 
+  const onPublishClose = (shouldRefetch: boolean) => {
+    setPublishModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+  const onModifyClose = (shouldRefetch: boolean) => {
+    setModifyModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
   const onNew = () => {
     setPublishModalOpen(true)
   }
 
   const onEdit = (id: string) => {
-    console.log('edit id ', id)
+    setCurrentModifyId(id)
+    setModifyModalOpen(true)
   }
 
   const onDelete = (id: string) => {
     console.log('delete id ', id)
   }
 
-  const [vhrGoal] = useState(600) // use hardcoded goal for now
   useEffect(() => {
     setGridTheme(
       resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
@@ -52,6 +73,27 @@ const OrganizationCauses: React.FC = () => {
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
+  useEffect(() => {
+    setPostMetadata(getCauseMetadata(data))
+  }, [data])
+
+  const getFormDefaults = (id: string): IPublishCauseFormProps => {
+    const d = postMetadata.find((val) => val?.cause_id === id)
+
+    return d
+      ? {
+          causeName: d.name ?? '',
+          category: d.category ?? '',
+          currency: d.currency ?? '',
+          contribution: d.contribution ?? '',
+          goal: d.goal ?? '',
+          recipient: d.recipient ?? '',
+          description: d.description ?? ''
+        }
+      : { ...emptyPublishFormData }
+  }
+  const [vhrGoal] = useState(600) // use hardcoded goal for now
+
   const Progress = ({
     progress,
     total,
@@ -137,9 +179,12 @@ const OrganizationCauses: React.FC = () => {
           <div className="p-5">
             <button
               onClick={onNew}
-              className="w-8 h-8 bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
+              className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
               <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <div className="text-white mr-3 mt-1 font-bold">
+                Create new cause
+              </div>
             </button>
             <div
               className={gridTheme}
@@ -150,13 +195,11 @@ const OrganizationCauses: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={getCauseMetadata(data)}
-                  columnDefs={Object.values(
-                    makeOrgCauseColumnDefs({
-                      onEditClick: onEdit,
-                      onDeleteClick: onDelete
-                    })
-                  )}
+                  rowData={postMetadata}
+                  columnDefs={makeOrgCauseColumnDefs({
+                    onEditClick: onEdit,
+                    onDeleteClick: onDelete
+                  })}
                   pagination
                   paginationPageSize={20}
                 />
@@ -165,14 +208,15 @@ const OrganizationCauses: React.FC = () => {
             {error && <Error message="An error occured. Please try again." />}
             <PublishCauseModal
               open={publishModalOpen}
-              onClose={(shouldRefetch) => {
-                setPublishModalOpen(false)
-
-                if (shouldRefetch) {
-                  refetch()
-                }
-              }}
+              onClose={onPublishClose}
               publisher={profile}
+            />
+            <ModifyCauseModal
+              open={modifyModalOpen}
+              onClose={onModifyClose}
+              publisher={profile}
+              id={currentModifyId}
+              defaultValues={getFormDefaults(currentModifyId)}
             />
           </div>
         </Card>
