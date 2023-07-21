@@ -27,6 +27,8 @@ import { PostTags } from '@/lib/types'
 import Error from './Error'
 
 export interface IPublishCauseFormProps {
+  selectedCurrency: string | number | readonly string[] | undefined
+  OrgPublish: any
   causeName: string
   category: string
   currency: string
@@ -43,7 +45,9 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
   contribution: '',
   goal: '',
   recipient: '',
-  description: ''
+  description: '',
+  OrgPublish: undefined,
+  selectedCurrency: undefined
 }
 
 export const createPublishAttributes = (

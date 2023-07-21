@@ -125,7 +125,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <PencilIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onEditClick(event.data.id)
+        params.onEditClick(event.data['cause_id'])
       },
       width: 50
     },
@@ -137,7 +137,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <TrashIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onDeleteClick(event.data.id)
+        params.onDeleteClick(event.data['cause_id'])
       },
       width: 50
     },
