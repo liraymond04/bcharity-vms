@@ -77,17 +77,18 @@ const Navbar: FC = () => {
       <div className="flex items-center">
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
-            className="m-5 h-10 w-10"
-            src="/logo.jpg "
+            className="m-5 h-10 w-auto"
+            src="/logo.png"
             alt="BCharity logo"
           ></img>
         </Link>
         {screenSize == 'wideDesktop' && (
-          <div
+          <Link
             className={`m-5 text-2xl text-violet-800 tracking-wider ${inter500.className}`}
+            href="/"
           >
             BCharity
-          </div>
+          </Link>
         )}
         {screenSize == 'phone' && (
           <div className="absolute left-20 top-7">
@@ -253,7 +254,7 @@ const Navbar: FC = () => {
             )}
           </div>
         )}
-        <div className="my-auto mr-10">
+        <div className="relative my-auto mr-10">
           <TranslateButton />
         </div>
         <div className="my-auto mr-10">

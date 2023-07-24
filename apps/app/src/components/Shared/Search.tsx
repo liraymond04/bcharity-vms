@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Input } from '../UI/Input'
@@ -7,11 +7,12 @@ import useOnClickOutside from '../utils/hooks/useClickOnOutside'
 
 interface Props {
   className?: string | undefined
+  searchText: string
+  setSearchText(string: string): void
 }
 
-const Search: FC<Props> = ({ className }) => {
+const Search: FC<Props> = ({ className, searchText, setSearchText }) => {
   const { push, pathname, query } = useRouter()
-  const [searchText, setSearchText] = useState<string>('')
   const dropdownRef = useRef(null)
   const { t } = useTranslation('common')
 
@@ -25,6 +26,7 @@ const Search: FC<Props> = ({ className }) => {
   const handleKeyDown = (evt: ChangeEvent<HTMLFormElement>) => {
     const keyword = evt.target.value
     setSearchText('')
+    evt.preventDefault()
   }
 
   return (

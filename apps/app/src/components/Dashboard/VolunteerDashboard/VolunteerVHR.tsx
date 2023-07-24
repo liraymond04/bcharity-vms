@@ -1,27 +1,23 @@
-import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
-import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import FilterDropdown from '@/components/Shared/FilterDropdown'
 import Progress from '@/components/Shared/Progress'
-import FilterDropdown from '@/components/Shared/SearchDropdown'
+import Search from '@/components/Shared/Search'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import testSearch from '@/lib/search'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
-
-const inter500 = Inter({
-  subsets: ['latin'],
-  weight: ['500']
-})
+import BrowseCard from './BrowseCard'
 
 const VolunteerVHRTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
@@ -39,7 +35,8 @@ const VolunteerVHRTab: React.FC = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: { oneOf: [PostTags.OrgPublish.Opportuntiy] }
-    }
+    },
+    noRandomize: true
   })
 
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
@@ -56,36 +53,6 @@ const VolunteerVHRTab: React.FC = () => {
     setCategories(_categories)
     setPosts(_posts)
   }, [postData])
-
-  const filterOpportunity = (name: string, search: string) => {
-    const nameArr = name.split(' ')
-    const searchArr = search.split(' ')
-    let result = true
-    searchArr.map((search) => {
-      let found = false
-      nameArr.map((name) => {
-        let p0 = 0
-        let p1 = 0
-        while (p0 < name.length && p1 < search.length) {
-          if (
-            name.charAt(p0).toLowerCase() == search.charAt(p1).toLowerCase()
-          ) {
-            p0++, p1++
-          } else {
-            p0++
-          }
-        }
-        if (p1 == search.length) {
-          found = true
-        }
-      })
-      if (!found) {
-        result = false
-      }
-    })
-
-    return result
-  }
 
   return (
     <GridLayout>
@@ -133,62 +100,30 @@ const VolunteerVHRTab: React.FC = () => {
         </Card>
       </GridItemTwelve>
       <GridItemTwelve>
-        <div className="flex justify-between">
-          <div className="ml-5 w-[200px]"></div>
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-2xl border-violet-300 border-2 ml-10 mr-10">
-            <input
-              className="border-none bg-transparent rounded-2xl w-[250px]"
-              type="text"
-              value={searchValue}
-              placeholder="search"
-              onChange={(e) => {
-                setSearchValue(e.target.value)
-              }}
-            />
-            <div className="h-5 w-5 mr-5">
-              <SearchIcon />
-            </div>
-          </div>
-          <div>
-            <FilterDropdown
-              label="Filter:"
-              options={Array.from(categories)}
-              onChange={(c) => setSelectedCategory(c)}
-            ></FilterDropdown>
-          </div>
+        <div className="flex justify-between py-5">
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => setSelectedCategory(c)}
+            options={Array.from(categories)}
+          />
         </div>
         <div className="flex flex-wrap justify-around">
           {!loading ? (
             posts
-              .filter((op) => filterOpportunity(op.name, searchValue))
+              .filter((op) => testSearch(op.name, searchValue))
               .filter(
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
               )
-              .map((op, id) => (
-                <div
-                  key={id}
-                  className="relative my-5 mx-5 w-[300px] h-[350px] bg-slate-100 border-8 border-white rounded-md"
-                >
-                  <img
-                    src={getAvatar(op.from)}
-                    className="h-[200px] w-full"
-                    alt="organization profile picture"
-                  />
-                  <div
-                    className={`flex justify-center text-center mt-5 text-xl ${inter500.className}`}
-                  >
-                    {op.name}
-                  </div>
-                  <Link
-                    className={`flex justify-center bg-purple-500 py-1 px-12 w-20 rounded-3xl text-sm text-white absolute bottom-2 right-2 ${inter500.className}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="." // external link or /volunteer/[post-id] here
-                  >
-                    APPLY
-                  </Link>
-                </div>
+              .map((op) => (
+                <BrowseCard
+                  key={op.opportunity_id}
+                  imageSrc={getAvatar(op.from)}
+                  name={op.name}
+                  buttonText="APPLY"
+                  buttonHref="."
+                />
               ))
           ) : (
             <Spinner />

@@ -3,16 +3,16 @@ import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { useBalance } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Slug from '@/components/Shared/Slug'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHR_TOKEN } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const VolunteerHome: React.FC = () => {
@@ -39,14 +39,11 @@ const VolunteerHome: React.FC = () => {
       .then((data) => {
         setpostdata(data.items)
       })
-  }, [])
+  }, [currentUser])
 
   const [searchAddress, setSearchAddress] = useState<string>('')
 
-  const { data, isLoading } = useBalance({
-    address: `0x${searchAddress.substring(2)}`,
-    token: `0x${VHR_TOKEN.substring(2)}`
-  })
+  const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
@@ -80,10 +77,16 @@ const VolunteerHome: React.FC = () => {
                   </div>
 
                   <div className="inset-0 flex justify-left items-center ml-20 mt-20">
-                    <h1>Followers</h1>
+                    <h1>Followers: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowers}
+                    </div>
                   </div>
                   <div className="relative inset-0 flex justify-left items-center ml-20 mt-10">
-                    <h1>Following</h1>
+                    <h1>Following: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowing}
+                    </div>
                   </div>
 
                   <div className="ml-12 flex flex-row">
@@ -123,7 +126,7 @@ const VolunteerHome: React.FC = () => {
                         {currentUser?.handle}
                       </p>
                       <div>
-                        <a href={`/u/${currentUser?.handle}`}>
+                        <Link href="">
                           <div className="truncate">
                             <Slug
                               className="font-bold"
@@ -131,55 +134,62 @@ const VolunteerHome: React.FC = () => {
                               prefix="@"
                             />
                           </div>
-                        </a>
+                        </Link>
                       </div>
                     </div>
 
-                    <div className="overflow-y-scroll w-full mt-20 ">
-                      <div className="w-full">
-                        {postdata.map((post) => {
-                          if (post.__typename === 'Post')
-                            return (
-                              <div className=" w-full lg:flex" key={post.id}>
-                                <div className="border-r border-b border-l dark:border-black border-gray-400 p-5 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white dark:bg-slate-600 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                                  <div className="mb-8">
-                                    <div className="text-gray-900 dark:text-white font-bold text-xl mb-2">
-                                      <div className=" clearfix">
-                                        <img
-                                          className=" w-8 h-8  mr-3 rounded-full"
-                                          src={getAvatar(currentUser)}
-                                          alt="Rounded avatar"
-                                        />
-                                        <div>
-                                          {currentUser.handle}
-                                          <a href={`/u/${currentUser?.handle}`}>
-                                            <div className="text-sm float-right top-0 mb-5">
-                                              <p className="text-gray-900 leading-none"></p>
-                                              <p className="text-gray-600 dark:text-white">
-                                                {post.createdAt}
-                                              </p>
-                                            </div>
-                                            <div className="truncate">
-                                              <Slug
-                                                className="font-bold"
-                                                slug={currentUser?.handle}
-                                                prefix="@"
-                                              />
-                                            </div>
-                                          </a>
+                    <div className="h-[60vh]">
+                      <div className="overflow-y-scroll w-full mt-20 h-full border border-gray-400 dark:border-black rounded-md">
+                        <div className="w-full">
+                          {postdata.map((post, index) => {
+                            if (post.__typename === 'Post')
+                              return (
+                                <div className="w-full lg:flex" key={post.id}>
+                                  <div
+                                    className={`p-5 ${
+                                      index !== postdata.length - 1 &&
+                                      'border-b'
+                                    } dark:border-black border-gray-400 lg:border-gray-400 bg-white dark:bg-slate-600 flex flex-col justify-between leading-normal w-full`}
+                                  >
+                                    <div className="mb-8">
+                                      <div className="text-gray-900 dark:text-white font-bold text-xl mb-2">
+                                        <div className=" clearfix">
+                                          <img
+                                            className=" w-8 h-8  mr-3 rounded-full"
+                                            src={getAvatar(currentUser)}
+                                            alt="Rounded avatar"
+                                          />
+                                          <div>
+                                            {currentUser.handle}
+                                            <Link href="">
+                                              <div className="text-sm float-right top-0 mb-5">
+                                                <p className="text-gray-900 leading-none"></p>
+                                                <p className="text-gray-600 dark:text-white">
+                                                  {post.createdAt}
+                                                </p>
+                                              </div>
+                                              <div className="truncate">
+                                                <Slug
+                                                  className="font-bold"
+                                                  slug={currentUser?.handle}
+                                                  prefix="@"
+                                                />
+                                              </div>
+                                            </Link>
+                                          </div>
                                         </div>
                                       </div>
+                                      <p className="text-gray-700 text-sm mt-10  dark:text-gray-50">
+                                        {post.metadata.content}
+                                      </p>
                                     </div>
-                                    <p className="text-gray-700 text-sm mt-10  dark:text-gray-50">
-                                      {post.metadata.content}
-                                    </p>
-                                  </div>
 
-                                  <div className="flex items-center"></div>
+                                    <div className="flex items-center"></div>
+                                  </div>
                                 </div>
-                              </div>
-                            )
-                        })}
+                              )
+                          })}
+                        </div>
                       </div>
                     </div>
                   </div>

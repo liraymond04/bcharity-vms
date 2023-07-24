@@ -1,23 +1,60 @@
+import { PublicationSortCriteria } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { useBalance } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import FilterDropdown from '@/components/Shared/FilterDropdown'
+import Search from '@/components/Shared/Search'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHR_TOKEN } from '@/constants'
+import getAvatar from '@/lib/getAvatar'
+import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
+import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import testSearch from '@/lib/search'
+import { CauseMetadata, PostTags } from '@/lib/types'
+import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import BrowseCard from './BrowseCard'
+
 const VolunteerCauses: React.FC = () => {
+  const [posts, setPosts] = useState<CauseMetadata[]>([])
+  const [categories, setCategories] = useState<Set<string>>(new Set())
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [searchValue, setSearchValue] = useState('')
+
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [searchAddress, setSearchAddress] = useState<string>('')
   const [donationGoal, setDonationsGoal] = useState(500) // use hardcoded goal for now
 
-  const { data, isLoading } = useBalance({
-    address: `0x${searchAddress.substring(2)}`,
-    token: `0x${VHR_TOKEN.substring(2)}`
+  const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
+
+  const {
+    data: postData,
+    error: postDataError,
+    loading
+  } = useExplorePublications({
+    sortCriteria: PublicationSortCriteria.Latest,
+    metadata: {
+      tags: { oneOf: [PostTags.OrgPublish.Cause] }
+    },
+    noRandomize: true
   })
+
+  useEffect(() => {
+    let _categories: Set<string> = new Set()
+    const _posts = getCauseMetadata(postData)
+
+    _posts.forEach((post) => {
+      if (post) {
+        if (post.category) _categories.add(post.category)
+      }
+    })
+
+    setCategories(_categories)
+    setPosts(_posts)
+  }, [postData])
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
@@ -90,6 +127,39 @@ const VolunteerCauses: React.FC = () => {
             )}
           </div>
         </Card>
+      </GridItemTwelve>
+
+      <GridItemTwelve>
+        <div className="flex justify-between py-5">
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => setSelectedCategory(c)}
+            options={Array.from(categories)}
+          />
+        </div>
+        <div className="flex flex-wrap justify-around">
+          {!loading ? (
+            posts
+              .filter((op) => testSearch(op.name, searchValue))
+              .filter(
+                (op) =>
+                  selectedCategory === '' || op.category === selectedCategory
+              )
+              .map((op, id) => (
+                <BrowseCard
+                  key={op.cause_id}
+                  imageSrc={getAvatar(op.from)}
+                  name={op.name}
+                  buttonText="APPLY"
+                  buttonHref="."
+                />
+              ))
+          ) : (
+            <Spinner />
+          )}
+        </div>
+        {postDataError && <h1>error</h1>}
       </GridItemTwelve>
     </GridLayout>
   )
