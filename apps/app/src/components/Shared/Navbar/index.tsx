@@ -133,7 +133,7 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:opacity-80 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/volunteers'
                           ? 'text-purple-600'
                           : 'text-black'
@@ -192,7 +192,7 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/causes'
                       ? 'text-purple-500 bg-white'
                       : 'text-black'
@@ -208,7 +208,7 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/volunteers'
                       ? 'text-purple-500 bg-white'
                       : 'text-black'
@@ -224,7 +224,7 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/organizations'
                       ? 'text-purple-500 bg-white'
                       : 'text-black'
@@ -241,7 +241,7 @@ const Navbar: FC = () => {
               >
                 <button>
                   <div
-                    className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 tracking-wider ${
+                    className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                       pathname == '/dashboard'
                         ? 'text-purple-500 bg-white'
                         : 'text-black'
