@@ -133,7 +133,7 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:opacity-80 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/volunteers'
                           ? 'text-purple-600'
                           : 'text-black'
