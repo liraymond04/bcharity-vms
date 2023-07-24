@@ -15,9 +15,8 @@ import { PostTags } from '@/lib/types'
 
 import { GridItemFour, GridLayout } from '../GridLayout'
 import Divider from '../Shared/Divider'
-import GradientWrapper from '../Shared/Gradient/GradientWrapper'
+import FilterDropdown from '../Shared/FilterDropdown'
 import Search from '../Shared/Search'
-import FilterDropdown from '../Shared/SearchDropdown'
 import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
 
@@ -37,6 +36,8 @@ const Causes: NextPage = () => {
 
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
   const [postings, setPostings] = useState<number[]>([])
+  const [searchValue, setSearchValue] = useState('')
+
   const [otherError, setOtherError] = useState(false)
   const posts = useMemo(() => getOpportunityMetadata(data), [data])
 
@@ -83,36 +84,34 @@ const Causes: NextPage = () => {
   return (
     <>
       <SEO title="Causes • BCharity VMS" />
-      <GradientWrapper>
-        <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-regular text-2xl">
-          <div className="flex justify-between py-5">
-            <Search />
-            <FilterDropdown
-              label="Filter:"
-              onChange={(c) => console.log('filter', c)}
-              options={['cause1', 'cause2', 'cause3']}
-            />
-          </div>
-          <Divider />
-          <p className="font-bold px-6"> Browse Causes </p>
-          {loading ? (
-            <div className="flex justify-center">
-              <Spinner />
-            </div>
-          ) : (
-            <GridLayout>
-              {profiles.map((profile, index) => (
-                <GridItemFour key={profile.id}>
-                  <CauseCard profile={profile} postings={postings[index]} />
-                </GridItemFour>
-              ))}
-            </GridLayout>
-          )}
-          {(exploreError || otherError) && (
-            <div className="text-sm text-center">Something went wrong.</div>
-          )}
+      <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-regular text-2xl">
+        <div className="flex justify-between py-5">
+          <Search searchText={searchValue} setSearchText={setSearchValue} />
+          <FilterDropdown
+            label="Filter:"
+            onChange={(c) => console.log('filter', c)}
+            options={['cause1', 'cause2', 'cause3']}
+          />
         </div>
-      </GradientWrapper>
+        <Divider />
+        <p className="font-bold px-6"> Browse Causes </p>
+        {loading ? (
+          <div className="flex justify-center">
+            <Spinner />
+          </div>
+        ) : (
+          <GridLayout>
+            {profiles.map((profile, index) => (
+              <GridItemFour key={profile.id}>
+                <CauseCard profile={profile} postings={postings[index]} />
+              </GridItemFour>
+            ))}
+          </GridLayout>
+        )}
+        {(exploreError || otherError) && (
+          <div className="text-sm text-center">Something went wrong.</div>
+        )}
+      </div>
     </>
   )
 }
