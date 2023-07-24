@@ -20,6 +20,7 @@ import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
+import SelectAvatar from './UserHome/SelectAvatar'
 
 const VolunteerHomeTab: React.FC = () => {
   const { currentUser } = useAppPersistStore()
@@ -27,7 +28,7 @@ const VolunteerHomeTab: React.FC = () => {
   const [location, setLocation] = useState<string>('')
   const [bio, setBio] = useState<string>('')
   const [website, setWebsite] = useState<string>('')
-  const [avatar, setAvatar] = useState<File | null>(null)
+  const [cover, setCover] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -78,7 +79,7 @@ const VolunteerHomeTab: React.FC = () => {
             }
           ]
 
-          const avatarUrl = avatar ? await uploadToIPFS(avatar) : null
+          const avatarUrl = cover ? await uploadToIPFS(cover) : null
 
           const metadata: ProfileMetadata = {
             version: MetadataVersions.one,
@@ -171,10 +172,10 @@ const VolunteerHomeTab: React.FC = () => {
               </div>
               <div>
                 <Input
-                  label="Avatar: "
+                  label="Cover: "
                   type="file"
-                  id="avatar"
-                  onChange={(e) => setAvatar(e.target.files?.[0] || null)}
+                  id="cover"
+                  onChange={(e) => setCover(e.target.files?.[0] || null)}
                 />
               </div>
               <div className="flex justify-end">
@@ -185,6 +186,9 @@ const VolunteerHomeTab: React.FC = () => {
             </form>
           )}
         </Card>
+      </GridItemTwelve>
+      <GridItemTwelve>
+        <SelectAvatar />
       </GridItemTwelve>
     </GridLayout>
   )
