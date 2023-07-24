@@ -135,7 +135,7 @@ const OrganizationHome: React.FC = () => {
                               alt="bcharity-logo"
                             ></img>
 
-                            <Slug slug={currentUser?.Location} />
+                            <Slug slug={currentUser.Location} />
                           </div>
                         </Link>
                       </div>
