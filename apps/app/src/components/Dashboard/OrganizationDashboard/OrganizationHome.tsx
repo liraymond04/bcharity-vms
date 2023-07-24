@@ -50,9 +50,17 @@ const OrganizationHome: React.FC = () => {
       setSearchAddress(currentUser.ownedBy)
     }
   }, [currentUser, isAuthenticated])
-  {
-    console.log('currentuser', currentUser)
+
+  const getSlug = () => {
+    const item =
+      currentUser?.attributes &&
+      currentUser.attributes.filter((item) => item.key === 'location').at(0)
+    if (item) {
+      return item.value
+    }
+    return ''
   }
+
   return auth && currentUser ? (
     <GridLayout>
       <GridItemTwelve>
@@ -135,7 +143,7 @@ const OrganizationHome: React.FC = () => {
                               alt="bcharity-logo"
                             ></img>
 
-                            <Slug slug={currentUser.Location} />
+                            <Slug slug={getSlug()} />
                           </div>
                         </Link>
                       </div>
