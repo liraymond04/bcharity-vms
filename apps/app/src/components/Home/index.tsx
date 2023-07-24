@@ -28,7 +28,7 @@ const Home: NextPage = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: {
-        oneOf: [PostTags.OrgPublish.Opportuntiy, PostTags.OrgPublish.Cause]
+        oneOf: [PostTags.OrgPublish.Opportuntiy]
       }
     },
     noRandomize: true
