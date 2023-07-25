@@ -76,6 +76,12 @@ const VolunteerHomeTab: React.FC = () => {
               traitType: 'website',
               value: website,
               key: 'website'
+            },
+            {
+              displayType: MetadataDisplayType.string,
+              traitType: 'location',
+              value: location,
+              key: 'location'
             }
           ]
 
@@ -107,6 +113,7 @@ const VolunteerHomeTab: React.FC = () => {
             id: typedDataResult.unwrap().id,
             signature: signature
           })
+
           setIsLoading(false)
         })
       }
