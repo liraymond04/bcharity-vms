@@ -84,7 +84,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       attributes,
       appId: APP_NAME
     }
-
+    console.log('editing', metadata)
     checkAuth(publisher.ownedBy)
       .then(() =>
         createPost(
