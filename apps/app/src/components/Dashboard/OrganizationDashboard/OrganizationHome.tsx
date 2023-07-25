@@ -33,7 +33,7 @@ const OrganizationHome: React.FC = () => {
         }
       })
     }
-  }, [])
+  }, [currentUser])
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       setAuth(true)
@@ -161,7 +161,7 @@ const OrganizationHome: React.FC = () => {
                         </Link>
                         <Slug
                           className=" font-semibold text-lg mt-2"
-                          slug={profile?.attributes?.[0].value ?? ' '}
+                          slug={profile?.attributes?.at(0)?.value ?? ''}
                         />
                       </div>
                     </div>
