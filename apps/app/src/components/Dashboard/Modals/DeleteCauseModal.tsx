@@ -102,7 +102,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
       <div className="mx-12">
         {!pending ? (
           <>
-            <Input label="Name" defaultValue={values.causeName} disabled />
+            <Input label="Name" defaultValue={values.name} disabled />
 
             <Input label="Categiry" defaultValue={values.category} disabled />
 
