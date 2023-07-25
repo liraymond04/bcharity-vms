@@ -1,35 +1,135 @@
 /* eslint-disable no-unused-vars */
 import { ProfileFragment } from '@lens-protocol/client'
+import { MetadataAttributeInput } from '@lens-protocol/client'
 
-export interface OpportunityMetadata {
-  opportunity_id: string
-  name: string
-  date: string
-  hours: string
-  category: string
-  website: string
-  description: string
+interface OrgPublishMetadata {
+  /**
+   * ProfileFragment type data for the profile that created the post
+   */
   from: ProfileFragment
 }
 
-export interface CauseMetadata {
-  cause_id: string
+export interface OpportunityMetadata extends OrgPublishMetadata {
+  /**
+   * a uuid associated with a volunteer opporunity
+   */
+  opportunity_id: string
+  /**
+   * the opportunity name
+   */
   name: string
+  /**
+   * opportunity start date in YYYY-MM-DD format
+   */
+  startDate: string
+  /**
+   * opportunity end date in YYYY-MM-DD format
+   */
+  endDate: string
+  /**
+   * number of hours per week for this volunteer opportunity
+   */
+  hoursPerWeek: string
+  /**
+   * category associated with the volunteer opportunity
+   */
   category: string
-  currency: string
-  contribution: string
-  goal: string
-  recipient: string
+  /**
+   * an optional url to link to an external webste
+   */
+  website: string
+  /**
+   * opportunity description
+   */
   description: string
+  /**
+   * optional URL to image uploaded to IPFS. Empty string if no image
+   */
+  imageUrl: string
+  /**
+   * ProfileFragment type data for the profile that created the post
+   */
   from: ProfileFragment
+}
+
+/**
+ * Interface for a metadata field used when publishing a opportunity
+ */
+export interface OpportunityMetadataAttributeInput
+  extends MetadataAttributeInput {
+  traitType: keyof OpportunityMetadata | 'type'
+}
+
+export interface CauseMetadata extends OrgPublishMetadata {
+  /**
+   * a uuid associated with this cause
+   */
+  cause_id: string
+  /**
+   * the cause name
+   */
+  name: string
+  /**
+   * category associated with the cause
+   */
+  category: string
+  /**
+   * TODO
+   */
+  currency: string
+  /**
+   * TODO
+   */
+  contribution: string
+  /**
+   * TODO
+   */
+  goal: string
+  /**
+   * TODO
+   */
+  recipient: string
+  /**
+   * description for this fundraiser
+   */
+  description: string
+  /**
+   * optional URL to image uploaded to IPFS. Empty string if no image
+   */
+  imageUrl: string
+  /**
+   * Location in the form <City>, <State>, Country
+   */
+  location: string
+}
+
+/**
+ * Interface for a metadata field used when publishing an cause
+ */
+export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof CauseMetadata | 'type'
 }
 
 enum OrgPublish {
+  /**
+   * Tag to use for an organization publishing or modifying a volunteer opportunity
+   */
   Opportuntiy = 'ORG_PUBLISH_OPPORTUNITY',
+  /**
+   * Tag to use for an organization publishing or modifying a cause
+   */
   Cause = 'ORG_PUBLISH_CAUSE'
 }
 
+export type OpportunityMetadataRecord = Record<
+  keyof OpportunityMetadata | 'type',
+  string
+>
+
 export const PostTags = {
+  /**
+   * Collection of tags for organizations publishing and modifying
+   */
   OrgPublish
 }
 

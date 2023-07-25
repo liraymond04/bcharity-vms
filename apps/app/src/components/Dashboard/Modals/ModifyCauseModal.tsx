@@ -149,7 +149,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
             <Input
               label="Cause name"
               placeholder="Medical internship"
-              error={!!errors.causeName?.type}
+              error={!!errors.name?.type}
               {...register('causeName', {
                 required: true,
                 maxLength: 255

@@ -7,7 +7,7 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
     .filter(
       (post) =>
         post.__typename === 'Post' &&
-        post.metadata.attributes.length !== 0 &&
+        post.metadata.attributes.length > 10 &&
         !post.hidden
     )
     .map((post) => {
@@ -21,6 +21,8 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
         goal: attributes[6].value ?? '',
         recipient: attributes[7].value ?? '',
         description: attributes[8].value ?? '',
+        location: attributes[9].value ?? '',
+        imageUrl: attributes[10].value ?? '',
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime()
       }
