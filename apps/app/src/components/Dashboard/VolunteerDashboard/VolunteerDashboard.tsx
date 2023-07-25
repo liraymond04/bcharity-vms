@@ -24,22 +24,22 @@ const VolunteerDashboard: React.FC = () => {
   const tabs: IDashboardTab[] = [
     {
       label: 'Home',
-      icon: <HomeIcon className="w-4 inline" />,
+      icon: <HomeIcon className="inline" />,
       component: <VolunteerHomeTab />
     },
     {
       label: 'VHR',
-      icon: <StarIcon className="w-4 inline" />,
+      icon: <StarIcon className="inline" />,
       component: <VolunteerVHRTab />
     },
     {
-      label: 'Causes',
-      icon: <GlobeIcon className="w-4 inline" />,
+      label: 'Fundraisers',
+      icon: <GlobeIcon className="inline" />,
       component: <VolunteerCausesTab />
     },
     {
       label: 'User Settings',
-      icon: <LockClosedIcon className="w-4 inline" />,
+      icon: <LockClosedIcon className="inline" />,
       component: <div />,
       redirect: '/settings'
     }
