@@ -2,16 +2,16 @@ import {
   PublicationFragment,
   PublicationQueryRequest
 } from '@lens-protocol/client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import lensClient from './lensClient'
 
-const usePublication = (params: PublicationQueryRequest) => {
+const usePublication = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<PublicationFragment>()
   const [error, setError] = useState('')
 
-  const refetch = () => {
+  const fetch = async (params: PublicationQueryRequest) => {
     setLoading(true)
     lensClient()
       .publication.fetch(params)
@@ -26,13 +26,11 @@ const usePublication = (params: PublicationQueryRequest) => {
       })
   }
 
-  useEffect(refetch, [])
-
   return {
     loading,
     data,
     error,
-    refetch
+    fetch
   }
 }
 
