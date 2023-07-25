@@ -16,6 +16,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
+import uploadToIPFS from '@/lib/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import { PostTags } from '@/lib/types'
@@ -104,6 +105,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
 
   const form = useForm<IPublishOpportunityFormProps>()
 
@@ -130,6 +132,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
+    const imageUrl = image ? await uploadToIPFS(image) : null
+
     const attributes = createPublishAttributes(v4(), data)
 
     const metadata: PublicationMetadataV2Input = {
@@ -141,6 +145,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       mainContentFocus: PublicationMainFocus.TextOnly,
       name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
       attributes,
+      image: imageUrl,
       appId: APP_NAME
     }
 
@@ -232,6 +237,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="Tell us more about this volunteer opportunity"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
+            />
+            <Input
+              label="Image (optional): "
+              type="file"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
         ) : (
