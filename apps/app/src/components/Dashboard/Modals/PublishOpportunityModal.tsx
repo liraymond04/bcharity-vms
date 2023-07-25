@@ -144,7 +144,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       appId: APP_NAME
     }
 
-    setIsPending(true)
     try {
       await checkAuth(publisher.ownedBy)
 
