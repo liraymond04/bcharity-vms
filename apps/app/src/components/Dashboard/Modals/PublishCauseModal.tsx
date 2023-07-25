@@ -205,7 +205,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Cause'}
+      title={'Publish New Fundraiser'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -218,7 +218,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Cause name"
+              label="Fundraiser name"
               placeholder="Medical internship"
               error={!!errors.causeName?.type}
               {...register('causeName', {
@@ -311,7 +311,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <TextArea
               label="Description"
-              placeholder="Tell us more about this cause"
+              placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
