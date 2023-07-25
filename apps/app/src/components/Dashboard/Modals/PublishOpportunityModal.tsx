@@ -24,7 +24,8 @@ import Error from './Error'
 
 export interface IPublishOpportunityFormProps {
   opportunityName: string
-  dates: string
+  dateStart: string
+  dateEnd: string
   numHours: string
   category: string
   website: string
@@ -33,7 +34,8 @@ export interface IPublishOpportunityFormProps {
 
 export const emptyPublishFormData: IPublishOpportunityFormProps = {
   opportunityName: '',
-  dates: '',
+  dateStart: '',
+  dateEnd: '',
   numHours: '',
   category: '',
   website: '',
@@ -61,9 +63,14 @@ export const createPublishAttributes = (
       value: data.opportunityName
     },
     {
-      traitType: 'dates',
+      traitType: 'dateStart',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.dates
+      value: data.dateStart
+    },
+    {
+      traitType: 'dateEnd',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.dateEnd
     },
     {
       traitType: 'hours',
@@ -201,11 +208,20 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               })}
             />
             <Input
-              label="Date(s)"
-              type="date"
+              label="Start Date"
+              type="dateStart"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dates?.type}
-              {...register('dates', {
+              error={!!errors.dateStart?.type}
+              {...register('dateStart', {
+                required: true
+              })}
+            />
+            <Input
+              label="End Date"
+              type="dateEnd"
+              placeholder="yyyy-mm-dd"
+              error={!!errors.dateEnd?.type}
+              {...register('dateEnd', {
                 required: true
               })}
             />

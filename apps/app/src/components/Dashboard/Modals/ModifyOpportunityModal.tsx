@@ -142,11 +142,20 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               })}
             />
             <Input
-              label="Date(s)"
-              type="date"
+              label="Start Date"
+              type="dateStart"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dates?.type}
-              {...register('dates', {
+              error={!!errors.dateStart?.type}
+              {...register('dateStart', {
+                required: true
+              })}
+            />
+            <Input
+              label="End Date"
+              type="dateEnd"
+              placeholder="yyyy-mm-dd"
+              error={!!errors.dateEnd?.type}
+              {...register('dateEnd', {
                 required: true
               })}
             />
