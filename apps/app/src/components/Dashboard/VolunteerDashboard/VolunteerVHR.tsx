@@ -134,31 +134,32 @@ const VolunteerVHRTab: React.FC = () => {
               Clear Filters
             </button>
           </div>
-          <div className="flex flex-wrap justify-around">
-            {!loading ? (
-              posts
-                .filter((op) => testSearch(op.name, searchValue))
-                .filter(
-                  (op) =>
-                    selectedCategory === '' || op.category === selectedCategory
-                )
-                .map((op) => (
-                  <BrowseCard
-                    key={op.opportunity_id}
-                    imageSrc={getAvatar(op.from)}
-                    name={op.name}
-                    buttonText="APPLY"
-                    buttonHref="."
-                  />
-                ))
-            ) : (
-              <Spinner />
-            )}
-          </div>
+
           {postDataError && (
             <Error
               message={`An error occured: ${postDataError}. Please try again`}
             />
+          )}
+        </div>
+        <div className="flex flex-wrap justify-around">
+          {!loading ? (
+            posts
+              .filter((op) => testSearch(op.name, searchValue))
+              .filter(
+                (op) =>
+                  selectedCategory === '' || op.category === selectedCategory
+              )
+              .map((op) => (
+                <BrowseCard
+                  key={op.opportunity_id}
+                  imageSrc={getAvatar(op.from)}
+                  name={op.name}
+                  buttonText="APPLY"
+                  buttonHref="."
+                />
+              ))
+          ) : (
+            <Spinner />
           )}
         </div>
       </GridItemTwelve>

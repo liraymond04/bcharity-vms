@@ -164,28 +164,29 @@ const VolunteerCauses: React.FC = () => {
               Clear Filters
             </button>
           </div>
-          <div className="flex flex-wrap justify-around">
-            {!loading ? (
-              posts
-                .filter((op) => testSearch(op.name, searchValue))
-                .filter(
-                  (op) =>
-                    selectedCategory === '' || op.category === selectedCategory
-                )
-                .map((op, id) => (
-                  <BrowseCard
-                    key={op.cause_id}
-                    imageSrc={getAvatar(op.from)}
-                    name={op.name}
-                    buttonText="APPLY"
-                    buttonHref="."
-                  />
-                ))
-            ) : (
-              <Spinner />
-            )}
-          </div>
+
           {postDataError && <h1>error</h1>}
+        </div>
+        <div className="flex flex-wrap justify-around">
+          {!loading ? (
+            posts
+              .filter((op) => testSearch(op.name, searchValue))
+              .filter(
+                (op) =>
+                  selectedCategory === '' || op.category === selectedCategory
+              )
+              .map((op, id) => (
+                <BrowseCard
+                  key={op.cause_id}
+                  imageSrc={getAvatar(op.from)}
+                  name={op.name}
+                  buttonText="APPLY"
+                  buttonHref="."
+                />
+              ))
+          ) : (
+            <Spinner />
+          )}
         </div>
       </GridItemTwelve>
     </GridLayout>
