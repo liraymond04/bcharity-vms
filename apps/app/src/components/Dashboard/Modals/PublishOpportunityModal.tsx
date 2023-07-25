@@ -155,6 +155,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     }
 
     const imageUrl = image ? await uploadToIPFS(image) : null
+    data.imageUrl = imageUrl ? imageUrl : ''
 
     const attributes = createPublishAttributes(v4(), data)
 
@@ -167,7 +168,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       mainContentFocus: PublicationMainFocus.TextOnly,
       name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
       attributes,
-      image: imageUrl,
       appId: APP_NAME
     }
 
