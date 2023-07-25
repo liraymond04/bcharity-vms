@@ -4,6 +4,7 @@ import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+import { useInView } from 'react-cool-inview'
 
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
@@ -22,7 +23,7 @@ const Volunteers: NextPage = () => {
 
   const [searchValue, setSearchValue] = useState('')
 
-  const { data, error, loading } = useExplorePublications({
+  const { data, error, loading, pageInfo, fetchMore } = useExplorePublications({
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: {
@@ -43,6 +44,15 @@ const Volunteers: NextPage = () => {
     setPosts(metadata)
     setCategories(_categories)
   }, [data])
+
+  const { observe } = useInView({
+    onChange: async ({ unobserve, inView }) => {
+      if (pageInfo?.next && inView) {
+        unobserve()
+        fetchMore(pageInfo?.next)
+      }
+    }
+  })
 
   return (
     <>
@@ -97,11 +107,18 @@ const Volunteers: NextPage = () => {
               (post) =>
                 selectedCategory === '' || post.category === selectedCategory
             )
-            .map((post) => (
+            .map((post, idx, arr) => (
               <GridItemFour key={post?.opportunity_id}>
-                <VolunteerCard post={post} />
+                <span ref={idx === arr.length - 1 ? observe : null}>
+                  <VolunteerCard post={post} />
+                </span>
               </GridItemFour>
             ))}
+          {pageInfo?.next && (
+            <span className="flex justify-center p-5">
+              <Spinner size="md" />
+            </span>
+          )}
         </GridLayout>
       )}
       {error && (
