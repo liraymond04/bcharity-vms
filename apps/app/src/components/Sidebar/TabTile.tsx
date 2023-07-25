@@ -33,6 +33,7 @@ const TabTitle: React.FC<ITabTitleProps> = ({
         onClick={() => onClick()}
       >
         <div className={`${open ? 'pr-2 w-6' : 'w-6'}`}>{icon}</div>
+
         {open && <p className={`text-[20px] font-sans`}>{label}</p>}
         {open && selected && (
           <span className="absolute h-12 bg-violet-600 -right-1 w-1 z-10" />

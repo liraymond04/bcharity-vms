@@ -1,4 +1,9 @@
-import { GlobeIcon, LockClosedIcon } from '@heroicons/react/outline'
+import {
+  ArrowLeftIcon,
+  GlobeIcon,
+  LockClosedIcon,
+  TrashIcon
+} from '@heroicons/react/outline'
 import { CogIcon, UserIcon } from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
@@ -42,8 +47,13 @@ const UserDashboard: React.FC = () => {
     },
     {
       label: 'Delete Account',
-      icon: <LockClosedIcon className="w-4 inline" />,
+      icon: <TrashIcon className="w-4 inline" />,
       component: <UserDelete />
+    },
+    {
+      label: 'Back',
+      icon: <ArrowLeftIcon className="w-4 inline" />,
+      component: <div></div>
     }
   ]
 
