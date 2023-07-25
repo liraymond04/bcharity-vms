@@ -27,32 +27,32 @@ const UserDashboard: React.FC = () => {
   const tabs: IDashboardTab[] = [
     {
       label: 'Profile',
-      icon: <UserIcon className="w-4 h-4" />,
+      icon: <UserIcon className="inline" />,
       component: <UserHome />
     },
     {
       label: 'Settings',
-      icon: <CogIcon className="w-4 h-4" />,
+      icon: <CogIcon className="inline" />,
       component: <UserSettings />
     },
     {
       label: 'Dispatcher',
-      icon: <GlobeIcon className="w-4 inline" />,
+      icon: <GlobeIcon className="inline" />,
       component: <UserDispatcher />
     },
     {
       label: 'Permissions',
-      icon: <LockClosedIcon className="w-4 inline" />,
+      icon: <LockClosedIcon className="inline" />,
       component: <Permissons />
     },
     {
       label: 'Delete Account',
-      icon: <TrashIcon className="w-4 inline" />,
+      icon: <TrashIcon className="inline" />,
       component: <UserDelete />
     },
     {
       label: 'Back',
-      icon: <ArrowLeftIcon className="w-4 inline" />,
+      icon: <ArrowLeftIcon className="inline" />,
       component: <div></div>
     }
   ]
