@@ -1,4 +1,4 @@
-import { PublicationFragment } from '@lens-protocol/client'
+import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
 import {
   PublicationsQueryRequest,
   PublicationTypes
@@ -11,15 +11,29 @@ import Slug from '@/components/Shared/Slug'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
+import getProfile from '@/lib/lens-protocol/getProfile'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const OrganizationHome: React.FC = () => {
   const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
-  const { currentUser: profile } = useAppPersistStore()
+
   const [auth, setAuth] = useState<boolean>(false)
   const [postdata, setpostdata] = useState<PublicationFragment[]>([])
+  const [profile, setProfile] = useState<ProfileFragment>()
+  useEffect(() => {
+    if (currentUser?.id) {
+      getProfile({
+        id: currentUser.id
+      }).then((data) => {
+        if (data) {
+          setProfile(data)
+          console.log('data', data)
+        }
+      })
+    }
+  }, [])
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       setAuth(true)
@@ -73,7 +87,7 @@ const OrganizationHome: React.FC = () => {
                 <div className="align-middle w-3/12 ">
                   <div>
                     <img
-                      className=" w-50 h-50 ml-12 mt-10 rounded-full"
+                      className=" w-50 h-50 ml-2 mt-10 rounded-full"
                       src={getAvatar(currentUser)}
                       alt="Rounded avatar"
                     />
@@ -134,7 +148,8 @@ const OrganizationHome: React.FC = () => {
                       <p className=" text-3xl text-white-600 flex items-left mt-10 ">
                         {currentUser?.handle}
                       </p>
-                      <div>
+                      <div className="flex flex-row">
+                        <div></div>
                         <Link href="">
                           <div className="truncate">
                             <img
@@ -142,10 +157,12 @@ const OrganizationHome: React.FC = () => {
                               className="w-8 h-8"
                               alt="bcharity-logo"
                             ></img>
-
-                            <Slug slug={getSlug()} />
                           </div>
                         </Link>
+                        <Slug
+                          className=" font-semibold text-lg mt-2"
+                          slug={profile?.attributes?.[0].value ?? ' '}
+                        />
                       </div>
                     </div>
 
