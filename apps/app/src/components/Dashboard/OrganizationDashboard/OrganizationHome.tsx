@@ -67,8 +67,8 @@ const OrganizationHome: React.FC = () => {
 
   const getSlug = () => {
     const item =
-      currentUser?.attributes &&
-      currentUser.attributes.filter((item) => item.key === 'location').at(0)
+      profile?.attributes &&
+      profile.attributes.filter((item) => item.key === 'location').at(0)
     if (item) {
       return item.value
     }
@@ -148,22 +148,24 @@ const OrganizationHome: React.FC = () => {
                       <p className=" text-3xl text-white-600 flex items-left mt-10 ">
                         {currentUser?.handle}
                       </p>
-                      <div className="flex flex-row">
-                        <div></div>
-                        <Link href="">
-                          <div className="truncate">
-                            <img
-                              src="/location-marker.png "
-                              className="w-8 h-8"
-                              alt="bcharity-logo"
-                            ></img>
-                          </div>
-                        </Link>
-                        <Slug
-                          className=" font-semibold text-lg mt-2"
-                          slug={profile?.attributes?.[0].value ?? ' '}
-                        />
-                      </div>
+                      {getSlug() !== '' && (
+                        <div className="flex flex-row">
+                          <div></div>
+                          <Link href="">
+                            <div className="truncate">
+                              <img
+                                src="/location-marker.png "
+                                className="w-8 h-8"
+                                alt="location-marker"
+                              ></img>
+                            </div>
+                          </Link>
+                          <Slug
+                            className=" font-semibold text-lg mt-2"
+                            slug={getSlug()}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div className="h-[60vh]">
