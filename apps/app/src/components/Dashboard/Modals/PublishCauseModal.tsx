@@ -171,9 +171,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       appId: APP_NAME
     }
 
+    setIsPending(true)
     try {
-      setIsPending(true)
-
       await checkAuth(publisher.ownedBy)
 
       await createPost(
@@ -194,6 +193,9 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
           followerOnlyReferenceModule: false
         }
       )
+
+      reset()
+      onClose(true)
     } catch (e: any) {
       setErrorMessage(e.message)
       setError(true)

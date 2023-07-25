@@ -144,37 +144,28 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       appId: APP_NAME
     }
 
-    checkAuth(publisher.ownedBy)
-      .then(() =>
-        createPost(
-          publisher,
-          metadata,
-          {
-            freeCollectModule: {
-              followerOnly: false
-            }
-          },
-          { followerOnlyReferenceModule: false }
-        )
+    setIsPending(true)
+    try {
+      await checkAuth(publisher.ownedBy)
+
+      createPost(
+        publisher,
+        metadata,
+        {
+          freeCollectModule: {
+            followerOnly: false
+          }
+        },
+        { followerOnlyReferenceModule: false }
       )
-      .then((res) => {
-        if (res.isFailure()) {
-          setError(true)
-          setErrorMessage(res.error.message)
-          throw res.error.message
-        }
-      })
-      .then(() => {
-        reset()
-        onClose(true)
-      })
-      .catch((e) => {
-        setErrorMessage(e.message)
-        setError(true)
-      })
-      .finally(() => {
-        setIsPending(false)
-      })
+
+      reset()
+      onClose(true)
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setError(true)
+    }
+    setIsPending(false)
   }
 
   return (
