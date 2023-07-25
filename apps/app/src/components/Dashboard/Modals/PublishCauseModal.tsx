@@ -21,7 +21,7 @@ import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
-import { CauseMetadataAttributeInput } from '@/lib/types'
+import { CauseMetadataAttributeInput, MetadataVersion } from '@/lib/types'
 import { PostTags } from '@/lib/types'
 
 import Error from './Error'
@@ -64,6 +64,11 @@ export const createPublishAttributes = (
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
       value: PostTags.OrgPublish.Cause
+    },
+    {
+      traitType: 'version',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: MetadataVersion.CauseMetadataVersion['1.0.0']
     },
     {
       traitType: 'cause_id',

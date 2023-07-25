@@ -1,6 +1,10 @@
 import { PostFragment, PublicationFragment } from '@lens-protocol/client'
 
-import { OpportunityMetadata } from '../types'
+import {
+  MetadataVersion,
+  OpportunityMetadata,
+  OpportunityMetadataVersion
+} from '../types'
 
 /**
  * @file getOpportunityMetadata.ts
@@ -16,21 +20,25 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
     .filter(
       (post) =>
         post.__typename === 'Post' &&
-        post.metadata.attributes.length > 8 &&
+        post.metadata.attributes.length > 1 &&
+        post.metadata.attributes[1]?.value ===
+          MetadataVersion.OpportunityMetadataVersion['1.0.0'] &&
         !post.hidden
     )
     .map((post) => {
+      console.log(post)
       const attributes = (post as PostFragment).metadata.attributes
       return {
-        opportunity_id: attributes[1].value ?? '',
-        name: attributes[2].value ?? '',
-        startDate: attributes[3].value ?? '',
-        endDate: attributes[3].value ?? '',
-        hoursPerWeek: attributes[4].value ?? '',
-        category: attributes[5].value ?? '',
-        website: attributes[6].value ?? '',
-        description: attributes[7].value ?? '',
-        imageUrl: attributes[8].value ?? '',
+        version: attributes[1].value! as OpportunityMetadataVersion,
+        opportunity_id: attributes[2].value ?? '',
+        name: attributes[3].value ?? '',
+        startDate: attributes[4].value ?? '',
+        endDate: attributes[4].value ?? '',
+        hoursPerWeek: attributes[5].value ?? '',
+        category: attributes[6].value ?? '',
+        website: attributes[7].value ?? '',
+        description: attributes[8].value ?? '',
+        imageUrl: attributes[9].value ?? '',
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime()
       }

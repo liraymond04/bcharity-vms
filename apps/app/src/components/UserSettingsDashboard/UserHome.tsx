@@ -13,7 +13,7 @@ import lensClient from '@/lib/lens-protocol/lensClient'
 import {
   AttributeData,
   MetadataDisplayType,
-  MetadataVersions,
+  MetadataVersion,
   ProfileMetadata
 } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
@@ -88,7 +88,7 @@ const VolunteerHomeTab: React.FC = () => {
           const avatarUrl = cover ? await uploadToIPFS(cover) : null
 
           const metadata: ProfileMetadata = {
-            version: MetadataVersions.one,
+            version: MetadataVersion.ProfileMetadataVersions['1.0.0'],
             metadata_id: v4(),
             name,
             bio,

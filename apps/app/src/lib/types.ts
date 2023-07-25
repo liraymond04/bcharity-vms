@@ -2,14 +2,37 @@
 import { ProfileFragment } from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
 
-interface OrgPublishMetadata {
+export enum OpportunityMetadataVersion {
+  '1.0.0' = '1.0.0'
+}
+
+export enum CauseMetadataVersion {
+  '1.0.0' = '1.0.0'
+}
+
+export enum ProfileMetadataVersions {
+  '1.0.0'
+}
+
+export const MetadataVersion = {
+  OpportunityMetadataVersion,
+  CauseMetadataVersion,
+  ProfileMetadataVersions
+}
+
+interface OrgPublishMetadata<T> {
   /**
    * ProfileFragment type data for the profile that created the post
    */
   from: ProfileFragment
+  /**
+   * The metadata schema version
+   */
+  version: T
 }
 
-export interface OpportunityMetadata extends OrgPublishMetadata {
+export interface OpportunityMetadata
+  extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
    * a uuid associated with a volunteer opporunity
    */
@@ -46,10 +69,6 @@ export interface OpportunityMetadata extends OrgPublishMetadata {
    * optional URL to image uploaded to IPFS. Empty string if no image
    */
   imageUrl: string
-  /**
-   * ProfileFragment type data for the profile that created the post
-   */
-  from: ProfileFragment
 }
 
 /**
@@ -60,7 +79,8 @@ export interface OpportunityMetadataAttributeInput
   traitType: keyof OpportunityMetadata | 'type'
 }
 
-export interface CauseMetadata extends OrgPublishMetadata {
+export interface CauseMetadata
+  extends OrgPublishMetadata<CauseMetadataVersion> {
   /**
    * a uuid associated with this cause
    */
@@ -98,7 +118,7 @@ export interface CauseMetadata extends OrgPublishMetadata {
    */
   imageUrl: string
   /**
-   * Location in the form <City>, <State>, Country
+   * Location in the form <City>, <State>, <Country>
    */
   location: string
 }
@@ -139,10 +159,6 @@ export enum MetadataDisplayType {
   date = 'date'
 }
 
-export enum MetadataVersions {
-  one = '1.0.0'
-}
-
 export interface AttributeData {
   displayType?: MetadataDisplayType
   traitType?: string
@@ -154,7 +170,7 @@ export interface ProfileMetadata {
   /**
    * The metadata version.
    */
-  version: MetadataVersions
+  version: ProfileMetadataVersions
 
   /**
    * The metadata id can be anything but if your uploading to ipfs

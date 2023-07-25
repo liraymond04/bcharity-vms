@@ -17,7 +17,11 @@ import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { OpportunityMetadataAttributeInput, PostTags } from '@/lib/types'
+import {
+  MetadataVersion,
+  OpportunityMetadataAttributeInput,
+  PostTags
+} from '@/lib/types'
 
 import Error from './Error'
 
@@ -52,6 +56,11 @@ export const createPublishAttributes = (
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
       value: PostTags.OrgPublish.Opportuntiy
+    },
+    {
+      traitType: 'version',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: MetadataVersion.OpportunityMetadataVersion['1.0.0']
     },
     {
       traitType: 'opportunity_id',

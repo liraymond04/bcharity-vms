@@ -11,13 +11,13 @@ import lensClient from './lensClient'
  * @brief React hook to query lens posts associated with a profile
  * @param params `PublicationQueryRequest` data (see https://docs.lens.xyz/docs/get-publications)
  *
- * @returns `loading`: whether or not the data is loading,
- *          `data`: the raw post data
- *          `error`: error message (if request fails),
+ * @returns `loading`: whether or not the data is loading, \
+ *          `data`: the raw post data \
+ *          `error`: error message (if request fails), \
  *          `refetch`: function that triggers the data to refetch
  *
  * @example
- * // Get post data for a profile for posts only with the tag PostTags.OrgPublish.Cause
+ * // Get posts made by a profile, filtered by posts that have the tag PostTags.OrgPublish.Cause
  * const { data, error, loading, refetch } = usePostData({
  * profileId: profile?.id,
  *   metadata: {
