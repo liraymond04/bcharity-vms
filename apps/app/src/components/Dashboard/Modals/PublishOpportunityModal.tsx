@@ -1,5 +1,4 @@
 import {
-  MetadataAttributeInput,
   PublicationMainFocus,
   PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
@@ -19,37 +18,50 @@ import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { PostTags } from '@/lib/types'
+import {
+  MetadataVersion,
+  OpportunityMetadataAttributeInput,
+  PostTags
+} from '@/lib/types'
 
 import Error from './Error'
 
 export interface IPublishOpportunityFormProps {
-  opportunityName: string
-  dates: string
-  numHours: string
+  name: string
+  startDate: string
+  endDate: string
+  hoursPerWeek: string
   category: string
   website: string
   description: string
+  imageUrl: string
 }
 
 export const emptyPublishFormData: IPublishOpportunityFormProps = {
-  opportunityName: '',
-  dates: '',
-  numHours: '',
+  name: '',
+  startDate: '',
+  endDate: '',
+  hoursPerWeek: '',
   category: '',
   website: '',
-  description: ''
+  description: '',
+  imageUrl: ''
 }
 
 export const createPublishAttributes = (
   id: string,
   data: IPublishOpportunityFormProps
 ) => {
-  const attributes: MetadataAttributeInput[] = [
+  const attributes: OpportunityMetadataAttributeInput[] = [
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
       value: PostTags.OrgPublish.Opportuntiy
+    },
+    {
+      traitType: 'version',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: MetadataVersion.OpportunityMetadataVersion['1.0.0']
     },
     {
       traitType: 'opportunity_id',
@@ -57,19 +69,24 @@ export const createPublishAttributes = (
       value: id
     },
     {
-      traitType: 'opportunity_name',
+      traitType: 'name',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.opportunityName
+      value: data.name
     },
     {
-      traitType: 'dates',
+      traitType: 'startDate',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.dates
+      value: data.startDate
     },
     {
-      traitType: 'hours',
+      traitType: 'endDate',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.numHours
+      value: data.endDate
+    },
+    {
+      traitType: 'hoursPerWeek',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.hoursPerWeek
     },
     {
       traitType: 'category',
@@ -85,6 +102,11 @@ export const createPublishAttributes = (
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
       value: data.description
+    },
+    {
+      traitType: 'imageUrl',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.imageUrl
     }
   ]
 
@@ -152,7 +174,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     try {
       await checkAuth(publisher.ownedBy)
 
-      createPost(
+      await createPost(
         publisher,
         metadata,
         {
@@ -189,8 +211,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             <Input
               label="Volunteer opportunity name"
               placeholder="Medical internship"
-              error={!!errors.opportunityName?.type}
-              {...register('opportunityName', {
+              error={!!errors.name?.type}
+              {...register('name', {
                 required: true,
                 maxLength: 100
               })}
@@ -199,8 +221,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Date(s)"
               type="date"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dates?.type}
-              {...register('dates', {
+              error={!!errors.startDate?.type}
+              {...register('startDate', {
                 required: true
               })}
             />
@@ -210,8 +232,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="5.5"
               step="0.1"
               min="0.1"
-              error={!!errors.numHours?.type}
-              {...register('numHours', {
+              error={!!errors.hoursPerWeek?.type}
+              {...register('hoursPerWeek', {
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,

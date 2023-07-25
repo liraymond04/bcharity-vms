@@ -33,7 +33,7 @@ const OrganizationHome: React.FC = () => {
         }
       })
     }
-  }, [])
+  }, [currentUser])
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       setAuth(true)

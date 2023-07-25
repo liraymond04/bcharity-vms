@@ -1,6 +1,5 @@
 import {
   Erc20Fragment,
-  MetadataAttributeInput,
   PublicationMainFocus,
   PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
@@ -22,6 +21,7 @@ import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
+import { CauseMetadataAttributeInput, MetadataVersion } from '@/lib/types'
 import { PostTags } from '@/lib/types'
 
 import Error from './Error'
@@ -29,23 +29,27 @@ import Error from './Error'
 export interface IPublishCauseFormProps {
   selectedCurrency: string | number | readonly string[] | undefined
   OrgPublish: any
-  causeName: string
+  name: string
   category: string
   currency: string
   contribution: string
   goal: string
   recipient: string
   description: string
+  location: string
+  imageUrl: string
 }
 
 export const emptyPublishFormData: IPublishCauseFormProps = {
-  causeName: '',
+  name: '',
   category: '',
   currency: '',
   contribution: '',
   goal: '',
   recipient: '',
   description: '',
+  location: '',
+  imageUrl: '',
   OrgPublish: undefined,
   selectedCurrency: undefined
 }
@@ -55,11 +59,16 @@ export const createPublishAttributes = (
   selectedCurrency: string,
   data: IPublishCauseFormProps
 ) => {
-  const attributes: MetadataAttributeInput[] = [
+  const attributes: CauseMetadataAttributeInput[] = [
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
       value: PostTags.OrgPublish.Cause
+    },
+    {
+      traitType: 'version',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: MetadataVersion.CauseMetadataVersion['1.0.0']
     },
     {
       traitType: 'cause_id',
@@ -67,9 +76,9 @@ export const createPublishAttributes = (
       value: id
     },
     {
-      traitType: 'cause_name',
+      traitType: 'name',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.causeName
+      value: data.name
     },
     {
       traitType: 'category',
@@ -100,6 +109,16 @@ export const createPublishAttributes = (
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
       value: data.description
+    },
+    {
+      traitType: 'location',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.location
+    },
+    {
+      traitType: 'imageUrl',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.imageUrl
     }
   ]
 
@@ -205,7 +224,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Cause'}
+      title={'Publish New Fundraiser'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -218,10 +237,10 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Cause name"
+              label="Fundraiser name"
               placeholder="Medical internship"
-              error={!!errors.causeName?.type}
-              {...register('causeName', {
+              error={!!errors.name?.type}
+              {...register('name', {
                 required: true,
                 maxLength: 255
               })}
@@ -311,7 +330,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <TextArea
               label="Description"
-              placeholder="Tell us more about this cause"
+              placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
