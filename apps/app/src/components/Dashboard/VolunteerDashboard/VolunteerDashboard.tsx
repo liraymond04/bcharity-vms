@@ -33,7 +33,7 @@ const VolunteerDashboard: React.FC = () => {
       component: <VolunteerVHRTab />
     },
     {
-      label: 'Causes',
+      label: 'Fundraisers',
       icon: <GlobeIcon className="inline" />,
       component: <VolunteerCausesTab />
     },

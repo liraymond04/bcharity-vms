@@ -113,15 +113,19 @@ const Navbar: FC = () => {
                 </li>
                 {showMenu && (
                   <Link
-                    href="/causes"
-                    aria-current={pathname == '/causes' ? 'page' : undefined}
+                    href="/fundraisers"
+                    aria-current={
+                      pathname == '/fundraisers' ? 'page' : undefined
+                    }
                   >
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] ${
-                        pathname == '/causes' ? 'text-purple-600' : 'text-black'
+                        pathname == '/fundraisers'
+                          ? 'text-purple-600'
+                          : 'text-black'
                       } ${inter500.className}`}
                     >
-                      CAUSES
+                      FUNDRAISERS
                     </div>
                   </Link>
                 )}
@@ -187,18 +191,18 @@ const Navbar: FC = () => {
         {!(screenSize == 'phone') && (
           <div className="flex w-[60] justify-around items-center">
             <Link
-              href="/causes"
-              aria-current={pathname == '/causes' ? 'page' : undefined}
+              href="/fundraisers"
+              aria-current={pathname == '/fundraisers' ? 'page' : undefined}
             >
               <button>
                 <div
                   className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
-                    pathname == '/causes'
+                    pathname == '/fundraisers'
                       ? 'text-purple-500 bg-white'
                       : 'text-black'
                   } ${inter500.className}`}
                 >
-                  CAUSES
+                  FUNDRAISERS
                 </div>
               </button>
             </Link>

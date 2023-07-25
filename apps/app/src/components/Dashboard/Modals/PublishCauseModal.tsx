@@ -190,9 +190,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       appId: APP_NAME
     }
 
+    setIsPending(true)
     try {
-      setIsPending(true)
-
       await checkAuth(publisher.ownedBy)
 
       await createPost(
@@ -213,6 +212,9 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
           followerOnlyReferenceModule: false
         }
       )
+
+      reset()
+      onClose(true)
     } catch (e: any) {
       setErrorMessage(e.message)
       setError(true)
@@ -222,7 +224,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Cause'}
+      title={'Publish New Fundraiser'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -235,7 +237,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Cause name"
+              label="Fundraiser name"
               placeholder="Medical internship"
               error={!!errors.name?.type}
               {...register('name', {
@@ -328,7 +330,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <TextArea
               label="Description"
-              placeholder="Tell us more about this cause"
+              placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
