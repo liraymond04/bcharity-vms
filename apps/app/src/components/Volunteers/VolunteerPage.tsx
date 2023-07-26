@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
@@ -65,21 +66,6 @@ const VolunteerPage: NextPage = () => {
     )
   }
 
-  const getPosition = (string: string, subString: string, index: number) => {
-    return string.split(subString, index).join(subString).length
-  }
-
-  const getImageUrl = (url: string) => {
-    const _url = url.replace('ipfs', 'https')
-    const insert = getPosition(_url, '/', 3)
-    const output = [
-      _url.slice(0, insert),
-      '.gateway.ipfscdn.io',
-      _url.slice(insert)
-    ].join('')
-    return output
-  }
-
   const WrongPost = () => {
     return (
       <div className="py-10 text-center">
@@ -107,6 +93,22 @@ const VolunteerPage: NextPage = () => {
   const [bookmarked, setBookmarked] = useState<boolean>(false)
 
   const Body = ({ post }: { post: PublicationFragment | undefined }) => {
+    const [resolvedImageUrl, setResolvedImageUrl] = useState('')
+
+    useEffect(() => {
+      if (
+        post?.__typename === 'Post' &&
+        attributeExists(post.metadata.attributes, 'imageUrl') &&
+        getAttribute(post.metadata.attributes, 'imageUrl')?.toString() !== '' &&
+        getAttribute(post.metadata.attributes, 'imageUrl')?.toString() !==
+          undefined
+      ) {
+        getIPFSBlob(
+          getAttribute(post.metadata.attributes, 'imageUrl')?.toString() ?? ''
+        ).then((url) => setResolvedImageUrl(url))
+      }
+    }, [post])
+
     return (
       post?.__typename === 'Post' &&
       (post.metadata.attributes?.length &&
@@ -176,19 +178,16 @@ const VolunteerPage: NextPage = () => {
           <div className="pt-6 pb-4">
             {getAttribute(post.metadata.attributes, 'description')}
           </div>
-          <div>
-            <img
-              key="attachment"
-              className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
-              src={getImageUrl(
-                getAttribute(
-                  post.metadata.attributes,
-                  'imageUrl'
-                )?.toString() ?? ''
-              )}
-              alt={'image attachment'}
-            />
-          </div>
+          {resolvedImageUrl && (
+            <div>
+              <img
+                key="attachment"
+                className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                src={resolvedImageUrl}
+                alt={'image attachment'}
+              />
+            </div>
+          )}
           <div className="flex justify-end space-x-3">
             {getAttribute(post.metadata.attributes, 'website') !== '' && (
               <Link
