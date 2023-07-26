@@ -194,7 +194,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     }
     setIsPending(false)
   }
-  console.log('publish', errors.startDate?.type)
+
   return (
     <GradientModal
       title={'Publish New Volunteer Opportunity'}
@@ -233,6 +233,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="yyyy-mm-dd"
               hasTick
               change={() => {
+                form.setValue('endDate', '')
                 setEndDateDisabled(!endDateDisabled)
               }}
               disabled={!endDateDisabled}
