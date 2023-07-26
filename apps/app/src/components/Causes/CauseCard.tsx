@@ -27,7 +27,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
         <img
           src={getAvatar(cause.from)}
           alt="Organization avatar"
-          className="h-full w-auto"
+          className="object-cover h-full w-auto m-auto"
         />
       )
     } else if (!resolvedImageUrl) {
@@ -41,7 +41,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
         <img
           src={resolvedImageUrl}
           alt="Volunteer opportunity related image"
-          className="object-cover h-full w-full"
+          className="object-cover h-full w-full m-auto"
         />
       )
     }
