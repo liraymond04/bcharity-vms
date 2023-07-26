@@ -1,4 +1,9 @@
-import { HomeIcon } from '@heroicons/react/outline'
+import {
+  BookmarkIcon,
+  ExternalLinkIcon,
+  HomeIcon
+} from '@heroicons/react/outline'
+import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/solid'
 import {
   MetadataAttributeOutputFragment,
   PublicationFragment
@@ -6,14 +11,16 @@ import {
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import usePublication from '@/lib/lens-protocol/usePublication'
 import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
+import { useAppPersistStore } from '@/store/app'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
+import Slug from '../Shared/Slug'
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
@@ -32,6 +39,18 @@ const VolunteerPage: NextPage = () => {
       fetch({ publicationId: Array.isArray(id) ? '' : id })
     }
   }, [id, isReady])
+
+  const attributeExists = (
+    attributes: MetadataAttributeOutputFragment[],
+    attribute: string
+  ) => {
+    return (
+      attributes?.length &&
+      attributes.filter((item) => {
+        return item.traitType === attribute
+      }).length !== 0
+    )
+  }
 
   const getAttribute = (
     attributes: MetadataAttributeOutputFragment[],
@@ -71,16 +90,90 @@ const VolunteerPage: NextPage = () => {
     )
   }
 
+  const [bookmarked, setBookmarked] = useState<boolean>(false)
+  const { currentUser } = useAppPersistStore()
+
   const Body = ({ post }: { post: PublicationFragment | undefined }) => {
+    console.log(currentUser)
     return (
       post?.__typename === 'Post' &&
       (post.metadata.attributes?.length &&
       post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportuntiy ? (
         <WrongPost />
       ) : (
-        <div className="p-3">
-          {getAttribute(post.metadata.attributes, 'opportunity_name')} is a
-          volunteer opportunity
+        <div className="p-6">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <button
+                className="transition duration-100 hover:scale-125"
+                onClick={() => {
+                  setBookmarked(!bookmarked)
+                }}
+              >
+                {bookmarked ? (
+                  <BookmarkSolid className="w-6 inline mb-1" />
+                ) : (
+                  <BookmarkIcon className="w-6 inline mb-1" />
+                )}
+              </button>
+              <div className="text-2xl font-bold text-brand-600">
+                {attributeExists(post.metadata.attributes, 'opportunity_name')
+                  ? getAttribute(post.metadata.attributes, 'opportunity_name')
+                  : getAttribute(post.metadata.attributes, 'name')}
+              </div>
+              <div className="text-xl text-gray-400 font-bold pl-5">
+                {getAttribute(post.metadata.attributes, 'category')}
+              </div>
+            </div>
+            <div className="font-semibold">
+              Valid from:
+              {attributeExists(post.metadata.attributes, 'dates') ? (
+                <div>
+                  {`${getAttribute(post.metadata.attributes, 'dates')
+                    ?.toString()
+                    .replaceAll('-', '/')} - Ongoing`}
+                </div>
+              ) : (
+                <div>
+                  {`${getAttribute(post.metadata.attributes, 'startDate')
+                    ?.toString()
+                    .replaceAll('-', '/')} - ${getAttribute(
+                    post.metadata.attributes,
+                    'endDate'
+                  )
+                    ?.toString()
+                    .replaceAll('-', '/')}`}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex space-x-3 items-center">
+            <Slug prefix="@" slug={post.profile.handle} />
+            <Button size="sm">Follow</Button>
+          </div>
+          <div className="pt-6 pb-4">
+            {getAttribute(post.metadata.attributes, 'description')}
+          </div>
+          <div className="flex justify-end space-x-3">
+            {getAttribute(post.metadata.attributes, 'website') !== '' && (
+              <Link
+                href={
+                  getAttribute(
+                    post.metadata.attributes,
+                    'website'
+                  )?.toString() ?? ''
+                }
+                target="_blank"
+                className="flex"
+              >
+                <div className="flex items-center text-brand-600">
+                  <div className="mr-1 whitespace-nowrap">External url</div>
+                  <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
+                </div>
+              </Link>
+            )}
+            <Button>Apply now</Button>
+          </div>
         </div>
       ))
     )
@@ -91,7 +184,9 @@ const VolunteerPage: NextPage = () => {
       <GridItemTwelve>
         <Card>
           {loading ? (
-            <Spinner />
+            <center className="p-20">
+              <Spinner />
+            </center>
           ) : error || data === undefined ? (
             <Custom404 />
           ) : (
