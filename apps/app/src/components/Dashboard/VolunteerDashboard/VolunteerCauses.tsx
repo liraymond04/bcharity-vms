@@ -175,10 +175,11 @@ const VolunteerCauses: React.FC = () => {
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
               )
-              .map((op, id) => (
+              .map((op) => (
                 <BrowseCard
                   key={op.cause_id}
-                  imageSrc={getAvatar(op.from)}
+                  imageSrc={op.imageUrl}
+                  avatarSrc={getAvatar(op.from)}
                   name={op.name}
                   buttonText="APPLY"
                   buttonHref="."
