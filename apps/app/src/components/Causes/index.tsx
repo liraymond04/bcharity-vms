@@ -83,7 +83,7 @@ const Causes: NextPage = () => {
 
   return (
     <>
-      <SEO title="Causes • BCharity VMS" />
+      <SEO title="Fundraisers • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-regular text-2xl">
         <div className="flex justify-between py-5">
           <Search searchText={searchValue} setSearchText={setSearchValue} />
@@ -94,7 +94,7 @@ const Causes: NextPage = () => {
           />
         </div>
         <Divider />
-        <p className="font-bold px-6"> Browse Causes </p>
+        <p className="font-bold px-6"> Browse Fundraisers </p>
         {loading ? (
           <div className="flex justify-center">
             <Spinner />

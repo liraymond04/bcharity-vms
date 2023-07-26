@@ -134,7 +134,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Modify Cause'}
+      title={'Modify Fundraiser'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -147,10 +147,10 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Cause name"
+              label="Fundraiser name"
               placeholder="Medical internship"
-              error={!!errors.causeName?.type}
-              {...register('causeName', {
+              error={!!errors.name?.type}
+              {...register('name', {
                 required: true,
                 maxLength: 255
               })}
@@ -240,7 +240,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <TextArea
               label="Description"
-              placeholder="Tell us more about this cause"
+              placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />

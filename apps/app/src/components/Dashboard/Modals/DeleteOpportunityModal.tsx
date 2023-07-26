@@ -41,10 +41,10 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
     const ids = postData
       .filter(
         (post) =>
-          post.__typename === 'Post' && !!post.metadata.attributes[1].value
+          post.__typename === 'Post' && !!post.metadata.attributes[2].value
       )
       .filter(
-        (post) => (post as PostFragment).metadata.attributes[1].value === id
+        (post) => (post as PostFragment).metadata.attributes[2].value === id
       )
       .map((post) => post.id)
 
@@ -104,18 +104,18 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
           <>
             <Input
               label="Volunteer opportunity name"
-              defaultValue={values.opportunityName}
+              defaultValue={values.name}
               disabled
             />
             <Input
               label="Date(s)"
               type="date"
-              defaultValue={values.dates}
+              defaultValue={values.startDate}
               disabled
             />
             <Input
               label="Expected number of hours"
-              defaultValue={values.numHours}
+              defaultValue={values.hoursPerWeek}
               disabled
             />
             <Input label="Category" defaultValue={values.category} disabled />

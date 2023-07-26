@@ -1,7 +1,7 @@
 import {
+  CogIcon,
   GlobeIcon,
   HomeIcon,
-  LockClosedIcon,
   StarIcon
 } from '@heroicons/react/outline'
 import React from 'react'
@@ -24,22 +24,22 @@ const VolunteerDashboard: React.FC = () => {
   const tabs: IDashboardTab[] = [
     {
       label: 'Home',
-      icon: <HomeIcon className="w-4 inline" />,
+      icon: <HomeIcon className="inline" />,
       component: <VolunteerHomeTab />
     },
     {
       label: 'VHR',
-      icon: <StarIcon className="w-4 inline" />,
+      icon: <StarIcon className="inline" />,
       component: <VolunteerVHRTab />
     },
     {
-      label: 'Causes',
-      icon: <GlobeIcon className="w-4 inline" />,
+      label: 'Fundraisers',
+      icon: <GlobeIcon className="inline" />,
       component: <VolunteerCausesTab />
     },
     {
       label: 'User Settings',
-      icon: <LockClosedIcon className="w-4 inline" />,
+      icon: <CogIcon className="inline" />,
       component: <div />,
       redirect: '/settings'
     }
@@ -55,7 +55,9 @@ const VolunteerDashboard: React.FC = () => {
       />
       <div className="grow">
         <GradientWrapper>
-          <div className="min-h-screen">{tabs[selectedTab].component}</div>
+          <div className="min-h-screen overflow-x-scroll">
+            {tabs[selectedTab].component}
+          </div>
         </GradientWrapper>
       </div>
     </div>

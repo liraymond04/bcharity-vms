@@ -124,14 +124,16 @@ const OrganizationCauses: React.FC = () => {
     return d
       ? {
           selectedCurrency: d.currency ?? '',
-          causeName: d.name ?? '',
+          name: d.name ?? '',
           goal: d.goal ?? '',
           contribution: d.contribution ?? '',
           OrgPublish: d.from ?? '',
           category: d.category ?? '',
           description: d.description ?? '',
           currency: d.currency ?? '',
-          recipient: d.recipient ?? ''
+          recipient: d.recipient ?? '',
+          location: d.location ?? '',
+          imageUrl: d.imageUrl ?? ''
         }
       : { ...emptyPublishFormData }
   }
@@ -204,7 +206,7 @@ const OrganizationCauses: React.FC = () => {
             >
               <PlusSmIcon className="w-8 text-white dark:text-black" />
               <div className="text-white mr-3 mt-1 font-bold">
-                Create new cause
+                Create new fundraiser
               </div>
             </button>
             <div

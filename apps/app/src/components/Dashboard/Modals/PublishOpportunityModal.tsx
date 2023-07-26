@@ -1,5 +1,4 @@
 import {
-  MetadataAttributeInput,
   PublicationMainFocus,
   PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
@@ -16,39 +15,53 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
+import uploadToIPFS from '@/lib/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { PostTags } from '@/lib/types'
+import {
+  MetadataVersion,
+  OpportunityMetadataAttributeInput,
+  PostTags
+} from '@/lib/types'
 
 import Error from './Error'
 
 export interface IPublishOpportunityFormProps {
-  opportunityName: string
-  dates: string
-  numHours: string
+  name: string
+  startDate: string
+  endDate: string
+  hoursPerWeek: string
   category: string
   website: string
   description: string
+  imageUrl: string
 }
 
 export const emptyPublishFormData: IPublishOpportunityFormProps = {
-  opportunityName: '',
-  dates: '',
-  numHours: '',
+  name: '',
+  startDate: '',
+  endDate: '',
+  hoursPerWeek: '',
   category: '',
   website: '',
-  description: ''
+  description: '',
+  imageUrl: ''
 }
 
 export const createPublishAttributes = (
   id: string,
   data: IPublishOpportunityFormProps
 ) => {
-  const attributes: MetadataAttributeInput[] = [
+  const attributes: OpportunityMetadataAttributeInput[] = [
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
       value: PostTags.OrgPublish.Opportuntiy
+    },
+    {
+      traitType: 'version',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: MetadataVersion.OpportunityMetadataVersion['1.0.0']
     },
     {
       traitType: 'opportunity_id',
@@ -56,19 +69,24 @@ export const createPublishAttributes = (
       value: id
     },
     {
-      traitType: 'opportunity_name',
+      traitType: 'name',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.opportunityName
+      value: data.name
     },
     {
-      traitType: 'dates',
+      traitType: 'startDate',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.dates
+      value: data.startDate
     },
     {
-      traitType: 'hours',
+      traitType: 'endDate',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.numHours
+      value: data.endDate
+    },
+    {
+      traitType: 'hoursPerWeek',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.hoursPerWeek
     },
     {
       traitType: 'category',
@@ -84,6 +102,11 @@ export const createPublishAttributes = (
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
       value: data.description
+    },
+    {
+      traitType: 'imageUrl',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.imageUrl
     }
   ]
 
@@ -104,6 +127,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
 
   const form = useForm<IPublishOpportunityFormProps>()
 
@@ -130,6 +154,9 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
+    const imageUrl = image ? await uploadToIPFS(image) : null
+    data.imageUrl = imageUrl ? imageUrl : ''
+
     const attributes = createPublishAttributes(v4(), data)
 
     const metadata: PublicationMetadataV2Input = {
@@ -144,37 +171,27 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       appId: APP_NAME
     }
 
-    checkAuth(publisher.ownedBy)
-      .then(() =>
-        createPost(
-          publisher,
-          metadata,
-          {
-            freeCollectModule: {
-              followerOnly: false
-            }
-          },
-          { followerOnlyReferenceModule: false }
-        )
+    try {
+      await checkAuth(publisher.ownedBy)
+
+      await createPost(
+        publisher,
+        metadata,
+        {
+          freeCollectModule: {
+            followerOnly: false
+          }
+        },
+        { followerOnlyReferenceModule: false }
       )
-      .then((res) => {
-        if (res.isFailure()) {
-          setError(true)
-          setErrorMessage(res.error.message)
-          throw res.error.message
-        }
-      })
-      .then(() => {
-        reset()
-        onClose(true)
-      })
-      .catch((e) => {
-        setErrorMessage(e.message)
-        setError(true)
-      })
-      .finally(() => {
-        setIsPending(false)
-      })
+
+      reset()
+      onClose(true)
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setError(true)
+    }
+    setIsPending(false)
   }
 
   return (
@@ -194,8 +211,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             <Input
               label="Volunteer opportunity name"
               placeholder="Medical internship"
-              error={!!errors.opportunityName?.type}
-              {...register('opportunityName', {
+              error={!!errors.name?.type}
+              {...register('name', {
                 required: true,
                 maxLength: 100
               })}
@@ -204,8 +221,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Date(s)"
               type="date"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dates?.type}
-              {...register('dates', {
+              error={!!errors.startDate?.type}
+              {...register('startDate', {
                 required: true
               })}
             />
@@ -215,8 +232,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="5.5"
               step="0.1"
               min="0.1"
-              error={!!errors.numHours?.type}
-              {...register('numHours', {
+              error={!!errors.hoursPerWeek?.type}
+              {...register('hoursPerWeek', {
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
@@ -242,6 +259,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="Tell us more about this volunteer opportunity"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
+            />
+            <Input
+              label="Image (optional): "
+              type="file"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
         ) : (

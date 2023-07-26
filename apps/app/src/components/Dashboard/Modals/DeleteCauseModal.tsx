@@ -41,10 +41,10 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
     const ids = postData
       .filter(
         (post) =>
-          post.__typename === 'Post' && !!post.metadata.attributes[1].value
+          post.__typename === 'Post' && !!post.metadata.attributes[2].value
       )
       .filter(
-        (post) => (post as PostFragment).metadata.attributes[1].value === id
+        (post) => (post as PostFragment).metadata.attributes[2].value === id
       )
       .map((post) => post.id)
 
@@ -102,7 +102,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
       <div className="mx-12">
         {!pending ? (
           <>
-            <Input label="Name" defaultValue={values.causeName} disabled />
+            <Input label="Name" defaultValue={values.name} disabled />
 
             <Input label="Categiry" defaultValue={values.category} disabled />
 

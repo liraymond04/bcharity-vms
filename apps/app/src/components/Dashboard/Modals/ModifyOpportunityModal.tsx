@@ -135,8 +135,8 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             <Input
               label="Volunteer opportunity name"
               placeholder="Medical internship"
-              error={!!errors.opportunityName?.type}
-              {...register('opportunityName', {
+              error={!!errors.name?.type}
+              {...register('name', {
                 required: true,
                 maxLength: 100
               })}
@@ -145,16 +145,16 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Date(s)"
               type="date"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dates?.type}
-              {...register('dates', {
+              error={!!errors.startDate?.type}
+              {...register('startDate', {
                 required: true
               })}
             />
             <Input
               label="Expected number of hours"
               placeholder="5.5"
-              error={!!errors.numHours?.type}
-              {...register('numHours', {
+              error={!!errors.hoursPerWeek?.type}
+              {...register('hoursPerWeek', {
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
