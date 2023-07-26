@@ -1,4 +1,5 @@
 import {
+  CogIcon,
   GlobeIcon,
   HomeIcon,
   LockClosedIcon,
@@ -13,6 +14,7 @@ import Sidebar from '@/components/Sidebar/Sidebar'
 import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
 import OrganizationCausesTab from './OrganizationCauses'
 import OrganizationHomeTab from './OrganizationHome'
+import OrganizationLogVHRTab from './OrganizationLogVHR/OrganizationLogVHR'
 import OrganizationVHRTab from './OrganizationVHR'
 
 const OrganizationDashboard: React.FC = () => {
@@ -35,8 +37,13 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationCausesTab />
     },
     {
-      label: 'User Settings',
+      label: 'Verify VHR',
       icon: <LockClosedIcon className="w-4 inline" />,
+      component: <OrganizationLogVHRTab />
+    },
+    {
+      label: 'User Settings',
+      icon: <CogIcon className="w-4 inline" />,
       component: <div />,
       redirect: '/settings'
     }
@@ -53,7 +60,9 @@ const OrganizationDashboard: React.FC = () => {
 
       <div className="grow">
         <GradientWrapper>
-          <div className="min-h-screen">{tabs[selectedTab].component}</div>
+          <div className="min-h-screen overflow-x-scroll">
+            {tabs[selectedTab].component}
+          </div>
         </GradientWrapper>
       </div>
     </div>
