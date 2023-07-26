@@ -285,10 +285,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               placeholder="Calgary"
               error={!!errors.location?.type}
               {...register('location', {
-                required: true,
-                validate: (value) => {
-                  return value == 'test' || 'Value must be in test'
-                }
+                required: true
               })}
             />
             <Input
