@@ -6,7 +6,7 @@ import {
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 
-import uploadToIPFS from '../ipfsUpload'
+import uploadToIPFS from '../ipfs/ipfsUpload'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 

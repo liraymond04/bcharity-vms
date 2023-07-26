@@ -78,14 +78,21 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     //   width: 110
     // },
     {
-      field: 'date',
+      field: 'startDate',
       filter: 'agDateColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
       } as IDateFilterParams
     },
     {
-      field: 'hours',
+      field: 'endDate',
+      filter: 'agDateColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as IDateFilterParams
+    },
+    {
+      field: 'hoursPerWeek',
       filter: 'agNumberColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -186,6 +193,13 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'description',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        buttons: ['reset', 'apply']
+      } as ITextFilterParams
+    },
+    {
+      field: 'location',
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']

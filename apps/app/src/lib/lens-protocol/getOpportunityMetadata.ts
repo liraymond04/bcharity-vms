@@ -1,11 +1,26 @@
-import { PostFragment, PublicationFragment } from '@lens-protocol/client'
+import {
+  MetadataAttributeOutputFragment,
+  PostFragment,
+  PublicationFragment
+} from '@lens-protocol/client'
 
 import {
   MetadataVersion,
   OpportunityMetadata,
   OpportunityMetadataVersion
 } from '../types'
-
+const getAttribute = (
+  attributes: MetadataAttributeOutputFragment[],
+  attributeName: string
+) => {
+  const item =
+    attributes &&
+    attributes.filter((item) => item.traitType === attributeName).at(0)
+  if (item) {
+    return item.value
+  }
+  return ''
+}
 /**
  * @file getOpportunityMetadata.ts
  * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
@@ -29,16 +44,19 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
       console.log(post)
       const attributes = (post as PostFragment).metadata.attributes
       return {
-        version: attributes[1].value! as OpportunityMetadataVersion,
-        opportunity_id: attributes[2].value ?? '',
-        name: attributes[3].value ?? '',
-        startDate: attributes[4].value ?? '',
-        endDate: attributes[4].value ?? '',
-        hoursPerWeek: attributes[5].value ?? '',
-        category: attributes[6].value ?? '',
-        website: attributes[7].value ?? '',
-        description: attributes[8].value ?? '',
-        imageUrl: attributes[9].value ?? '',
+        version: getAttribute(
+          attributes,
+          'version'
+        ) as OpportunityMetadataVersion,
+        opportunity_id: getAttribute(attributes, 'opportunity_id') ?? '',
+        name: getAttribute(attributes, 'name') ?? '',
+        startDate: getAttribute(attributes, 'startDate') ?? '',
+        endDate: getAttribute(attributes, 'endDate') ?? '',
+        hoursPerWeek: getAttribute(attributes, 'hoursPerWeek') ?? '',
+        category: getAttribute(attributes, 'category') ?? '',
+        website: getAttribute(attributes, 'website') ?? '',
+        description: getAttribute(attributes, 'description') ?? '',
+        imageUrl: getAttribute(attributes, 'image_url') ?? '',
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime()
       }

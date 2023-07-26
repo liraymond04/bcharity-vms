@@ -15,7 +15,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
-import uploadToIPFS from '@/lib/ipfsUpload'
+import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import {
@@ -124,6 +124,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
+  const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -227,13 +228,25 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               })}
             />
             <Input
-              label="Date(s)"
+              label="Start Date"
               type="date"
               placeholder="yyyy-mm-dd"
               error={!!errors.startDate?.type}
               {...register('startDate', {
                 required: true
               })}
+            />
+            <Input
+              label="End Date"
+              type="date"
+              placeholder="yyyy-mm-dd"
+              hasTick
+              change={() => {
+                form.setValue('endDate', '')
+                setEndDateDisabled(!endDateDisabled)
+              }}
+              disabled={!endDateDisabled}
+              {...register('endDate', {})}
             />
             <Input
               label="Expected number of hours"

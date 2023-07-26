@@ -41,10 +41,10 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
     const ids = postData
       .filter(
         (post) =>
-          post.__typename === 'Post' && !!post.metadata.attributes[1].value
+          post.__typename === 'Post' && !!post.metadata.attributes[2].value
       )
       .filter(
-        (post) => (post as PostFragment).metadata.attributes[1].value === id
+        (post) => (post as PostFragment).metadata.attributes[2].value === id
       )
       .map((post) => post.id)
 
@@ -108,9 +108,15 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
               disabled
             />
             <Input
-              label="Date(s)"
+              label="Start Date"
               type="date"
               defaultValue={values.startDate}
+              disabled
+            />
+            <Input
+              label="End Date"
+              type="date"
+              defaultValue={values.endDate}
               disabled
             />
             <Input

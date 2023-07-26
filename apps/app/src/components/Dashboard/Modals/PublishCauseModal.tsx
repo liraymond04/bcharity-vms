@@ -18,6 +18,7 @@ import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
+import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
@@ -86,6 +87,11 @@ export const createPublishAttributes = (
       value: data.category
     },
     {
+      traitType: 'location',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.location
+    },
+    {
       traitType: 'currency',
       displayType: PublicationMetadataDisplayTypes.String,
       value: selectedCurrency
@@ -109,11 +115,6 @@ export const createPublishAttributes = (
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
       value: data.description
-    },
-    {
-      traitType: 'location',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.location
     },
     {
       traitType: 'imageUrl',
@@ -141,6 +142,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
 
   const [selectedCurrency, setSelectedCurrency] = useState<string>(
     DEFAULT_COLLECT_TOKEN
@@ -167,7 +169,6 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onSubmit = async (data: IPublishCauseFormProps) => {
     setError(false)
     setIsPending(true)
-    console.log('test')
 
     if (!publisher) {
       setErrorMessage('No publisher provided')
@@ -175,6 +176,10 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       setIsPending(false)
       return
     }
+
+    const imageUrl = image ? await uploadToIPFS(image) : null
+
+    data.imageUrl = imageUrl ?? ''
 
     const attributes = createPublishAttributes(v4(), selectedCurrency, data)
 
@@ -275,6 +280,14 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               </select>
             </div>
             <Input
+              label="Location"
+              placeholder="Calgary"
+              error={!!errors.location?.type}
+              {...register('location', {
+                required: true
+              })}
+            />
+            <Input
               label={t('Contribution')}
               type="number"
               step="0.0001"
@@ -333,6 +346,11 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
+            />
+            <Input
+              label="Image (optional): "
+              type="file"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
             {/* <Input
               label="Date(s)"
