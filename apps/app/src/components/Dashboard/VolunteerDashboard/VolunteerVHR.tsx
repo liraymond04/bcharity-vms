@@ -155,7 +155,7 @@ const VolunteerVHRTab: React.FC = () => {
                   imageSrc={getAvatar(op.from)}
                   name={op.name}
                   buttonText="APPLY"
-                  buttonHref="."
+                  buttonHref="https://google.com"
                 />
               ))
           ) : (
