@@ -67,7 +67,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
             className
           )}
-          type={type === 'date' ? 'date' : type}
+          type={type}
           ref={ref}
           {...props}
         />
