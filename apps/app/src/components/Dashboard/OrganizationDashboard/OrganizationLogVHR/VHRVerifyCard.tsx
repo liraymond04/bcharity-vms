@@ -1,4 +1,4 @@
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid'
 import React from 'react'
 
 import { Card } from '@/components/UI/Card'
@@ -49,7 +49,7 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
           }}
         />
         <CheckCircleIcon
-          className="w-8 ml-2 cursor-pointer  "
+          className="w-8 ml-2 cursor-pointer"
           onClick={(e) => {
             onRejectClick()
             e.stopPropagation()
