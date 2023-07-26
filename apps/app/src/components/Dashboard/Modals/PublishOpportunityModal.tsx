@@ -15,7 +15,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
-import uploadToIPFS from '@/lib/ipfsUpload'
+import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import {
