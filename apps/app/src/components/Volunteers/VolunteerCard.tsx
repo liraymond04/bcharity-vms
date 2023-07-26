@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
-import getIPFSData from '@/lib/ipfs/getIPFSData'
+import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { OpportunityMetadata } from '@/lib/types'
 
 import { Card } from '../UI/Card'
@@ -18,7 +18,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
 
   useEffect(() => {
     if (post.imageUrl) {
-      getIPFSData(post.imageUrl).then((url) => setResolvedImageUrl(url))
+      getIPFSBlob(post.imageUrl).then((url) => setResolvedImageUrl(url))
     }
   }, [post])
 
