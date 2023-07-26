@@ -1,5 +1,4 @@
-import { ThirdwebStorage } from '@thirdweb-dev/storage'
-const storage = new ThirdwebStorage()
+import storage from './storage'
 
 const uploadToIPFS = async (data: any) => {
   const upload = await storage.upload(data)

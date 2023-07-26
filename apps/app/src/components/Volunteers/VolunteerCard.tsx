@@ -1,22 +1,32 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
+import getIPFSData from '@/lib/ipfs/getIPFSData'
 import { OpportunityMetadata } from '@/lib/types'
 
 import { Card } from '../UI/Card'
+import { Spinner } from '../UI/Spinner'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
 }
 
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
-  return (
-    <Card>
-      <div className="flex">
+  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
+
+  useEffect(() => {
+    if (post.imageUrl) {
+      getIPFSData(post.imageUrl).then((url) => setResolvedImageUrl(url))
+    }
+  }, [post])
+
+  const getDisplayedImage = () => {
+    if (!post.imageUrl) {
+      return (
         <div
-          className="flex-shrink-0 h-36 w-36 rounded-l-xl border-b dark:border-b-gray-700/80"
+          className="border-b dark:border-b-gray-700/80 h-full"
           style={{
             backgroundImage: `url(${`${STATIC_ASSETS}/patterns/2.svg`})`,
             backgroundColor: '#8b5cf6',
@@ -25,6 +35,30 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
             backgroundRepeat: 'repeat'
           }}
         />
+      )
+    } else if (!resolvedImageUrl) {
+      return (
+        <div className="h-full flex items-center justify-center">
+          <Spinner size="lg" />
+        </div>
+      )
+    } else {
+      return (
+        <img
+          src={resolvedImageUrl}
+          alt="Volunteer opportunity related image"
+          className="h-full w-auto m-auto"
+        />
+      )
+    }
+  }
+
+  return (
+    <Card>
+      <div className="flex">
+        <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
+          {getDisplayedImage()}
+        </div>
         <div className="relative mx-5 mt-3 mb-1">
           <div className="font-bold text-2xl line-clamp-1">{post?.name}</div>
           <div className="text-xs">{post?.from.handle}</div>
