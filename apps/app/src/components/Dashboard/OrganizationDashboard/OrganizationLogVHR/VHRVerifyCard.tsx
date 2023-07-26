@@ -1,18 +1,9 @@
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid'
 import React from 'react'
 
 import { Card } from '@/components/UI/Card'
 
-interface _fake_data {
-  id: string
-  date: string
-  VHR: number
-  handle: string
-  handleId: string
-  oppName: string
-  oppId: string
-  comment: string
-}
+import { _fake_data } from './OrganizationLogVHR'
 
 interface IVHRVerifyCardProps {
   selected?: boolean
@@ -49,7 +40,7 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
           }}
         />
         <CheckCircleIcon
-          className="w-8 ml-2 cursor-pointer  "
+          className="w-8 ml-2 cursor-pointer"
           onClick={(e) => {
             onRejectClick()
             e.stopPropagation()
