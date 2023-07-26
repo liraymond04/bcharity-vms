@@ -12,7 +12,7 @@ const inter500 = Inter({
 
 interface IBrowseCardProps {
   imageSrc: string
-  avatarSrc: string
+  avatarSrc?: string
   name: string
   buttonText: string
   buttonHref: string
