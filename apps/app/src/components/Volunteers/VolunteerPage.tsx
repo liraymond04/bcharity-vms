@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
-import { useAppPersistStore } from '@/store/app'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import Slug from '../Shared/Slug'
@@ -66,6 +65,21 @@ const VolunteerPage: NextPage = () => {
     )
   }
 
+  const getPosition = (string: string, subString: string, index: number) => {
+    return string.split(subString, index).join(subString).length
+  }
+
+  const getImageUrl = (url: string) => {
+    const _url = url.replace('ipfs', 'https')
+    const insert = getPosition(_url, '/', 3)
+    const output = [
+      _url.slice(0, insert),
+      '.gateway.ipfscdn.io',
+      _url.slice(insert)
+    ].join('')
+    return output
+  }
+
   const WrongPost = () => {
     return (
       <div className="py-10 text-center">
@@ -91,7 +105,6 @@ const VolunteerPage: NextPage = () => {
   }
 
   const [bookmarked, setBookmarked] = useState<boolean>(false)
-  const { currentUser } = useAppPersistStore()
 
   const Body = ({ post }: { post: PublicationFragment | undefined }) => {
     return (
@@ -156,14 +169,13 @@ const VolunteerPage: NextPage = () => {
           <div>
             <img
               key="attachment"
-              className="object-cover w-full h-full rounded-lg border-[3px] border-black margin mb-[20px]"
-              // height={240}
-              src={
+              className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+              src={getImageUrl(
                 getAttribute(
                   post.metadata.attributes,
                   'imageUrl'
                 )?.toString() ?? ''
-              }
+              )}
               alt={'image attachment'}
             />
           </div>
