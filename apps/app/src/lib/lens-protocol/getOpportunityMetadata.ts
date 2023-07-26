@@ -33,12 +33,12 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
         opportunity_id: attributes[2].value ?? '',
         name: attributes[3].value ?? '',
         startDate: attributes[4].value ?? '',
-        endDate: attributes[4].value ?? '',
-        hoursPerWeek: attributes[5].value ?? '',
-        category: attributes[6].value ?? '',
-        website: attributes[7].value ?? '',
-        description: attributes[8].value ?? '',
-        imageUrl: attributes[9].value ?? '',
+        endDate: attributes[5].value ?? '',
+        hoursPerWeek: attributes[6].value ?? '',
+        category: attributes[7].value ?? '',
+        website: attributes[8].value ?? '',
+        description: attributes[9].value ?? '',
+        imageUrl: attributes[10].value ?? '',
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime()
       }
