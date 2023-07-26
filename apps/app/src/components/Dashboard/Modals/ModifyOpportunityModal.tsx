@@ -41,7 +41,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
-
+  const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
 
   useEffect(() => {
@@ -142,9 +142,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
                 maxLength: 100
               })}
             />
+
             <Input
               label="Start Date"
-              type="startDate"
+              type="date"
               placeholder="yyyy-mm-dd"
               error={!!errors.endDate?.type}
               {...register('startDate', {
@@ -153,12 +154,15 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
             <Input
               label="End Date"
-              type="endDate"
+              type="date"
+              hasTick
               placeholder="yyyy-mm-dd"
+              change={() => {
+                setEndDateDisabled(!endDateDisabled)
+              }}
+              disabled={!endDateDisabled}
               error={!!errors.endDate?.type}
-              {...register('endDate', {
-                required: true
-              })}
+              {...register('endDate', {})}
             />
             <Input
               label="Expected number of hours"
