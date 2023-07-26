@@ -18,6 +18,7 @@ import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
+import uploadToIPFS from '@/lib/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
@@ -141,6 +142,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
 
   const [selectedCurrency, setSelectedCurrency] = useState<string>(
     DEFAULT_COLLECT_TOKEN
@@ -175,6 +177,10 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       setIsPending(false)
       return
     }
+
+    const imageUrl = image ? await uploadToIPFS(image) : null
+
+    data.imageUrl = imageUrl ?? ''
 
     const attributes = createPublishAttributes(v4(), selectedCurrency, data)
 
@@ -333,6 +339,11 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
+            />
+            <Input
+              label="Image (optional): "
+              type="file"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
             {/* <Input
               label="Date(s)"
