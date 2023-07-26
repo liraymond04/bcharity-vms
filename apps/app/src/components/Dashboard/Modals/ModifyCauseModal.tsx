@@ -85,7 +85,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes(selectedCurrency, id, data)
+    const attributes = createPublishAttributes(id, selectedCurrency, data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',

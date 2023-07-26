@@ -124,6 +124,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
+  const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -218,13 +219,25 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               })}
             />
             <Input
-              label="Date(s)"
+              label="Start Date"
               type="date"
               placeholder="yyyy-mm-dd"
               error={!!errors.startDate?.type}
               {...register('startDate', {
                 required: true
               })}
+            />
+            <Input
+              label="End Date"
+              type="date"
+              placeholder="yyyy-mm-dd"
+              hasTick
+              change={() => {
+                form.setValue('endDate', '')
+                setEndDateDisabled(!endDateDisabled)
+              }}
+              disabled={!endDateDisabled}
+              {...register('endDate', {})}
             />
             <Input
               label="Expected number of hours"

@@ -169,7 +169,6 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onSubmit = async (data: IPublishCauseFormProps) => {
     setError(false)
     setIsPending(true)
-    console.log('test')
 
     if (!publisher) {
       setErrorMessage('No publisher provided')
