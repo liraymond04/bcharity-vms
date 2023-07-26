@@ -20,6 +20,7 @@ import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
+import FollowButton from '../Shared/FollowButton'
 import Slug from '../Shared/Slug'
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
@@ -173,7 +174,7 @@ const VolunteerPage: NextPage = () => {
           </div>
           <div className="flex space-x-3 items-center">
             <Slug prefix="@" slug={post.profile.handle} />
-            <Button size="sm">Follow</Button>
+            <FollowButton followId={post.profile.id} />
           </div>
           <div className="pt-6 pb-4">
             {getAttribute(post.metadata.attributes, 'description')}
