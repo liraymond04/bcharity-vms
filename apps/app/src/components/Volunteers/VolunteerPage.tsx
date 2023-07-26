@@ -149,12 +149,22 @@ const VolunteerPage: NextPage = () => {
                 <div>
                   {`${getAttribute(post.metadata.attributes, 'startDate')
                     ?.toString()
-                    .replaceAll('-', '/')} - ${getAttribute(
-                    post.metadata.attributes,
-                    'endDate'
-                  )
-                    ?.toString()
-                    .replaceAll('-', '/')}`}
+                    .replaceAll('-', '/')} - ${
+                    attributeExists(post.metadata.attributes, 'endDate')
+                      ? getAttribute(
+                          post.metadata.attributes,
+                          'endDate'
+                        )?.toString() !== '' &&
+                        getAttribute(
+                          post.metadata.attributes,
+                          'endDate'
+                        )?.toString() !== undefined
+                        ? getAttribute(post.metadata.attributes, 'endDate')
+                            ?.toString()
+                            .replaceAll('-', '/')
+                        : 'Ongoing'
+                      : 'Ongoing'
+                  }`}
                 </div>
               )}
             </div>
