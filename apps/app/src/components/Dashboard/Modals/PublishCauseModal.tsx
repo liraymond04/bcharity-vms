@@ -87,6 +87,11 @@ export const createPublishAttributes = (
       value: data.category
     },
     {
+      traitType: 'location',
+      displayType: PublicationMetadataDisplayTypes.String,
+      value: data.location
+    },
+    {
       traitType: 'currency',
       displayType: PublicationMetadataDisplayTypes.String,
       value: selectedCurrency
@@ -110,11 +115,6 @@ export const createPublishAttributes = (
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
       value: data.description
-    },
-    {
-      traitType: 'location',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.location
     },
     {
       traitType: 'imageUrl',
@@ -279,6 +279,14 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
+            <Input
+              label="Location"
+              placeholder="Calgary"
+              error={!!errors.location?.type}
+              {...register('location', {
+                required: true
+              })}
+            />
             <Input
               label={t('Contribution')}
               type="number"
