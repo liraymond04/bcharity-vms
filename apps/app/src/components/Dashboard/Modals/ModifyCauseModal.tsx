@@ -185,6 +185,14 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               </select>
             </div>
             <Input
+              label="Location"
+              placeholder="Calgary"
+              error={!!errors.location?.type}
+              {...register('location', {
+                required: true
+              })}
+            />
+            <Input
               label={t('Contribution')}
               type="number"
               step="0.0001"
