@@ -3,16 +3,7 @@ import React from 'react'
 
 import { Card } from '@/components/UI/Card'
 
-interface _fake_data {
-  id: string
-  date: string
-  VHR: number
-  handle: string
-  handleId: string
-  oppName: string
-  oppId: string
-  comment: string
-}
+import { _fake_data } from './OrganizationLogVHR'
 
 interface IVHRVerifyCardProps {
   selected?: boolean
