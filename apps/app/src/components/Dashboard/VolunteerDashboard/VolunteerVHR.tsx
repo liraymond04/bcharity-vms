@@ -152,7 +152,8 @@ const VolunteerVHRTab: React.FC = () => {
               .map((op) => (
                 <BrowseCard
                   key={op.opportunity_id}
-                  imageSrc={getAvatar(op.from)}
+                  imageSrc={op.imageUrl}
+                  avatarSrc={getAvatar(op.from)}
                   name={op.name}
                   buttonText="APPLY"
                   buttonHref="."
