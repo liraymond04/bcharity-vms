@@ -94,7 +94,6 @@ const VolunteerPage: NextPage = () => {
   const { currentUser } = useAppPersistStore()
 
   const Body = ({ post }: { post: PublicationFragment | undefined }) => {
-    console.log(currentUser)
     return (
       post?.__typename === 'Post' &&
       (post.metadata.attributes?.length &&
@@ -153,6 +152,20 @@ const VolunteerPage: NextPage = () => {
           </div>
           <div className="pt-6 pb-4">
             {getAttribute(post.metadata.attributes, 'description')}
+          </div>
+          <div>
+            <img
+              key="attachment"
+              className="object-cover w-full h-full rounded-lg border-[3px] border-black margin mb-[20px]"
+              // height={240}
+              src={
+                getAttribute(
+                  post.metadata.attributes,
+                  'imageUrl'
+                )?.toString() ?? ''
+              }
+              alt={'image attachment'}
+            />
           </div>
           <div className="flex justify-end space-x-3">
             {getAttribute(post.metadata.attributes, 'website') !== '' && (
