@@ -34,21 +34,22 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
               {label}
             </label>
           </div>
-          {type === 'startDate' && (
-            <>
-              <input
-                type="checkbox"
-                style={{ position: 'relative' }}
-                onClick={() => {
-                  if (!props.change) return
-                  props.change()
-                }}
-              />
-              <label style={{ position: 'relative' }}>
-                {t('Multiple Days')}
-              </label>
-            </>
-          )}
+          {type === 'startDate' ||
+            (type === 'endDate' && (
+              <>
+                <input
+                  type="checkbox"
+                  style={{ position: 'relative' }}
+                  onClick={() => {
+                    if (!props.change) return
+                    props.change()
+                  }}
+                />
+                <label style={{ position: 'relative' }}>
+                  {t('Multiple Days')}
+                </label>
+              </>
+            ))}
 
           <HelpTooltip content={helper} />
         </div>
@@ -68,7 +69,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
             className
           )}
-          type={type === 'startDate' ? 'date' : type}
+          type={type === 'startDate' || type === 'endDate' ? 'date' : type}
           ref={ref}
           {...props}
         />

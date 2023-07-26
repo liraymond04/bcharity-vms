@@ -98,12 +98,14 @@ const OrganizationVHRTab: React.FC = () => {
 
     return d
       ? {
-          opportunityName: d.name ?? '',
-          dates: d.date ?? '',
-          numHours: d.hours ?? '',
+          name: d.name ?? '',
+          startDate: d.startDate ?? '',
+          endDate: d.endDate ?? '',
+          hoursPerWeek: d.hoursPerWeek ?? '',
           category: d.category ?? '',
           website: d.website ?? '',
-          description: d.description ?? ''
+          description: d.description ?? '',
+          imageUrl: d.imageUrl ?? ''
         }
       : { ...emptyPublishFormData }
   }

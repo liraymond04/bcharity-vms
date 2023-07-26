@@ -104,18 +104,24 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
           <>
             <Input
               label="Volunteer opportunity name"
-              defaultValue={values.opportunityName}
+              defaultValue={values.name}
               disabled
             />
             <Input
-              label="Date(s)"
-              type="date"
-              defaultValue={values.dates}
+              label="Start Date"
+              type="startDate"
+              defaultValue={values.startDate}
+              disabled
+            />
+            <Input
+              label="End Date"
+              type="endDate"
+              defaultValue={values.endDate}
               disabled
             />
             <Input
               label="Expected number of hours"
-              defaultValue={values.numHours}
+              defaultValue={values.hoursPerWeek}
               disabled
             />
             <Input label="Category" defaultValue={values.category} disabled />

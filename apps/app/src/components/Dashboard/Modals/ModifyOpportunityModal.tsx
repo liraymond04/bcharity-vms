@@ -85,6 +85,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       appId: APP_NAME
     }
     console.log('editing', metadata)
+
     checkAuth(publisher.ownedBy)
       .then(() =>
         createPost(
@@ -135,35 +136,35 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             <Input
               label="Volunteer opportunity name"
               placeholder="Medical internship"
-              error={!!errors.opportunityName?.type}
-              {...register('opportunityName', {
+              error={!!errors.name?.type}
+              {...register('name', {
                 required: true,
                 maxLength: 100
               })}
             />
             <Input
               label="Start Date"
-              type="dateStart"
+              type="startDate"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dateStart?.type}
-              {...register('dateStart', {
+              error={!!errors.endDate?.type}
+              {...register('startDate', {
                 required: true
               })}
             />
             <Input
               label="End Date"
-              type="dateEnd"
+              type="endDate"
               placeholder="yyyy-mm-dd"
-              error={!!errors.dateEnd?.type}
-              {...register('dateEnd', {
+              error={!!errors.endDate?.type}
+              {...register('endDate', {
                 required: true
               })}
             />
             <Input
               label="Expected number of hours"
               placeholder="5.5"
-              error={!!errors.numHours?.type}
-              {...register('numHours', {
+              error={!!errors.hoursPerWeek?.type}
+              {...register('hoursPerWeek', {
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
