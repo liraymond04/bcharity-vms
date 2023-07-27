@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
-import LocationDropdowns from '@/components/UI/LocationDropdowns'
+import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
@@ -59,8 +59,6 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
 
-  const [location, setLocation] = useState(',,')
-
   useEffect(() => {
     reset(defaultValues)
   }, [defaultValues])
@@ -87,8 +85,6 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       setIsPending(false)
       return
     }
-
-    formData.location = location
 
     const attributes = createPublishAttributes({
       id,
@@ -193,7 +189,11 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
-            <LocationDropdowns onChange={(s) => setLocation(s)} />
+            <LocationFormComponent
+              defaultCountry={defaultValues.country}
+              defaultProvince={defaultValues.province}
+              defaultCity={defaultValues.city}
+            />
             <Input
               label={t('Contribution')}
               type="number"

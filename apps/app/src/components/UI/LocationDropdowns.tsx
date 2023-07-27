@@ -1,20 +1,28 @@
-import { Country, State } from 'country-state-city'
+import { City, Country, State } from 'country-state-city'
 import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import useLazyGeolocation from '@/lib/lens-protocol/useLazyGeolocation'
 
 import Error from '../Dashboard/Modals/Error'
+import { IPublishCauseFormProps } from '../Dashboard/Modals/PublishCauseModal'
 import Divider from '../Shared/Divider'
-import FilterDropdown from '../Shared/FilterDropdown'
+import FormDropdown from '../Shared/FormDropdown'
 import { Button } from './Button'
 import { Input } from './Input'
 import { Spinner } from './Spinner'
 
-interface ILocationDropdownsProps {
-  onChange: (data: string) => void
+interface ILocationFormComponentProps {
+  defaultCountry?: string
+  defaultProvince?: string
+  defaultCity?: string
 }
 
-const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({ onChange }) => {
+const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
+  defaultCountry,
+  defaultProvince,
+  defaultCity
+}) => {
   const {
     data,
     loading,
@@ -23,34 +31,31 @@ const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({ onChange }) => {
     denied
   } = useLazyGeolocation()
 
-  const [country, setCountry] = useState('')
-  const [province, setProvince] = useState('')
-  const [city, setCity] = useState('')
+  const { register, setValue, watch } = useFormContext<IPublishCauseFormProps>()
+  const [provinces, setProvinces] = useState<string[]>([])
 
-  const getProvinces = () => {
-    if (!country) return []
+  const formValues = watch()
 
+  useEffect(() => {
     const countryCode = Country.getAllCountries().find(
-      (c) => c.name === country
+      (c) => c.name === formValues.country
     )?.isoCode
 
-    return State.getStatesOfCountry(countryCode).map((p) => p.name)
-  }
+    const provinces = State.getStatesOfCountry(countryCode).map((p) => p.name)
+
+    setProvinces(provinces)
+  }, [formValues.country])
 
   const onLocateButtonClick = () => {
     executeGeoloationRequest()
   }
 
   useEffect(() => {
-    setCountry(data.country?.name ?? '')
-    setProvince(data.province?.name ?? '')
-    setCity(data.city?.name ?? '')
-  }, [data])
-
-  useEffect(() => {
-    const locationString = `${country},${province},${city}`
-    onChange(locationString)
-  }, [country, province, city, onChange])
+    console.log('useEffect')
+    setValue('country', data.country?.name ?? defaultCountry ?? '')
+    setValue('province', data.province?.name ?? defaultProvince ?? '')
+    setValue('city', data.city?.name ?? defaultCity ?? '')
+  }, [data, defaultCity, defaultCountry, defaultProvince, setValue])
 
   return (
     <div className="my-4">
@@ -59,28 +64,31 @@ const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({ onChange }) => {
       <div className="flex">
         {!loading || denied ? (
           <>
-            <FilterDropdown
-              onChange={(val) => {
-                setCountry(val)
-                setCity('')
-              }}
+            <FormDropdown
               label="Country"
               options={Country.getAllCountries().map((c) => c.name)}
-              value={country}
+              required
+              {...register('country')}
             />
             <div className="ml-4">
-              <FilterDropdown
-                onChange={(val) => setProvince(val)}
+              <FormDropdown
                 label="Province"
-                options={getProvinces()}
-                value={province}
+                options={provinces}
+                {...register('province')}
               />
             </div>
             <div className="ml-4">
               <Input
-                value={city}
                 placeholder="City"
-                onChange={(e) => setCity(e.target.value)}
+                required
+                {...register('city', {
+                  validate: (value) => {
+                    return !!City.getCitiesOfCountry(formValues.country)?.find(
+                      (c) =>
+                        c.name.toLocaleLowerCase() === value.toLocaleLowerCase()
+                    )
+                  }
+                })}
               />
             </div>
           </>
@@ -113,4 +121,4 @@ const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({ onChange }) => {
   )
 }
 
-export default LocationDropdowns
+export default LocationFormComponent

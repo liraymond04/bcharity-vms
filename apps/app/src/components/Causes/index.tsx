@@ -9,7 +9,7 @@ import { PostTags } from '@/lib/types'
 
 import { GridItemFour, GridLayout } from '../GridLayout'
 import Divider from '../Shared/Divider'
-import FilterDropdown from '../Shared/FilterDropdown'
+import FormDropdown from '../Shared/FormDropdown'
 import Search from '../Shared/Search'
 import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
@@ -36,7 +36,7 @@ const Causes: NextPage = () => {
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5 font-regular text-2xl">
         <div className="flex justify-between py-5">
           <Search searchText={searchValue} setSearchText={setSearchValue} />
-          <FilterDropdown
+          <FormDropdown
             label="Filter:"
             onChange={(c) => console.log('filter', c)}
             options={['cause1', 'cause2', 'cause3']}

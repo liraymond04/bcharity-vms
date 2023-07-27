@@ -13,7 +13,7 @@ import { v4 } from 'uuid'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
-import LocationDropdowns from '@/components/UI/LocationDropdowns'
+import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
@@ -38,8 +38,10 @@ export interface IPublishCauseFormProps {
   goal: string
   recipient: string
   description: string
-  location: string
   imageUrl: string
+  country: string
+  province: string
+  city: string
 }
 
 export const emptyPublishFormData: IPublishCauseFormProps = {
@@ -50,10 +52,12 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
   goal: '',
   recipient: '',
   description: '',
-  location: '',
   imageUrl: '',
   OrgPublish: undefined,
-  selectedCurrency: undefined
+  selectedCurrency: undefined,
+  country: '',
+  province: '',
+  city: ''
 }
 
 export const createPublishAttributes = (data: {
@@ -90,7 +94,7 @@ export const createPublishAttributes = (data: {
     {
       traitType: 'location',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.location
+      value: `${data.formData.country}-${data.formData.province}-${data.formData.city}`
     },
     {
       traitType: 'currency',
@@ -153,15 +157,12 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
 
-  const [location, setLocation] = useState(',,')
-
   const form = useForm<IPublishCauseFormProps>()
 
   const {
     handleSubmit,
     reset,
     register,
-    setValue,
     formState: { errors }
   } = form
 
@@ -184,7 +185,6 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
     const imageUrl = image ? await uploadToIPFS(image) : null
 
     formData.imageUrl = imageUrl ?? ''
-    formData.location = location
 
     const attributes = createPublishAttributes({
       id: v4(),
@@ -288,7 +288,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
-            <LocationDropdowns onChange={(s) => setLocation(s)} />
+            <LocationFormComponent />
             <Input
               label={t('Contribution')}
               type="number"

@@ -118,6 +118,8 @@ const OrganizationCauses: React.FC = () => {
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
     const d = postMetadata.find((val) => val?.cause_id === id)
 
+    const [country, province, city] = d?.location.split('-', 3) ?? ['', '', '']
+
     return d
       ? {
           selectedCurrency: d.currency ?? '',
@@ -129,8 +131,10 @@ const OrganizationCauses: React.FC = () => {
           description: d.description ?? '',
           currency: d.currency ?? '',
           recipient: d.recipient ?? '',
-          location: d.location ?? '',
-          imageUrl: d.imageUrl ?? ''
+          imageUrl: d.imageUrl ?? '',
+          country,
+          province,
+          city
         }
       : { ...emptyPublishFormData }
   }
