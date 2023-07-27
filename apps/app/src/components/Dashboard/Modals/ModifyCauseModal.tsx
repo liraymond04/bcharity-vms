@@ -59,6 +59,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
 
+  const [location, setLocation] = useState(',,')
+
   useEffect(() => {
     reset(defaultValues)
   }, [defaultValues])
@@ -75,7 +77,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
     onClose(false)
   }
 
-  const onSubmit = async (data: IPublishCauseFormProps) => {
+  const onSubmit = async (formData: IPublishCauseFormProps) => {
     setError(false)
     setIsPending(true)
 
@@ -86,7 +88,13 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes(id, selectedCurrency, data)
+    formData.location = location
+
+    const attributes = createPublishAttributes({
+      id,
+      selectedCurrency,
+      formData
+    })
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
@@ -121,7 +129,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
         }
       })
       .then(() => {
-        reset(data)
+        reset(formData)
         onClose(true)
       })
       .catch((e) => {
@@ -185,15 +193,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
-            {/* <Input
-              label="Location"
-              placeholder="Calgary"
-              error={!!errors.location?.type}
-              {...register('location', {
-                required: true
-              })}
-            /> */}
-            <LocationDropdowns />
+            <LocationDropdowns onChange={(s) => setLocation(s)} />
             <Input
               label={t('Contribution')}
               type="number"

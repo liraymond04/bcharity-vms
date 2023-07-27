@@ -10,9 +10,11 @@ import { Button } from './Button'
 import { Input } from './Input'
 import { Spinner } from './Spinner'
 
-interface ILocationDropdownsProps {}
+interface ILocationDropdownsProps {
+  onChange: (data: string) => void
+}
 
-const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({}) => {
+const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({ onChange }) => {
   const {
     data,
     loading,
@@ -44,6 +46,11 @@ const LocationDropdowns: React.FC<ILocationDropdownsProps> = ({}) => {
     setProvince(data.province?.name ?? '')
     setCity(data.city?.name ?? '')
   }, [data])
+
+  useEffect(() => {
+    const locationString = `${country},${province},${city}`
+    onChange(locationString)
+  }, [country, province, city, onChange])
 
   return (
     <div className="my-4">

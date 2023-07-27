@@ -56,11 +56,11 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
   selectedCurrency: undefined
 }
 
-export const createPublishAttributes = (
-  id: string,
-  selectedCurrency: string,
-  data: IPublishCauseFormProps
-) => {
+export const createPublishAttributes = (data: {
+  id: string
+  selectedCurrency: string
+  formData: IPublishCauseFormProps
+}) => {
   const attributes: CauseMetadataAttributeInput[] = [
     {
       traitType: 'type',
@@ -75,52 +75,52 @@ export const createPublishAttributes = (
     {
       traitType: 'cause_id',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: id
+      value: data.id
     },
     {
       traitType: 'name',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.name
+      value: data.formData.name
     },
     {
       traitType: 'category',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.category
+      value: data.formData.category
     },
     {
       traitType: 'location',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.location
+      value: data.formData.location
     },
     {
       traitType: 'currency',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: selectedCurrency
+      value: data.selectedCurrency
     },
     {
       traitType: 'contribution',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.contribution
+      value: data.formData.contribution
     },
     {
       traitType: 'goal',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.goal
+      value: data.formData.goal
     },
     {
       traitType: 'recipient',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.recipient
+      value: data.formData.recipient
     },
     {
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.description
+      value: data.formData.description
     },
     {
       traitType: 'imageUrl',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.imageUrl
+      value: data.formData.imageUrl
     }
   ]
 
@@ -153,12 +153,15 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
 
+  const [location, setLocation] = useState(',,')
+
   const form = useForm<IPublishCauseFormProps>()
 
   const {
     handleSubmit,
     reset,
     register,
+    setValue,
     formState: { errors }
   } = form
 
@@ -167,7 +170,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
     onClose(false)
   }
 
-  const onSubmit = async (data: IPublishCauseFormProps) => {
+  const onSubmit = async (formData: IPublishCauseFormProps) => {
     setError(false)
     setIsPending(true)
 
@@ -180,9 +183,14 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : null
 
-    data.imageUrl = imageUrl ?? ''
+    formData.imageUrl = imageUrl ?? ''
+    formData.location = location
 
-    const attributes = createPublishAttributes(v4(), selectedCurrency, data)
+    const attributes = createPublishAttributes({
+      id: v4(),
+      selectedCurrency,
+      formData
+    })
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
@@ -207,9 +215,9 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
           feeCollectModule: {
             amount: {
               currency: selectedCurrency,
-              value: data.contribution
+              value: formData.contribution
             },
-            recipient: data.recipient,
+            recipient: formData.recipient,
             referralFee: 0,
             followerOnly: false
           }
@@ -280,15 +288,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
-            {/* <Input
-              label="Location"
-              placeholder="Calgary"
-              error={!!errors.location?.type}
-              {...register('location', {
-                required: true
-              })}
-            /> */}
-            <LocationDropdowns />
+            <LocationDropdowns onChange={(s) => setLocation(s)} />
             <Input
               label={t('Contribution')}
               type="number"
