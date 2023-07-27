@@ -1,5 +1,4 @@
 import { City, Country, State } from 'country-state-city'
-import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import useLazyGeolocation from '@/lib/lens-protocol/useLazyGeolocation'
@@ -24,7 +23,6 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
   defaultCity
 }) => {
   const {
-    data,
     loading,
     error: geolocationError,
     execute: executeGeoloationRequest,
@@ -32,30 +30,40 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
   } = useLazyGeolocation()
 
   const { register, setValue, watch } = useFormContext<IPublishCauseFormProps>()
-  const [provinces, setProvinces] = useState<string[]>([])
 
   const formValues = watch()
 
-  useEffect(() => {
-    const countryCode = Country.getAllCountries().find(
-      (c) => c.name === formValues.country
-    )?.isoCode
+  console.log('form province', formValues.province)
 
-    const provinces = State.getStatesOfCountry(countryCode).map((p) => p.name)
-
-    setProvinces(provinces)
-  }, [formValues.country])
+  const provinces =
+    State.getStatesOfCountry(
+      Country.getAllCountries().find((c) => c.name === formValues.country)
+        ?.isoCode
+    ).map((p) => p.name) ?? []
 
   const onLocateButtonClick = () => {
-    executeGeoloationRequest()
+    executeGeoloationRequest((value) => {
+      setValue('country', value.country?.name ?? defaultCountry ?? '')
+      setValue('province', value.province?.name ?? defaultProvince ?? '')
+      setValue('city', value.city?.name ?? defaultCity ?? '')
+    })
   }
 
-  useEffect(() => {
-    console.log('useEffect')
-    setValue('country', data.country?.name ?? defaultCountry ?? '')
-    setValue('province', data.province?.name ?? defaultProvince ?? '')
-    setValue('city', data.city?.name ?? defaultCity ?? '')
-  }, [data, defaultCity, defaultCountry, defaultProvince, setValue])
+  const validateCity = (value: string, _formValues: IPublishCauseFormProps) => {
+    const countryCode = Country.getAllCountries().find(
+      (c) => c.name === _formValues.country
+    )?.isoCode
+
+    const provinceCode = State.getStatesOfCountry(countryCode).find(
+      (p) => p.name === _formValues.province
+    )?.isoCode
+
+    if (!provinceCode || !countryCode) return false
+
+    const cities = City.getCitiesOfState(countryCode, provinceCode)
+    console.log(cities)
+    return !!cities.find((c) => c.name.toLowerCase() === value.toLowerCase())
+  }
 
   return (
     <div className="my-4">
@@ -68,13 +76,22 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
               label="Country"
               options={Country.getAllCountries().map((c) => c.name)}
               required
-              {...register('country')}
+              {...register('country', {
+                validate: {
+                  required: (v) => !!v
+                }
+              })}
             />
             <div className="ml-4">
               <FormDropdown
                 label="Province"
                 options={provinces}
-                {...register('province')}
+                required
+                {...register('province', {
+                  validate: {
+                    required: (v) => !!v
+                  }
+                })}
               />
             </div>
             <div className="ml-4">
@@ -82,12 +99,8 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
                 placeholder="City"
                 required
                 {...register('city', {
-                  validate: (value) => {
-                    return !!City.getCitiesOfCountry(formValues.country)?.find(
-                      (c) =>
-                        c.name.toLocaleLowerCase() === value.toLocaleLowerCase()
-                    )
-                  }
+                  validate: { city: validateCity },
+                  deps: ['province, city']
                 })}
               />
             </div>
