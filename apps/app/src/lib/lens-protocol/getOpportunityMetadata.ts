@@ -58,7 +58,7 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
         category: getAttribute(attributes, 'category') ?? '',
         website: getAttribute(attributes, 'website') ?? '',
         description: getAttribute(attributes, 'description') ?? '',
-        imageUrl: getAttribute(attributes, 'image_url') ?? '',
+        imageUrl: getAttribute(attributes, 'imageUrl') ?? '',
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime(),
         id: post.id

@@ -75,9 +75,12 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
 
-    formData.imageUrl = imageUrl
+    const attributes = createPublishAttributes({
+      id,
+      formData: { ...formData, imageUrl }
+    })
 
-    const attributes = createPublishAttributes({ id, formData })
+    console.log(attributes)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
