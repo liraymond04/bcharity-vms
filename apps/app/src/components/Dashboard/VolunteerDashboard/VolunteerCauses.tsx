@@ -14,26 +14,22 @@ import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
-import DonateToCauseModal from '../Modals/DonateToCauseModal'
 import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
-  const { currentUser: profile } = useAppPersistStore()
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [searchValue, setSearchValue] = useState('')
-  const [donateCauseModalOpen, setDonateCauseModalOpen] = useState(false)
+
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [searchAddress, setSearchAddress] = useState<string>('')
   const [donationGoal, setDonationsGoal] = useState(500) // use hardcoded goal for now
 
   const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
-  const onPublishClose = (shouldRefetch: boolean) => {
-    setDonateCauseModalOpen(false)
-  }
+
   const {
     data: postData,
     error: postDataError,
@@ -89,7 +85,6 @@ const VolunteerCauses: React.FC = () => {
 
   return (
     <GridLayout>
-      <DonateToCauseModal></DonateToCauseModal>
       <GridItemTwelve>
         <Card>
           <div className="p-10 m-10">
@@ -175,7 +170,6 @@ const VolunteerCauses: React.FC = () => {
         <div className="flex flex-wrap justify-around">
           {!loading ? (
             posts
-
               .filter((op) => testSearch(op.name, searchValue))
               .filter(
                 (op) =>
