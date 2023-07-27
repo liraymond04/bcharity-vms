@@ -105,11 +105,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
 
             <Input label="Categiry" defaultValue={values.category} disabled />
 
-            <Input
-              label="Currency"
-              defaultValue={values.selectedCurrency}
-              disabled
-            />
+            <Input label="Currency" defaultValue={values.currency} disabled />
             <Input
               label="Contribution"
               defaultValue={values.contribution}
