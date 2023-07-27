@@ -17,6 +17,7 @@ import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
+import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
@@ -60,6 +61,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
 
   const currency = watch('currency')
 
@@ -91,6 +93,10 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       setIsPending(false)
       return
     }
+
+    const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
+
+    formData.imageUrl = imageUrl
 
     const attributes = createPublishAttributes({ id, formData })
 
@@ -226,7 +232,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                   alt={selectedCurrencySymbol}
                 />
               }
-              placeholder="420"
+              placeholder="400"
               {...register('goal', { required: true })}
             />
             <Input
@@ -246,6 +252,11 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               placeholder="Tell us more about this fundraiser"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
+            />
+            <Input
+              label="Image (optional): "
+              type="file"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
         ) : (
