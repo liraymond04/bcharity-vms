@@ -18,7 +18,12 @@ const DonateToCauseModal: FC = () => {
 
   return (
     <>
-      <Modal show={showModal} title="" onClose={() => setShowModal(false)}>
+      <Modal
+        show={showModal}
+        title=""
+        size="lg"
+        onClose={() => setShowModal(false)}
+      >
         <div className="pl-10">
           <div className="flex flex-row ">
             <div className="text-purple-500 text-5xl font-bold">

@@ -15,15 +15,19 @@ interface Props {
 export const Modal: FC<Props> = ({
   icon,
   title,
-  size,
+  size = 'sm',
   show,
   children,
   onClose
 }) => {
   return (
     <Transition.Root show={show} as={Fragment}>
-      <Dialog as="div" className="w-full justify-center flex" onClose={onClose}>
-        <div className=" w-5/12 flex justify-center items-center p-4 text-center ">
+      <Dialog
+        as="div"
+        className="overflow-y-auto fixed inset-0 z-10"
+        onClose={onClose}
+      >
+        <div className="flex justify-center items-center p-4 min-h-screen text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-100"
