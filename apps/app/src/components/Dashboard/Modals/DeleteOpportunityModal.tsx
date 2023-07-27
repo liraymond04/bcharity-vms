@@ -109,13 +109,13 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
             />
             <Input
               label="Start Date"
-              type="startDate"
+              type="date"
               defaultValue={values.startDate}
               disabled
             />
             <Input
               label="End Date"
-              type="endDate"
+              type="date"
               defaultValue={values.endDate}
               disabled
             />

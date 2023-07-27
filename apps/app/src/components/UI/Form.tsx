@@ -47,6 +47,9 @@ export const FieldError: FC<FieldErrorProps> = ({ name }) => {
       case 'pattern': {
         return error.message?.toString() ?? 'Unknown error'
       }
+      case 'validate': {
+        return error.message?.toString() ?? 'Unknown error'
+      }
       default:
         return 'Unknown error'
     }

@@ -84,7 +84,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       attributes,
       appId: APP_NAME
     }
-    console.log('editing', metadata)
 
     checkAuth(publisher.ownedBy)
       .then(() =>
@@ -158,6 +157,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               hasTick
               placeholder="yyyy-mm-dd"
               change={() => {
+                form.setValue('endDate', '')
                 setEndDateDisabled(!endDateDisabled)
               }}
               disabled={!endDateDisabled}

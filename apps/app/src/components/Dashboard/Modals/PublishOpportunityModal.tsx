@@ -139,6 +139,15 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     formState: { errors }
   } = form
 
+  const validUrl = (url: string) => {
+    try {
+      new URL(url)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
   const onCancel = () => {
     reset()
     onClose(false)
@@ -194,7 +203,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     }
     setIsPending(false)
   }
-  console.log('publish', errors.startDate?.type)
+
   return (
     <GradientModal
       title={'Publish New Volunteer Opportunity'}
@@ -233,6 +242,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="yyyy-mm-dd"
               hasTick
               change={() => {
+                form.setValue('endDate', '')
                 setEndDateDisabled(!endDateDisabled)
               }}
               disabled={!endDateDisabled}
@@ -264,7 +274,15 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Website (leave empty if not linking to external opportunity)"
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
-              {...register('website')}
+              {...register('website', {
+                validate: (url) => {
+                  return (
+                    url == '' ||
+                    validUrl(url) ||
+                    'You must enter a valid website'
+                  )
+                }
+              })}
             />
             <TextArea
               label="Activity Description"

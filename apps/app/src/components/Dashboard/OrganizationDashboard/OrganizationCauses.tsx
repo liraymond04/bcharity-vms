@@ -73,9 +73,7 @@ const OrganizationCauses: React.FC = () => {
   }
 
   const onDelete = (id: string) => {
-    console.log('delete id ', id)
     setCurrentDeleteId(id)
-
     setDeleteModalOpen(true)
   }
 
