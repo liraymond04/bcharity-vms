@@ -1,22 +1,33 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
+import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { OpportunityMetadata } from '@/lib/types'
 
 import { Card } from '../UI/Card'
+import { Spinner } from '../UI/Spinner'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
+  id: string
 }
 
-const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
-  return (
-    <Card>
-      <div className="flex">
+const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
+  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
+
+  useEffect(() => {
+    if (post.imageUrl) {
+      getIPFSBlob(post.imageUrl).then((url) => setResolvedImageUrl(url))
+    }
+  }, [post])
+
+  const getDisplayedImage = () => {
+    if (!post.imageUrl) {
+      return (
         <div
-          className="flex-shrink-0 h-36 w-36 rounded-l-xl border-b dark:border-b-gray-700/80"
+          className="border-b dark:border-b-gray-700/80 h-full rounded-l-xl"
           style={{
             backgroundImage: `url(${`${STATIC_ASSETS}/patterns/2.svg`})`,
             backgroundColor: '#8b5cf6',
@@ -25,25 +36,51 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
             backgroundRepeat: 'repeat'
           }}
         />
-        <div className="relative mx-5 mt-3 mb-1">
-          <div className="font-bold text-2xl line-clamp-1">{post?.name}</div>
-          <div className="text-xs">{post?.from.handle}</div>
-          <div className="text-xs">{post?.startDate}</div>
-          <div className="line-clamp-2 text-sm mt-1">{post?.description}</div>
-          {post?.website && (
-            <Link
-              href={post?.website}
-              target="_blank"
-              className="absolute bottom-0 flex text-brand-600 text-sm"
-            >
-              <div className="flex items-center">
-                <div className="mr-1 whitespace-nowrap">External url</div>
-                <ExternalLinkIcon className="w-4 h-4 inline-flex" />
-              </div>
-            </Link>
-          )}
+      )
+    } else if (!resolvedImageUrl) {
+      return (
+        <div className="h-full flex items-center justify-center rounded-l-xl">
+          <Spinner size="lg" />
         </div>
-      </div>
+      )
+    } else {
+      return (
+        <img
+          src={resolvedImageUrl}
+          alt="Volunteer opportunity related image"
+          className="h-full w-auto m-auto rounded-l-xl"
+        />
+      )
+    }
+  }
+
+  return (
+    <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
+      <Link href={`/volunteer/${id}`} target="_blank">
+        <div className="flex">
+          <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
+            {getDisplayedImage()}
+          </div>
+          <div className="relative mx-5 mt-3 mb-1">
+            <div className="font-bold text-2xl line-clamp-1">{post?.name}</div>
+            <div className="text-xs">{post?.from.handle}</div>
+            <div className="text-xs">{post?.startDate}</div>
+            <div className="line-clamp-2 text-sm mt-1">{post?.description}</div>
+            {post?.website && (
+              <Link
+                href={post?.website}
+                target="_blank"
+                className="absolute bottom-0 flex text-brand-600 text-sm"
+              >
+                <div className="flex items-center transition duration-10 hover:bg-brand-200 rounded-sm">
+                  <div className="mr-1 whitespace-nowrap">External url</div>
+                  <ExternalLinkIcon className="w-4 h-4 inline-flex" />
+                </div>
+              </Link>
+            )}
+          </div>
+        </div>
+      </Link>
     </Card>
   )
 }

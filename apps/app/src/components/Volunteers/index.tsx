@@ -16,7 +16,7 @@ import { Spinner } from '../UI/Spinner'
 import VolunteerCard from './VolunteerCard'
 
 const Volunteers: NextPage = () => {
-  const [posts, setPosts] = useState<OpportunityMetadata[]>([])
+  const [posts, setPosts] = useState<[OpportunityMetadata, string][]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -34,14 +34,14 @@ const Volunteers: NextPage = () => {
   })
 
   useEffect(() => {
-    let _posts: OpportunityMetadata[] = []
+    let _posts: [OpportunityMetadata, string][] = []
     let _categories: Set<string> = new Set()
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {
-      _posts.push(post)
+      _posts.push([post, post.id])
       if (post.category) _categories.add(post.category)
     })
-    setPosts(metadata)
+    setPosts(_posts)
     setCategories(_categories)
   }, [data])
 
@@ -105,12 +105,12 @@ const Volunteers: NextPage = () => {
           {posts
             .filter(
               (post) =>
-                selectedCategory === '' || post.category === selectedCategory
+                selectedCategory === '' || post[0].category === selectedCategory
             )
             .map((post, idx, arr) => (
-              <GridItemFour key={post?.opportunity_id}>
+              <GridItemFour key={post[0]?.opportunity_id}>
                 <span ref={idx === arr.length - 1 ? observe : null}>
-                  <VolunteerCard post={post} />
+                  <VolunteerCard post={post[0]} id={post[1]} />
                 </span>
               </GridItemFour>
             ))}

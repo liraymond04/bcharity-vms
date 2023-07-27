@@ -1,7 +1,23 @@
-import { PostFragment, PublicationFragment } from '@lens-protocol/client'
+import {
+  MetadataAttributeOutputFragment,
+  PostFragment,
+  PublicationFragment
+} from '@lens-protocol/client'
 
 import { CauseMetadata, CauseMetadataVersion, MetadataVersion } from '../types'
 
+const getAttribute = (
+  attributes: MetadataAttributeOutputFragment[],
+  attributeName: string
+) => {
+  const item =
+    attributes &&
+    attributes.filter((item) => item.traitType === attributeName).at(0)
+  if (item) {
+    return item.value
+  }
+  return ''
+}
 const getCauseMetadata = (data: PublicationFragment[]) => {
   const allMetadata: (CauseMetadata & { createdAt: number })[] = data
     .filter(
@@ -12,20 +28,21 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
           MetadataVersion.CauseMetadataVersion['1.0.0'] &&
         !post.hidden
     )
+
     .map((post) => {
       const attributes = (post as PostFragment).metadata.attributes
       return {
-        version: attributes[1].value! as CauseMetadataVersion,
-        cause_id: attributes[2].value ?? '',
-        name: attributes[3].value ?? '',
-        category: attributes[4].value ?? '',
-        currency: attributes[5].value ?? '',
-        contribution: attributes[6].value ?? '',
-        goal: attributes[7].value ?? '',
-        recipient: attributes[8].value ?? '',
-        description: attributes[9].value ?? '',
-        location: attributes[10].value ?? '',
-        imageUrl: attributes[11].value ?? '',
+        version: getAttribute(attributes, 'version') as CauseMetadataVersion,
+        cause_id: getAttribute(attributes, 'cause_id') ?? '',
+        name: getAttribute(attributes, 'name') ?? '',
+        category: getAttribute(attributes, 'category') ?? '',
+        currency: getAttribute(attributes, 'currency') ?? '',
+        contribution: getAttribute(attributes, 'contribution') ?? '',
+        goal: getAttribute(attributes, 'goal') ?? '',
+        recipient: getAttribute(attributes, 'recipient') ?? '',
+        description: getAttribute(attributes, 'description') ?? '',
+        location: getAttribute(attributes, 'location') ?? '',
+        imageUrl: getAttribute(attributes, 'imageUrl') ?? '',
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime()
       }

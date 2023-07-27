@@ -1,15 +1,9 @@
 import SEO from '@components/utils/SEO'
-import {
-  ProfileFragment,
-  PublicationSortCriteria,
-  PublicationsQueryRequest,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { PostTags } from '@/lib/types'
 
@@ -28,58 +22,13 @@ const Causes: NextPage = () => {
   } = useExplorePublications({
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportuntiy, PostTags.OrgPublish.Cause]
-      }
+      tags: { oneOf: [PostTags.OrgPublish.Cause] }
     }
   })
 
-  const [profiles, setProfiles] = useState<ProfileFragment[]>([])
-  const [postings, setPostings] = useState<number[]>([])
+  const posts = useMemo(() => getCauseMetadata(data), [data])
+
   const [searchValue, setSearchValue] = useState('')
-
-  const [otherError, setOtherError] = useState(false)
-  const posts = useMemo(() => getOpportunityMetadata(data), [data])
-
-  useEffect(() => {
-    const uniqueIds: Set<string> = new Set()
-
-    posts.forEach((post) => uniqueIds.add(post.from.id))
-
-    if (uniqueIds.size > 0)
-      lensClient()
-        .profile.fetchAll({ profileIds: Array.from(uniqueIds) })
-        .then((res) => setProfiles(res.items))
-        .catch((err) => {
-          console.log(err)
-          setOtherError(true)
-        })
-  }, [posts])
-
-  const generateRequest = (profileId: string) => {
-    const param: PublicationsQueryRequest = {
-      profileId,
-      publicationTypes: [PublicationTypes.Post],
-      metadata: {
-        tags: {
-          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportuntiy]
-        }
-      }
-    }
-
-    return lensClient()
-      .publication.fetchAll(param)
-      .then((result) => result.items.filter((res) => !res.hidden).length)
-  }
-
-  useEffect(() => {
-    Promise.all(profiles.map((profile) => generateRequest(profile.id)))
-      .then((lengths) => setPostings(lengths))
-      .catch((err) => {
-        setOtherError(true)
-        console.log(err)
-      })
-  }, [profiles])
 
   return (
     <>
@@ -101,14 +50,14 @@ const Causes: NextPage = () => {
           </div>
         ) : (
           <GridLayout>
-            {profiles.map((profile, index) => (
-              <GridItemFour key={profile.id}>
-                <CauseCard profile={profile} postings={postings[index]} />
+            {posts.map((post) => (
+              <GridItemFour key={post.cause_id}>
+                <CauseCard cause={post} />
               </GridItemFour>
             ))}
           </GridLayout>
         )}
-        {(exploreError || otherError) && (
+        {exploreError && (
           <div className="text-sm text-center">Something went wrong.</div>
         )}
       </div>

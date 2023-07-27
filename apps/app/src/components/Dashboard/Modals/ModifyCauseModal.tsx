@@ -85,7 +85,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes(selectedCurrency, id, data)
+    const attributes = createPublishAttributes(id, selectedCurrency, data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
@@ -184,6 +184,14 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
+            <Input
+              label="Location"
+              placeholder="Calgary"
+              error={!!errors.location?.type}
+              {...register('location', {
+                required: true
+              })}
+            />
             <Input
               label={t('Contribution')}
               type="number"
