@@ -117,7 +117,6 @@ const OrganizationCauses: React.FC = () => {
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
     const d = postMetadata.find((val) => val?.cause_id === id)
-    console.log('d', d)
 
     return d
       ? {

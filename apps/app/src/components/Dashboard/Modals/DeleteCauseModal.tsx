@@ -90,7 +90,6 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
         setPending(false)
       })
   }
-  console.log('delte', postData)
   return (
     <GradientModal
       title={'Delete Volunteer Opportunity'}
