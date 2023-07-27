@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ProfileFragment } from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
+import { ICity, ICountry, IState } from 'country-state-city'
 
 export enum OpportunityMetadataVersion {
   '1.0.0' = '1.0.0'
@@ -213,4 +214,29 @@ export interface ProfileMetadata {
    */
   attributes: AttributeData[]
   location: string | null
+}
+
+/**
+ * Interface to hold location data, split into country, province, and city, all
+ * portentially undefined
+ */
+export interface ILocationData {
+  /**
+   * The country of the user, possibly undefined
+   */
+  country: ICountry | undefined
+  /**
+   * The provincial subdivision of the user, possibly undefined
+   */
+  province: IState | undefined
+  /**
+   * The city of the user, possibly undefined
+   */
+  city: ICity | undefined
+}
+
+export interface IFormLocation {
+  country: string
+  province: string
+  city: string
 }
