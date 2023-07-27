@@ -55,8 +55,12 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
   }
 
   return (
-    <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
-      <Link href={`/volunteer/${id}`} target="_blank">
+    <div
+      onClick={() => {
+        window.open(`/volunteer/${id}`, '_blank')
+      }}
+    >
+      <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
         <div className="flex">
           <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
             {getDisplayedImage()}
@@ -80,8 +84,8 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
             )}
           </div>
         </div>
-      </Link>
-    </Card>
+      </Card>
+    </div>
   )
 }
 
