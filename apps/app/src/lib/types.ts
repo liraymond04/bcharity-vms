@@ -142,6 +142,17 @@ enum OrgPublish {
   Cause = 'ORG_PUBLISH_CAUSE'
 }
 
+enum Bookmark {
+  /**
+   * Tag to use for bookmarking a volunteer opportunity
+   */
+  Opportunity = 'BOOKMARK_OPPORTUNITY',
+  /**
+   * Tag to use for bookmarking a cause
+   */
+  Cause = 'BOOKMARK_CAUSE'
+}
+
 export type OpportunityMetadataRecord = Record<
   keyof OpportunityMetadata | 'type',
   string
@@ -151,7 +162,11 @@ export const PostTags = {
   /**
    * Collection of tags for organizations publishing and modifying
    */
-  OrgPublish
+  OrgPublish,
+  /**
+   * Collection of tags for bookmarking publications
+   */
+  Bookmark
 }
 
 export enum MetadataDisplayType {

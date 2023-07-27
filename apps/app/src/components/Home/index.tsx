@@ -119,7 +119,7 @@ const Home: NextPage = () => {
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {posts.map((post) => (
                     <div key={post.opportunity_id} className="my-2 mx-1">
-                      <VolunteerCard post={post} />
+                      <VolunteerCard post={post} id={post.id} />
                     </div>
                   ))}
                 </div>

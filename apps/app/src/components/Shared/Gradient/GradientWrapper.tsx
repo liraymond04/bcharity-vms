@@ -1,5 +1,5 @@
 import { useTheme } from 'next-themes'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import styles from './gradient.module.css'
 interface IGradientWrapperProps {
@@ -16,22 +16,18 @@ const GradientWrapper: React.FC<IGradientWrapperProps> = ({
   children,
   className = ''
 }) => {
-  const { resolvedTheme } = useTheme()
-  const [theme, setTheme] = useState<string | undefined>('light')
-
-  useEffect(() => {
-    setTheme(resolvedTheme)
-  }, [resolvedTheme])
+  const { theme } = useTheme()
 
   return (
-    <>
-      {theme === 'light' && (
-        <div className={`${styles.gradient} ${className}`}>{children}</div>
-      )}
-      {theme === 'dark' && (
-        <div className={`${styles.darkgradient} ${className}`}>{children}</div>
-      )}
-    </>
+    <div
+      className={
+        theme === 'light'
+          ? `${styles.gradient} ${className}`
+          : `${styles.darkgradient} ${className}`
+      }
+    >
+      {children}
+    </div>
   )
 }
 
