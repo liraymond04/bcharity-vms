@@ -2,11 +2,13 @@ import { PlusSmIcon } from '@heroicons/react/outline'
 import { AgGridReact } from 'ag-grid-react'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
+import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
@@ -91,6 +93,16 @@ const OrganizationCauses: React.FC = () => {
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
+
+  const { data: currencyData, error: currencyError } = useEnabledCurrencies(
+    currentUser?.ownedBy
+  )
+
+  useEffect(() => {
+    if (currencyError) {
+      toast.error(currencyError.message)
+    }
+  }, [currencyError])
 
   const [vhrGoal] = useState(600) // use hardcoded goal for now
 
@@ -232,6 +244,7 @@ const OrganizationCauses: React.FC = () => {
               open={publishModalOpen}
               onClose={onPublishClose}
               publisher={profile}
+              currencyData={currencyData}
             />
             <DeleteCauseModal
               open={deleteModalOpen}
@@ -247,6 +260,7 @@ const OrganizationCauses: React.FC = () => {
               publisher={profile}
               id={currentModifyId}
               defaultValues={getFormDefaults(currentModifyId)}
+              currencyData={currencyData}
             />
           </div>
         </Card>
