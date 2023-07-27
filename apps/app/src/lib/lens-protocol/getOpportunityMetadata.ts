@@ -31,7 +31,10 @@ const getAttribute = (
  *
  */
 const getOpportunityMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: (OpportunityMetadata & { createdAt: number })[] = data
+  const allMetadata: (OpportunityMetadata & {
+    createdAt: number
+    id: string
+  })[] = data
     .filter(
       (post) =>
         post.__typename === 'Post' &&
@@ -41,7 +44,6 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
         !post.hidden
     )
     .map((post) => {
-      console.log(post)
       const attributes = (post as PostFragment).metadata.attributes
       return {
         version: getAttribute(
@@ -58,7 +60,8 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
         description: getAttribute(attributes, 'description') ?? '',
         imageUrl: getAttribute(attributes, 'image_url') ?? '',
         from: post.profile,
-        createdAt: new Date(post.createdAt).getTime()
+        createdAt: new Date(post.createdAt).getTime(),
+        id: post.id
       }
     })
 
