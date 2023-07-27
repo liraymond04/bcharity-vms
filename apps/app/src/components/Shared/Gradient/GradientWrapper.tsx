@@ -25,6 +25,7 @@ const GradientWrapper: React.FC<IGradientWrapperProps> = ({
           ? `${styles.gradient} ${className}`
           : `${styles.darkgradient} ${className}`
       }
+      suppressHydrationWarning
     >
       {children}
     </div>
