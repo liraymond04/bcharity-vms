@@ -1,9 +1,4 @@
-import {
-  BookmarkIcon,
-  ExternalLinkIcon,
-  HomeIcon
-} from '@heroicons/react/outline'
-import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/solid'
+import { ExternalLinkIcon, HomeIcon } from '@heroicons/react/outline'
 import {
   MetadataAttributeOutputFragment,
   PublicationFragment
@@ -20,6 +15,7 @@ import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
+import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
 import Slug from '../Shared/Slug'
 import { Button } from '../UI/Button'
@@ -91,8 +87,6 @@ const VolunteerPage: NextPage = () => {
     )
   }
 
-  const [bookmarked, setBookmarked] = useState<boolean>(false)
-
   const Body = ({ post }: { post: PublicationFragment | undefined }) => {
     const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
@@ -119,18 +113,10 @@ const VolunteerPage: NextPage = () => {
         <div className="p-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-1">
-              <button
-                className="transition duration-100 hover:scale-125"
-                onClick={() => {
-                  setBookmarked(!bookmarked)
-                }}
-              >
-                {bookmarked ? (
-                  <BookmarkSolid className="w-6 inline mb-1" />
-                ) : (
-                  <BookmarkIcon className="w-6 inline mb-1" />
-                )}
-              </button>
+              <BookmarkButton
+                publicationId={post.id}
+                postTag={PostTags.Bookmark.Opportunity}
+              />
               <div className="text-2xl font-bold text-brand-600">
                 {attributeExists(post.metadata.attributes, 'opportunity_name')
                   ? getAttribute(post.metadata.attributes, 'opportunity_name')
