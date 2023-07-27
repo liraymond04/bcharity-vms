@@ -162,8 +162,6 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const [selectedCurrencySymbol, setSelectedCurrencySymol] = useState('WMATIC')
 
-  console.log('currency', currency)
-
   useEffect(() => {
     reset({ ...emptyPublishFormData })
   }, [reset])

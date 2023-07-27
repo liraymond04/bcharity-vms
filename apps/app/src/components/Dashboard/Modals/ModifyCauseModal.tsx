@@ -43,7 +43,6 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   publisher,
   defaultValues
 }) => {
-  console.log('default', defaultValues.currency)
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
 
   const {
