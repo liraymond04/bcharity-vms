@@ -13,6 +13,7 @@ import { v4 } from 'uuid'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
+import LocationDropdowns from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
@@ -279,14 +280,15 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
-            <Input
+            {/* <Input
               label="Location"
               placeholder="Calgary"
               error={!!errors.location?.type}
               {...register('location', {
                 required: true
               })}
-            />
+            /> */}
+            <LocationDropdowns />
             <Input
               label={t('Contribution')}
               type="number"
@@ -352,20 +354,6 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               type="file"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
-            {/* <Input
-              label="Date(s)"
-              type="date"
-              placeholder="yyyy-mm-dd"
-              error={!!errors.dates?.type}
-              {...register('dates', { required: true })}
-            />
-            <Input
-              label="Expected number of hours"
-              placeholder="5"
-              error={!!errors.numHours?.type}
-              {...register('numHours', { required: true })}
-            />
-             */}
           </Form>
         ) : (
           <Spinner />

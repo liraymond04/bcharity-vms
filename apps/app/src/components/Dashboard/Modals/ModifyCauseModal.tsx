@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
+import LocationDropdowns from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
@@ -184,14 +185,15 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 ))}
               </select>
             </div>
-            <Input
+            {/* <Input
               label="Location"
               placeholder="Calgary"
               error={!!errors.location?.type}
               {...register('location', {
                 required: true
               })}
-            />
+            /> */}
+            <LocationDropdowns />
             <Input
               label={t('Contribution')}
               type="number"

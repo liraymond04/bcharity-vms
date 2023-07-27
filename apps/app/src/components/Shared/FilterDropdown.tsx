@@ -4,12 +4,14 @@ interface IFilterDropdownProps {
   label: string
   options: string[]
   onChange: (string: string) => void
+  value: string
 }
 
 const FilterDropdown: React.FC<IFilterDropdownProps> = ({
   label,
   options,
-  onChange
+  onChange,
+  value
 }) => {
   return (
     <div className="flex items-center">
@@ -19,6 +21,7 @@ const FilterDropdown: React.FC<IFilterDropdownProps> = ({
         onChange={(e) => {
           onChange(e.target.value)
         }}
+        value={value}
       >
         <option key="_none" value="">
           None
