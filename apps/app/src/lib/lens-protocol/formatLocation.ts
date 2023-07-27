@@ -6,7 +6,6 @@ import { Country, State } from 'country-state-city'
  *
  */
 export const formatLocation = (locationString: string) => {
-  console.log(locationString)
   const [country, province, city] = locationString.split('-', 3)
 
   const countryCode =

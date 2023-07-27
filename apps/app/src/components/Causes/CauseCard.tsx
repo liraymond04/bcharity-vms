@@ -54,9 +54,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
         <div className="w-full h-[200px]">{getDisplayedImage()}</div>
         <p className="text-lg text-brand-600 font-semibold leading-7 mt-2">
           {formatLocation(
-            cause.location
-              ? cause.location.toUpperCase()
-              : 'Canada-Alberta-Calgary'
+            cause.location ? cause.location : 'Canada-Alberta-Calgary'
           )}
         </p>
         <p className="text-lg font-semibold leading-7">{cause.name}</p>
