@@ -219,3 +219,9 @@ export interface ILocationData {
    */
   city: ICity | undefined
 }
+
+export interface IFormLocation {
+  country: string
+  province: string
+  city: string
+}

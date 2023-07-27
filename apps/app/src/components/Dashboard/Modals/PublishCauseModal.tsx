@@ -1,15 +1,15 @@
 import {
-  Erc20Fragment,
   PublicationMainFocus,
   PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
+import FormDropdown from '@/components/Shared/FormDropdown'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
@@ -29,11 +29,9 @@ import { PostTags } from '@/lib/types'
 import Error from './Error'
 
 export interface IPublishCauseFormProps {
-  selectedCurrency: string | number | readonly string[] | undefined
-  OrgPublish: any
+  currency: string
   name: string
   category: string
-  currency: string
   contribution: string
   goal: string
   recipient: string
@@ -47,14 +45,12 @@ export interface IPublishCauseFormProps {
 export const emptyPublishFormData: IPublishCauseFormProps = {
   name: '',
   category: '',
-  currency: '',
+  currency: DEFAULT_COLLECT_TOKEN,
   contribution: '',
   goal: '',
   recipient: '',
   description: '',
   imageUrl: '',
-  OrgPublish: undefined,
-  selectedCurrency: undefined,
   country: '',
   province: '',
   city: ''
@@ -62,7 +58,6 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
 
 export const createPublishAttributes = (data: {
   id: string
-  selectedCurrency: string
   formData: IPublishCauseFormProps
 }) => {
   const attributes: CauseMetadataAttributeInput[] = [
@@ -99,7 +94,7 @@ export const createPublishAttributes = (data: {
     {
       traitType: 'currency',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.selectedCurrency
+      value: data.formData.currency
     },
     {
       traitType: 'contribution',
@@ -142,31 +137,45 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   onClose,
   publisher
 }) => {
-  const { t } = useTranslation('common')
-  const [isPending, setIsPending] = useState<boolean>(false)
-
-  const [error, setError] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [image, setImage] = useState<File | null>(null)
-
-  const [selectedCurrency, setSelectedCurrency] = useState<string>(
-    DEFAULT_COLLECT_TOKEN
-  )
-  const [selectedCurrencySymbol, setSelectedCurrencySymbol] =
-    useState<string>('WMATIC')
-
-  const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
-
-  const form = useForm<IPublishCauseFormProps>()
+  const form = useForm<IPublishCauseFormProps>({
+    defaultValues: { ...emptyPublishFormData }
+  })
 
   const {
     handleSubmit,
     reset,
     register,
+    watch,
+    clearErrors,
     formState: { errors }
   } = form
 
+  const { t } = useTranslation('common')
+
+  const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
+  const [isPending, setIsPending] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
+
+  const currency = watch('currency')
+
+  const [selectedCurrencySymbol, setSelectedCurrencySymol] = useState('WMATIC')
+
+  console.log('currency', currency)
+
+  useEffect(() => {
+    reset({ ...emptyPublishFormData })
+  }, [reset])
+
+  useEffect(() => {
+    setSelectedCurrencySymol(
+      currencyData?.find((c) => c.address === currency)?.symbol ?? 'WMATIC'
+    )
+  }, [currency, currencyData])
+
   const onCancel = () => {
+    clearErrors()
     reset()
     onClose(false)
   }
@@ -186,11 +195,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     formData.imageUrl = imageUrl ?? ''
 
-    const attributes = createPublishAttributes({
-      id: v4(),
-      selectedCurrency,
-      formData
-    })
+    const attributes = createPublishAttributes({ id: v4(), formData })
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
@@ -204,28 +209,25 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       appId: APP_NAME
     }
 
+    const collectModuleParams = {
+      feeCollectModule: {
+        amount: {
+          currency,
+          value: formData.contribution
+        },
+        recipient: formData.recipient,
+        referralFee: 0,
+        followerOnly: false
+      }
+    }
+
     setIsPending(true)
     try {
       await checkAuth(publisher.ownedBy)
 
-      await createPost(
-        publisher,
-        metadata,
-        {
-          feeCollectModule: {
-            amount: {
-              currency: selectedCurrency,
-              value: formData.contribution
-            },
-            recipient: formData.recipient,
-            referralFee: 0,
-            followerOnly: false
-          }
-        },
-        {
-          followerOnlyReferenceModule: false
-        }
-      )
+      await createPost(publisher, metadata, collectModuleParams, {
+        followerOnlyReferenceModule: false
+      })
 
       reset()
       onClose(true)
@@ -268,26 +270,13 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 maxLength: 40
               })}
             />
-            <div>
-              <div className="label">{t('Select currency')}</div>
-              <select
-                className="w-full bg-white rounded-xl border border-gray-300 outline-none dark:bg-gray-800 disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
-                onChange={(e) => {
-                  const currency = e.target.value.split('-')
-                  setSelectedCurrency(currency[0])
-                  setSelectedCurrencySymbol(currency[1])
-                }}
-              >
-                {currencyData?.map((currency: Erc20Fragment) => (
-                  <option
-                    key={currency.address}
-                    value={`${currency.address}-${currency.symbol}`}
-                  >
-                    {currency.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FormDropdown
+              label={t('Select currency')}
+              options={currencyData?.map((c) => c.address) ?? []}
+              displayedOptions={currencyData?.map((c) => c.name) ?? []}
+              {...register('currency')}
+            />
+
             <LocationFormComponent />
             <Input
               label={t('Contribution')}

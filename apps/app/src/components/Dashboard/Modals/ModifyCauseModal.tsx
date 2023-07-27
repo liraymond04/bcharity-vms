@@ -1,5 +1,4 @@
 import {
-  Erc20Fragment,
   PublicationMainFocus,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
@@ -8,13 +7,14 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import FormDropdown from '@/components/Shared/FormDropdown'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
+import { APP_NAME } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
@@ -43,34 +43,41 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   publisher,
   defaultValues
 }) => {
-  const { t } = useTranslation('common')
-  const [isPending, setIsPending] = useState<boolean>(false)
-
-  const [error, setError] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string>('')
-
-  const [selectedCurrency, setSelectedCurrency] = useState<string>(
-    DEFAULT_COLLECT_TOKEN
-  )
-  const [selectedCurrencySymbol, setSelectedCurrencySymbol] =
-    useState<string>('WMATIC')
-
-  const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
-
+  console.log('default', defaultValues.currency)
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
-
-  useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues])
 
   const {
     handleSubmit,
     reset,
     register,
+    watch,
+    clearErrors,
     formState: { errors }
   } = form
 
+  const { t } = useTranslation('common')
+
+  const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
+  const [isPending, setIsPending] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const currency = watch('currency')
+
+  const [selectedCurrencySymbol, setSelectedCurrencySymol] = useState('WMATIC')
+
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues, reset])
+
+  useEffect(() => {
+    setSelectedCurrencySymol(
+      currencyData?.find((c) => c.address === currency)?.symbol ?? 'WMATIC'
+    )
+  }, [currency, currencyData])
+
   const onCancel = () => {
+    clearErrors()
     reset(defaultValues)
     onClose(false)
   }
@@ -86,11 +93,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes({
-      id,
-      selectedCurrency,
-      formData
-    })
+    const attributes = createPublishAttributes({ id, formData })
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
@@ -104,18 +107,23 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       appId: APP_NAME
     }
 
+    const collectModuleParams = {
+      feeCollectModule: {
+        amount: {
+          currency,
+          value: formData.contribution
+        },
+        recipient: formData.recipient,
+        referralFee: 0,
+        followerOnly: false
+      }
+    }
+
     checkAuth(publisher.ownedBy)
       .then(() =>
-        createPost(
-          publisher,
-          metadata,
-          {
-            freeCollectModule: {
-              followerOnly: false
-            }
-          },
-          { followerOnlyReferenceModule: false }
-        )
+        createPost(publisher, metadata, collectModuleParams, {
+          followerOnlyReferenceModule: false
+        })
       )
       .then((res) => {
         if (res.isFailure()) {
@@ -169,26 +177,12 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 maxLength: 40
               })}
             />
-            <div>
-              <div className="label">{t('Select currency')}</div>
-              <select
-                className="w-full bg-white rounded-xl border border-gray-300 outline-none dark:bg-gray-800 disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
-                onChange={(e) => {
-                  const currency = e.target.value.split('-')
-                  setSelectedCurrency(currency[0])
-                  setSelectedCurrencySymbol(currency[1])
-                }}
-              >
-                {currencyData?.map((currency: Erc20Fragment) => (
-                  <option
-                    key={currency.address}
-                    value={`${currency.address}-${currency.symbol}`}
-                  >
-                    {currency.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FormDropdown
+              label={t('Select currency')}
+              options={currencyData?.map((c) => c.address) ?? []}
+              displayedOptions={currencyData?.map((c) => c.name) ?? []}
+              {...register('currency')}
+            />
             <LocationFormComponent
               defaultCountry={defaultValues.country}
               defaultProvince={defaultValues.province}

@@ -2,9 +2,9 @@ import { City, Country, State } from 'country-state-city'
 import { useFormContext } from 'react-hook-form'
 
 import useLazyGeolocation from '@/lib/lens-protocol/useLazyGeolocation'
+import { IFormLocation } from '@/lib/types'
 
 import Error from '../Dashboard/Modals/Error'
-import { IPublishCauseFormProps } from '../Dashboard/Modals/PublishCauseModal'
 import Divider from '../Shared/Divider'
 import FormDropdown from '../Shared/FormDropdown'
 import { Button } from './Button'
@@ -29,16 +29,13 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
     denied
   } = useLazyGeolocation()
 
-  const { register, setValue, watch } = useFormContext<IPublishCauseFormProps>()
+  const { register, setValue, watch } = useFormContext<IFormLocation>()
 
-  const formValues = watch()
-
-  console.log('form province', formValues.province)
+  const country = watch('country')
 
   const provinces =
     State.getStatesOfCountry(
-      Country.getAllCountries().find((c) => c.name === formValues.country)
-        ?.isoCode
+      Country.getAllCountries().find((c) => c.name === country)?.isoCode
     ).map((p) => p.name) ?? []
 
   const onLocateButtonClick = () => {
@@ -49,7 +46,7 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
     })
   }
 
-  const validateCity = (value: string, _formValues: IPublishCauseFormProps) => {
+  const validateCity = (value: string, _formValues: IFormLocation) => {
     const countryCode = Country.getAllCountries().find(
       (c) => c.name === _formValues.country
     )?.isoCode

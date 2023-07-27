@@ -5,10 +5,11 @@ import { FieldError } from '../UI/Form'
 interface IFilterDropdownProps extends ComponentProps<'select'> {
   label: string
   options: string[]
+  displayedOptions?: string[]
 }
 
 const FormDropdown = forwardRef<HTMLSelectElement, IFilterDropdownProps>(
-  function FormDropdown({ label, options, ...props }, ref) {
+  function FormDropdown({ label, options, displayedOptions, ...props }, ref) {
     return (
       <div>
         <div className="flex items-center">
@@ -21,9 +22,9 @@ const FormDropdown = forwardRef<HTMLSelectElement, IFilterDropdownProps>(
             <option key="_none" value="">
               None
             </option>
-            {options.map((o) => (
+            {options.map((o, i) => (
               <option key={o} value={o}>
-                {o}
+                {displayedOptions ? displayedOptions[i] : o}
               </option>
             ))}
           </select>

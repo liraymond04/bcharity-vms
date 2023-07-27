@@ -122,11 +122,9 @@ const OrganizationCauses: React.FC = () => {
 
     return d
       ? {
-          selectedCurrency: d.currency ?? '',
           name: d.name ?? '',
           goal: d.goal ?? '',
           contribution: d.contribution ?? '',
-          OrgPublish: d.from ?? '',
           category: d.category ?? '',
           description: d.description ?? '',
           currency: d.currency ?? '',
