@@ -11,7 +11,7 @@ interface IFilterDropdownProps extends ComponentProps<'select'> {
 const FormDropdown = forwardRef<HTMLSelectElement, IFilterDropdownProps>(
   function FormDropdown({ label, options, displayedOptions, ...props }, ref) {
     return (
-      <div>
+      <div className="my-4">
         <div className="flex items-center">
           <div className="text-md mr-3">{label}</div>
           <select

@@ -5,7 +5,6 @@ import useLazyGeolocation from '@/lib/lens-protocol/useLazyGeolocation'
 import { IFormLocation } from '@/lib/types'
 
 import Error from '../Dashboard/Modals/Error'
-import Divider from '../Shared/Divider'
 import FormDropdown from '../Shared/FormDropdown'
 import { Button } from './Button'
 import { Input } from './Input'
@@ -40,9 +39,15 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
 
   const onLocateButtonClick = () => {
     executeGeoloationRequest((value) => {
-      setValue('country', value.country?.name ?? defaultCountry ?? '')
-      setValue('province', value.province?.name ?? defaultProvince ?? '')
-      setValue('city', value.city?.name ?? defaultCity ?? '')
+      setValue('country', value.country?.name ?? defaultCountry ?? '', {
+        shouldValidate: true
+      })
+      setValue('province', value.province?.name ?? defaultProvince ?? '', {
+        shouldValidate: true
+      })
+      setValue('city', value.city?.name ?? defaultCity ?? '', {
+        shouldValidate: true
+      })
     })
   }
 
@@ -58,15 +63,12 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
     if (!provinceCode || !countryCode) return false
 
     const cities = City.getCitiesOfState(countryCode, provinceCode)
-    console.log(cities)
     return !!cities.find((c) => c.name.toLowerCase() === value.toLowerCase())
   }
 
   return (
-    <div className="my-4">
-      <Divider />
-      <p>Location</p>
-      <div className="flex">
+    <div className="">
+      <div className="flex items-center">
         {!loading || denied ? (
           <>
             <FormDropdown
@@ -126,7 +128,6 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
           message={`An unexpected error occured: ${geolocationError}. Please try again.`}
         />
       )}
-      <Divider />
     </div>
   )
 }
