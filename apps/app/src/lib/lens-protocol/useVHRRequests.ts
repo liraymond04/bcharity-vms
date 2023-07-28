@@ -152,7 +152,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
       })
   }
 
-  useEffect(refetch, [])
+  useEffect(refetch, [params.profile])
 
   return {
     loading,
