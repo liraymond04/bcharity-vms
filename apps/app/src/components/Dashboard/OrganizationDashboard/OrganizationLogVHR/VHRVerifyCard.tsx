@@ -36,14 +36,14 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
         <XCircleIcon
           className="w-8 ml-auto cursor-pointer"
           onClick={(e) => {
-            onAcceptClick()
+            onRejectClick()
             e.stopPropagation()
           }}
         />
         <CheckCircleIcon
           className="w-8 ml-2 cursor-pointer"
           onClick={(e) => {
-            onRejectClick()
+            onAcceptClick()
             e.stopPropagation()
           }}
         />

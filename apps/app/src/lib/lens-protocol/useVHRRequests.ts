@@ -26,38 +26,33 @@ interface getRejectedPostIdsParams {
 }
 
 const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
+  console.log('commentId', params.commentId)
   return lensClient()
     .publication.fetchAll({
       commentsOf: params.commentId,
-      metadata: {
-        tags: {
-          oneOf: [
-            /* "REJECT_VHR_REQUEST" */
-          ]
-        }
-      }
+      metadata: { tags: { oneOf: [PostTags.VhrRequest.Reject] } }
     })
-    .then(
-      (values) =>
-        values.items.filter(
-          (value) => value.profile.ownedBy === params.profile.ownedBy
-        ).length > 0
-    )
+    .then((values) => {
+      console.log('comments', values.items)
+      const filtered = values.items.filter((value) => {
+        console.log('value', value.profile.ownedBy)
+        console.log('params', params.profile.ownedBy)
+        return value.profile.ownedBy == params.profile.ownedBy
+      })
+      console.log(filtered)
+      console.log('length', filtered.length)
+      return filtered.length > 0
+    })
 }
 
 interface getVHRRequestCommentsParams {
   publicationId: string
 }
+
 const getVHRRequestComments = (params: getVHRRequestCommentsParams) => {
   return lensClient().publication.fetchAll({
     commentsOf: params.publicationId,
-    metadata: {
-      tags: {
-        all: [
-          /* "VHR_REQUEST_OPPORTUNITY" */
-        ]
-      }
-    }
+    metadata: { tags: { all: [PostTags.VhrRequest.Opportunity] } }
   })
 }
 
@@ -103,17 +98,45 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         return Promise.all([collectedIds, ...postsComments])
       })
       .then(([collectedPostsIds, ...postsComments]) => {
+        const rejectedPostPromises = postsComments
+          .map((comment) => {
+            return comment.items.map((c) =>
+              getIsRequestRejected({
+                profile: params.profile!,
+                commentId: c.id
+              }).then((value) => {
+                return {
+                  k: c.id,
+                  v: value
+                }
+              })
+            )
+          })
+          .flat(1)
+
+        const rejectedPostMap: Record<string, boolean> = {}
+
+        return Promise.all(rejectedPostPromises)
+          .then((v) => {
+            v.map((p) => {
+              rejectedPostMap[p.k] = p.v
+            })
+          })
+          .then(() => {
+            return {
+              collectedPostsIds,
+              postsComments,
+              rejectedPostMap
+            }
+          })
+      })
+      .then(({ collectedPostsIds, postsComments, rejectedPostMap }) => {
         const data: VHRRequest[] = []
 
-        postsComments.forEach(async (postComments, i) => {
-          const filteredPosts = postComments.items.filter(async (p) => {
-            const rejected = await getIsRequestRejected({
-              profile: params.profile!,
-              commentId: p.id
-            })
+        postsComments.forEach((postComments, i) => {
+          const filteredPosts = postComments.items.filter((p) => {
             const accepted = !!collectedPostsIds.find((id) => p.id === id)
-
-            return !(rejected || accepted)
+            return !(rejectedPostMap[p.id] || accepted)
           })
 
           const metadata = getVerifyMetadata(filteredPosts)
@@ -132,6 +155,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
           })
         })
 
+        console.log('set data')
         setRequests(data)
       })
       .catch((error) => {

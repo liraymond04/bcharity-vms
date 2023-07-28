@@ -172,9 +172,10 @@ enum Bookmark {
 
 enum VhrRequest {
   /**
-   * Tag to use for making a VHR request for a volunteer opportunity
+   * Tags realted to making and verifying VHR requests for a volunteer opportunity
    */
-  Opportunity = 'VHR_REQUEST_OPPORTUNITY'
+  Opportunity = 'VHR_REQUEST_OPPORTUNITY',
+  Reject = 'VHR_REJECT_REQUEST'
 }
 
 export const PostTags = {

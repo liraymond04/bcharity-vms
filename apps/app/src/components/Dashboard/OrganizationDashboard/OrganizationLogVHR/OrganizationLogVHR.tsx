@@ -1,8 +1,18 @@
 import { SearchIcon } from '@heroicons/react/outline'
+import {
+  PublicationMainFocus,
+  PublicationMetadataV2Input
+} from '@lens-protocol/client'
 import React, { useMemo, useState } from 'react'
+import { v4 } from 'uuid'
 
 import { Spinner } from '@/components/UI/Spinner'
+import { APP_NAME } from '@/constants'
+import getUserLocale from '@/lib/getUserLocale'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
+import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
+import { PostTags } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../../Modals/Error'
@@ -25,13 +35,38 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const onAcceptClick = (id: string) => {
     console.log('accept', id)
 
-    const newData = data.filter((val) => id !== val.id)
+    refetch()
   }
 
   const onRejectClick = (id: string) => {
     console.log('reject', id)
 
-    const newData = data.filter((val) => id !== val.id)
+    if (profile === null) return
+
+    checkAuth(profile?.ownedBy ?? '').then(() => {
+      const metadata: PublicationMetadataV2Input = {
+        version: '2.0.0',
+        metadata_id: v4(),
+        content: `#${PostTags.VhrRequest.Reject}`,
+        locale: getUserLocale(),
+        tags: [PostTags.VhrRequest.Reject],
+        mainContentFocus: PublicationMainFocus.TextOnly,
+        name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
+        attributes: [],
+        appId: APP_NAME
+      }
+
+      createComment(id, profile, metadata)
+        .then((res) => {
+          if (res.isFailure()) {
+            throw res.error.message
+          } else {
+            console.log(res)
+            refetch()
+          }
+        })
+        .catch((err) => console.log(err))
+    })
   }
 
   return (
