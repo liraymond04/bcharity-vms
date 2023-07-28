@@ -2,7 +2,6 @@ import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
 import { OpportunityMetadata, PostTags, VHRRequest } from '../types'
-import checkAuth from './checkAuth'
 import getOpportunityMetadata from './getOpportunityMetadata'
 import getVerifyMetadata from './getVerifyRequestMetadata'
 import lensClient from './lensClient'
@@ -77,14 +76,12 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
       return
     }
 
-    checkAuth(params.profile.ownedBy)
-      .then(() =>
-        lensClient().publication.fetchAll({
-          profileId: params.profile!.id,
-          publicationTypes: [PublicationTypes.Post],
-          metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
-        })
-      )
+    lensClient()
+      .publication.fetchAll({
+        profileId: params.profile!.id,
+        publicationTypes: [PublicationTypes.Post],
+        metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
+      })
       .then((res) => {
         opportunities = getOpportunityMetadata(res.items)
       })
