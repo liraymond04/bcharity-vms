@@ -35,7 +35,8 @@ const generateData = () => {
       end: generateDate(),
       hour: Math.floor(Math.random() * 10),
       description:
-        'hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. '
+        'hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. ',
+      website: 'https://google.com'
     }
     data.push(op)
   }
@@ -124,12 +125,12 @@ const VolunteerLogHours: React.FC = () => {
       </div>
 
       <div className="max-h-[250px] w-fit overflow-scroll">
-        {indice.map((op, index) => (
+        {indice.map((op) => (
           <div
             className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer ${
               inter500.className
-            } ${displayIndex == index ? 'bg-blue-200' : ''}`}
-            key={index}
+            } ${displayIndex == op ? 'bg-blue-200' : ''}`}
+            key={op}
             onClick={() => setDisplayIndex(op)}
           >
             <div className="flex justify-between items-center ml-10">
@@ -140,7 +141,9 @@ const VolunteerLogHours: React.FC = () => {
               <p className="mx-5 w-[100px]">{data[op].end}</p>
               <p className="mx-5 w-[100px]">{data[op].hour} hours</p>
             </div>
-            <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
+            <a href="https://google.com" target="_blank">
+              <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
+            </a>
           </div>
         ))}
       </div>
