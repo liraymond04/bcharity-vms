@@ -2,10 +2,12 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid'
 import React from 'react'
 
 import { Card } from '@/components/UI/Card'
+import { Spinner } from '@/components/UI/Spinner'
 import { VHRRequest } from '@/lib/types'
 
 interface IVHRVerifyCardProps {
   selected?: boolean
+  pending: boolean
   value: VHRRequest
   onClick: VoidFunction
   onAcceptClick: () => void
@@ -13,6 +15,7 @@ interface IVHRVerifyCardProps {
 }
 
 const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
+  pending,
   selected,
   value,
   onClick,
@@ -33,20 +36,28 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
         <p className="ml-8 font-bold">{value.hoursToVerify} VHR</p>
         <p className="ml-8 font-bold">{value.from.handle}</p>
         <p className="ml-8 font-bold">{value.opportunity.name}</p>
-        <XCircleIcon
-          className="w-8 ml-auto cursor-pointer"
-          onClick={(e) => {
-            onRejectClick()
-            e.stopPropagation()
-          }}
-        />
-        <CheckCircleIcon
-          className="w-8 ml-2 cursor-pointer"
-          onClick={(e) => {
-            onAcceptClick()
-            e.stopPropagation()
-          }}
-        />
+        {pending ? (
+          <div className="ml-auto">
+            <Spinner />
+          </div>
+        ) : (
+          <>
+            <XCircleIcon
+              className="w-8 cursor-pointer ml-auto"
+              onClick={(e) => {
+                onRejectClick()
+                e.stopPropagation()
+              }}
+            />
+            <CheckCircleIcon
+              className="w-8 ml-2 cursor-pointer"
+              onClick={(e) => {
+                onAcceptClick()
+                e.stopPropagation()
+              }}
+            />
+          </>
+        )}
       </div>
     </Card>
   )

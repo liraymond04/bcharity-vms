@@ -29,53 +29,76 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const { loading, data, error, refetch } = useVHRRequests({ profile })
   const [selectedId, setSelectedId] = useState('')
 
+  const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
+
   const selectedValue = useMemo(() => {
     return data.find((val) => val.id === selectedId) ?? null
   }, [data, selectedId])
 
+  const setIdPending = (id: string) => {
+    const newPendingIds = { ...pendingIds, [id]: true }
+    setPendingIds(newPendingIds)
+  }
+
+  const removeIdPending = (id: string) => {
+    setPendingIds({ ...pendingIds, [id]: false })
+  }
+
   const onAcceptClick = (id: string) => {
-    checkAuth(profile?.ownedBy ?? '').then(() => {
-      createCollect(id)
-        .then((res) => {
-          if (res.isFailure()) {
-            throw res.error.message
-          } else {
-            refetch()
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    })
+    if (profile === null) return
+
+    setIdPending(id)
+
+    checkAuth(profile.ownedBy)
+      .then(() => createCollect(id))
+      .then((res) => {
+        if (res.isFailure()) {
+          throw res.error.message
+        } else {
+          refetch()
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        removeIdPending(id)
+      })
   }
 
   const onRejectClick = (id: string) => {
     if (profile === null) return
 
-    checkAuth(profile?.ownedBy ?? '').then(() => {
-      const metadata: PublicationMetadataV2Input = {
-        version: '2.0.0',
-        metadata_id: v4(),
-        content: `#${PostTags.VhrRequest.Reject}`,
-        locale: getUserLocale(),
-        tags: [PostTags.VhrRequest.Reject],
-        mainContentFocus: PublicationMainFocus.TextOnly,
-        name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
-        attributes: [],
-        appId: APP_NAME
-      }
+    setIdPending(id)
 
-      createComment(id, profile, metadata)
-        .then((res) => {
-          if (res.isFailure()) {
-            throw res.error.message
-          } else {
-            console.log(res)
-            refetch()
-          }
-        })
-        .catch((err) => console.log(err))
-    })
+    checkAuth(profile.ownedBy)
+      .then(() => {
+        const metadata: PublicationMetadataV2Input = {
+          version: '2.0.0',
+          metadata_id: v4(),
+          content: `#${PostTags.VhrRequest.Reject}`,
+          locale: getUserLocale(),
+          tags: [PostTags.VhrRequest.Reject],
+          mainContentFocus: PublicationMainFocus.TextOnly,
+          name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
+          attributes: [],
+          appId: APP_NAME
+        }
+
+        return createComment(id, profile, metadata)
+      })
+      .then((res) => {
+        if (res.isFailure()) {
+          throw res.error.message
+        } else {
+          console.log(res)
+          refetch()
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        removeIdPending(id)
+      })
   }
 
   return (
@@ -117,6 +140,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
 
               return (
                 <VHRVerifyCard
+                  pending={!!pendingIds[value.id]}
                   selected={selected}
                   key={value.id}
                   value={value}
