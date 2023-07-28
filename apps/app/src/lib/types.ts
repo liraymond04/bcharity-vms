@@ -153,6 +153,10 @@ enum Bookmark {
   Cause = 'BOOKMARK_CAUSE'
 }
 
+enum VHRRequestEnum {
+  Reject = 'REJECT'
+}
+
 export type OpportunityMetadataRecord = Record<
   keyof OpportunityMetadata | 'type',
   string
@@ -166,7 +170,11 @@ export const PostTags = {
   /**
    * Collection of tags for bookmarking publications
    */
-  Bookmark
+  Bookmark,
+  /**
+   * Collection of tags for VHR Requests
+   */
+  VHRRequest: VHRRequestEnum
 }
 
 export enum MetadataDisplayType {
@@ -239,4 +247,13 @@ export interface IFormLocation {
   country: string
   province: string
   city: string
+}
+
+export interface VHRRequest {
+  hours: number
+  comment: string
+  from: ProfileFragment
+  opportunity: OpportunityMetadata
+  id: string
+  createdAt: string
 }

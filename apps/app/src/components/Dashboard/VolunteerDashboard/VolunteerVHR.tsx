@@ -15,7 +15,7 @@ import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
-import Error from '../Modals/Error'
+import ErrorMessage from '../Modals/Error'
 import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
@@ -136,7 +136,7 @@ const VolunteerVHRTab: React.FC = () => {
           </div>
 
           {postDataError && (
-            <Error
+            <ErrorMessage
               message={`An error occured: ${postDataError}. Please try again`}
             />
           )}

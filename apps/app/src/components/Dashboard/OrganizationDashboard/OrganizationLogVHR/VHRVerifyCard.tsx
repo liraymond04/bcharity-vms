@@ -2,12 +2,11 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid'
 import React from 'react'
 
 import { Card } from '@/components/UI/Card'
-
-import { _fake_data } from './OrganizationLogVHR'
+import { VHRRequest } from '@/lib/types'
 
 interface IVHRVerifyCardProps {
   selected?: boolean
-  value: _fake_data
+  value: VHRRequest
   onClick: VoidFunction
   onAcceptClick: () => void
   onRejectClick: () => void
@@ -28,10 +27,12 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
         } flex items-center shadow-sm shadow-black px-5 py-2`}
         onClick={onClick}
       >
-        <p>{value.date}</p>
-        <p className="ml-8 font-bold">{value.VHR} VHR</p>
-        <p className="ml-8 font-bold">{value.handle}</p>
-        <p className="ml-8 font-bold">{value.oppName}</p>
+        <p>
+          {value.opportunity.startDate} - {value.opportunity.endDate}
+        </p>
+        <p className="ml-8 font-bold">{value.hours} VHR</p>
+        <p className="ml-8 font-bold">{value.from.handle}</p>
+        <p className="ml-8 font-bold">{value.opportunity.name}</p>
         <XCircleIcon
           className="w-8 ml-auto cursor-pointer"
           onClick={(e) => {

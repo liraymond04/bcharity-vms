@@ -24,7 +24,6 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
   }, [post])
 
   const getDisplayedImage = () => {
-    console.log(post)
     if (!post.imageUrl) {
       console.log('showing default')
       return (
