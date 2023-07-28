@@ -107,7 +107,7 @@ const VolunteerPage: NextPage = () => {
     return (
       post?.__typename === 'Post' &&
       (post.metadata.attributes?.length &&
-      post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportuntiy ? (
+      post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportunity ? (
         <WrongPost />
       ) : (
         <div className="p-6">
