@@ -28,7 +28,8 @@ const useApply = (params: Props) => {
 
   const apply = async (
     profile: ProfileFragment | null,
-    hoursToVerify: string
+    hoursToVerify: string,
+    close?: Function
   ) => {
     setIsLoading(true)
     try {
@@ -85,6 +86,8 @@ const useApply = (params: Props) => {
         id: typedDataResult.unwrap().id,
         signature: signature
       })
+
+      if (close) close()
 
       return broadcastResult
     } catch (e) {

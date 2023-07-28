@@ -1,7 +1,6 @@
 import Error from '@components/Dashboard/Modals/Error'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 
 import useApply from '@/lib/lens-protocol/useApply'
 import { useAppPersistStore } from '@/store/app'
@@ -35,12 +34,6 @@ const ApplyButton: FC<Props> = ({
     organizationId
   })
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error.message)
-    }
-  }, [error])
-
   const form = useForm<IVhrVerificationFormProps>()
 
   const {
@@ -56,8 +49,7 @@ const ApplyButton: FC<Props> = ({
   }
 
   const onSubmit = async (formData: IVhrVerificationFormProps) => {
-    await apply(currentUser, formData.hoursToVerify)
-    onCancel()
+    await apply(currentUser, formData.hoursToVerify, onCancel)
   }
 
   return (
