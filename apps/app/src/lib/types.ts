@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { ProfileFragment } from '@lens-protocol/client'
+import {
+  ProfileFragment,
+  PublicationMetadataV2Input
+} from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
@@ -15,10 +18,15 @@ export enum ProfileMetadataVersions {
   '1.0.0'
 }
 
+export enum VhrRequestMetadataVersions {
+  '1.0.0' = '1.0.0'
+}
+
 export const MetadataVersion = {
   OpportunityMetadataVersion,
   CauseMetadataVersion,
-  ProfileMetadataVersions
+  ProfileMetadataVersions,
+  VhrRequestMetadataVersions
 }
 
 interface OrgPublishMetadata<T> {
@@ -153,6 +161,13 @@ enum Bookmark {
   Cause = 'BOOKMARK_CAUSE'
 }
 
+enum VhrRequest {
+  /**
+   * Tag to use for making a VHR request for a volunteer opportunity
+   */
+  Opportunity = 'VHR_REQUEST_OPPORTUNITY'
+}
+
 export const PostTags = {
   /**
    * Collection of tags for organizations publishing and modifying
@@ -161,7 +176,11 @@ export const PostTags = {
   /**
    * Collection of tags for bookmarking publications
    */
-  Bookmark
+  Bookmark,
+  /**
+   * Collection of tags for making VHR requests
+   */
+  VhrRequest
 }
 
 export type OpportunityMetadataRecord = Record<
@@ -214,6 +233,18 @@ export interface ProfileMetadata {
    */
   attributes: AttributeData[]
   location: string | null
+}
+
+export interface VhrRequestMetadata extends PublicationMetadataV2Input {
+  /**
+   * The metadata version.
+   */
+  version: VhrRequestMetadataVersions
+
+  /**
+   * Any custom attributes can be added here for a VHR request
+   */
+  attributes: MetadataAttributeInput[]
 }
 
 /**
