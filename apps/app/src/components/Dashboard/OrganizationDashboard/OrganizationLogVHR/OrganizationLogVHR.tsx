@@ -61,8 +61,8 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         }
       })
       .catch((err) => {
-        setVerifyOrRejectError(err?.message ?? err)
         console.log(err)
+        setVerifyOrRejectError(err?.message ?? err)
       })
       .finally(() => {
         removeIdPending(id)
@@ -94,13 +94,12 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         if (res.isFailure()) {
           throw res.error.message
         } else {
-          console.log(res)
           refetch()
         }
       })
       .catch((err) => {
-        setVerifyOrRejectError(err?.message ?? err)
         console.log(err)
+        setVerifyOrRejectError(err?.message ?? err)
       })
       .finally(() => {
         removeIdPending(id)
