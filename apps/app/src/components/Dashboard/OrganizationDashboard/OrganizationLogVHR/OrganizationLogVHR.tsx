@@ -1,76 +1,129 @@
 import { SearchIcon } from '@heroicons/react/outline'
+import {
+  PublicationMainFocus,
+  PublicationMetadataV2Input
+} from '@lens-protocol/client'
 import React, { useMemo, useState } from 'react'
 import { v4 } from 'uuid'
 
+import { Spinner } from '@/components/UI/Spinner'
+import { APP_NAME } from '@/constants'
+import getUserLocale from '@/lib/getUserLocale'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
+import createCollect from '@/lib/lens-protocol/createCollect'
+import createComment from '@/lib/lens-protocol/createComment'
+import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
+import { PostTags } from '@/lib/types'
+import { useAppPersistStore } from '@/store/app'
+
+import Error from '../../Modals/Error'
 import DashboardDropDown from '../../VolunteerDashboard/DashboardDropDown'
 import VHRDetailCard from './VHRDetailCard'
 import VHRVerifyCard from './VHRVerifyCard'
 
-export interface _fake_data {
-  id: string
-  date: string
-  VHR: number
-  handle: string
-  handleId: string
-  oppName: string
-  oppId: string
-  comment: string
-}
-
-const makeFakeData = (): _fake_data[] => {
-  const randomInRange = (from: number, to: number) => {
-    var r = Math.random()
-    return Math.floor(r * (to - from) + from)
-  }
-
-  const fake: _fake_data[] = []
-
-  for (let i = 0; i < 100; i++) {
-    fake.push({
-      id: '' + i,
-      date: '2005-11-02',
-      VHR: 10 * randomInRange(1, 99999),
-      handle: '@cookiekiller' + randomInRange(1, 99999),
-      handleId: v4(),
-      oppName: 'opportunity' + randomInRange(1, 99999),
-      oppId: v4(),
-      comment:
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A ' +
-        'A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A '
-    })
-  }
-
-  return fake
-}
-
 interface IOrganizationLogVHRProps {}
 
 const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
-  const [data, setData] = useState(makeFakeData())
+  const { currentUser: profile } = useAppPersistStore()
+
+  const { loading, data, error, refetch } = useVHRRequests({ profile })
+
   const [selectedId, setSelectedId] = useState('')
+  const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 
   const selectedValue = useMemo(() => {
     return data.find((val) => val.id === selectedId) ?? null
   }, [data, selectedId])
 
-  const onAcceptClick = (id: string) => {
-    console.log('accept', id)
+  const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
 
-    const newData = data.filter((val) => id !== val.id)
-    setData(newData)
+  const setIdPending = (id: string) => {
+    const newPendingIds = { ...pendingIds, [id]: true }
+    setPendingIds(newPendingIds)
+  }
+
+  const removeIdPending = (id: string) => {
+    setPendingIds({ ...pendingIds, [id]: false })
+  }
+
+  const onAcceptClick = (id: string) => {
+    if (profile === null) return
+
+    setIdPending(id)
+
+    checkAuth(profile.ownedBy)
+      .then(() => createCollect(id))
+      .then((res) => {
+        if (res.isFailure()) {
+          throw res.error.message
+        } else {
+          refetch()
+        }
+      })
+      .catch((err) => {
+        setVerifyOrRejectError(err)
+        console.log(err)
+      })
+      .finally(() => {
+        removeIdPending(id)
+      })
   }
 
   const onRejectClick = (id: string) => {
-    console.log('reject', id)
+    if (profile === null) return
 
-    const newData = data.filter((val) => id !== val.id)
-    setData(newData)
+    setIdPending(id)
+
+    checkAuth(profile.ownedBy)
+      .then(() => {
+        const metadata: PublicationMetadataV2Input = {
+          version: '2.0.0',
+          metadata_id: v4(),
+          content: `#${PostTags.VhrRequest.Reject}`,
+          locale: getUserLocale(),
+          tags: [PostTags.VhrRequest.Reject],
+          mainContentFocus: PublicationMainFocus.TextOnly,
+          name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
+          attributes: [],
+          appId: APP_NAME
+        }
+
+        return createComment(id, profile, metadata)
+      })
+      .then((res) => {
+        if (res.isFailure()) {
+          throw res.error.message
+        } else {
+          console.log(res)
+          refetch()
+        }
+      })
+      .catch((err) => {
+        setVerifyOrRejectError(err)
+        console.log(err)
+      })
+      .finally(() => {
+        removeIdPending(id)
+      })
+  }
+
+  const shouldShowError = () => {
+    return (
+      (verifyOrRejectError &&
+        !verifyOrRejectError.startsWith('UserRejectedRequestError')) ||
+      error
+    )
+  }
+
+  const getErrorMessage = () => {
+    if (error) {
+      return error
+    } else if (
+      verifyOrRejectError &&
+      !verifyOrRejectError.startsWith('UserRejectedRequestError')
+    ) {
+      return verifyOrRejectError
+    }
   }
 
   return (
@@ -103,23 +156,36 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         </div>
       </div>
 
-      <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 shadow-md shadow-black px-4 py-3 rounded-md mt-10">
-        {data.map((value) => {
-          const selected = value.id === selectedId
+      <button onClick={() => refetch()}>Refresh</button>
+      {!loading ? (
+        <>
+          <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 shadow-md shadow-black px-4 py-3 rounded-md mt-10">
+            {data.map((value) => {
+              const selected = value.id === selectedId
 
-          return (
-            <VHRVerifyCard
-              selected={selected}
-              key={value.id}
-              value={value}
-              onClick={() => setSelectedId(selected ? '' : value.id)}
-              onAcceptClick={() => onAcceptClick(value.id)}
-              onRejectClick={() => onRejectClick(value.id)}
-            />
-          )
-        })}
-      </div>
-      {selectedValue && <VHRDetailCard value={selectedValue} />}
+              return (
+                <VHRVerifyCard
+                  pending={!!pendingIds[value.id]}
+                  selected={selected}
+                  key={value.id}
+                  value={value}
+                  onClick={() => setSelectedId(selected ? '' : value.id)}
+                  onAcceptClick={() => onAcceptClick(value.id)}
+                  onRejectClick={() => onRejectClick(value.id)}
+                />
+              )
+            })}
+          </div>
+          {selectedValue && <VHRDetailCard value={selectedValue} />}
+        </>
+      ) : (
+        <Spinner />
+      )}
+      {shouldShowError() && (
+        <Error
+          message={`An error occured: ${getErrorMessage()}. Please try again`}
+        ></Error>
+      )}
     </div>
   )
 }

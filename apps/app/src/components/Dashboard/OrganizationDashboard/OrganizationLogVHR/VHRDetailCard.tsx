@@ -2,10 +2,10 @@ import { LinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import React from 'react'
 
-import { _fake_data } from './OrganizationLogVHR'
+import { VHRRequest } from '@/lib/types'
 
 interface IVHRDetailCardProps {
-  value: _fake_data
+  value: VHRRequest
 }
 
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
@@ -15,24 +15,32 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
         <Link href="">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
-            <p className="text-black font-semibold text-lg">{value.handle}</p>
+            <p className="text-black font-semibold text-lg">
+              {value.from.handle}
+            </p>
           </div>
-          <p className="ml-10 text-fuchsia-700">{value.handleId}</p>
+          <p className="ml-10 text-fuchsia-700">{value.from.id}</p>
         </Link>
         <Link href="">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
-            <p className="text-black font-semibold text-lg">{value.oppName}</p>
+            <p className="text-black font-semibold text-lg">
+              {value.opportunity.name}
+            </p>
           </div>
-          <p className="ml-10 text-fuchsia-700">{value.oppId}</p>
+          <p className="ml-10 text-fuchsia-700">
+            {value.opportunity.opportunity_id}
+          </p>
         </Link>
         <div className="flex justify-between font-semibold text-lg mt-4">
-          <p>{value.date}</p>
-          <p>{value.VHR} VHR</p>
+          <p>
+            {value.opportunity.startDate} - {value.opportunity.endDate}
+          </p>
+          <p>{value.hoursToVerify} VHR</p>
         </div>
-        <p className="mt-auto">Request made on {value.date}</p>
+        <p className="mt-auto">Request made on {value.createdAt}</p>
       </div>
-      <p className="ml-10 overflow-scroll">{value.comment}</p>
+      <p className="ml-10 overflow-scroll">{value.comments}</p>
     </div>
   )
 }
