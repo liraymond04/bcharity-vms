@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { OpportunityMetadata, PostTags, VHRRequest } from '../types'
 import checkAuth from './checkAuth'
 import getOpportunityMetadata from './getOpportunityMetadata'
+import getVerifyMetadata from './getVerifyRequestMetadata'
 import lensClient from './lensClient'
 
 interface getCollectedPostIdsParams {
@@ -44,9 +45,7 @@ const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
   return (
     lensClient()
       .publication.fetchAll({
-        profileId: params.profile.id,
         commentsOf: params.commentId,
-        publicationTypes: [PublicationTypes.Post],
         metadata: {
           tags: {
             oneOf: [
@@ -56,7 +55,12 @@ const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
         }
       })
       // .then((res) => getPaginatedData(res))
-      .then((values) => values.items.length > 0)
+      .then(
+        (values) =>
+          values.items.filter(
+            (value) => value.profile.ownedBy === params.profile.ownedBy
+          ).length > 0
+      )
   )
 }
 
@@ -102,7 +106,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         lensClient().publication.fetchAll({
           profileId: params.profile!.id,
           publicationTypes: [PublicationTypes.Post],
-          metadata: { tags: { all: [PostTags.OrgPublish.Opportuntiy] } }
+          metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
         })
       )
       .then((res) => {
@@ -118,29 +122,35 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         return Promise.all([collectedIds, ...postsComments])
       })
       .then(([collectedPostsIds, ...postsComments]) => {
-        console.log('test', collectedPostsIds, postsComments)
         const data: VHRRequest[] = []
+
         postsComments.forEach(async (postComments, i) => {
-          postComments.items
-            .filter((p) => true) // TODO get metadata of post comment, including hours and comment id
-            .filter(
-              (p) =>
-                !getIsRequestRejected({
-                  profile: params.profile!,
-                  commentId: p.id
-                }) && !collectedPostsIds.find((id) => p.id === id)
-            )
-            .forEach((p) => {
-              data.push({
-                opportunity: opportunities[i],
-                hours: 10,
-                comment: '',
-                from: opportunities[i].from,
-                id: p.id,
-                createdAt: p.createdAt
-              })
+          const filteredPosts = postComments.items.filter(async (p) => {
+            const rejected = await getIsRequestRejected({
+              profile: params.profile!,
+              commentId: p.id
             })
+            const accepted = !!collectedPostsIds.find((id) => p.id === id)
+
+            return !(rejected || accepted)
+          })
+
+          const metadata = getVerifyMetadata(filteredPosts)
+
+          metadata.forEach((p) => {
+            const verifyRequest: VHRRequest = {
+              opportunity: opportunities[i],
+              hoursToVerify: p.hoursToVerify,
+              comments: '',
+              from: p.from,
+              id: p.id,
+              createdAt: p.createdAt
+            }
+
+            data.push(verifyRequest)
+          })
         })
+
         setRequests(data)
       })
       .catch((error) => {

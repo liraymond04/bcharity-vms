@@ -1,5 +1,4 @@
 import {
-  MetadataAttributeInput,
   ProfileFragment,
   PublicationMainFocus,
   PublicationMetadataDisplayTypes,
@@ -13,7 +12,7 @@ import { APP_NAME } from '@/constants'
 
 import getUserLocale from '../getUserLocale'
 import uploadToIPFS from '../ipfs/ipfsUpload'
-import { PostTags } from '../types'
+import { PostTags, VerifyMetadataAttributeInput } from '../types'
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
@@ -38,7 +37,7 @@ const useApply = (params: Props) => {
         throw Error('Provided profile is null!')
       }
 
-      const attributes: MetadataAttributeInput[] = [
+      const attributes: VerifyMetadataAttributeInput[] = [
         {
           traitType: 'type',
           displayType: PublicationMetadataDisplayTypes.String,

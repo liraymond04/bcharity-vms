@@ -36,11 +36,11 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
           <p>
             {value.opportunity.startDate} - {value.opportunity.endDate}
           </p>
-          <p>{value.hours} VHR</p>
+          <p>{value.hoursToVerify} VHR</p>
         </div>
         <p className="mt-auto">Request made on {value.createdAt}</p>
       </div>
-      <p className="ml-10 overflow-scroll">{value.comment}</p>
+      <p className="ml-10 overflow-scroll">{value.comments}</p>
     </div>
   )
 }

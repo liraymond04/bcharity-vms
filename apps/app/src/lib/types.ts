@@ -139,6 +139,15 @@ export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof CauseMetadata | 'type'
 }
 
+export interface VerifyMetadata {
+  hoursToVerify: string
+  comments: string
+}
+
+export interface VerifyMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof VerifyMetadata | 'type'
+}
+
 enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a volunteer opportunity
@@ -273,8 +282,8 @@ export interface IFormLocation {
 }
 
 export interface VHRRequest {
-  hours: number
-  comment: string
+  hoursToVerify: string
+  comments: string
   from: ProfileFragment
   opportunity: OpportunityMetadata
   id: string

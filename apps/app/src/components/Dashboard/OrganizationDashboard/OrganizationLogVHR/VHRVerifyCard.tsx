@@ -30,7 +30,7 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
         <p>
           {value.opportunity.startDate} - {value.opportunity.endDate}
         </p>
-        <p className="ml-8 font-bold">{value.hours} VHR</p>
+        <p className="ml-8 font-bold">{value.hoursToVerify} VHR</p>
         <p className="ml-8 font-bold">{value.from.handle}</p>
         <p className="ml-8 font-bold">{value.opportunity.name}</p>
         <XCircleIcon
