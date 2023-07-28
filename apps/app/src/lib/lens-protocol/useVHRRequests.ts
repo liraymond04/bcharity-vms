@@ -105,10 +105,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
                 profile: params.profile!,
                 commentId: c.id
               }).then((value) => {
-                return {
-                  k: c.id,
-                  v: value
-                }
+                return { k: c.id, v: value }
               })
             )
           })
@@ -123,11 +120,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
             })
           })
           .then(() => {
-            return {
-              collectedPostsIds,
-              postsComments,
-              rejectedPostMap
-            }
+            return { collectedPostsIds, postsComments, rejectedPostMap }
           })
       })
       .then(({ collectedPostsIds, postsComments, rejectedPostMap }) => {

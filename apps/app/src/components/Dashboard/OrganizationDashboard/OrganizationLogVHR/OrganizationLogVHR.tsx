@@ -10,6 +10,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
+import createCollect from '@/lib/lens-protocol/createCollect'
 import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
 import { PostTags } from '@/lib/types'
@@ -33,14 +34,22 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   }, [data, selectedId])
 
   const onAcceptClick = (id: string) => {
-    console.log('accept', id)
-
-    refetch()
+    checkAuth(profile?.ownedBy ?? '').then(() => {
+      createCollect(id)
+        .then((res) => {
+          if (res.isFailure()) {
+            throw res.error.message
+          } else {
+            refetch()
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    })
   }
 
   const onRejectClick = (id: string) => {
-    console.log('reject', id)
-
     if (profile === null) return
 
     checkAuth(profile?.ownedBy ?? '').then(() => {
