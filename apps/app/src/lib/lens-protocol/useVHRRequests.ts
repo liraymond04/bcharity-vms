@@ -11,29 +11,13 @@ interface getCollectedPostIdsParams {
   profile: ProfileFragment
 }
 
-// const getPaginatedData = async <T>(data: PaginatedResult<T>) => {
-//   let d: PaginatedResult<T> | null = data
-
-//   const ret = []
-
-//   while (d) {
-//     ret.push(...d.items)
-//     d = await d.next()
-//   }
-
-//   return ret
-// }
-
 const getCollectedPostIds = (params: getCollectedPostIdsParams) => {
-  return (
-    lensClient()
-      .publication.fetchAll({
-        collectedBy: params.profile.ownedBy,
-        publicationTypes: [PublicationTypes.Comment]
-      })
-      // .then((res) => getPaginatedData(res))
-      .then((res) => res.items.map((i) => i.id))
-  )
+  return lensClient()
+    .publication.fetchAll({
+      collectedBy: params.profile.ownedBy,
+      publicationTypes: [PublicationTypes.Comment]
+    })
+    .then((res) => res.items.map((i) => i.id))
 }
 
 interface getRejectedPostIdsParams {
@@ -42,26 +26,23 @@ interface getRejectedPostIdsParams {
 }
 
 const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
-  return (
-    lensClient()
-      .publication.fetchAll({
-        commentsOf: params.commentId,
-        metadata: {
-          tags: {
-            oneOf: [
-              /* "REJECT_VHR_REQUEST" */
-            ]
-          }
+  return lensClient()
+    .publication.fetchAll({
+      commentsOf: params.commentId,
+      metadata: {
+        tags: {
+          oneOf: [
+            /* "REJECT_VHR_REQUEST" */
+          ]
         }
-      })
-      // .then((res) => getPaginatedData(res))
-      .then(
-        (values) =>
-          values.items.filter(
-            (value) => value.profile.ownedBy === params.profile.ownedBy
-          ).length > 0
-      )
-  )
+      }
+    })
+    .then(
+      (values) =>
+        values.items.filter(
+          (value) => value.profile.ownedBy === params.profile.ownedBy
+        ).length > 0
+    )
 }
 
 interface getVHRRequestCommentsParams {
