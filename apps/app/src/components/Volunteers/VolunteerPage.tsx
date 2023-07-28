@@ -22,6 +22,7 @@ import Slug from '../Shared/Slug'
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
+import SEO from '../utils/SEO'
 
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common')
@@ -211,21 +212,24 @@ const VolunteerPage: NextPage = () => {
   }
 
   return (
-    <GridLayout>
-      <GridItemTwelve>
-        <Card>
-          {loading ? (
-            <center className="p-20">
-              <Spinner />
-            </center>
-          ) : error || data === undefined ? (
-            <Custom404 />
-          ) : (
-            <Body post={data} />
-          )}
-        </Card>
-      </GridItemTwelve>
-    </GridLayout>
+    <>
+      <SEO title="Volunteer Opportunity • BCharity VMS" />
+      <GridLayout>
+        <GridItemTwelve>
+          <Card>
+            {loading ? (
+              <center className="p-20">
+                <Spinner />
+              </center>
+            ) : error || data === undefined ? (
+              <Custom404 />
+            ) : (
+              <Body post={data} />
+            )}
+          </Card>
+        </GridItemTwelve>
+      </GridLayout>
+    </>
   )
 }
 
