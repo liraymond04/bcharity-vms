@@ -1,4 +1,9 @@
-import { ArrowCircleRightIcon, LinkIcon } from '@heroicons/react/outline'
+import {
+  ArrowCircleRightIcon,
+  CalendarIcon,
+  ClockIcon,
+  LinkIcon
+} from '@heroicons/react/outline'
 import { Inter } from '@next/font/google'
 import { useState } from 'react'
 
@@ -37,6 +42,14 @@ const generateData = () => {
   return data
 }
 
+const resetIndice = () => {
+  let indice = []
+  for (let i = 0; i < 20; i++) {
+    indice.push(i)
+  }
+  return indice
+}
+
 const VolunteerLogHours: React.FC = () => {
   const [selectedSortBy, setSelectedSortBy] = useState<string>('')
   const sortByOptions = ['Start Date', 'End Date', 'Total Hours']
@@ -45,26 +58,27 @@ const VolunteerLogHours: React.FC = () => {
   const categories = ['Education', 'Healthcare', 'Food', 'Entertainment']
 
   const [displayIndex, setDisplayIndex] = useState(0)
-  const originalData = generateData()
-  const [data, setData] = useState(originalData)
+
+  const [data, setdata] = useState(generateData())
+  const [indice, setIndice] = useState(resetIndice())
 
   const sortByStartDate = () => {
-    data.sort((a, b) => {
-      if (a.start < b.start) return -1
+    indice.sort((a, b) => {
+      if (data[a].start < data[b].start) return -1
       else return 1
     })
   }
 
   const sortByEndDate = () => {
-    data.sort((a, b) => {
-      if (a.end < b.end) return -1
+    indice.sort((a, b) => {
+      if (data[a].end < data[b].end) return -1
       else return 1
     })
   }
 
   const sortByHours = () => {
-    data.sort((a, b) => {
-      if (a.hour < b.hour) return -1
+    indice.sort((a, b) => {
+      if (data[a].hour < data[b].hour) return -1
       else return 1
     })
   }
@@ -102,7 +116,7 @@ const VolunteerLogHours: React.FC = () => {
           onClick={() => {
             setSelectedSortBy('')
             setSelectedCategory('')
-            setData(originalData)
+            setIndice(resetIndice())
           }}
         >
           Clear Filters
@@ -110,19 +124,21 @@ const VolunteerLogHours: React.FC = () => {
       </div>
 
       <div className="max-h-[250px] w-fit overflow-scroll">
-        {data.map((op, index) => (
+        {indice.map((op, index) => (
           <div
             className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer ${
               inter500.className
             } ${displayIndex == index ? 'bg-blue-200' : ''}`}
             key={index}
-            onClick={() => setDisplayIndex(index)}
+            onClick={() => setDisplayIndex(op)}
           >
             <div className="flex justify-between items-center ml-10">
-              <p className="mx-5">{op.name}</p>
-              <p className="mx-5">{op.start}</p>
-              <p className="mx-5">{op.end}</p>
-              <p className="mx-5">{op.hour} hr/week</p>
+              <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
+                {data[op].name}
+              </p>
+              <p className="mx-5 w-[100px]">{data[op].start}</p>
+              <p className="mx-5 w-[100px]">{data[op].end}</p>
+              <p className="mx-5 w-[100px]">{data[op].hour} hours</p>
             </div>
             <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
           </div>
@@ -138,10 +154,14 @@ const VolunteerLogHours: React.FC = () => {
               {data[displayIndex].name}
             </div>
           </div>
-          <div>
+          <div className="flex items-center ml-2 mt-5">
+            <CalendarIcon className="w-5 h-5 mr-2" />
             {data[displayIndex].start} to {data[displayIndex].end}
           </div>
-          <div>{data[displayIndex].hour} hours in total</div>
+          <div className="flex items-center ml-2 mt-2">
+            <ClockIcon className="w-5 h-5 mr-2" /> {data[displayIndex].hour}{' '}
+            hours in total
+          </div>
         </div>
         <div className="h-[250px] self-center w-[2px] bg-[#D8C0EC]"></div>
         <div className="flex justify-around w-[400px]">
