@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import getAvatar from '@/lib/getAvatar'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
+import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import { CauseMetadata } from '@/lib/types'
 
 import Progress from '../Shared/Progress'
@@ -52,7 +53,9 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
       <div className="flex flex-col items-stretch h-full">
         <div className="w-full h-[200px]">{getDisplayedImage()}</div>
         <p className="text-lg text-brand-600 font-semibold leading-7 mt-2">
-          {cause.location ? cause.location.toUpperCase() : 'CALGARY, AB'}
+          {formatLocation(
+            cause.location ? cause.location : 'Canada-Alberta-Calgary'
+          )}
         </p>
         <p className="text-lg font-semibold leading-7">{cause.name}</p>
         <p className="text-lg grow overflow-auto">{cause.description}</p>

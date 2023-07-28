@@ -24,7 +24,9 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
   }, [post])
 
   const getDisplayedImage = () => {
+    console.log(post)
     if (!post.imageUrl) {
+      console.log('showing default')
       return (
         <div
           className="border-b dark:border-b-gray-700/80 h-full rounded-l-xl"
@@ -38,12 +40,14 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
         />
       )
     } else if (!resolvedImageUrl) {
+      console.log('showing spinner')
       return (
         <div className="h-full flex items-center justify-center rounded-l-xl">
           <Spinner size="lg" />
         </div>
       )
     } else {
+      console.log('showing image')
       return (
         <img
           src={resolvedImageUrl}
@@ -55,8 +59,12 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
   }
 
   return (
-    <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
-      <Link href={`/volunteer/${id}`} target="_blank">
+    <div
+      onClick={() => {
+        window.open(`/volunteer/${id}`, '_blank')
+      }}
+    >
+      <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
         <div className="flex">
           <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
             {getDisplayedImage()}
@@ -80,8 +88,8 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
             )}
           </div>
         </div>
-      </Link>
-    </Card>
+      </Card>
+    </div>
   )
 }
 

@@ -50,8 +50,11 @@ export const FieldError: FC<FieldErrorProps> = ({ name }) => {
       case 'validate': {
         return error.message?.toString() ?? 'Unknown error'
       }
+      case 'city': {
+        return 'City not recognized'
+      }
       default:
-        return 'Unknown error'
+        return error.message?.toString() ?? 'Unknown error'
     }
   }
 

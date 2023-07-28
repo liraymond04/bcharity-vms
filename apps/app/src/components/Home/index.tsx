@@ -28,7 +28,7 @@ const Home: NextPage = () => {
     sortCriteria: PublicationSortCriteria.Latest,
     metadata: {
       tags: {
-        oneOf: [PostTags.OrgPublish.Opportuntiy]
+        oneOf: [PostTags.OrgPublish.Opportunity]
       }
     },
     noRandomize: true
@@ -62,7 +62,7 @@ const Home: NextPage = () => {
       publicationTypes: [PublicationTypes.Post],
       metadata: {
         tags: {
-          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportuntiy]
+          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportunity]
         }
       }
     }
@@ -118,7 +118,7 @@ const Home: NextPage = () => {
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {posts.map((post) => (
-                    <div key={post.opportunity_id} className="my-2 mx-1">
+                    <div key={post.opportunity_id} className="my-2 mx-6">
                       <VolunteerCard post={post} id={post.id} />
                     </div>
                   ))}

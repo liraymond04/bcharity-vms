@@ -13,6 +13,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
+import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import { PostTags } from '@/lib/types'
@@ -41,6 +42,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [image, setImage] = useState<File | null>(null)
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
 
@@ -60,7 +62,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     onClose(false)
   }
 
-  const onSubmit = async (data: IPublishOpportunityFormProps) => {
+  const onSubmit = async (formData: IPublishOpportunityFormProps) => {
     setError(false)
     setIsPending(true)
 
@@ -71,16 +73,23 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes(id, data)
+    const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
+
+    const attributes = createPublishAttributes({
+      id,
+      formData: { ...formData, imageUrl }
+    })
+
+    console.log(attributes)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: id,
-      content: `#${PostTags.OrgPublish.Opportuntiy}`,
+      content: `#${PostTags.OrgPublish.Opportunity}`,
       locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Opportuntiy],
+      tags: [PostTags.OrgPublish.Opportunity],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish.Opportunity} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
@@ -106,7 +115,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         }
       })
       .then(() => {
-        reset(data)
+        reset(formData)
         onClose(true)
       })
       .catch((e) => {
@@ -194,6 +203,11 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               placeholder="Tell us more about this volunteer opportunity"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
+            />
+            <Input
+              label="Image (optional): "
+              type="file"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
         ) : (
