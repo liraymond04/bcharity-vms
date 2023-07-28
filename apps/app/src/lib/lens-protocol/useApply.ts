@@ -29,6 +29,7 @@ const useApply = (params: Props) => {
   const apply = async (
     profile: ProfileFragment | null,
     hoursToVerify: string,
+    comments: string,
     close?: Function
   ) => {
     setIsLoading(true)
@@ -47,6 +48,11 @@ const useApply = (params: Props) => {
           traitType: 'hoursToVerify',
           displayType: PublicationMetadataDisplayTypes.Number,
           value: hoursToVerify
+        },
+        {
+          traitType: 'comments',
+          displayType: PublicationMetadataDisplayTypes.String,
+          value: comments
         }
       ]
       const metadata: PublicationMetadataV2Input = {
@@ -101,6 +107,7 @@ const useApply = (params: Props) => {
 
   return {
     error,
+    setError,
     isLoading,
     apply
   }

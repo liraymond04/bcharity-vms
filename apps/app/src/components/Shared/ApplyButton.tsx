@@ -10,6 +10,7 @@ import { Form } from '../UI/Form'
 import { Input } from '../UI/Input'
 import { Modal } from '../UI/Modal'
 import { Spinner } from '../UI/Spinner'
+import { TextArea } from '../UI/TextArea'
 
 interface Props {
   hoursDefault: string
@@ -19,6 +20,7 @@ interface Props {
 
 export interface IVhrVerificationFormProps {
   hoursToVerify: string
+  comments: string
 }
 
 const ApplyButton: FC<Props> = ({
@@ -29,7 +31,7 @@ const ApplyButton: FC<Props> = ({
   const { currentUser } = useAppPersistStore()
 
   const [showModal, setShowModal] = useState<boolean>(false)
-  const { error, isLoading, apply } = useApply({
+  const { error, setError, isLoading, apply } = useApply({
     publicationId,
     organizationId
   })
@@ -45,11 +47,18 @@ const ApplyButton: FC<Props> = ({
 
   const onCancel = () => {
     reset()
+    setError(undefined)
     setShowModal(false)
   }
 
   const onSubmit = async (formData: IVhrVerificationFormProps) => {
-    await apply(currentUser, formData.hoursToVerify, onCancel)
+    setError(undefined)
+    await apply(
+      currentUser,
+      formData.hoursToVerify,
+      formData.comments,
+      onCancel
+    )
   }
 
   return (
@@ -77,6 +86,12 @@ const ApplyButton: FC<Props> = ({
                       'Hours should be a positive number with at most one decimal place'
                   }
                 })}
+              />
+              <TextArea
+                label="Comments"
+                placeholder="If you have any comments, enter them here"
+                error={!!errors.comments?.type}
+                {...register('comments', { required: false, maxLength: 1000 })}
               />
             </Form>
           ) : (
