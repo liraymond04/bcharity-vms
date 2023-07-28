@@ -9,21 +9,25 @@ const inter500 = Inter({
   weight: ['500']
 })
 
+const generateDate = () => {
+  let year = (Math.floor(Math.random() * 5) + 2018).toString()
+
+  let month = (Math.floor(Math.random() * 12) + 1).toString()
+  if (month.length < 2) month = '0' + month
+
+  let day = (Math.floor(Math.random() * 30) + 1).toString()
+  if (day.length < 2) day = '0' + day
+
+  return year + '-' + month + '-' + day
+}
+
 const generateData = () => {
   var data = []
   for (let i = 0; i < 20; i++) {
     const op = {
       name: 'Opportunity ' + i,
-      start:
-        '2023-' +
-        Math.floor(Math.random() * 12) +
-        '-' +
-        Math.floor(Math.random() * 30),
-      end:
-        '2023-' +
-        Math.floor(Math.random() * 12) +
-        '-' +
-        Math.floor(Math.random() * 30),
+      start: generateDate(),
+      end: generateDate(),
       hour: Math.floor(Math.random() * 10),
       description:
         'hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. '
@@ -35,23 +39,54 @@ const generateData = () => {
 
 const VolunteerLogHours: React.FC = () => {
   const [selectedSortBy, setSelectedSortBy] = useState<string>('')
-  const sortByOptions = ['Start Date', 'End Date', 'Alphabet']
+  const sortByOptions = ['Start Date', 'End Date', 'Total Hours']
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const categories = ['Education', 'Healthcare', 'Food', 'Entertainment']
 
   const [displayIndex, setDisplayIndex] = useState(0)
-  const [data, setData] = useState(generateData())
+  const originalData = generateData()
+  const [data, setData] = useState(originalData)
+
+  const sortByStartDate = () => {
+    data.sort((a, b) => {
+      if (a.start < b.start) return -1
+      else return 1
+    })
+  }
+
+  const sortByEndDate = () => {
+    data.sort((a, b) => {
+      if (a.end < b.end) return -1
+      else return 1
+    })
+  }
+
+  const sortByHours = () => {
+    data.sort((a, b) => {
+      if (a.hour < b.hour) return -1
+      else return 1
+    })
+  }
 
   return (
     <div className="mt-10 ml-20">
-      <div className="flex py-5">
+      <div className="flex py-5 items-center">
         <div className="mr-5 h-[50px] z-10">
           <DashboardDropDown
             label="Sort By:"
             selected={selectedSortBy}
             options={Array.from(sortByOptions)}
-            onClick={(c) => setSelectedSortBy(c)}
+            onClick={(c) => {
+              if (c == 'Start Date') {
+                sortByStartDate()
+              } else if (c == 'End Date') {
+                sortByEndDate()
+              } else if (c == 'Total Hours') {
+                sortByHours()
+              }
+              setSelectedSortBy(c)
+            }}
           />
         </div>
         <div className="mx-5 h-[50px] z-10">
@@ -62,7 +97,18 @@ const VolunteerLogHours: React.FC = () => {
             onClick={(c) => setSelectedCategory(c)}
           />
         </div>
+        <button
+          className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+          onClick={() => {
+            setSelectedSortBy('')
+            setSelectedCategory('')
+            setData(originalData)
+          }}
+        >
+          Clear Filters
+        </button>
       </div>
+
       <div className="max-h-[250px] w-fit overflow-scroll">
         {data.map((op, index) => (
           <div
