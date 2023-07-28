@@ -85,11 +85,11 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: id,
-      content: `#${PostTags.OrgPublish.Opportuntiy}`,
+      content: `#${PostTags.OrgPublish.Opportunity}`,
       locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Opportuntiy],
+      tags: [PostTags.OrgPublish.Opportunity],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish.Opportunity} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }

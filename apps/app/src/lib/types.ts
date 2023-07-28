@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { ProfileFragment } from '@lens-protocol/client'
+import {
+  ProfileFragment,
+  PublicationMetadataV2Input
+} from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
@@ -15,10 +18,15 @@ export enum ProfileMetadataVersions {
   '1.0.0'
 }
 
+export enum VhrRequestMetadataVersions {
+  '1.0.0' = '1.0.0'
+}
+
 export const MetadataVersion = {
   OpportunityMetadataVersion,
   CauseMetadataVersion,
-  ProfileMetadataVersions
+  ProfileMetadataVersions,
+  VhrRequestMetadataVersions
 }
 
 interface OrgPublishMetadata<T> {
@@ -135,7 +143,7 @@ enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a volunteer opportunity
    */
-  Opportuntiy = 'ORG_PUBLISH_OPPORTUNITY',
+  Opportunity = 'ORG_PUBLISH_OPPORTUNITY',
   /**
    * Tag to use for an organization publishing or modifying a cause
    */
@@ -153,14 +161,12 @@ enum Bookmark {
   Cause = 'BOOKMARK_CAUSE'
 }
 
-enum VHRRequestEnum {
-  Reject = 'REJECT'
+enum VhrRequest {
+  /**
+   * Tag to use for making a VHR request for a volunteer opportunity
+   */
+  Opportunity = 'VHR_REQUEST_OPPORTUNITY'
 }
-
-export type OpportunityMetadataRecord = Record<
-  keyof OpportunityMetadata | 'type',
-  string
->
 
 export const PostTags = {
   /**
@@ -172,10 +178,15 @@ export const PostTags = {
    */
   Bookmark,
   /**
-   * Collection of tags for VHR Requests
+   * Collection of tags for making VHR requests
    */
-  VHRRequest: VHRRequestEnum
+  VhrRequest
 }
+
+export type OpportunityMetadataRecord = Record<
+  keyof OpportunityMetadata | 'type',
+  string
+>
 
 export enum MetadataDisplayType {
   number = 'number',
@@ -222,6 +233,18 @@ export interface ProfileMetadata {
    */
   attributes: AttributeData[]
   location: string | null
+}
+
+export interface VhrRequestMetadata extends PublicationMetadataV2Input {
+  /**
+   * The metadata version.
+   */
+  version: VhrRequestMetadataVersions
+
+  /**
+   * Any custom attributes can be added here for a VHR request
+   */
+  attributes: MetadataAttributeInput[]
 }
 
 /**

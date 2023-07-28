@@ -4,6 +4,7 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { Erc20Fragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +23,6 @@ import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import { CauseMetadataAttributeInput, MetadataVersion } from '@/lib/types'
 import { PostTags } from '@/lib/types'
 
@@ -130,12 +130,14 @@ interface IPublishCauseModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
   publisher: Profile | null
+  currencyData: Erc20Fragment[] | undefined
 }
 
 const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   open,
   onClose,
-  publisher
+  publisher,
+  currencyData
 }) => {
   const form = useForm<IPublishCauseFormProps>({
     defaultValues: { ...emptyPublishFormData }
@@ -152,7 +154,6 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const { t } = useTranslation('common')
 
-  const { data: currencyData } = useEnabledCurrencies(publisher?.ownedBy)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
