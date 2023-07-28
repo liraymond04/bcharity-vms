@@ -27,13 +27,15 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const { currentUser: profile } = useAppPersistStore()
 
   const { loading, data, error, refetch } = useVHRRequests({ profile })
-  const [selectedId, setSelectedId] = useState('')
 
+  const [selectedId, setSelectedId] = useState('')
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 
   const selectedValue = useMemo(() => {
     return data.find((val) => val.id === selectedId) ?? null
   }, [data, selectedId])
+
+  const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
 
   const setIdPending = (id: string) => {
     const newPendingIds = { ...pendingIds, [id]: true }
@@ -59,6 +61,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         }
       })
       .catch((err) => {
+        setVerifyOrRejectError(err)
         console.log(err)
       })
       .finally(() => {
@@ -95,10 +98,32 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
           refetch()
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setVerifyOrRejectError(err)
+        console.log(err)
+      })
       .finally(() => {
         removeIdPending(id)
       })
+  }
+
+  const shouldShowError = () => {
+    return (
+      (verifyOrRejectError &&
+        !verifyOrRejectError.startsWith('UserRejectedRequestError')) ||
+      error
+    )
+  }
+
+  const getErrorMessage = () => {
+    if (error) {
+      return error
+    } else if (
+      verifyOrRejectError &&
+      !verifyOrRejectError.startsWith('UserRejectedRequestError')
+    ) {
+      return verifyOrRejectError
+    }
   }
 
   return (
@@ -156,8 +181,10 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
       ) : (
         <Spinner />
       )}
-      {error && (
-        <Error message={`An error occured: ${error}. Please try again`}></Error>
+      {shouldShowError() && (
+        <Error
+          message={`An error occured: ${getErrorMessage()}. Please try again`}
+        ></Error>
       )}
     </div>
   )
