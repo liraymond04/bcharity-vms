@@ -15,6 +15,7 @@ import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
+import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
 import Slug from '../Shared/Slug'
@@ -193,7 +194,16 @@ const VolunteerPage: NextPage = () => {
                 </div>
               </Link>
             )}
-            <Button>Apply now</Button>
+            <ApplyButton
+              hoursDefault={
+                getAttribute(
+                  post.metadata.attributes,
+                  'hoursPerWeek'
+                )?.toString() ?? ''
+              }
+              publicationId={post.id}
+              organizationId={post.profile.id}
+            />
           </div>
         </div>
       ))
