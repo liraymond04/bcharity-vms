@@ -129,7 +129,7 @@ const ApplyButton: FC<Props> = ({
           setShowModal(true)
         }}
       >
-        Apply
+        Log hours
       </Button>
     </div>
   )

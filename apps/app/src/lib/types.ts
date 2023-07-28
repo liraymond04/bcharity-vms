@@ -139,6 +139,15 @@ export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof CauseMetadata | 'type'
 }
 
+export interface VerifyMetadata {
+  hoursToVerify: string
+  comments: string
+}
+
+export interface VerifyMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof VerifyMetadata | 'type'
+}
+
 enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a volunteer opportunity
@@ -163,9 +172,10 @@ enum Bookmark {
 
 enum VhrRequest {
   /**
-   * Tag to use for making a VHR request for a volunteer opportunity
+   * Tags realted to making and verifying VHR requests for a volunteer opportunity
    */
-  Opportunity = 'VHR_REQUEST_OPPORTUNITY'
+  Opportunity = 'VHR_REQUEST_OPPORTUNITY',
+  Reject = 'VHR_REJECT_REQUEST'
 }
 
 export const PostTags = {
@@ -270,4 +280,13 @@ export interface IFormLocation {
   country: string
   province: string
   city: string
+}
+
+export interface VHRRequest {
+  hoursToVerify: string
+  comments: string
+  from: ProfileFragment
+  opportunity: OpportunityMetadata
+  id: string
+  createdAt: string
 }

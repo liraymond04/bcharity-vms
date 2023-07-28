@@ -80,8 +80,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       formData: { ...formData, imageUrl }
     })
 
-    console.log(attributes)
-
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: id,
