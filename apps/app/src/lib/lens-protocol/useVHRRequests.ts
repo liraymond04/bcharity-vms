@@ -26,21 +26,21 @@ interface getRejectedPostIdsParams {
 }
 
 const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
-  console.log('commentId', params.commentId)
+  // console.log('commentId', params.commentId)
   return lensClient()
     .publication.fetchAll({
       commentsOf: params.commentId,
       metadata: { tags: { oneOf: [PostTags.VhrRequest.Reject] } }
     })
     .then((values) => {
-      console.log('comments', values.items)
+      // console.log('comments', values.items)
       const filtered = values.items.filter((value) => {
-        console.log('value', value.profile.ownedBy)
-        console.log('params', params.profile.ownedBy)
+        // console.log('value', value.profile.ownedBy)
+        // console.log('params', params.profile.ownedBy)
         return value.profile.ownedBy == params.profile.ownedBy
       })
-      console.log(filtered)
-      console.log('length', filtered.length)
+      // console.log(filtered)
+      // console.log('length', filtered.length)
       return filtered.length > 0
     })
 }
@@ -129,7 +129,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         postsComments.forEach((postComments, i) => {
           const filteredPosts = postComments.items.filter((p) => {
             const accepted = !!collectedPostsIds.find((id) => p.id === id)
-            return !(rejectedPostMap[p.id] || accepted)
+            return !(rejectedPostMap[p.id] || accepted) && !p.hidden
           })
 
           const metadata = getVerifyMetadata(filteredPosts)
@@ -148,11 +148,11 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
           })
         })
 
-        console.log('set data')
+        // console.log('set data')
         setRequests(data)
       })
       .catch((error) => {
-        console.log(error)
+        // console.log(error)
         setError(error)
       })
       .finally(() => {
