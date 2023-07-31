@@ -1,8 +1,4 @@
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon
-} from '@heroicons/react/outline'
+import { CheckIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import React, { useState } from 'react'
 
 interface Props {
@@ -35,11 +31,11 @@ const DashboardDropDown: React.FC<Props> = ({
         >
           <div className="w-5 h-5 ml-2"></div>
           <button className="flex ">{selected}</button>
-          {open ? (
-            <ChevronUpIcon className="w-5 h-5 mr-2" />
-          ) : (
-            <ChevronDownIcon className="w-5 h-5 mr-2" />
-          )}
+          <ChevronUpIcon
+            className={`w-5 h-5 mr-2 transform ${
+              open ? 'rotate-180 duration-100' : 'rotate-0'
+            } duration-100`}
+          />
         </div>
         {open &&
           options.map((value, index) => (
