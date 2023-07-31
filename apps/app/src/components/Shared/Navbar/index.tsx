@@ -73,7 +73,7 @@ const Navbar: FC = () => {
   }, [currentUser, isAuthenticated])
 
   return (
-    <div className="sticky z-20 top-0 flex justify-between bg-white bg-opacity-80 max-h-20 border-b-2 border-gray-100">
+    <div className="sticky z-20 top-0 flex justify-between bg-white dark:bg-indigo-950 bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
       <div className="flex items-center">
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
@@ -84,7 +84,7 @@ const Navbar: FC = () => {
         </Link>
         {screenSize == 'wideDesktop' && (
           <Link
-            className={`m-5 text-2xl text-violet-800 tracking-wider ${inter500.className}`}
+            className={`m-5 text-2xl text-violet-800 dark:text-white tracking-wider ${inter500.className}`}
             href="/"
           >
             BCharity
@@ -122,7 +122,7 @@ const Navbar: FC = () => {
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] ${
                         pathname == '/fundraisers'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
                       FUNDRAISERS
@@ -140,7 +140,7 @@ const Navbar: FC = () => {
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/volunteers'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
                       VOLUNTEERS
@@ -158,7 +158,7 @@ const Navbar: FC = () => {
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/organizations'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
                       ORGANIZATIONS
@@ -174,7 +174,7 @@ const Navbar: FC = () => {
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
                         pathname == '/dashboard'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
                       DASHBOARD
@@ -196,10 +196,10 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/fundraisers'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
                   FUNDRAISERS
@@ -212,10 +212,10 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/volunteers'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
                   VOLUNTEERS
@@ -228,10 +228,10 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/organizations'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
                   } ${inter500.className} ${auth ? '' : 'mr-10'}`}
                 >
                   ORGANIZATIONS
@@ -245,10 +245,10 @@ const Navbar: FC = () => {
               >
                 <button>
                   <div
-                    className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                    className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                       pathname == '/dashboard'
-                        ? 'text-purple-500 bg-white'
-                        : 'text-black'
+                        ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                        : 'text-black dark:text-sky-50'
                     } ${inter500.className}`}
                   >
                     DASHBOARD
