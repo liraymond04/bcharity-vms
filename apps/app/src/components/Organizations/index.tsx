@@ -26,15 +26,18 @@ const Organizations: NextPage = () => {
     data,
     error: exploreError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
-      }
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+        }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   const [otherError, setOtherError] = useState(false)
 

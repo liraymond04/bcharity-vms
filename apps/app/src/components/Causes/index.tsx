@@ -19,12 +19,15 @@ const Causes: NextPage = () => {
     data,
     error: exploreError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: { oneOf: [PostTags.OrgPublish.Cause] }
-    }
-  })
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: { oneOf: [PostTags.OrgPublish.Cause] }
+      }
+    },
+    true
+  )
 
   const posts = useMemo(() => getCauseMetadata(data), [data])
 
