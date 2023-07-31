@@ -33,7 +33,7 @@ const DashboardDropDown: React.FC<Props> = ({
           <button className="flex ">{selected}</button>
           <ChevronUpIcon
             className={`w-5 h-5 mr-2 transform ${
-              open ? 'rotate-180 duration-100' : 'rotate-0'
+              open ? 'rotate-180' : 'rotate-0'
             } duration-100`}
           />
         </div>
