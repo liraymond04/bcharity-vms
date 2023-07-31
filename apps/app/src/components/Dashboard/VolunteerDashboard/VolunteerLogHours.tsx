@@ -2,7 +2,8 @@ import {
   ArrowCircleRightIcon,
   CalendarIcon,
   ClockIcon,
-  LinkIcon
+  LinkIcon,
+  ViewListIcon
 } from '@heroicons/react/outline'
 import { Inter } from '@next/font/google'
 import { useState } from 'react'
@@ -26,17 +27,27 @@ const generateDate = () => {
   return year + '-' + month + '-' + day
 }
 
+const generateCategory = () => {
+  let x = Math.floor(Math.random() * 5)
+  if (x == 0) return 'Education'
+  else if (x == 1) return 'Entertainment'
+  else if (x == 2) return 'Sport'
+  else if (x == 3) return 'Healthcare'
+  else return 'Food'
+}
+
 const generateData = () => {
   var data = []
   for (let i = 0; i < 20; i++) {
     const op = {
-      name: 'Opportunity ' + i,
+      name: 'Opportunity ' + (i + 1),
       start: generateDate(),
       end: generateDate(),
       hour: Math.floor(Math.random() * 10),
       description:
         'hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. ',
-      website: 'https://google.com'
+      website: 'https://google.com',
+      category: generateCategory()
     }
     data.push(op)
   }
@@ -58,7 +69,7 @@ const VolunteerLogHours: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const categories = ['Education', 'Healthcare', 'Food', 'Entertainment']
 
-  const [displayIndex, setDisplayIndex] = useState(0)
+  const [displayIndex, setDisplayIndex] = useState(-1)
 
   const [data, setdata] = useState(generateData())
   const [indice, setIndice] = useState(resetIndice())
@@ -124,55 +135,74 @@ const VolunteerLogHours: React.FC = () => {
         </button>
       </div>
 
-      <div className="max-h-[250px] w-fit overflow-scroll">
-        {indice.map((op) => (
-          <div
-            className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer ${
-              inter500.className
-            } ${displayIndex == op ? 'bg-blue-200' : ''}`}
-            key={op}
-            onClick={() => setDisplayIndex(op)}
-          >
-            <div className="flex justify-between items-center ml-10">
-              <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
-                {data[op].name}
-              </p>
-              <p className="mx-5 w-[100px]">{data[op].start}</p>
-              <p className="mx-5 w-[100px]">{data[op].end}</p>
-              <p className="mx-5 w-[100px]">{data[op].hour} hours</p>
-            </div>
-            <a href="https://google.com" target="_blank">
-              <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
-            </a>
-          </div>
-        ))}
-      </div>
       <div
-        className={`flex mt-10 tracking-wide w-[800px] h-[300px] bg-[#CEBBF8] bg-opacity-[0.30] rounded-md shadow-md ${inter500.className}`}
+        className={` w-fit overflow-scroll ${
+          displayIndex == -1 ? 'max-h-[470px]' : 'max-h-[250px]'
+        }`}
       >
-        <div className="w-[400px]">
-          <div className="flex justify-around mt-5 text-xl h-fit">
-            <div className="flex items-center">
-              <LinkIcon className="w-5 h-5 mr-4" />
-              {data[displayIndex].name}
+        {indice
+          .filter(
+            (idx) =>
+              selectedCategory == '' || data[idx].category == selectedCategory
+          )
+          .map((op) => (
+            <div
+              className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer ${
+                inter500.className
+              } ${displayIndex == op ? 'bg-blue-200' : ''}`}
+              key={op}
+              onClick={() => {
+                if (displayIndex == -1 || displayIndex != op)
+                  setDisplayIndex(op)
+                else setDisplayIndex(-1)
+              }}
+            >
+              <div className="flex justify-between items-center ml-10">
+                <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
+                  {data[op].name}
+                </p>
+                <p className="mx-5 w-[100px]">{data[op].start}</p>
+                <p className="mx-5 w-[100px]">{data[op].end}</p>
+                <p className="mx-5 w-[100px]">{data[op].hour} hours</p>
+              </div>
+              <a href="https://google.com" target="_blank">
+                <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
+              </a>
+            </div>
+          ))}
+      </div>
+      {displayIndex != -1 && (
+        <div
+          className={`flex mt-10 tracking-wide w-[800px] h-[300px] bg-[#CEBBF8] bg-opacity-[0.30] rounded-md shadow-md ${inter500.className}`}
+        >
+          <div className="w-[400px]">
+            <div className="flex justify-around mt-5 text-xl h-fit">
+              <div className="flex items-center">
+                <LinkIcon className="w-5 h-5 mr-4" />
+                {data[displayIndex].name}
+              </div>
+            </div>
+            <div className="flex items-center ml-2 mt-5">
+              <CalendarIcon className="w-5 h-5 mr-2" />
+              {data[displayIndex].start} to {data[displayIndex].end}
+            </div>
+            <div className="flex items-center ml-2 mt-2">
+              <ClockIcon className="w-5 h-5 mr-2" /> {data[displayIndex].hour}{' '}
+              hours in total
+            </div>
+            <div className="flex items-center ml-2 mt-2">
+              <ViewListIcon className="w-5 h-5 mr-2" />{' '}
+              {data[displayIndex].category}
             </div>
           </div>
-          <div className="flex items-center ml-2 mt-5">
-            <CalendarIcon className="w-5 h-5 mr-2" />
-            {data[displayIndex].start} to {data[displayIndex].end}
-          </div>
-          <div className="flex items-center ml-2 mt-2">
-            <ClockIcon className="w-5 h-5 mr-2" /> {data[displayIndex].hour}{' '}
-            hours in total
+          <div className="h-[250px] self-center w-[2px] bg-[#D8C0EC]"></div>
+          <div className="flex justify-around w-[400px]">
+            <div className="w-[350px] mt-5 mb-5 overflow-scroll">
+              {data[displayIndex].description}
+            </div>
           </div>
         </div>
-        <div className="h-[250px] self-center w-[2px] bg-[#D8C0EC]"></div>
-        <div className="flex justify-around w-[400px]">
-          <div className="w-[350px] mt-5 mb-5 overflow-scroll">
-            {data[displayIndex].description}
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
