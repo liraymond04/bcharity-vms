@@ -61,8 +61,8 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         }
       })
       .catch((err) => {
-        setVerifyOrRejectError(err)
-        // console.log(err)
+        console.log(err)
+        setVerifyOrRejectError(err?.message ?? err)
       })
       .finally(() => {
         removeIdPending(id)
@@ -94,13 +94,12 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         if (res.isFailure()) {
           throw res.error.message
         } else {
-          // console.log(res)
           refetch()
         }
       })
       .catch((err) => {
-        setVerifyOrRejectError(err)
-        // console.log(err)
+        console.log(err)
+        setVerifyOrRejectError(err?.message ?? err)
       })
       .finally(() => {
         removeIdPending(id)
@@ -110,7 +109,8 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const shouldShowError = () => {
     return (
       (verifyOrRejectError &&
-        !verifyOrRejectError.startsWith('UserRejectedRequestError')) ||
+        !verifyOrRejectError.startsWith('UserRejectedRequestError') &&
+        !verifyOrRejectError.startsWith('User rejected the request')) ||
       error
     )
   }
@@ -120,7 +120,8 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
       return error
     } else if (
       verifyOrRejectError &&
-      !verifyOrRejectError.startsWith('UserRejectedRequestError')
+      !verifyOrRejectError.startsWith('UserRejectedRequestError') &&
+      !verifyOrRejectError.startsWith('User rejected the request')
     ) {
       return verifyOrRejectError
     }

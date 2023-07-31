@@ -25,21 +25,15 @@ interface getRejectedPostIdsParams {
 }
 
 const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
-  // console.log('commentId', params.commentId)
   return lensClient()
     .publication.fetchAll({
       commentsOf: params.commentId,
       metadata: { tags: { oneOf: [PostTags.VhrRequest.Reject] } }
     })
     .then((values) => {
-      // console.log('comments', values.items)
       const filtered = values.items.filter((value) => {
-        // console.log('value', value.profile.ownedBy)
-        // console.log('params', params.profile.ownedBy)
         return value.profile.ownedBy == params.profile.ownedBy
       })
-      // console.log(filtered)
-      // console.log('length', filtered.length)
       return filtered.length > 0
     })
 }
@@ -145,11 +139,10 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
           })
         })
 
-        // console.log('set data')
         setRequests(data)
       })
       .catch((error) => {
-        // console.log(error)
+        console.log(error)
         setError(error)
       })
       .finally(() => {

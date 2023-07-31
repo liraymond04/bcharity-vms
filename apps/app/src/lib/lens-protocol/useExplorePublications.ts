@@ -9,9 +9,13 @@ import {
 } from '@lens-protocol/client/dist/declarations/src/graphql/types.generated'
 import { useEffect, useState } from 'react'
 
+import isVerified from '../isVerified'
 import lensClient from './lensClient'
 
-const useExplorePublications = (params: ExplorePublicationRequest) => {
+const useExplorePublications = (
+  params: ExplorePublicationRequest,
+  verified: boolean
+) => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<PublicationFragment[]>([])
   const [error, setError] = useState('')
@@ -22,7 +26,11 @@ const useExplorePublications = (params: ExplorePublicationRequest) => {
     lensClient()
       .explore.publications(params)
       .then((data) => {
-        setData(data.items)
+        const filtered = data.items.filter((item) => {
+          if (!verified) return true
+          return isVerified(item.profile.id)
+        })
+        setData(filtered)
         setPageInfo(data.pageInfo)
       })
       .catch((error) => {

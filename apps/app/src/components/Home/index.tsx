@@ -24,15 +24,18 @@ const Home: NextPage = () => {
     data,
     error: exploreError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportunity]
-      }
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Opportunity]
+        }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   const [otherError, setOtherError] = useState(false)
 
