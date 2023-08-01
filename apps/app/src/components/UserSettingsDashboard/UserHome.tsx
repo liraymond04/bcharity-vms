@@ -55,7 +55,6 @@ const VolunteerHomeTab: React.FC = () => {
             }
             setBio(userProfile.bio || '')
           }
-          console.log('profile', userProfile)
         }
       } catch (error) {
         console.error('Error fetching profile data:', error)
@@ -94,7 +93,8 @@ const VolunteerHomeTab: React.FC = () => {
             name,
             bio,
             cover_picture: avatarUrl,
-            attributes
+            attributes,
+            location
           }
 
           const metadataUrl = await uploadToIPFS(metadata)
