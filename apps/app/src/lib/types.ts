@@ -9,7 +9,9 @@ export enum OpportunityMetadataVersion {
 export enum CauseMetadataVersion {
   '1.0.0' = '1.0.0'
 }
-
+export enum GoalMetadataVersion {
+  '1.0.0' = '1.0.0'
+}
 export enum ProfileMetadataVersions {
   '1.0.0'
 }
@@ -17,6 +19,7 @@ export enum ProfileMetadataVersions {
 export const MetadataVersion = {
   OpportunityMetadataVersion,
   CauseMetadataVersion,
+  GoalMetadataVersion,
   ProfileMetadataVersions
 }
 
@@ -30,7 +33,34 @@ interface OrgPublishMetadata<T> {
    */
   version: T
 }
+export interface GoalMetadata extends OrgPublishMetadata<GoalMetadataVersion> {
+  /**
+   * a uuid associated with a volunteer opporunity
+   */
 
+  /**
+   * the opportunity nam e
+   */
+  goal: string
+  /**
+   * opportunity start date in YYYY-MM-DD format
+   */
+
+  /**
+   * opportunity end date in YYYY-MM-DD format
+   */
+  goalDate: string
+  /**
+
+}
+
+/**
+ * Interface for a metadata field used when publishing a opportunity
+ */
+}
+export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof GoalMetadata | 'type'
+}
 export interface OpportunityMetadata
   extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
@@ -138,7 +168,9 @@ enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a cause
    */
-  Cause = 'ORG_PUBLISH_CAUSE'
+  Cause = 'ORG_PUBLISH_CAUSE',
+
+  Goal = 'ORG_PUBLISH_Goal'
 }
 
 enum Bookmark {
@@ -212,5 +244,4 @@ export interface ProfileMetadata {
    * Any custom attributes can be added here to save state for a profile
    */
   attributes: AttributeData[]
-  location: string | null
 }
