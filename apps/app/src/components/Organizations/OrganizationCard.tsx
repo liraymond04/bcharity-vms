@@ -49,7 +49,7 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
             <FollowButton
               icon={<StarIcon className="w-4 align-end text-white" />}
               className="h-8 place-self-end"
-              followId={profile.handle}
+              followId={profile.id}
             />
           </div>
         </div>
