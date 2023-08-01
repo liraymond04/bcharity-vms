@@ -107,7 +107,7 @@ const Causes: NextPage = () => {
             )
             .map((post) => (
               <GridItemFour key={post[0].cause_id}>
-                <CauseCard cause={post[0]} />
+                <CauseCard cause={post[0]} id={post[1]} />
               </GridItemFour>
             ))}
         </GridLayout>
