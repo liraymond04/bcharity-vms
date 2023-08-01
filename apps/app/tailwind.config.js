@@ -14,7 +14,11 @@ module.exports = {
         green: colors.emerald,
         purple: colors.violet,
         yellow: colors.yellow,
-        brand: colors.violet
+        brand: colors.violet,
+        NavBar: '#23172D',
+        SideBar: '#23224A',
+        Card: '#18004A',
+        Input: '#00254A'
       },
       typography(theme) {
         return {

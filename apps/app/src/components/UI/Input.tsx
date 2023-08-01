@@ -54,7 +54,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
       )}
       <div className="flex">
         {prefix && (
-          <span className="inline-flex items-center px-3 text-gray-500 bg-gray-100 rounded-l-xl border border-r-0 border-gray-300 dark:bg-gray-900 roun xl dark:border-gray-700/80">
+          <span className="inline-flex items-center px-3 text-gray-500 bg-gray-100 rounded-l-xl border border-r-0 border-gray-300 dark:bg-wh-900 roun xl dark:border-gray-700/80">
             {prefix}
           </span>
         )}
@@ -64,7 +64,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             { '!border-red-500 placeholder-red-500': error },
             { 'rounded-r-xl': prefix },
             { 'rounded-xl': !prefix },
-            'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
+            'bg-white dark:bg-Input border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
             className
           )}
           type={type}
