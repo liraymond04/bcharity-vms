@@ -48,15 +48,15 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   imageUrl: ''
 }
 
-export const createPublishAttributes = (data: {
-  id: string
-  formData: IPublishOpportunityFormProps
-}) => {
+export const createPublishAttributes = (
+  id: string,
+  data: IPublishOpportunityFormProps
+) => {
   const attributes: OpportunityMetadataAttributeInput[] = [
     {
       traitType: 'type',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: PostTags.OrgPublish.Opportunity
+      value: PostTags.OrgPublish.Opportuntiy
     },
     {
       traitType: 'version',
@@ -66,47 +66,47 @@ export const createPublishAttributes = (data: {
     {
       traitType: 'opportunity_id',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.id
+      value: id
     },
     {
       traitType: 'name',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.name
+      value: data.name
     },
     {
       traitType: 'startDate',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.startDate
+      value: data.startDate
     },
     {
       traitType: 'endDate',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.endDate
+      value: data.endDate
     },
     {
       traitType: 'hoursPerWeek',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.hoursPerWeek
+      value: data.hoursPerWeek
     },
     {
       traitType: 'category',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.category
+      value: data.category
     },
     {
       traitType: 'website',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.website
+      value: data.website
     },
     {
       traitType: 'description',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.description
+      value: data.description
     },
     {
       traitType: 'imageUrl',
       displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.imageUrl
+      value: data.imageUrl
     }
   ]
 
@@ -153,7 +153,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     onClose(false)
   }
 
-  const onSubmit = async (formData: IPublishOpportunityFormProps) => {
+  const onSubmit = async (data: IPublishOpportunityFormProps) => {
     setError(false)
     setIsPending(true)
 
@@ -164,21 +164,19 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : ''
+    const imageUrl = image ? await uploadToIPFS(image) : null
+    data.imageUrl = imageUrl ? imageUrl : ''
 
-    const attributes = createPublishAttributes({
-      id: v4(),
-      formData: { ...formData, imageUrl }
-    })
+    const attributes = createPublishAttributes(v4(), data)
 
     const metadata: PublicationMetadataV2Input = {
       version: '2.0.0',
       metadata_id: v4(),
-      content: `#${PostTags.OrgPublish.Opportunity}`,
+      content: `#${PostTags.OrgPublish.Opportuntiy}`,
       locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Opportunity],
+      tags: [PostTags.OrgPublish.Opportuntiy],
       mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Opportunity} by ${publisher?.handle}`,
+      name: `${PostTags.OrgPublish.Opportuntiy} by ${publisher?.handle}`,
       attributes,
       appId: APP_NAME
     }
