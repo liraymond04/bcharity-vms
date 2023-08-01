@@ -1,26 +1,11 @@
-import {
-  MetadataAttributeOutputFragment,
-  PostFragment,
-  PublicationFragment
-} from '@lens-protocol/client'
+import { PostFragment, PublicationFragment } from '@lens-protocol/client'
 
 import {
   MetadataVersion,
   OpportunityMetadata,
   OpportunityMetadataVersion
 } from '../types'
-const getAttribute = (
-  attributes: MetadataAttributeOutputFragment[],
-  attributeName: string
-) => {
-  const item =
-    attributes &&
-    attributes.filter((item) => item.traitType === attributeName).at(0)
-  if (item) {
-    return item.value
-  }
-  return ''
-}
+import { getAttribute } from './getAttribute'
 /**
  * @file getOpportunityMetadata.ts
  * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
@@ -50,15 +35,15 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
           attributes,
           'version'
         ) as OpportunityMetadataVersion,
-        opportunity_id: getAttribute(attributes, 'opportunity_id') ?? '',
-        name: getAttribute(attributes, 'name') ?? '',
-        startDate: getAttribute(attributes, 'startDate') ?? '',
-        endDate: getAttribute(attributes, 'endDate') ?? '',
-        hoursPerWeek: getAttribute(attributes, 'hoursPerWeek') ?? '',
-        category: getAttribute(attributes, 'category') ?? '',
-        website: getAttribute(attributes, 'website') ?? '',
-        description: getAttribute(attributes, 'description') ?? '',
-        imageUrl: getAttribute(attributes, 'imageUrl') ?? '',
+        opportunity_id: getAttribute(attributes, 'opportunity_id'),
+        name: getAttribute(attributes, 'name'),
+        startDate: getAttribute(attributes, 'startDate'),
+        endDate: getAttribute(attributes, 'endDate'),
+        hoursPerWeek: getAttribute(attributes, 'hoursPerWeek'),
+        category: getAttribute(attributes, 'category'),
+        website: getAttribute(attributes, 'website'),
+        description: getAttribute(attributes, 'description'),
+        imageUrl: getAttribute(attributes, 'imageUrl'),
         from: post.profile,
         createdAt: new Date(post.createdAt).getTime(),
         id: post.id

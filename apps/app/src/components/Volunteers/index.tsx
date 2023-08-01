@@ -23,15 +23,18 @@ const Volunteers: NextPage = () => {
 
   const [searchValue, setSearchValue] = useState('')
 
-  const { data, error, loading, pageInfo, fetchMore } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportunity]
-      }
+  const { data, error, loading, pageInfo, fetchMore } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Opportunity]
+        }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   useEffect(() => {
     let _posts: [OpportunityMetadata, string][] = []
