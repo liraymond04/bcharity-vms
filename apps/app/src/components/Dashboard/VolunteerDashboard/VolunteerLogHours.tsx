@@ -129,6 +129,7 @@ const VolunteerLogHours: React.FC = () => {
             setSelectedSortBy('')
             setSelectedCategory('')
             setIndice(resetIndice())
+            setDisplayIndex(-1)
           }}
         >
           Clear Filters
@@ -138,7 +139,7 @@ const VolunteerLogHours: React.FC = () => {
       <div
         className={` w-fit overflow-scroll ${
           displayIndex == -1 ? 'max-h-[470px]' : 'max-h-[250px]'
-        }`}
+        } `}
       >
         {indice
           .filter(
@@ -147,7 +148,7 @@ const VolunteerLogHours: React.FC = () => {
           )
           .map((op) => (
             <div
-              className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer ${
+              className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer hover:h-[60px] duration-100 ${
                 inter500.className
               } ${displayIndex == op ? 'bg-blue-200' : ''}`}
               key={op}
@@ -173,7 +174,7 @@ const VolunteerLogHours: React.FC = () => {
       </div>
       {displayIndex != -1 && (
         <div
-          className={`flex mt-10 tracking-wide w-[800px] h-[300px] bg-[#CEBBF8] bg-opacity-[0.30] rounded-md shadow-md ${inter500.className}`}
+          className={`flex my-10 tracking-wide w-[800px] h-[300px] bg-[#CEBBF8] bg-opacity-[0.30] rounded-md shadow-md ${inter500.className}`}
         >
           <div className="w-[400px]">
             <div className="flex justify-around mt-5 text-xl h-fit">
@@ -182,15 +183,15 @@ const VolunteerLogHours: React.FC = () => {
                 {data[displayIndex].name}
               </div>
             </div>
-            <div className="flex items-center ml-2 mt-5">
+            <div className="flex items-center ml-5 mt-5">
               <CalendarIcon className="w-5 h-5 mr-2" />
               {data[displayIndex].start} to {data[displayIndex].end}
             </div>
-            <div className="flex items-center ml-2 mt-2">
+            <div className="flex items-center ml-5 mt-2">
               <ClockIcon className="w-5 h-5 mr-2" /> {data[displayIndex].hour}{' '}
               hours in total
             </div>
-            <div className="flex items-center ml-2 mt-2">
+            <div className="flex items-center ml-5 mt-2">
               <ViewListIcon className="w-5 h-5 mr-2" />{' '}
               {data[displayIndex].category}
             </div>
