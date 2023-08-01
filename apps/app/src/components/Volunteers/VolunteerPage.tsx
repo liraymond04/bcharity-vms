@@ -15,12 +15,14 @@ import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
+import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
 import Slug from '../Shared/Slug'
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
+import SEO from '../utils/SEO'
 
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common')
@@ -107,7 +109,7 @@ const VolunteerPage: NextPage = () => {
     return (
       post?.__typename === 'Post' &&
       (post.metadata.attributes?.length &&
-      post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportuntiy ? (
+      post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportunity ? (
         <WrongPost />
       ) : (
         <div className="p-6">
@@ -193,7 +195,16 @@ const VolunteerPage: NextPage = () => {
                 </div>
               </Link>
             )}
-            <Button>Apply now</Button>
+            <ApplyButton
+              hoursDefault={
+                getAttribute(
+                  post.metadata.attributes,
+                  'hoursPerWeek'
+                )?.toString() ?? ''
+              }
+              publicationId={post.id}
+              organizationId={post.profile.id}
+            />
           </div>
         </div>
       ))
@@ -201,21 +212,24 @@ const VolunteerPage: NextPage = () => {
   }
 
   return (
-    <GridLayout>
-      <GridItemTwelve>
-        <Card>
-          {loading ? (
-            <center className="p-20">
-              <Spinner />
-            </center>
-          ) : error || data === undefined ? (
-            <Custom404 />
-          ) : (
-            <Body post={data} />
-          )}
-        </Card>
-      </GridItemTwelve>
-    </GridLayout>
+    <>
+      <SEO title="Volunteer Opportunity • BCharity VMS" />
+      <GridLayout>
+        <GridItemTwelve>
+          <Card>
+            {loading ? (
+              <center className="p-20">
+                <Spinner />
+              </center>
+            ) : error || data === undefined ? (
+              <Custom404 />
+            ) : (
+              <Body post={data} />
+            )}
+          </Card>
+        </GridItemTwelve>
+      </GridLayout>
+    </>
   )
 }
 

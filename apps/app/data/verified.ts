@@ -76,6 +76,5 @@ export const testnetVerified = [
 
   '0x8a60' /** @cookiekiller133.test (ezra)*/,
   '0x88ce' /** @thedavid.test (marketing team david) */,
-  '0x88cc' /** @andrewtest.test */,
-  '0x88c7' /**kevin.test **/
+  '0x88cc' /** @andrewtest.test */
 ]
