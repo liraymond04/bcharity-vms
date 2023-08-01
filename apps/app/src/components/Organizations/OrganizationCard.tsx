@@ -7,6 +7,7 @@ import { ProfileFragment } from '@lens-protocol/client'
 
 import getAvatar from '@/lib/getAvatar'
 
+import FollowButton from '../Shared/FollowButton'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 
@@ -45,9 +46,11 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
               <LocationMarkerIcon className="w-4 inline" />
               <p className="inline">LOCATION</p>
             </div>
-            <div className="bg-brand-300 p-1 rounded-md place-self-end">
-              <StarIcon className="w-4 align-end text-white" />
-            </div>
+            <FollowButton
+              icon={<StarIcon className="w-4 align-end text-white" />}
+              className="h-8 place-self-end"
+              followId={profile.handle}
+            />
           </div>
         </div>
       </div>
