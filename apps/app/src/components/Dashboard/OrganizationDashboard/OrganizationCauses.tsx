@@ -8,12 +8,14 @@ import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
@@ -124,6 +126,16 @@ const OrganizationCauses: React.FC = () => {
     currentUser?.ownedBy ?? ''
   )
 
+  const { data: currencyData, error: currencyError } = useEnabledCurrencies(
+    currentUser?.ownedBy
+  )
+
+  useEffect(() => {
+    if (currencyError) {
+      toast.error(currencyError.message)
+    }
+  }, [currencyError])
+
   const [vhrGoal] = useState(600) // use hardcoded goal for now
 
   const Progress = ({
@@ -149,21 +161,22 @@ const OrganizationCauses: React.FC = () => {
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
     const d = postMetadata.find((val) => val?.cause_id === id)
-    console.log('d', d)
+
+    const [country, province, city] = d?.location.split('-', 3) ?? ['', '', '']
 
     return d
       ? {
-          selectedCurrency: d.currency ?? '',
           name: d.name ?? '',
           goal: d.goal ?? '',
           contribution: d.contribution ?? '',
-          OrgPublish: d.from ?? '',
           category: d.category ?? '',
           description: d.description ?? '',
           currency: d.currency ?? '',
           recipient: d.recipient ?? '',
-          location: d.location ?? '',
-          imageUrl: d.imageUrl ?? ''
+          imageUrl: d.imageUrl ?? '',
+          country,
+          province,
+          city
         }
       : { ...emptyPublishFormData }
   }
@@ -337,6 +350,7 @@ const OrganizationCauses: React.FC = () => {
               open={publishModalOpen}
               onClose={onPublishClose}
               publisher={profile}
+              currencyData={currencyData}
             />
             <DeleteCauseModal
               open={deleteModalOpen}
@@ -351,6 +365,7 @@ const OrganizationCauses: React.FC = () => {
               onClose={onModifyClose}
               publisher={profile}
               id={currentModifyId}
+              currencyData={currencyData}
               defaultValues={getFormDefaults(currentModifyId)}
             />
             <GoalModal

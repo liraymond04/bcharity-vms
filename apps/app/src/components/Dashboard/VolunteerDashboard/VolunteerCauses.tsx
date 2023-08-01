@@ -35,13 +35,16 @@ const VolunteerCauses: React.FC = () => {
     data: postData,
     error: postDataError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: { oneOf: [PostTags.OrgPublish.Cause] }
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: { oneOf: [PostTags.OrgPublish.Cause] }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   useEffect(() => {
     let _categories: Set<string> = new Set()

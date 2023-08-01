@@ -1,4 +1,5 @@
 import {
+  ClockIcon,
   CogIcon,
   GlobeIcon,
   HomeIcon,
@@ -12,6 +13,7 @@ import Sidebar, { ITabProps } from '@/components/Sidebar/Sidebar'
 
 import VolunteerCausesTab from './VolunteerCauses'
 import VolunteerHomeTab from './VolunteerHome'
+import VolunteerLogHoursTab from './VolunteerLogHours'
 import VolunteerVHRTab from './VolunteerVHR'
 
 export interface IDashboardTab extends ITabProps {
@@ -36,6 +38,11 @@ const VolunteerDashboard: React.FC = () => {
       label: 'Fundraisers',
       icon: <GlobeIcon className="inline" />,
       component: <VolunteerCausesTab />
+    },
+    {
+      label: 'Log VHR',
+      icon: <ClockIcon className="inline" />,
+      component: <VolunteerLogHoursTab />
     },
     {
       label: 'User Settings',

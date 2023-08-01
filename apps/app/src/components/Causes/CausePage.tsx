@@ -24,32 +24,19 @@ import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
-const VolunteerPage: NextPage = () => {
+const CausePage: NextPage = () => {
+  const { data, loading, fetch, error } = usePublication()
   const { t } = useTranslation('common')
   const {
     query: { id },
     isReady
   } = useRouter()
 
-  const { data, loading, fetch, error } = usePublication()
-
   useEffect(() => {
     if (isReady && id) {
       fetch({ publicationId: Array.isArray(id) ? '' : id })
     }
   }, [id, isReady])
-
-  const attributeExists = (
-    attributes: MetadataAttributeOutputFragment[],
-    attribute: string
-  ) => {
-    return (
-      attributes?.length &&
-      attributes.filter((item) => {
-        return item.traitType === attribute
-      }).length !== 0
-    )
-  }
 
   const getAttribute = (
     attributes: MetadataAttributeOutputFragment[],
@@ -64,6 +51,17 @@ const VolunteerPage: NextPage = () => {
         .at(0)?.value
     )
   }
+  const attributeExists = (
+    attributes: MetadataAttributeOutputFragment[],
+    attribute: string
+  ) => {
+    return (
+      attributes?.length &&
+      attributes.filter((item) => {
+        return item.traitType === attribute
+      }).length !== 0
+    )
+  }
 
   const WrongPost = () => {
     return (
@@ -73,7 +71,7 @@ const VolunteerPage: NextPage = () => {
         </h1>
         <div className="mb-4">
           {t(
-            'This publication is not a volunteer opportunity, please check that your URL is correct.'
+            'This publication cannot be accessed. Please check that your URL is correct.'
           )}
         </div>
         <Link href="/">
@@ -109,7 +107,7 @@ const VolunteerPage: NextPage = () => {
     return (
       post?.__typename === 'Post' &&
       (post.metadata.attributes?.length &&
-      post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportunity ? (
+      post.metadata.attributes[0].value !== PostTags.OrgPublish.Cause ? (
         <WrongPost />
       ) : (
         <div className="p-6">
@@ -117,11 +115,11 @@ const VolunteerPage: NextPage = () => {
             <div className="flex items-center space-x-1">
               <BookmarkButton
                 publicationId={post.id}
-                postTag={PostTags.Bookmark.Opportunity}
+                postTag={PostTags.Bookmark.Cause}
               />
               <div className="text-2xl font-bold text-brand-600">
-                {attributeExists(post.metadata.attributes, 'opportunity_name')
-                  ? getAttribute(post.metadata.attributes, 'opportunity_name')
+                {attributeExists(post.metadata.attributes, 'cause_name')
+                  ? getAttribute(post.metadata.attributes, 'cause_name')
                   : getAttribute(post.metadata.attributes, 'name')}
               </div>
               <div className="text-xl text-gray-400 font-bold pl-5">
@@ -213,7 +211,7 @@ const VolunteerPage: NextPage = () => {
 
   return (
     <>
-      <SEO title="Volunteer Opportunity • BCharity VMS" />
+      <SEO title="Cause Opportunity • BCharity VMS" />
       <GridLayout>
         <GridItemTwelve>
           <Card>
@@ -233,4 +231,4 @@ const VolunteerPage: NextPage = () => {
   )
 }
 
-export default VolunteerPage
+export default CausePage
