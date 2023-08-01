@@ -32,6 +32,7 @@ const usePostData = (params: PublicationsQueryRequest) => {
 
   const refetch = () => {
     setLoading(true)
+    setError('')
     lensClient()
       .publication.fetchAll(params)
       .then((data) => {

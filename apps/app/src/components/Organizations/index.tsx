@@ -9,6 +9,7 @@ import {
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 
+import { getAttribute } from '@/lib/lens-protocol/getAttribute'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
@@ -25,15 +26,18 @@ const Organizations: NextPage = () => {
     data,
     error: exploreError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportuntiy, PostTags.OrgPublish.Cause]
-      }
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+        }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   const [otherError, setOtherError] = useState(false)
 
@@ -66,14 +70,31 @@ const Organizations: NextPage = () => {
       publicationTypes: [PublicationTypes.Post],
       metadata: {
         tags: {
-          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportuntiy]
+          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportunity]
         }
       }
     }
 
     return lensClient()
       .publication.fetchAll(param)
-      .then((result) => result.items.filter((res) => !res.hidden).length)
+      .then((result) => {
+        const opportunity_ids = new Set<string>()
+        const cause_ids = new Set<string>()
+
+        result.items.filter((res) => {
+          if (!res.hidden && res.__typename === 'Post') {
+            const opp_id = getAttribute(
+              res.metadata.attributes,
+              'opportunity_id'
+            )
+            const cause_id = getAttribute(res.metadata.attributes, 'cause_id')
+            if (opp_id !== '') opportunity_ids.add(opp_id)
+            if (cause_id !== '') cause_ids.add(cause_id)
+          }
+        })
+
+        return opportunity_ids.size + cause_ids.size
+      })
   }
 
   useEffect(() => {
