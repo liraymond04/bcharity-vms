@@ -14,6 +14,7 @@ import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
 
+import Progress from '@/components/Shared/Progress'
 import { APP_NAME, CURRENCIES } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
@@ -214,13 +215,36 @@ const DonateButton: FC<Props> = ({ post }) => {
 
   return (
     <>
-      <Modal title="Donate" show={showModal} onClose={onCancel}>
+      <Modal size="lg" title="Donate" show={showModal} onClose={onCancel}>
         <div className="mx-12 mt-5">
           {!isLoading ? (
             <Form
               form={form}
               onSubmit={() => handleSubmit((data) => onSubmit(data))}
             >
+              <div className="flex flex-row ">
+                <div className="text-purple-500 text-5xl font-bold">
+                  Donate to {getAttribute(post.metadata.attributes, 'name')}
+                </div>
+              </div>
+              <div className="text-gray-500  mt-2 text-2xl font-bold">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-2xl">
+                  {`@${post.profile.handle}`}
+                </span>
+              </div>
+              <Progress
+                progress={1}
+                total={parseFloat(
+                  getAttribute(post.metadata.attributes, 'goal')
+                )}
+                className="my-4"
+              />
+              <div className="flex flex-row font-semibold mb-6">
+                <div className="mr-3 text-purple-600 font-semibold">
+                  0.2 {selectedCurrencySymbol}
+                </div>
+                raised of {getAttribute(post.metadata.attributes, 'goal')}!
+              </div>
               <div className="flex items-end space-x-4">
                 <Input
                   label="Contribution"
