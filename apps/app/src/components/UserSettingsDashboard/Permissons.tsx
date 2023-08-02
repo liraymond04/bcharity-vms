@@ -141,15 +141,15 @@ const Permissons: React.FC = () => {
         <Card>
           <div className="p-3">
             <div className=" rounded-xl border-amber-950 border-width:3">
-              <div className="text-s font-bold text-white sm:text-s p-2">
+              <div className="text-s font-bold text-black dark:text-white sm:text-s p-2">
                 Allow/Remove modules
               </div>
-              <div className="text-m font-normal text-white p-2">
+              <div className="text-m font-normal text-black dark:text-white p-2">
                 In order to use the collect feature you need to allow the
                 corresponding modules. You can allow and revoke permissions for
                 modules at any time.
               </div>
-              <div className="text-m font-normal text-white p-2">
+              <div className="text-m font-normal text-black dark:text-white p-2">
                 Select Currency:
               </div>
               <select
@@ -190,9 +190,9 @@ const Permissons: React.FC = () => {
                   return (
                     <div className="mb-3" key={index}>
                       <Card>
-                        <div className="bg-Input rounded-xl flex justify-end p-2 items-center">
+                        <div className="bg-white dark:bg-Input rounded-xl flex justify-end p-2 items-center">
                           <div className="px-2 pt-2 pb-1">
-                            <div className="flex text-s font-normal text-white">
+                            <div className="flex text-s font-normal text-black dark:text-white">
                               <div className="mr-1">{data.module}</div>
                               <HelpTooltip content="The Fee Collect Module all p-1ows for any follower to collect the associated publication provided they pay a fee set by the poster." />
                             </div>
