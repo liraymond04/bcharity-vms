@@ -1,16 +1,18 @@
 import { ExternalLinkIcon, HomeIcon } from '@heroicons/react/outline'
-import {
-  MetadataAttributeOutputFragment,
-  PublicationFragment
-} from '@lens-protocol/client'
+import { PostFragment } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import usePublication from '@/lib/lens-protocol/usePublication'
+import {
+  InvalidMetadataException,
+  OpportunityMetadata,
+  OpportunityMetadataBuilder
+} from '@/lib/metadata'
 import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
 
@@ -33,37 +35,28 @@ const VolunteerPage: NextPage = () => {
 
   const { data, loading, fetch, error } = usePublication()
 
+  const [opoprtunityError, setOpportunityError] = useState(false)
+
+  const opportunity = useMemo(() => {
+    if (!data) return
+    try {
+      return new OpportunityMetadataBuilder(
+        new Set(['1.0.0']),
+        data as PostFragment
+      ).build()
+    } catch (e) {
+      if (e instanceof InvalidMetadataException) {
+        setOpportunityError(true)
+      }
+      return
+    }
+  }, [data])
+
   useEffect(() => {
     if (isReady && id) {
       fetch({ publicationId: Array.isArray(id) ? '' : id })
     }
   }, [id, isReady])
-
-  const attributeExists = (
-    attributes: MetadataAttributeOutputFragment[],
-    attribute: string
-  ) => {
-    return (
-      attributes?.length &&
-      attributes.filter((item) => {
-        return item.traitType === attribute
-      }).length !== 0
-    )
-  }
-
-  const getAttribute = (
-    attributes: MetadataAttributeOutputFragment[],
-    attribute: string
-  ) => {
-    return (
-      attributes?.length &&
-      attributes
-        .filter((item) => {
-          return item.traitType === attribute
-        })
-        .at(0)?.value
-    )
-  }
 
   const WrongPost = () => {
     return (
@@ -89,125 +82,82 @@ const VolunteerPage: NextPage = () => {
     )
   }
 
-  const Body = ({ post }: { post: PublicationFragment | undefined }) => {
+  const getDateString = (o: OpportunityMetadata) => {
+    const ongoing = !o.endDate
+
+    if (ongoing) {
+      return `${o.startDate} to ${o.endDate}`
+    } else {
+      return `${o.startDate} - Ongoing`
+    }
+  }
+
+  const Body = () => {
     const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
     useEffect(() => {
-      if (
-        post?.__typename === 'Post' &&
-        attributeExists(post.metadata.attributes, 'imageUrl') &&
-        getAttribute(post.metadata.attributes, 'imageUrl')?.toString() !== '' &&
-        getAttribute(post.metadata.attributes, 'imageUrl')?.toString() !==
-          undefined
-      ) {
-        getIPFSBlob(
-          getAttribute(post.metadata.attributes, 'imageUrl')?.toString() ?? ''
-        ).then((url) => setResolvedImageUrl(url))
+      if (!opportunity) return
+      if (opportunity.imageUrl) {
+        getIPFSBlob(opportunity.imageUrl).then((url) =>
+          setResolvedImageUrl(url)
+        )
       }
-    }, [post])
+    }, [opportunity])
 
-    return (
-      post?.__typename === 'Post' &&
-      (post.metadata.attributes?.length &&
-      post.metadata.attributes[0].value !== PostTags.OrgPublish.Opportunity ? (
-        <WrongPost />
-      ) : (
-        <div className="p-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-1">
-              <BookmarkButton
-                publicationId={post.id}
-                postTag={PostTags.Bookmark.Opportunity}
-              />
-              <div className="text-2xl font-bold text-brand-600">
-                {attributeExists(post.metadata.attributes, 'opportunity_name')
-                  ? getAttribute(post.metadata.attributes, 'opportunity_name')
-                  : getAttribute(post.metadata.attributes, 'name')}
-              </div>
-              <div className="text-xl text-gray-400 font-bold pl-5">
-                {getAttribute(post.metadata.attributes, 'category')}
-              </div>
-            </div>
-            <div className="font-semibold">
-              Valid from:
-              {attributeExists(post.metadata.attributes, 'dates') ? (
-                <div>
-                  {`${getAttribute(post.metadata.attributes, 'dates')
-                    ?.toString()
-                    .replaceAll('-', '/')} - Ongoing`}
-                </div>
-              ) : (
-                <div>
-                  {`${getAttribute(post.metadata.attributes, 'startDate')
-                    ?.toString()
-                    .replaceAll('-', '/')} - ${
-                    attributeExists(post.metadata.attributes, 'endDate')
-                      ? getAttribute(
-                          post.metadata.attributes,
-                          'endDate'
-                        )?.toString() !== '' &&
-                        getAttribute(
-                          post.metadata.attributes,
-                          'endDate'
-                        )?.toString() !== undefined
-                        ? getAttribute(post.metadata.attributes, 'endDate')
-                            ?.toString()
-                            .replaceAll('-', '/')
-                        : 'Ongoing'
-                      : 'Ongoing'
-                  }`}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex space-x-3 items-center">
-            <Slug prefix="@" slug={post.profile.handle} />
-            <FollowButton followId={post.profile.id} />
-          </div>
-          <div className="pt-6 pb-4">
-            {getAttribute(post.metadata.attributes, 'description')}
-          </div>
-          {resolvedImageUrl && (
-            <div>
-              <img
-                key="attachment"
-                className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
-                src={resolvedImageUrl}
-                alt={'image attachment'}
-              />
-            </div>
-          )}
-          <div className="flex justify-end space-x-3">
-            {getAttribute(post.metadata.attributes, 'website') !== '' && (
-              <Link
-                href={
-                  getAttribute(
-                    post.metadata.attributes,
-                    'website'
-                  )?.toString() ?? ''
-                }
-                target="_blank"
-                className="flex"
-              >
-                <div className="flex items-center text-brand-600">
-                  <div className="mr-1 whitespace-nowrap">External url</div>
-                  <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
-                </div>
-              </Link>
-            )}
-            <ApplyButton
-              hoursDefault={
-                getAttribute(
-                  post.metadata.attributes,
-                  'hoursPerWeek'
-                )?.toString() ?? ''
-              }
-              publicationId={post.id}
-              organizationId={post.profile.id}
+    if (!opportunity) return <Spinner />
+
+    return opoprtunityError ? (
+      <WrongPost />
+    ) : (
+      <div className="p-6">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-1">
+            <BookmarkButton
+              publicationId={opportunity.metadata_id}
+              postTag={PostTags.Bookmark.Opportunity}
             />
+            <div className="text-2xl font-bold text-brand-600">
+              {opportunity.name}
+            </div>
+            <div className="text-xl text-gray-400 font-bold pl-5">
+              {opportunity.category}
+            </div>
+          </div>
+          <div className="font-semibold">
+            Valid from: {getDateString(opportunity)}
           </div>
         </div>
-      ))
+        <div className="flex space-x-3 items-center">
+          <Slug prefix="@" slug={opportunity.from.handle} />
+          <FollowButton followId={opportunity.from.id} />
+        </div>
+        <div className="pt-6 pb-4">{opportunity.description}</div>
+        {resolvedImageUrl && (
+          <div>
+            <img
+              key="attachment"
+              className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+              src={resolvedImageUrl}
+              alt={'image attachment'}
+            />
+          </div>
+        )}
+        <div className="flex justify-end space-x-3">
+          {opportunity.website !== '' && (
+            <Link href={opportunity.website} target="_blank" className="flex">
+              <div className="flex items-center text-brand-600">
+                <div className="mr-1 whitespace-nowrap">External url</div>
+                <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
+              </div>
+            </Link>
+          )}
+          <ApplyButton
+            hoursDefault={opportunity.hoursPerWeek}
+            publicationId={opportunity.metadata_id}
+            organizationId={opportunity.from.id}
+          />
+        </div>
+      </div>
     )
   }
 
@@ -224,7 +174,7 @@ const VolunteerPage: NextPage = () => {
             ) : error || data === undefined ? (
               <Custom404 />
             ) : (
-              <Body post={data} />
+              <Body />
             )}
           </Card>
         </GridItemTwelve>
