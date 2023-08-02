@@ -82,6 +82,8 @@ export abstract class PublicationMetadataBuilder<T> {
    * @param {(PostFragment | CommentFragment)} post the lens protocol post or comment
    */
   constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
+    this.versions = versions
+
     const typeMaybe = getAttribute(post.metadata.attributes, 'type')
     const versionMaybe = getAttribute(post.metadata.attributes, 'version')
 
@@ -107,7 +109,6 @@ export abstract class PublicationMetadataBuilder<T> {
     this.metadata_id = post.id
     this.createdAt = post.createdAt
     this.from = post.profile
-    this.versions = versions
   }
 
   /**

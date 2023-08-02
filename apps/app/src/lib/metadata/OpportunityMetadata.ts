@@ -1,7 +1,11 @@
+import { CommentFragment, PostFragment } from '@lens-protocol/client'
+
 import {
   PublicationMetadata,
   PublicationMetadataBuilder
 } from '@/lib/metadata/PublicationMetadata'
+
+import { getAttribute } from '../lens-protocol/getAttribute'
 
 /**
  * A data class that represents some opportunity metadata
@@ -66,6 +70,23 @@ export class OpportunityMetadata extends PublicationMetadata {
 }
 
 export class OpportunityMetadataBuilder extends PublicationMetadataBuilder<OpportunityMetadata> {
+  constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
+    super(versions, post)
+
+    this._opportunity_id = getAttribute(
+      post.metadata.attributes,
+      'opportunity_id'
+    )
+    this._name = getAttribute(post.metadata.attributes, 'name')
+    this._startDate = getAttribute(post.metadata.attributes, 'startDate')
+    this._endDate = getAttribute(post.metadata.attributes, 'endDate')
+    this._hoursPerWeek = getAttribute(post.metadata.attributes, 'hoursPerWeek')
+    this._category = getAttribute(post.metadata.attributes, 'category')
+    this._website = getAttribute(post.metadata.attributes, 'website')
+    this._description = getAttribute(post.metadata.attributes, 'description')
+    this._imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
+  }
+
   buildObject(): OpportunityMetadata {
     return new OpportunityMetadata(this)
   }
