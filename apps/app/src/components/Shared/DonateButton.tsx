@@ -172,7 +172,6 @@ const DonateButton: FC<Props> = ({ post }) => {
     if (run) {
       form.setValue('contribution', currentContribution)
       setFormContribution(currentContribution)
-      setCurrentPublication(post)
       setRun(false)
     }
   }, [run])
@@ -242,7 +241,12 @@ const DonateButton: FC<Props> = ({ post }) => {
         <div className="flex px-4 py-3 justify-between">
           <Button
             onClick={() => {
-              console.log('Donate', currentContribution, selectedCurrencySymbol)
+              console.log(
+                'Donate',
+                currentContribution,
+                selectedCurrencySymbol,
+                currentPublication
+              )
             }}
             className={`${
               isLoading ? 'bg-gray-400 hover:bg-gray-400 !border-black' : ''
