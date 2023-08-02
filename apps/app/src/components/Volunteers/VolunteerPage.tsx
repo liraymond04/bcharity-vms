@@ -40,10 +40,7 @@ const VolunteerPage: NextPage = () => {
   const opportunity = useMemo(() => {
     if (!data) return
     try {
-      return new OpportunityMetadataBuilder(
-        new Set(['1.0.0']),
-        data as PostFragment
-      ).build()
+      return new OpportunityMetadataBuilder(data as PostFragment).build()
     } catch (e) {
       if (e instanceof InvalidMetadataException) {
         setOpportunityError(true)

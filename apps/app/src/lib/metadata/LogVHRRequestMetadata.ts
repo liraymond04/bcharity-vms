@@ -13,10 +13,12 @@ import { OpportunityMetadata } from './OpportunityMetadata'
  */
 export class LogVhrRequestMetadata extends PublicationMetadata {
   /**
+   * The metadata versions of this type of metadata
+   */
+  static MetadataVersions = ['1.0.0']
+
+  /**
    * Creates an instance of OpportunityMetadata from an OpportunityMetadataBuilder.
-   *
-   * @constructor
-   * @param {LogVhrRequestMetadataBuilder} builder
    */
   constructor(builder: LogVhrRequestMetadataBuilder) {
     super(builder)
@@ -43,11 +45,10 @@ export class LogVhrRequestMetadata extends PublicationMetadata {
 
 export class LogVhrRequestMetadataBuilder extends PublicationMetadataBuilder<LogVhrRequestMetadata> {
   constructor(
-    versions: Set<string>,
     post: PostFragment | CommentFragment,
     opportunity: OpportunityMetadata
   ) {
-    super(versions, post)
+    super(new Set(LogVhrRequestMetadata.MetadataVersions), post)
 
     this._opportunity = opportunity
 

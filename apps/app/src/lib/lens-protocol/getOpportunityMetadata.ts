@@ -22,10 +22,7 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
         !post.hidden
     )
     .map((post) => {
-      const builder = new OpportunityMetadataBuilder(
-        new Set(['1.0.0']),
-        post as PostFragment
-      )
+      const builder = new OpportunityMetadataBuilder(post as PostFragment)
       const metadata = builder.build()
       return metadata
     })

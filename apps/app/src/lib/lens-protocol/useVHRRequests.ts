@@ -133,7 +133,6 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
 
           filteredPosts.map((post) => {
             const request = new LogVhrRequestMetadataBuilder(
-              new Set(['1.0.0']),
               post as CommentFragment,
               opportunities[i]
             ).build()

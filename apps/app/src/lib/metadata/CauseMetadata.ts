@@ -11,11 +11,10 @@ import { getAttribute } from '../lens-protocol/getAttribute'
  * A data class that represents some cause metadata
  */
 export class CauseMetadata extends PublicationMetadata {
+  static MetdataVersions = ['1.0.0']
+
   /**
    * Creates an instance of CauseMetadata from a CauseMetadataBuilder.
-   *
-   * @constructor
-   * @param {CauseMetadataBuilder} builder
    */
   constructor(builder: CauseMetadataBuilder) {
     super(builder)
@@ -72,9 +71,12 @@ export class CauseMetadata extends PublicationMetadata {
   location: string
 }
 
+/**
+ * Builder class for CauseMetadata
+ */
 export class CauseMetadataBuilder extends PublicationMetadataBuilder<CauseMetadata> {
-  constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
-    super(versions, post)
+  constructor(post: PostFragment | CommentFragment) {
+    super(new Set(CauseMetadata.MetdataVersions), post)
 
     this._cause_id = getAttribute(post.metadata.attributes, 'cause_id')
     this._name = getAttribute(post.metadata.attributes, 'name')

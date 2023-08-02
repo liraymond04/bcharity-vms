@@ -18,15 +18,13 @@
 <section class="tsd-panel tsd-comment">
 <div class="tsd-comment tsd-typography"><p>An abstract base class for building publication metadata</p>
 </div>
-<div class="tsd-comment tsd-typography">
-<h4>Export</h4>
-<h4>Abstract</h4></div></section> 
+<div class="tsd-comment tsd-typography"></div></section> 
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">T</span></h4>
-<div class="tsd-comment tsd-typography"><p>the data class to build</p>
+<h4><span class="tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol"> extends </span><a href="PublicationMetadata.html" class="tsd-signature-type tsd-kind-class">PublicationMetadata</a></h4>
+<div class="tsd-comment tsd-typography"><p>The data class to build</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></section> 
 <section class="tsd-panel tsd-hierarchy">
@@ -35,10 +33,10 @@
 <li><span class="target">PublicationMetadataBuilder</span>
 <ul class="tsd-hierarchy">
 <li><a href="CauseMetadataBuilder.html" class="tsd-signature-type tsd-kind-class">CauseMetadataBuilder</a></li>
-<li><a href="OpportunityMetadataBuilder.html" class="tsd-signature-type tsd-kind-class">OpportunityMetadataBuilder</a></li>
-<li><a href="LogVhrRequestMetadataBuilder.html" class="tsd-signature-type tsd-kind-class">LogVhrRequestMetadataBuilder</a></li></ul></li></ul></section><aside class="tsd-sources">
+<li><a href="LogVhrRequestMetadataBuilder.html" class="tsd-signature-type tsd-kind-class">LogVhrRequestMetadataBuilder</a></li>
+<li><a href="OpportunityMetadataBuilder.html" class="tsd-signature-type tsd-kind-class">OpportunityMetadataBuilder</a></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L64">apps/app/src/lib/metadata/PublicationMetadata.ts:64</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L55">apps/app/src/lib/metadata/PublicationMetadata.ts:55</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -62,7 +60,7 @@
 <div class="tsd-index-list"><a href="PublicationMetadataBuilder.html#_validate" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-2048"><rect fill="var(--color-icon-background)" stroke="#FF4DB8" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="12"></rect><path d="M9.162 16V7.24H10.578L11.514 10.072C11.602 10.328 11.674 10.584 11.73 10.84C11.794 11.088 11.842 11.28 11.874 11.416C11.906 11.28 11.954 11.088 12.018 10.84C12.082 10.584 12.154 10.324 12.234 10.06L13.122 7.24H14.538V16H13.482V12.82C13.482 12.468 13.49 12.068 13.506 11.62C13.53 11.172 13.558 10.716 13.59 10.252C13.622 9.78 13.654 9.332 13.686 8.908C13.726 8.476 13.762 8.1 13.794 7.78L12.366 12.16H11.334L9.894 7.78C9.934 8.092 9.97 8.456 10.002 8.872C10.042 9.28 10.078 9.716 10.11 10.18C10.142 10.636 10.166 11.092 10.182 11.548C10.206 12.004 10.218 12.428 10.218 12.82V16H9.162Z" fill="var(--color-text)"></path></g></svg><span>_validate</span></a>
 <a href="PublicationMetadataBuilder.html#build" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>build</span></a>
 <a href="PublicationMetadataBuilder.html#buildObject" class="tsd-index-link tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>build<wbr/>Object</span></a>
-<a href="PublicationMetadataBuilder.html#getValidationErrors" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Validation<wbr/>Errors</span></a>
+<a href="PublicationMetadataBuilder.html#getValidationErrors" class="tsd-index-link tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Validation<wbr/>Errors</span></a>
 <a href="PublicationMetadataBuilder.html#isPostTag" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Post<wbr/>Tag</span></a>
 <a href="PublicationMetadataBuilder.html#isVersion" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Version</span></a>
 </div></section></div></details></section></section>
@@ -79,24 +77,26 @@
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">T</span></h4></li></ul></section>
+<h4><span class="tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol"> extends </span><a href="PublicationMetadata.html" class="tsd-signature-type tsd-kind-class">PublicationMetadata</a></h4></li></ul></section>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">versions</span>: <span class="tsd-signature-type ">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
-<div class="tsd-comment tsd-typography"><p>a set of version strings that should be recognized by the builder</p>
+<div class="tsd-comment tsd-typography"><p>A set of version strings that should be recognized by the builder. Builders that
+inherit from this class should define in it (or its corresponding data class) the
+potential versions</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li>
 <li>
 <h5><span class="tsd-kind-parameter">post</span>: <span class="tsd-signature-type ">PostFragment</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type ">CommentFragment</span></h5>
-<div class="tsd-comment tsd-typography"><p>the lens protocol post or comment</p>
+<div class="tsd-comment tsd-typography"><p>The lens protocol post or comment. See PostFragment and CommentFragment</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="PublicationMetadataBuilder.html" class="tsd-signature-type tsd-kind-class">PublicationMetadataBuilder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L79">apps/app/src/lib/metadata/PublicationMetadata.ts:79</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L76">apps/app/src/lib/metadata/PublicationMetadata.ts:76</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="createdAt" class="tsd-anchor"></a>
@@ -106,7 +106,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L214">apps/app/src/lib/metadata/PublicationMetadata.ts:214</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L184">apps/app/src/lib/metadata/PublicationMetadata.ts:184</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="from" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>from</span><a href="#from" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">from</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">ProfileFragment</span></div>
@@ -114,7 +114,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L221">apps/app/src/lib/metadata/PublicationMetadata.ts:221</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L188">apps/app/src/lib/metadata/PublicationMetadata.ts:188</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="metadata_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>metadata_<wbr/>id</span><a href="#metadata_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">metadata_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -122,7 +122,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L207">apps/app/src/lib/metadata/PublicationMetadata.ts:207</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L180">apps/app/src/lib/metadata/PublicationMetadata.ts:180</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="type" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>type</span><a href="#type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">PostTag</span></div>
@@ -130,7 +130,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L200">apps/app/src/lib/metadata/PublicationMetadata.ts:200</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L176">apps/app/src/lib/metadata/PublicationMetadata.ts:176</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="version" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>version</span><a href="#version" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">version</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -138,7 +138,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L193">apps/app/src/lib/metadata/PublicationMetadata.ts:193</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L172">apps/app/src/lib/metadata/PublicationMetadata.ts:172</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="versions" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>versions</span><a href="#versions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">versions</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
@@ -146,7 +146,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L70">apps/app/src/lib/metadata/PublicationMetadata.ts:70</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L63">apps/app/src/lib/metadata/PublicationMetadata.ts:63</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="_validate" class="tsd-anchor"></a>
@@ -159,7 +159,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="InvalidMetadataException.html" class="tsd-signature-type tsd-kind-class">InvalidMetadataException</a></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L147">apps/app/src/lib/metadata/PublicationMetadata.ts:147</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L131">apps/app/src/lib/metadata/PublicationMetadata.ts:131</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="build" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>build</span><a href="#build" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -170,7 +170,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type tsd-kind-type-parameter">T</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L179">apps/app/src/lib/metadata/PublicationMetadata.ts:179</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L161">apps/app/src/lib/metadata/PublicationMetadata.ts:161</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected"><a id="buildObject" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <code class="tsd-tag ts-flagAbstract">Abstract</code> <span>build<wbr/>Object</span><a href="#buildObject" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-protected">
@@ -182,20 +182,19 @@
 <div class="tsd-comment tsd-typography">
 <h4>Abstract</h4></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L172">apps/app/src/lib/metadata/PublicationMetadata.ts:172</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member tsd-is-private"><a id="getValidationErrors" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagAbstract">Abstract</code> <code class="tsd-tag ts-flagPrivate">Private</code> <span>get<wbr/>Validation<wbr/>Errors</span><a href="#getValidationErrors" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-private">
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L156">apps/app/src/lib/metadata/PublicationMetadata.ts:156</a></li></ul></aside></li></ul></section>
+<section class="tsd-panel tsd-member tsd-is-protected"><a id="getValidationErrors" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <code class="tsd-tag ts-flagAbstract">Abstract</code> <span>get<wbr/>Validation<wbr/>Errors</span><a href="#getValidationErrors" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures tsd-is-protected">
 <li class="tsd-signature tsd-anchor-link" id="getValidationErrors.getValidationErrors-1"><span class="tsd-kind-call-signature">get<wbr/>Validation<wbr/>Errors</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="InvalidMetadataException.html" class="tsd-signature-type tsd-kind-class">InvalidMetadataException</a><a href="#getValidationErrors.getValidationErrors-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description"><code class="tsd-tag ts-flagPrivate">Private</code> 
+<li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>A virtual method called in <a href="PublicationMetadataBuilder.html#_validate" class="tsd-kind-method">()</a> to throw any validation errors
 created by classes that extend this class</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="InvalidMetadataException.html" class="tsd-signature-type tsd-kind-class">InvalidMetadataException</a></h4>
-<div class="tsd-comment tsd-typography">
-<h4>Abstract</h4></div><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L139">apps/app/src/lib/metadata/PublicationMetadata.ts:139</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L124">apps/app/src/lib/metadata/PublicationMetadata.ts:124</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="isPostTag" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>is<wbr/>Post<wbr/>Tag</span><a href="#isPostTag" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-private">
@@ -207,29 +206,27 @@ created by classes that extend this class</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">tagString</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+<h5><span class="tsd-kind-parameter">tagString</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L115">apps/app/src/lib/metadata/PublicationMetadata.ts:115</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L109">apps/app/src/lib/metadata/PublicationMetadata.ts:109</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="isVersion" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>is<wbr/>Version</span><a href="#isVersion" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-private">
 <li class="tsd-signature tsd-anchor-link" id="isVersion.isVersion-1"><span class="tsd-kind-call-signature">is<wbr/>Version</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">versionString</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><a href="#isVersion.isVersion-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description"><code class="tsd-tag ts-flagPrivate">Private</code> 
+<li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Utility function that tests if a metadata string value matches a version in the versions set</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">versionString</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+<h5><span class="tsd-kind-parameter">versionString</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/4b41906/apps/app/src/lib/metadata/PublicationMetadata.ts#L127">apps/app/src/lib/metadata/PublicationMetadata.ts:127</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/liraymond04/bcharity-vms/blob/8a05c63/apps/app/src/lib/metadata/PublicationMetadata.ts#L116">apps/app/src/lib/metadata/PublicationMetadata.ts:116</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -259,7 +256,7 @@ created by classes that extend this class</p>
 <li><a href="#_validate" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>_validate</span></a></li>
 <li><a href="#build" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>build</span></a></li>
 <li><a href="#buildObject" class="tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>build<wbr/>Object</span></a></li>
-<li><a href="#getValidationErrors" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Validation<wbr/>Errors</span></a></li>
+<li><a href="#getValidationErrors" class="tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Validation<wbr/>Errors</span></a></li>
 <li><a href="#isPostTag" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Post<wbr/>Tag</span></a></li>
 <li><a href="#isVersion" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Version</span></a></li></ul></div></details></div>
 <div class="site-menu">

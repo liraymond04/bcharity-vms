@@ -11,11 +11,10 @@ import { getAttribute } from '../lens-protocol/getAttribute'
  * A data class that represents some opportunity metadata
  */
 export class OpportunityMetadata extends PublicationMetadata {
+  static MetdataVersions = ['1.0.0']
+
   /**
    * Creates an instance of OpportunityMetadata from an OpportunityMetadataBuilder.
-   *
-   * @constructor
-   * @param {OpportunityMetadataBuilder} builder
    */
   constructor(builder: OpportunityMetadataBuilder) {
     super(builder)
@@ -68,9 +67,12 @@ export class OpportunityMetadata extends PublicationMetadata {
   imageUrl: string
 }
 
+/**
+ * Builder class for OpportunityMetadata
+ */
 export class OpportunityMetadataBuilder extends PublicationMetadataBuilder<OpportunityMetadata> {
-  constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
-    super(versions, post)
+  constructor(post: PostFragment | CommentFragment) {
+    super(new Set(OpportunityMetadata.MetdataVersions), post)
 
     this._opportunity_id = getAttribute(
       post.metadata.attributes,

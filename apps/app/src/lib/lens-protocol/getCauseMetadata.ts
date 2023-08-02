@@ -15,10 +15,7 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
     )
 
     .map((post) => {
-      const builder = new CauseMetadataBuilder(
-        new Set(['1.0.0']),
-        post as PostFragment
-      )
+      const builder = new CauseMetadataBuilder(post as PostFragment)
       return builder.build()
     })
 

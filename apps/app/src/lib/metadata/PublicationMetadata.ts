@@ -10,10 +10,6 @@ import { PostTag } from './PostTags'
 
 /**
  * A base class for publication metadata
- *
- * @export
- * @class PublicationMetadata
- * @typedef {PublicationMetadata}
  */
 export class PublicationMetadata {
   /**
@@ -54,14 +50,11 @@ export class PublicationMetadata {
 
 /**
  * An abstract base class for building publication metadata
- *
- * @export
- * @abstract
- * @class PublicationMetadataBuilder
- * @typedef {PublicationMetadataBuilder}
- * @template T the data class to build
+ * @template T The data class to build
  */
-export abstract class PublicationMetadataBuilder<T> {
+export abstract class PublicationMetadataBuilder<
+  T extends PublicationMetadata
+> {
   /**
    * A set of version strings
    *
@@ -73,8 +66,12 @@ export abstract class PublicationMetadataBuilder<T> {
    * Creates an instance of PublicationMetadataBuilder.
    *
    * @constructor
-   * @param {Set<string>} versions a set of version strings that should be recognized by the builder
-   * @param {(PostFragment | CommentFragment)} post the lens protocol post or comment
+   * @param {Set<string>} versions
+   * A set of version strings that should be recognized by the builder. Builders that
+   * inherit from this class should define in it (or its corresponding data class) the
+   * potential versions
+   * @param {(PostFragment | CommentFragment)} post
+   * The Lens Protocol post or comment. See {@link PostFragment} and {@link CommentFragment}
    */
   constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
     this.versions = versions
@@ -108,9 +105,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * Utility function that searches the PostTag enum to see if a metadata string value matches a value in the enum
-   *
-   * @param {string} tagString
-   * @returns {boolean}
    */
   private isPostTag(tagString: string): boolean {
     return !!Object.values(PostTag).find((t: string) => t === tagString)
@@ -118,11 +112,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * Utility function that tests if a metadata string value matches a version in the versions set
-   *
-   * @param {string} versionString
-   *
-   * @private
-   * @returns {*}
    */
   private isVersion(versionString: string): any {
     return this.versions.has(versionString)
@@ -131,10 +120,6 @@ export abstract class PublicationMetadataBuilder<T> {
   /**
    * A virtual method called in {@link _validate()} to throw any validation errors
    * created by classes that extend this class
-   *
-   * @private
-   * @abstract
-   * @returns {(InvalidMetadataException | null)}
    */
   protected abstract getValidationErrors(): InvalidMetadataException | null
 
@@ -142,7 +127,6 @@ export abstract class PublicationMetadataBuilder<T> {
    * A method to validate the outputted metadata when attempting to build the data class
    *
    * @private
-   * @returns {*}
    */
   private _validate() {
     if (this.type === PostTag.NONE) {
@@ -173,8 +157,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * The bethod used to build the data class the builder builds
-   *
-   * @returns {T}
    */
   build() {
     const exception = this._validate()
@@ -186,37 +168,22 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * The version string in the set versions
-   *
-   * @readonly
-   * @type {string}
    */
   readonly version: string
   /**
    * The post type, a string enum value in PostTags
-   *
-   * @readonly
-   * @type {PostTag}
    */
   readonly type: PostTag
   /**
    * The publication post id assigned by lens
-   *
-   * @readonly
-   * @type {string}
    */
   readonly metadata_id: string
   /**
    * The publication post createdAt date, from lens
-   *
-   * @readonly
-   * @type {string}
    */
   readonly createdAt: string
   /**
    * The profile that created the post, from lens
-   *
-   * @readonly
-   * @type {ProfileFragment}
    */
   readonly from: ProfileFragment
 }
