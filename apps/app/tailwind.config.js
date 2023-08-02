@@ -17,8 +17,8 @@ module.exports = {
         brand: colors.violet,
         NavBar: '#23172D',
         SideBar: '#23224A',
-        Card: '#18004A',
-        Input: '#00254A'
+        Card: '#0f172a',
+        Input: '#1e254a'
       },
       typography(theme) {
         return {
