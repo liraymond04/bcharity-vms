@@ -55,7 +55,6 @@ const VolunteerHomeTab: React.FC = () => {
             }
             setBio(userProfile.bio || '')
           }
-          console.log('profile', userProfile)
         }
       } catch (error) {
         console.error('Error fetching profile data:', error)

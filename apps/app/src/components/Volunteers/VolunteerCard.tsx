@@ -24,7 +24,6 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
 
   const getDisplayedImage = () => {
     if (!post.imageUrl) {
-      console.log('showing default')
       return (
         <div
           className="border-b dark:border-b-gray-700/80 h-full rounded-l-xl"
@@ -38,14 +37,12 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
         />
       )
     } else if (!resolvedImageUrl) {
-      console.log('showing spinner')
       return (
         <div className="h-full flex items-center justify-center rounded-l-xl">
           <Spinner size="lg" />
         </div>
       )
     } else {
-      console.log('showing image')
       return (
         <img
           src={resolvedImageUrl}
