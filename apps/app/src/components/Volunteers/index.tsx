@@ -8,7 +8,8 @@ import { useInView } from 'react-cool-inview'
 
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { _om, PostTags } from '@/lib/types'
+import { OpportunityMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/types'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import Divider from '../Shared/Divider'
@@ -16,7 +17,7 @@ import { Spinner } from '../UI/Spinner'
 import VolunteerCard from './VolunteerCard'
 
 const Volunteers: NextPage = () => {
-  const [posts, setPosts] = useState<[_om, string][]>([])
+  const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -34,11 +35,11 @@ const Volunteers: NextPage = () => {
   })
 
   useEffect(() => {
-    let _posts: [_om, string][] = []
+    let _posts: OpportunityMetadata[] = []
     let _categories: Set<string> = new Set()
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {
-      _posts.push([post, post.id])
+      _posts.push(post)
       if (post.category) _categories.add(post.category)
     })
     setPosts(_posts)
@@ -105,12 +106,12 @@ const Volunteers: NextPage = () => {
           {posts
             .filter(
               (post) =>
-                selectedCategory === '' || post[0].category === selectedCategory
+                selectedCategory === '' || post.category === selectedCategory
             )
             .map((post, idx, arr) => (
-              <GridItemFour key={post[0]?.opportunity_id}>
+              <GridItemFour key={post.opportunity_id}>
                 <span ref={idx === arr.length - 1 ? observe : null}>
-                  <VolunteerCard post={post[0]} id={post[1]} />
+                  <VolunteerCard post={post} />
                 </span>
               </GridItemFour>
             ))}
