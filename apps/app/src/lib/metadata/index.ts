@@ -1,9 +1,9 @@
+import { buildMetadataAttributes } from './buildMetadataAttributes'
 import {
   CauseMetadata,
   CauseMetadataBuilder,
   CauseMetadataFields
 } from './CauseMetadata'
-import { buildMetadataAttributes } from './CreatePublicationMetadataBuilder'
 import { InvalidMetadataException } from './InvalidMetadataException'
 import {
   LogVhrRequestMetadata,
@@ -38,5 +38,5 @@ export type {
   CauseMetadataFields,
   LogVhrRequestMetadataFields,
   OpportunityMetadataFields,
-  PublicationMetadataFieldNames as PublicationMetadataFields
+  PublicationMetadataFieldNames
 }

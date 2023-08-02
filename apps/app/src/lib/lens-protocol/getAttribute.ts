@@ -1,6 +1,6 @@
 import { MetadataAttributeOutputFragment } from '@lens-protocol/client'
 
-export const getAttribute = (
+export const getAttribute = <T extends Record<string, string>>(
   attributes: MetadataAttributeOutputFragment[],
   attributeName: string
 ) => {

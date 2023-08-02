@@ -22,6 +22,11 @@
       "@utils*": ["src/utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/lib/metadata/buildMetadataAttributes.ts"
+  ],
   "exclude": ["node_modules"]
 }
