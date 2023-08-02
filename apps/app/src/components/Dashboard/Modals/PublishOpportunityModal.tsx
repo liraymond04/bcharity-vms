@@ -1,7 +1,3 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -12,15 +8,11 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME } from '@/constants'
-import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import {
-  buildMetadataAttributes,
-  OpportunityMetadataFields
-} from '@/lib/metadata'
+import { buildMetadata, OpportunityMetadataFields } from '@/lib/metadata'
+import { PostTag } from '@/lib/metadata/PostTags'
 import { MetadataVersion, PostTags } from '@/lib/types'
 
 import Error from './Error'
@@ -45,27 +37,6 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   website: '',
   description: '',
   imageUrl: ''
-}
-
-export const createPublishAttributes = (data: {
-  id: string
-  formData: IPublishOpportunityFormProps
-}) => {
-  const attributes = buildMetadataAttributes<OpportunityMetadataFields>({
-    version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
-    type: PostTags.OrgPublish.Opportunity,
-    opportunity_id: data.id,
-    name: data.formData.name,
-    startDate: data.formData.startDate,
-    endDate: data.formData.endDate,
-    hoursPerWeek: data.formData.hoursPerWeek,
-    category: data.formData.category,
-    website: data.formData.website,
-    description: data.formData.description,
-    imageUrl: data.formData.imageUrl
-  })
-
-  return attributes
 }
 
 interface IPublishOpportunityModalProps {
@@ -121,22 +92,17 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : ''
 
-    const attributes = createPublishAttributes({
-      id: v4(),
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: v4(),
-      content: `#${PostTags.OrgPublish.Opportunity}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Opportunity],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Opportunity} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<OpportunityMetadataFields>(
+      publisher,
+      [PostTag.PublishOpportunity],
+      {
+        version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
+        type: PostTags.OrgPublish.Opportunity,
+        opportunity_id: v4(),
+        ...formData,
+        imageUrl
+      }
+    )
 
     try {
       await checkAuth(publisher.ownedBy)

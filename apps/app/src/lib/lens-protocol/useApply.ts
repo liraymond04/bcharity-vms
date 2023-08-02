@@ -1,6 +1,8 @@
 import {
+  MetadataAttributeInput,
   ProfileFragment,
   PublicationMainFocus,
+  PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
@@ -11,11 +13,8 @@ import { APP_NAME } from '@/constants'
 
 import getUserLocale from '../getUserLocale'
 import uploadToIPFS from '../ipfs/ipfsUpload'
-import {
-  buildMetadataAttributes,
-  LogVhrRequestMetadataFields
-} from '../metadata'
-import { PostTags } from '../types'
+import { LogVhrRequestMetadataFields } from '../metadata'
+import { MetadataVersion, PostTags } from '../types'
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
@@ -40,12 +39,22 @@ const useApply = (params: Props) => {
         throw Error('Provided profile is null!')
       }
 
-      const attributes = buildMetadataAttributes<LogVhrRequestMetadataFields>({
-        hoursToVerify,
-        comments,
+      const data: LogVhrRequestMetadataFields = {
         type: PostTags.VhrRequest.Opportunity,
-        version: ''
-      })
+        version: MetadataVersion.LogVhrRequestMetadataVersions['1.0.0'],
+        hoursToVerify,
+        comments
+      }
+
+      const attributes: MetadataAttributeInput[] = Object.values(data).map(
+        ([k, v]) => {
+          return {
+            traitType: k,
+            value: v,
+            displayType: PublicationMetadataDisplayTypes.String
+          }
+        }
+      )
 
       const metadata: PublicationMetadataV2Input = {
         version: '2.0.0',

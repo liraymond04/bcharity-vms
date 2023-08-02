@@ -1,7 +1,3 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { Erc20Fragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
@@ -16,13 +12,13 @@ import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
+import { DEFAULT_COLLECT_TOKEN } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
-import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { buildMetadataAttributes, CauseMetadataFields } from '@/lib/metadata'
+import { buildMetadata, CauseMetadataFields } from '@/lib/metadata'
+import { PostTag } from '@/lib/metadata/PostTags'
 import { MetadataVersion } from '@/lib/types'
 import { PostTags } from '@/lib/types'
 
@@ -54,28 +50,6 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
   country: '',
   province: '',
   city: ''
-}
-
-export const createPublishAttributes = (data: {
-  id: string
-  formData: IPublishCauseFormProps
-}) => {
-  const attributes = buildMetadataAttributes<CauseMetadataFields>({
-    type: PostTags.OrgPublish.Cause,
-    cause_id: data.id,
-    name: data.formData.name,
-    category: data.formData.category,
-    currency: data.formData.currency,
-    contribution: data.formData.contribution,
-    goal: data.formData.goal,
-    recipient: data.formData.recipient,
-    description: data.formData.description,
-    imageUrl: data.formData.imageUrl,
-    location: `${data.formData.country}-${data.formData.province}-${data.formData.city}`,
-    version: MetadataVersion.CauseMetadataVersion['1.0.0']
-  })
-
-  return attributes
 }
 
 interface IPublishCauseModalProps {
@@ -144,22 +118,24 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : ''
 
-    const attributes = createPublishAttributes({
-      id: v4(),
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: v4(),
-      content: `#${PostTags.OrgPublish.Cause}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Cause],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Cause} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<CauseMetadataFields>(
+      publisher,
+      [PostTag.PublishCause],
+      {
+        version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
+        type: PostTags.OrgPublish.Opportunity,
+        cause_id: v4(),
+        name: formData.name,
+        category: formData.category,
+        currency: formData.currency,
+        contribution: formData.contribution,
+        goal: formData.goal,
+        recipient: formData.recipient,
+        description: formData.recipient,
+        location: `${formData.country}-${formData.province}-${formData.city}`,
+        imageUrl
+      }
+    )
 
     const collectModuleParams = {
       feeCollectModule: {

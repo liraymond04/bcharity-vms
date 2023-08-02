@@ -3,8 +3,6 @@ import { ProfileFragment } from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
-import { CauseMetadata, OpportunityMetadata } from './metadata'
-
 export enum OpportunityMetadataVersion {
   '1.0.0' = '1.0.0'
 }
@@ -65,31 +63,6 @@ export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof GoalMetadata | 'type'
 }
 
-/**
- * Interface for a metadata field used when publishing an cause
- */
-export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
-  traitType: keyof CauseMetadata
-}
-
-/**
- * Interface for a metadata field used when publishing a opportunity
- */
-
-export interface OpportunityMetadataAttributeInput
-  extends MetadataAttributeInput {
-  traitType: keyof OpportunityMetadata
-}
-
-export interface VerifyMetadata {
-  hoursToVerify: string
-  comments: string
-}
-
-export interface VerifyMetadataAttributeInput extends MetadataAttributeInput {
-  traitType: keyof VerifyMetadata | 'type'
-}
-
 enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a volunteer opportunity
@@ -121,11 +94,6 @@ enum VhrRequest {
   Opportunity = 'VHR_REQUEST_OPPORTUNITY',
   Reject = 'VHR_REJECT_REQUEST'
 }
-
-export type OpportunityMetadataRecord = Record<
-  keyof OpportunityMetadata | 'type',
-  string
->
 
 export const PostTags = {
   /**

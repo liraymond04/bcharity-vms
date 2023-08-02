@@ -1,7 +1,3 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -11,18 +7,15 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME } from '@/constants'
-import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { PostTags } from '@/lib/types'
+import { buildMetadata, OpportunityMetadataFields } from '@/lib/metadata'
+import { PostTag } from '@/lib/metadata/PostTags'
+import { MetadataVersion, PostTags } from '@/lib/types'
 
 import Error from './Error'
-import {
-  createPublishAttributes,
-  IPublishOpportunityFormProps
-} from './PublishOpportunityModal'
+import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
   open: boolean
@@ -75,22 +68,17 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
 
-    const attributes = createPublishAttributes({
-      id,
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: id,
-      content: `#${PostTags.OrgPublish.Opportunity}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Opportunity],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Opportunity} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<OpportunityMetadataFields>(
+      publisher,
+      [PostTag.PublishOpportunity],
+      {
+        version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
+        type: PostTags.OrgPublish.Opportunity,
+        opportunity_id: id,
+        ...formData,
+        imageUrl
+      }
+    )
 
     checkAuth(publisher.ownedBy)
       .then(() =>

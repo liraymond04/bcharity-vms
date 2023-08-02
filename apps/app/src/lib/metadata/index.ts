@@ -1,4 +1,4 @@
-import { buildMetadataAttributes } from './buildMetadataAttributes'
+import { buildMetadata } from './buildMetadata'
 import {
   CauseMetadata,
   CauseMetadataBuilder,
@@ -22,7 +22,7 @@ import {
 } from './PublicationMetadata'
 
 export {
-  buildMetadataAttributes,
+  buildMetadata,
   CauseMetadata,
   CauseMetadataBuilder,
   InvalidMetadataException,
