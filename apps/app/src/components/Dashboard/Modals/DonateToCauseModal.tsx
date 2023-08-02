@@ -19,17 +19,14 @@ const DonateToCauseModal: FC = () => {
   return (
     <>
       <Modal
-        size="lg"
         show={showModal}
         title=""
+        size="lg"
         onClose={() => setShowModal(false)}
       >
-        <div className="p-10">
+        <div className="pl-10">
           <div className="flex flex-row ">
-            <div
-              className="text-purple-500 text-5xl fon
-            t-bold"
-            >
+            <div className="text-purple-500 text-5xl font-bold">
               Donate to Cause
             </div>
           </div>
