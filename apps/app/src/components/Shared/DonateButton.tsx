@@ -1,14 +1,15 @@
 import {
   CollectModuleParams,
+  CommentFragment,
   MetadataAttributeInput,
   PostFragment,
-  PublicationFragment,
   PublicationMainFocus,
   ReferenceModuleParams,
   RelayerResultFragment,
   RelayErrorFragment
 } from '@lens-protocol/client'
 import { PublicationMetadataV2Input } from '@lens-protocol/client'
+import { fetchBalance } from '@wagmi/core'
 import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
@@ -29,6 +30,7 @@ import { Form } from '../UI/Form'
 import { Input } from '../UI/Input'
 import { Modal } from '../UI/Modal'
 import { Spinner } from '../UI/Spinner'
+import Uniswap from './Uniswap'
 
 interface Props {
   post: PostFragment
@@ -59,8 +61,9 @@ const DonateButton: FC<Props> = ({ post }) => {
 
   const [currencyEnough, setCurrencyEnough] = useState<boolean>(false)
 
-  const [currentPublication, setCurrentPublication] =
-    useState<PublicationFragment>(post)
+  const [currentPublication, setCurrentPublication] = useState<
+    PostFragment | CommentFragment
+  >(post)
 
   const form = useForm<IDonateFormProps>()
 
@@ -80,13 +83,46 @@ const DonateButton: FC<Props> = ({ post }) => {
 
   const onSubmit = async (formData: IDonateFormProps) => {
     setError(undefined)
-    // await apply(
-    //   currentUser,
-    //   formData.hoursToVerify,
-    //   formData.comments,
-    //   onCancel
-    // )
   }
+
+  const getBalance = async () => {
+    setCheckBalanceLoading(true)
+    try {
+      if (!currentUser) throw Error('Current user is null!')
+      if (
+        currentPublication.__typename !== 'Post' &&
+        currentPublication.__typename !== 'Comment'
+      )
+        throw Error('Incorrect publication type!')
+      if (
+        currentPublication.collectModule.__typename !==
+        'FeeCollectModuleSettings'
+      )
+        throw Error('Incorrect collect module type!')
+
+      const balance = await fetchBalance({
+        address: `0x${currentUser.ownedBy.substring(2)}`,
+        token: `0x${currentPublication.collectModule.amount.asset.address.substring(
+          2
+        )}`
+      })
+
+      setCurrencyEnough(
+        parseFloat(balance.formatted) >
+          parseFloat(currentPublication.collectModule.amount.value)
+      )
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e)
+      }
+    } finally {
+      setCheckBalanceLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getBalance()
+  }, [currentContribution])
 
   const [_setIsLoading, setSetIsLoading] = useState<boolean>(false)
   const onSet = async () => {
@@ -156,8 +192,6 @@ const DonateButton: FC<Props> = ({ post }) => {
 
       setCurrentPublication(publication)
       setCurrentContribution(formContribution)
-
-      // console.log(publication.)
     } catch (e) {
       if (e instanceof Error) {
         setError(e)
@@ -175,6 +209,8 @@ const DonateButton: FC<Props> = ({ post }) => {
       setRun(false)
     }
   }, [run])
+
+  const [checkBalanceLoading, setCheckBalanceLoading] = useState<boolean>(false)
 
   return (
     <>
@@ -226,6 +262,26 @@ const DonateButton: FC<Props> = ({ post }) => {
                   Set
                 </Button>
               </div>
+              {!currencyEnough && (
+                <div className="flex justify-between mt-4">
+                  <Uniswap
+                    module={
+                      currentPublication.collectModule.__typename ===
+                      'FeeCollectModuleSettings'
+                        ? currentPublication.collectModule
+                        : undefined
+                    }
+                  />
+                  <Button
+                    size="sm"
+                    icon={checkBalanceLoading && <Spinner size="sm" />}
+                    disabled={checkBalanceLoading}
+                    onClick={getBalance}
+                  >
+                    Check Balance
+                  </Button>
+                </div>
+              )}
             </Form>
           ) : (
             <Spinner />
@@ -251,7 +307,11 @@ const DonateButton: FC<Props> = ({ post }) => {
             className={`${
               isLoading ? 'bg-gray-400 hover:bg-gray-400 !border-black' : ''
             } px-6 py-2 font-medium`}
-            disabled={isLoading || currentContribution !== formContribution}
+            disabled={
+              isLoading ||
+              currentContribution !== formContribution ||
+              !currencyEnough
+            }
           >
             Donate
           </Button>
