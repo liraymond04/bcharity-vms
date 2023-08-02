@@ -15,11 +15,12 @@ export enum omv {
 export enum cmv {
   '1.0.0' = '1.0.0'
 }
-
+export enum GoalMetadataVersion {
+  '1.0.0' = '1.0.0'
+}
 export enum ProfileMetadataVersions {
   '1.0.0'
 }
-
 export enum VhrRequestMetadataVersions {
   '1.0.0' = '1.0.0'
 }
@@ -27,6 +28,7 @@ export enum VhrRequestMetadataVersions {
 export const MetadataVersion = {
   OpportunityMetadataVersion: omv,
   CauseMetadataVersion: cmv,
+  GoalMetadataVersion,
   ProfileMetadataVersions,
   VhrRequestMetadataVersions
 }
@@ -41,8 +43,35 @@ interface opm<T> {
    */
   version: T
 }
+export interface GoalMetadata extends opm<GoalMetadataVersion> {
+  /**
+   * a uuid associated with a volunteer opporunity
+   */
 
-export interface _om extends opm<omv> {
+  /**
+   * the opportunity nam e
+   */
+  goal: string
+  /**
+   * opportunity start date in YYYY-MM-DD format
+   */
+
+  /**
+   * opportunity end date in YYYY-MM-DD format
+   */
+  goalDate: string
+  /**
+
+}
+
+/**
+ * Interface for a metadata field used when publishing a opportunity
+ */
+}
+export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof GoalMetadata | 'type'
+}
+export interface _OpportunityMetadata extends opm<omv> {
   /**
    * a uuid associated with a volunteer opporunity
    */
@@ -84,10 +113,6 @@ export interface _om extends opm<omv> {
 /**
  * Interface for a metadata field used when publishing a opportunity
  */
-export interface OpportunityMetadataAttributeInput
-  extends MetadataAttributeInput {
-  traitType: keyof _om | 'type'
-}
 
 interface _cm extends opm<cmv> {
   /**
@@ -156,7 +181,9 @@ enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a cause
    */
-  Cause = 'ORG_PUBLISH_CAUSE'
+  Cause = 'ORG_PUBLISH_CAUSE',
+
+  Goal = 'ORG_PUBLISH_Goal'
 }
 
 enum Bookmark {
@@ -178,6 +205,11 @@ enum VhrRequest {
   Reject = 'VHR_REJECT_REQUEST'
 }
 
+export type OpportunityMetadataRecord = Record<
+  keyof OpportunityMetadata | 'type',
+  string
+>
+
 export const PostTags = {
   /**
    * Collection of tags for organizations publishing and modifying
@@ -192,8 +224,6 @@ export const PostTags = {
    */
   VhrRequest
 }
-
-export type OpportunityMetadataRecord = Record<keyof _om | 'type', string>
 
 export enum MetadataDisplayType {
   number = 'number',
@@ -239,7 +269,6 @@ export interface ProfileMetadata {
    * Any custom attributes can be added here to save state for a profile
    */
   attributes: AttributeData[]
-  location: string | null
 }
 
 export interface VhrRequestMetadata extends PublicationMetadataV2Input {

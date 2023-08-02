@@ -32,13 +32,16 @@ const VolunteerVHRTab: React.FC = () => {
     data: postData,
     error: postDataError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: { oneOf: [PostTags.OrgPublish.Opportunity] }
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: { oneOf: [PostTags.OrgPublish.Opportunity] }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
