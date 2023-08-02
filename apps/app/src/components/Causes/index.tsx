@@ -54,7 +54,6 @@ const Causes: NextPage = () => {
   return (
     <>
       <SEO title="Fundraisers • BCharity VMS" />
-      {/* <DonateToCauseModal /> */}
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5">
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
           <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
