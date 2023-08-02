@@ -45,7 +45,7 @@ const DeleteProfileSection: React.FC = () => {
       <Card>
         <GradientWrapper>
           <div className="pt-40 h-screen">
-            <div className="bg-zinc-100 dark:bg-gray-800 shadow-md shadow-gray-500 rounded-lg p-6 max-w-xl mx-auto">
+            <div className="bg-zinc-100 dark:bg-slate-900 shadow-md rounded-lg p-6 max-w-xl mx-auto">
               <div
                 className="my-4 text-base font-bold"
                 style={{ color: 'red' }}

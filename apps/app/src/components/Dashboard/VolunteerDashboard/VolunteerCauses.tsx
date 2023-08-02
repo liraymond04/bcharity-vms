@@ -83,7 +83,7 @@ const VolunteerCauses: React.FC = () => {
     <div className={className}>
       <div className="w-full bg-gray-200 rounded-full h-5 ">
         <div
-          className="bg-green-400 dark:bg-[#54787e] h-5 rounded-full"
+          className="bg-green-400 h-5 rounded-full"
           style={{
             width: `${Math.min(Math.trunc((progress / total) * 100), 100)}%`
           }}
