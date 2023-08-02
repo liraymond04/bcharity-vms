@@ -1,11 +1,7 @@
 import { PostFragment, PublicationFragment } from '@lens-protocol/client'
 
-import {
-  MetadataVersion,
-  OpportunityMetadata,
-  OpportunityMetadataVersion
-} from '../types'
-import { getAttribute } from './getAttribute'
+import { OpportunityMetadata, OpportunityMetadataBuilder } from '../metadata'
+import { MetadataVersion } from '../types'
 /**
  * @file getOpportunityMetadata.ts
  * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
@@ -16,10 +12,7 @@ import { getAttribute } from './getAttribute'
  *
  */
 const getOpportunityMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: (OpportunityMetadata & {
-    createdAt: number
-    id: string
-  })[] = data
+  const allMetadata: OpportunityMetadata[] = data
     .filter(
       (post) =>
         post.__typename === 'Post' &&
@@ -29,46 +22,30 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
         !post.hidden
     )
     .map((post) => {
-      const attributes = (post as PostFragment).metadata.attributes
-      return {
-        version: getAttribute(
-          attributes,
-          'version'
-        ) as OpportunityMetadataVersion,
-        opportunity_id: getAttribute(attributes, 'opportunity_id'),
-        name: getAttribute(attributes, 'name'),
-        startDate: getAttribute(attributes, 'startDate'),
-        endDate: getAttribute(attributes, 'endDate'),
-        hoursPerWeek: getAttribute(attributes, 'hoursPerWeek'),
-        category: getAttribute(attributes, 'category'),
-        website: getAttribute(attributes, 'website'),
-        description: getAttribute(attributes, 'description'),
-        imageUrl: getAttribute(attributes, 'imageUrl'),
-        from: post.profile,
-        createdAt: new Date(post.createdAt).getTime(),
-        id: post.id
-      }
+      const builder = new OpportunityMetadataBuilder(
+        new Set(['1.0.0']),
+        post as PostFragment
+      )
+      const metadata = builder.build()
+      return metadata
     })
 
   const opportunityIdCreatedAtMap: Record<string, number> = {}
 
   allMetadata.forEach((val) => {
+    const unixTime = new Date(val.createdAt).getTime()
     if (
       !opportunityIdCreatedAtMap[val.opportunity_id] ||
-      opportunityIdCreatedAtMap[val.opportunity_id] < val.createdAt
+      opportunityIdCreatedAtMap[val.opportunity_id] < unixTime
     ) {
-      opportunityIdCreatedAtMap[val.opportunity_id] = val.createdAt
+      opportunityIdCreatedAtMap[val.opportunity_id] = unixTime
     }
   })
 
-  const updatedPosts = allMetadata
-    .filter((post) => {
-      return post.createdAt === opportunityIdCreatedAtMap[post.opportunity_id]
-    })
-    .map((post) => {
-      const { createdAt, ...rest } = post
-      return rest
-    })
+  const updatedPosts = allMetadata.filter((post) => {
+    const unixTime = new Date(post.createdAt).getTime()
+    return unixTime === opportunityIdCreatedAtMap[post.opportunity_id]
+  })
 
   return updatedPosts
 }

@@ -1,12 +1,19 @@
 import {
   PublicationMetadata,
   PublicationMetadataBuilder
-} from '@/lib/metadata/PostMetadata'
+} from '@/lib/metadata/PublicationMetadata'
 
 /**
  * A data class that represents some opportunity metadata
  */
 export class OpportunityMetadata extends PublicationMetadata {
+  /**
+   * Creates an instance of OpportunityMetadata from an OpportunityMetadataBuilder.
+   * @date 8/2/2023 - 10:49:37 AM
+   *
+   * @constructor
+   * @param {OpportunityMetadataBuilder} builder
+   */
   constructor(builder: OpportunityMetadataBuilder) {
     super(builder)
     this.opportunity_id = builder.opportunity_id
@@ -20,40 +27,40 @@ export class OpportunityMetadata extends PublicationMetadata {
     this.imageUrl = builder.imageUrl
   }
   /**
-   * a uuid associated with a volunteer opporunity
+   * A uuid associated with a volunteer opporunity
    */
 
   opportunity_id: string
   /**
-   * the opportunity name
+   * The opportunity name
    */
   name: string
   /**
-   * opportunity start date in YYYY-MM-DD format
+   * The opportunity start date in YYYY-MM-DD format
    */
   startDate: string
   /**
-   * opportunity end date in YYYY-MM-DD format
+   * The opportunity end date in YYYY-MM-DD format
    */
   endDate: string
   /**
-   * number of hours per week for this volunteer opportunity
+   * The number of hours per week for this volunteer opportunity
    */
   hoursPerWeek: string
   /**
-   * category associated with the volunteer opportunity
+   * The category associated with the volunteer opportunity
    */
   category: string
   /**
-   * an optional url to link to an external webste
+   * An optional url to link to an external webste
    */
   website: string
   /**
-   * opportunity description
+   * The opportunity description
    */
   description: string
   /**
-   * optional URL to image uploaded to IPFS. Empty string if no image
+   * An optional URL to image uploaded to IPFS. Empty string if no image
    */
   imageUrl: string
 }

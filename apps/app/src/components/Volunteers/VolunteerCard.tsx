@@ -4,17 +4,16 @@ import React, { useEffect, useState } from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
-import { OpportunityMetadata } from '@/lib/types'
+import { OpportunityMetadata } from '@/lib/metadata'
 
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
-  id: string
 }
 
-const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
+const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
   const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
   useEffect(() => {
@@ -60,7 +59,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/volunteer/${id}`, '_blank')
+        window.open(`/volunteer/${post.metadata_id}`, '_blank')
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">

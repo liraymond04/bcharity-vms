@@ -3,7 +3,10 @@ import {
   OpportunityMetadata,
   OpportunityMetadataBuilder
 } from './OpportunityMetadata'
-import { PublicationMetadata, PublicationMetadataBuilder } from './PostMetadata'
+import {
+  PublicationMetadata,
+  PublicationMetadataBuilder
+} from './PublicationMetadata'
 
 export {
   InvalidMetadataException,
