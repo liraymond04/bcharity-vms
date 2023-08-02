@@ -1,4 +1,4 @@
-import { ExternalLinkIcon, HomeIcon } from '@heroicons/react/outline'
+import { HomeIcon } from '@heroicons/react/outline'
 import {
   MetadataAttributeOutputFragment,
   PublicationFragment
@@ -15,8 +15,8 @@ import { PostTags } from '@/lib/types'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
-import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
+import DonateButton from '../Shared/DonateButton'
 import FollowButton from '../Shared/FollowButton'
 import Slug from '../Shared/Slug'
 import { Button } from '../UI/Button'
@@ -126,37 +126,6 @@ const CausePage: NextPage = () => {
                 {getAttribute(post.metadata.attributes, 'category')}
               </div>
             </div>
-            <div className="font-semibold">
-              Valid from:
-              {attributeExists(post.metadata.attributes, 'dates') ? (
-                <div>
-                  {`${getAttribute(post.metadata.attributes, 'dates')
-                    ?.toString()
-                    .replaceAll('-', '/')} - Ongoing`}
-                </div>
-              ) : (
-                <div>
-                  {`${getAttribute(post.metadata.attributes, 'startDate')
-                    ?.toString()
-                    .replaceAll('-', '/')} - ${
-                    attributeExists(post.metadata.attributes, 'endDate')
-                      ? getAttribute(
-                          post.metadata.attributes,
-                          'endDate'
-                        )?.toString() !== '' &&
-                        getAttribute(
-                          post.metadata.attributes,
-                          'endDate'
-                        )?.toString() !== undefined
-                        ? getAttribute(post.metadata.attributes, 'endDate')
-                            ?.toString()
-                            .replaceAll('-', '/')
-                        : 'Ongoing'
-                      : 'Ongoing'
-                  }`}
-                </div>
-              )}
-            </div>
           </div>
           <div className="flex space-x-3 items-center">
             <Slug prefix="@" slug={post.profile.handle} />
@@ -176,32 +145,10 @@ const CausePage: NextPage = () => {
             </div>
           )}
           <div className="flex justify-end space-x-3">
-            {getAttribute(post.metadata.attributes, 'website') !== '' && (
-              <Link
-                href={
-                  getAttribute(
-                    post.metadata.attributes,
-                    'website'
-                  )?.toString() ?? ''
-                }
-                target="_blank"
-                className="flex"
-              >
-                <div className="flex items-center text-brand-600">
-                  <div className="mr-1 whitespace-nowrap">External url</div>
-                  <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
-                </div>
-              </Link>
-            )}
-            <ApplyButton
-              hoursDefault={
-                getAttribute(
-                  post.metadata.attributes,
-                  'hoursPerWeek'
-                )?.toString() ?? ''
-              }
-              publicationId={post.id}
-              organizationId={post.profile.id}
+            <DonateButton
+              post={post}
+              // publicationId={post.id}
+              // organizationId={post.profile.id}
             />
           </div>
         </div>
