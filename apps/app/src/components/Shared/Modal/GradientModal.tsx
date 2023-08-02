@@ -64,7 +64,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div
-              className="inline-block bg-white dark:bg-gray-800 shadow-xl 
+              className="inline-block bg-white dark:bg-back shadow-xl 
               transform transition-all sm:my-8 sm:align-middle w-full rounded-xl 
               font-sans"
             >

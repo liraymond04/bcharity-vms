@@ -5,7 +5,7 @@ const Footer: FC = () => {
   const { t } = useTranslation('common')
 
   return (
-    <footer className="overflow-auto bg-white text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-center">
+    <footer className="overflow-auto bg-white text-center text-neutral-600 dark:bg-indigo-950 dark:text-neutral-200 lg:text-center">
       <div className="mx-6 py-2 text-center md:text-left">
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="">

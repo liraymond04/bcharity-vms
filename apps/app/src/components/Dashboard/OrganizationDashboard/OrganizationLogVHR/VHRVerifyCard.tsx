@@ -26,7 +26,9 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
     <Card>
       <div
         className={`${
-          selected ? 'bg-blue-100' : 'bg-violet-200'
+          selected
+            ? 'bg-blue-100 dark:bg-violet-500'
+            : 'bg-violet-200 dark:bg-Within dark:bg-opacity-10'
         } flex items-center shadow-sm shadow-black px-5 py-2`}
         onClick={onClick}
       >

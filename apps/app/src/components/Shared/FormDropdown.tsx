@@ -15,7 +15,7 @@ const FormDropdown = forwardRef<HTMLSelectElement, IFilterDropdownProps>(
         <div className="flex items-center">
           <div className="text-md mr-3">{label}</div>
           <select
-            className="w-30 h-10 bg-white rounded-xl border border-gray-300 outline-none dark:bg-gray-800 disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
+            className="w-30 h-10 bg-white rounded-xl border border-gray-300 outline-none dark:bg-front disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
             ref={ref}
             {...props}
           >

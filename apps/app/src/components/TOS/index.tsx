@@ -7,7 +7,7 @@ const TOS: NextPage = () => {
     <>
       <SEO title="Terms of Service • BCharity VMS" />
       <div>
-        <section className="flex flex-col justify-center text-center border-b-8 border-indigo-700 border-dotted py-10 mx-32">
+        <section className="flex flex-col justify-center text-center border-b-8 border-indigo-700 dark:border-sky-200 border-dotted py-10 mx-32">
           <div className="m-4 flex justify-center text-4xl font-bold">
             Terms of Service
           </div>
@@ -15,7 +15,7 @@ const TOS: NextPage = () => {
             Last updated July 11th, 2023
           </div>
         </section>
-        <section className="flex justify-left items-center border rounded-lg my-10 mx-20">
+        <section className="flex justify-left items-center border rounded-lg my-10 mx-20 dark:bg-Card">
           <div className="flex m-8 flex-col space-y-5">
             <div className="mb-2 text-3xl font-bold">Table of Contents</div>
             <ul className="mx-5 mb-5 list-decimal">
