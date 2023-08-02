@@ -179,7 +179,7 @@ const VolunteerHome: React.FC = () => {
                                           </div>
                                         </div>
                                       </div>
-                                      <p className="text-gray-700 text-sm mt-10  dark:text-graluey-50">
+                                      <p className="text-gray-700 text-sm mt-10  dark:text-gray-50">
                                         {post.metadata.content}
                                       </p>
                                     </div>
