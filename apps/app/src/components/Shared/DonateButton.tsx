@@ -9,7 +9,7 @@ import {
   RelayErrorFragment
 } from '@lens-protocol/client'
 import { PublicationMetadataV2Input } from '@lens-protocol/client'
-import { fetchBalance } from '@wagmi/core'
+import { fetchBalance, signTypedData } from '@wagmi/core'
 import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
@@ -21,6 +21,7 @@ import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createComment from '@/lib/lens-protocol/createComment'
 import { getAttribute } from '@/lib/lens-protocol/getAttribute'
+import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import { PostTags } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
@@ -44,7 +45,6 @@ export interface IDonateFormProps {
 const DonateButton: FC<Props> = ({ post }) => {
   const { currentUser } = useAppPersistStore()
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
   const selectedCurrencySymbol =
     CURRENCIES[
@@ -202,6 +202,97 @@ const DonateButton: FC<Props> = ({ post }) => {
     }
   }
 
+  const [donateIsLoading, setDonateIsLoading] = useState<boolean>(false)
+  const onDonate = async () => {
+    setError(undefined)
+    setDonateIsLoading(true)
+    try {
+      if (!currentUser) throw Error('Current user is null!')
+      await checkAuth(currentUser.ownedBy)
+
+      const typedDataResult =
+        await lensClient().publication.createCollectTypedData({
+          publicationId: currentPublication.id
+        })
+
+      const signature = await signTypedData(
+        getSignature(typedDataResult.unwrap().typedData)
+      )
+
+      const broadcastResult = await lensClient().transaction.broadcast({
+        id: typedDataResult.unwrap().id,
+        signature: signature
+      })
+
+      return broadcastResult
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e)
+      }
+    } finally {
+      setDonateIsLoading(false)
+    }
+  }
+
+  const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
+    useState<boolean>(false)
+  const [totalDonated, setTotalDonated] = useState<number>(0)
+  const getTotalDonated = async () => {
+    setError(undefined)
+    setTotalDonatedIsLoading(true)
+    try {
+      let total = 0
+
+      const publication = await lensClient().publication.fetch({
+        publicationId: post.id
+      })
+
+      if (publication?.__typename !== 'Post')
+        throw Error('Incorrect publication type!')
+      if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
+        throw Error('Incorrect collect module!')
+
+      total +=
+        publication.stats.totalAmountOfCollects *
+        parseFloat(publication.collectModule.amount.value)
+
+      // get comment totals
+      const comments = await lensClient().publication.fetchAll({
+        commentsOf: post.id,
+        metadata: {
+          tags: {
+            all: [PostTags.Donate.SetAmount]
+          }
+        }
+      })
+
+      comments.items
+        .filter((comment) => !comment.hidden)
+        .forEach((comment) => {
+          console.log(comment)
+          if (
+            comment.__typename === 'Comment' &&
+            comment.collectModule.__typename === 'FeeCollectModuleSettings'
+          )
+            total +=
+              comment.stats.totalAmountOfCollects *
+              parseFloat(comment.collectModule.amount.value)
+        })
+
+      setTotalDonated(total)
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e)
+      }
+    } finally {
+      setTotalDonatedIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getTotalDonated()
+  }, [totalDonated])
+
   const [run, setRun] = useState<boolean>(true)
   useEffect(() => {
     if (run) {
@@ -217,100 +308,101 @@ const DonateButton: FC<Props> = ({ post }) => {
     <>
       <Modal size="lg" title="Donate" show={showModal} onClose={onCancel}>
         <div className="mx-12 mt-5">
-          {!isLoading ? (
-            <Form
-              form={form}
-              onSubmit={() => handleSubmit((data) => onSubmit(data))}
-            >
-              <div className="flex flex-row ">
-                <div className="text-purple-500 text-5xl font-bold">
-                  Donate to {getAttribute(post.metadata.attributes, 'name')}
+          <Form
+            form={form}
+            onSubmit={() => handleSubmit((data) => onSubmit(data))}
+          >
+            <div className="flex flex-row ">
+              <div className="text-purple-500 text-5xl font-bold">
+                Donate to {getAttribute(post.metadata.attributes, 'name')}
+              </div>
+            </div>
+            <div className="text-gray-500  mt-2 text-2xl font-bold">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-2xl">
+                {`@${post.profile.handle}`}
+              </span>
+            </div>
+            {totalDonatedIsLoading ? (
+              <Spinner className="my-4" />
+            ) : (
+              <div>
+                <Progress
+                  progress={totalDonated}
+                  total={parseFloat(
+                    getAttribute(post.metadata.attributes, 'goal')
+                  )}
+                  className="my-4"
+                />
+                <div className="flex flex-row font-semibold mb-6">
+                  <div className="mr-3 text-purple-600 font-semibold">
+                    {totalDonated} {selectedCurrencySymbol}
+                  </div>
+                  raised of {getAttribute(post.metadata.attributes, 'goal')}!
                 </div>
               </div>
-              <div className="text-gray-500  mt-2 text-2xl font-bold">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-2xl">
-                  {`@${post.profile.handle}`}
-                </span>
-              </div>
-              <Progress
-                progress={1}
-                total={parseFloat(
-                  getAttribute(post.metadata.attributes, 'goal')
-                )}
-                className="my-4"
-              />
-              <div className="flex flex-row font-semibold mb-6">
-                <div className="mr-3 text-purple-600 font-semibold">
-                  0.2 {selectedCurrencySymbol}
-                </div>
-                raised of {getAttribute(post.metadata.attributes, 'goal')}!
-              </div>
-              <div className="flex items-end space-x-4">
-                <Input
-                  label="Contribution"
-                  type="number"
-                  step="0.0001"
-                  min="0"
-                  max="100000"
-                  prefix={
-                    <img
-                      className="w-6 h-6"
-                      height={24}
-                      width={24}
-                      src={getTokenImage(selectedCurrencySymbol)}
-                      alt={selectedCurrencySymbol}
-                    />
+            )}
+            <div className="flex items-end space-x-4">
+              <Input
+                label="Contribution"
+                type="number"
+                step="0.0001"
+                min="0"
+                max="100000"
+                prefix={
+                  <img
+                    className="w-6 h-6"
+                    height={24}
+                    width={24}
+                    src={getTokenImage(selectedCurrencySymbol)}
+                    alt={selectedCurrencySymbol}
+                  />
+                }
+                placeholder="5"
+                defaultValue={currentContribution}
+                error={!!errors.contribution?.type}
+                {...register('contribution', {
+                  required: true,
+                  min: {
+                    value: 1,
+                    message: 'Invalid amount'
                   }
-                  placeholder="5"
-                  defaultValue={currentContribution}
-                  error={!!errors.contribution?.type}
-                  {...register('contribution', {
-                    required: true,
-                    min: {
-                      value: 1,
-                      message: 'Invalid amount'
-                    }
-                  })}
-                  onChange={(e) => {
-                    setFormContribution(e.target.value)
-                  }}
+                })}
+                onChange={(e) => {
+                  setFormContribution(e.target.value)
+                }}
+              />
+              <Button
+                className="h-10"
+                icon={_setIsLoading && <Spinner size="sm" />}
+                disabled={
+                  currentContribution === formContribution || _setIsLoading
+                }
+                onClick={onSet}
+              >
+                Set
+              </Button>
+            </div>
+            {!currencyEnough && (
+              <div className="flex justify-between mt-4">
+                <Uniswap
+                  module={
+                    currentPublication.collectModule.__typename ===
+                    'FeeCollectModuleSettings'
+                      ? currentPublication.collectModule
+                      : undefined
+                  }
                 />
                 <Button
-                  className="h-10"
-                  icon={_setIsLoading && <Spinner size="sm" />}
-                  disabled={
-                    currentContribution === formContribution || _setIsLoading
-                  }
-                  onClick={onSet}
+                  size="sm"
+                  icon={checkBalanceLoading && <Spinner size="sm" />}
+                  disabled={checkBalanceLoading}
+                  onClick={getBalance}
                 >
-                  Set
+                  Check Balance
                 </Button>
               </div>
-              {!currencyEnough && (
-                <div className="flex justify-between mt-4">
-                  <Uniswap
-                    module={
-                      currentPublication.collectModule.__typename ===
-                      'FeeCollectModuleSettings'
-                        ? currentPublication.collectModule
-                        : undefined
-                    }
-                  />
-                  <Button
-                    size="sm"
-                    icon={checkBalanceLoading && <Spinner size="sm" />}
-                    disabled={checkBalanceLoading}
-                    onClick={getBalance}
-                  >
-                    Check Balance
-                  </Button>
-                </div>
-              )}
-            </Form>
-          ) : (
-            <Spinner />
-          )}
-
+            )}
+          </Form>
           {error && (
             <ErrorModal
               message={`An error occured: ${error.message}. Please try again.`}
@@ -320,19 +412,15 @@ const DonateButton: FC<Props> = ({ post }) => {
         <div className="py-4 divider"></div>
         <div className="flex px-4 py-3 justify-between">
           <Button
-            onClick={() => {
-              console.log(
-                'Donate',
-                currentContribution,
-                selectedCurrencySymbol,
-                currentPublication
-              )
-            }}
+            onClick={onDonate}
+            icon={donateIsLoading && <Spinner size="sm" />}
             className={`${
-              isLoading ? 'bg-gray-400 hover:bg-gray-400 !border-black' : ''
+              donateIsLoading
+                ? 'bg-gray-400 hover:bg-gray-400 !border-black'
+                : ''
             } px-6 py-2 font-medium`}
             disabled={
-              isLoading ||
+              donateIsLoading ||
               currentContribution !== formContribution ||
               !currencyEnough
             }
