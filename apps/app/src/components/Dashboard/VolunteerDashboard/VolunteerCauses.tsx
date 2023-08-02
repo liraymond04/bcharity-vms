@@ -1,23 +1,69 @@
+import { SearchIcon } from '@heroicons/react/outline'
+import {
+  PostFragment,
+  PublicationFragment,
+  PublicationSortCriteria
+} from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { useBalance } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHR_TOKEN } from '@/constants'
+import getAvatar from '@/lib/getAvatar'
+import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
+import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import testSearch from '@/lib/search'
+import { CauseMetadata, PostTags } from '@/lib/types'
+import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import BrowseCauseCard from './BrowseCauseCard'
+import DashboardDropDown from './DashboardDropDown'
+
 const VolunteerCauses: React.FC = () => {
+  const [posts, setPosts] = useState<
+    (CauseMetadata & { pub: PublicationFragment })[]
+  >([])
+  const [categories, setCategories] = useState<Set<string>>(new Set())
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [searchValue, setSearchValue] = useState('')
+
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [searchAddress, setSearchAddress] = useState<string>('')
   const [donationGoal, setDonationsGoal] = useState(500) // use hardcoded goal for now
 
-  const { data, isLoading } = useBalance({
-    address: `0x${searchAddress.substring(2)}`,
-    token: `0x${VHR_TOKEN.substring(2)}`
-  })
+  const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
+
+  const {
+    data: postData,
+    error: postDataError,
+    loading
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: { oneOf: [PostTags.OrgPublish.Cause] }
+      },
+      noRandomize: true
+    },
+    true
+  )
+
+  useEffect(() => {
+    let _categories: Set<string> = new Set()
+    const _posts = getCauseMetadata(postData)
+
+    _posts.forEach((post) => {
+      if (post) {
+        if (post.category) _categories.add(post.category)
+      }
+    })
+
+    setCategories(_categories)
+    setPosts(_posts)
+  }, [postData])
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
@@ -90,6 +136,67 @@ const VolunteerCauses: React.FC = () => {
             )}
           </div>
         </Card>
+      </GridItemTwelve>
+
+      <GridItemTwelve>
+        <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
+            <input
+              className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
+              type="text"
+              value={searchValue}
+              placeholder="Search"
+              onChange={(e) => {
+                setSearchValue(e.target.value)
+              }}
+            />
+            <div className="h-5 w-5 mr-5">
+              <SearchIcon />
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
+            <div className="h-[50px] z-10 ">
+              <DashboardDropDown
+                label="Filter:"
+                options={Array.from(categories)}
+                onClick={(c) => setSelectedCategory(c)}
+                selected={selectedCategory}
+              ></DashboardDropDown>
+            </div>
+            <button
+              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-indigo-400 dark:bg-indigo-200 dark:border-purple-800 dark:hover:bg-indigo-300"
+              onClick={() => {
+                setSelectedCategory('')
+              }}
+            >
+              Clear Filters
+            </button>
+          </div>
+
+          {postDataError && <h1>error</h1>}
+        </div>
+        <div className="flex flex-wrap justify-around">
+          {!loading ? (
+            posts
+              .filter((op) => testSearch(op.name, searchValue))
+              .filter(
+                (op) =>
+                  selectedCategory === '' || op.category === selectedCategory
+              )
+              .map((op) => (
+                <BrowseCauseCard
+                  key={op.cause_id}
+                  imageSrc={op.imageUrl}
+                  avatarSrc={getAvatar(op.from)}
+                  name={op.name}
+                  post={op.pub as PostFragment}
+                />
+              ))
+          ) : (
+            <Spinner />
+          )}
+        </div>
       </GridItemTwelve>
     </GridLayout>
   )

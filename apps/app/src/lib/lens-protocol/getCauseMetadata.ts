@@ -1,25 +1,14 @@
-import {
-  MetadataAttributeOutputFragment,
-  PostFragment,
-  PublicationFragment
-} from '@lens-protocol/client'
+import { PostFragment, PublicationFragment } from '@lens-protocol/client'
 
 import { CauseMetadata, CauseMetadataVersion, MetadataVersion } from '../types'
+import { getAttribute } from './getAttribute'
 
-const getAttribute = (
-  attributes: MetadataAttributeOutputFragment[],
-  attributeName: string
-) => {
-  const item =
-    attributes &&
-    attributes.filter((item) => item.traitType === attributeName).at(0)
-  if (item) {
-    return item.value
-  }
-  return ''
-}
 const getCauseMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: (CauseMetadata & { createdAt: number })[] = data
+  const allMetadata: (CauseMetadata & {
+    createdAt: number
+    id: string
+    pub: PublicationFragment
+  })[] = data
     .filter(
       (post) =>
         post.__typename === 'Post' &&
@@ -33,18 +22,20 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
       const attributes = (post as PostFragment).metadata.attributes
       return {
         version: getAttribute(attributes, 'version') as CauseMetadataVersion,
-        cause_id: getAttribute(attributes, 'cause_id') ?? '',
-        name: getAttribute(attributes, 'name') ?? '',
-        category: getAttribute(attributes, 'category') ?? '',
-        currency: getAttribute(attributes, 'currency') ?? '',
-        contribution: getAttribute(attributes, 'contribution') ?? '',
-        goal: getAttribute(attributes, 'goal') ?? '',
-        recipient: getAttribute(attributes, 'recipient') ?? '',
-        description: getAttribute(attributes, 'description') ?? '',
-        location: getAttribute(attributes, 'location') ?? '',
-        imageUrl: getAttribute(attributes, 'imageUrl') ?? '',
+        cause_id: getAttribute(attributes, 'cause_id'),
+        name: getAttribute(attributes, 'name'),
+        category: getAttribute(attributes, 'category'),
+        currency: getAttribute(attributes, 'currency'),
+        contribution: getAttribute(attributes, 'contribution'),
+        goal: getAttribute(attributes, 'goal'),
+        recipient: getAttribute(attributes, 'recipient'),
+        description: getAttribute(attributes, 'description'),
+        location: getAttribute(attributes, 'location'),
+        imageUrl: getAttribute(attributes, 'imageUrl'),
         from: post.profile,
-        createdAt: new Date(post.createdAt).getTime()
+        createdAt: new Date(post.createdAt).getTime(),
+        id: post.id,
+        pub: post
       }
     })
 

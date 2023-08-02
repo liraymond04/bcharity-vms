@@ -9,6 +9,7 @@ import {
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 
+import { getAttribute } from '@/lib/lens-protocol/getAttribute'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
@@ -25,15 +26,18 @@ const Organizations: NextPage = () => {
     data,
     error: exploreError,
     loading
-  } = useExplorePublications({
-    sortCriteria: PublicationSortCriteria.Latest,
-    metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportuntiy, PostTags.OrgPublish.Cause]
-      }
+  } = useExplorePublications(
+    {
+      sortCriteria: PublicationSortCriteria.Latest,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+        }
+      },
+      noRandomize: true
     },
-    noRandomize: true
-  })
+    true
+  )
 
   const [otherError, setOtherError] = useState(false)
 
@@ -66,14 +70,31 @@ const Organizations: NextPage = () => {
       publicationTypes: [PublicationTypes.Post],
       metadata: {
         tags: {
-          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportuntiy]
+          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportunity]
         }
       }
     }
 
     return lensClient()
       .publication.fetchAll(param)
-      .then((result) => result.items.filter((res) => !res.hidden).length)
+      .then((result) => {
+        const opportunity_ids = new Set<string>()
+        const cause_ids = new Set<string>()
+
+        result.items.filter((res) => {
+          if (!res.hidden && res.__typename === 'Post') {
+            const opp_id = getAttribute(
+              res.metadata.attributes,
+              'opportunity_id'
+            )
+            const cause_id = getAttribute(res.metadata.attributes, 'cause_id')
+            if (opp_id !== '') opportunity_ids.add(opp_id)
+            if (cause_id !== '') cause_ids.add(cause_id)
+          }
+        })
+
+        return opportunity_ids.size + cause_ids.size
+      })
   }
 
   useEffect(() => {
@@ -90,7 +111,7 @@ const Organizations: NextPage = () => {
       <SEO title="Organizations • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5">
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-black">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
@@ -115,7 +136,7 @@ const Organizations: NextPage = () => {
               ></DashboardDropDown>
             </div>
             <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+              className="ml-3 min-w-[110px] h-fit text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
               onClick={() => {
                 setSelectedCategory('')
               }}

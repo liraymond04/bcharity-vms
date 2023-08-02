@@ -167,6 +167,22 @@ const Navbar: FC = () => {
                 )}
                 {showMenu && auth && (
                   <Link
+                    href="/vhrs"
+                    aria-current={pathname == '/vhrs' ? 'page' : undefined}
+                  >
+                    <div
+                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                        pathname == '/vhrs'
+                          ? 'text-purple-600'
+                          : 'text-black dark:text-sky-50'
+                      } ${inter500.className}`}
+                    >
+                      VHRs
+                    </div>
+                  </Link>
+                )}
+                {showMenu && auth && (
+                  <Link
                     href="/dashboard"
                     aria-current={pathname == '/dashboard' ? 'page' : undefined}
                   >
@@ -235,6 +251,22 @@ const Navbar: FC = () => {
                   } ${inter500.className} ${auth ? '' : 'mr-10'}`}
                 >
                   ORGANIZATIONS
+                </div>
+              </button>
+            </Link>
+            <Link
+              href="/vhrs"
+              aria-current={pathname == '/vhrs' ? 'page' : undefined}
+            >
+              <button>
+                <div
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                    pathname == '/vhrs'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
+                  } ${inter500.className}`}
+                >
+                  VHRs
                 </div>
               </button>
             </Link>

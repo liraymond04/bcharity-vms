@@ -33,7 +33,7 @@ const OrganizationVHRTab: React.FC = () => {
   const { data, error, loading, refetch } = usePostData({
     profileId: profile?.id,
     metadata: {
-      tags: { all: [PostTags.OrgPublish.Opportuntiy] }
+      tags: { all: [PostTags.OrgPublish.Opportunity] }
     }
   })
 
@@ -142,7 +142,7 @@ const OrganizationVHRTab: React.FC = () => {
                   Our Cause
                 </div>
                 <div className=" w-full lg:flex mt-5">
-                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-x-stone-600 bg-white dark:bg-slate-500 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
+                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-teal-50 dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
                     dolor sit amet, consectetur adipiscing elit. Praesent

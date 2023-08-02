@@ -5,7 +5,7 @@ const Footer: FC = () => {
   const { t } = useTranslation('common')
 
   return (
-    <footer className="overflow-auto bg-white text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-center">
+    <footer className="overflow-auto bg-white text-center text-neutral-600 dark:bg-indigo-950 dark:text-neutral-200 lg:text-center">
       <div className="mx-6 py-2 text-center md:text-left">
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="">
@@ -15,6 +15,7 @@ const Footer: FC = () => {
             <p className="mb-4">
               <a
                 href="https://polygive.gitbook.io/bcharity/"
+                target="_blank"
                 className="text-neutral-600 dark:text-neutral-200"
               >
                 Our Mission
@@ -27,7 +28,7 @@ const Footer: FC = () => {
             </p>
             <p className="mb-4 mr-10 justify-center  md:justify-start">
               <a
-                href="../../privacypolicy"
+                href="/privacypolicy"
                 className="text-neutral-600 dark:text-neutral-200"
               >
                 Privacy Policy
@@ -35,7 +36,7 @@ const Footer: FC = () => {
             </p>{' '}
             <p className="mb-4">
               <a
-                href="../../cookies"
+                href="/cookies"
                 className="text-neutral-600 dark:text-neutral-200"
               >
                 Cookies
@@ -48,16 +49,13 @@ const Footer: FC = () => {
               Information
             </h6>
             <p className="mb-4">
-              <a
-                href="../../tos"
-                className="text-neutral-600 dark:text-neutral-200"
-              >
+              <a href="/tos" className="text-neutral-600 dark:text-neutral-200">
                 Terms of Service
               </a>
             </p>
             <p className="mb-4">
               <a
-                href="../../organizations"
+                href="/organizations"
                 className="text-neutral-600 dark:text-neutral-200"
               >
                 Partner With Us
@@ -65,7 +63,7 @@ const Footer: FC = () => {
             </p>
             <p className="mb-4">
               <a
-                href="../../volunteers"
+                href="/volunteers"
                 className="text-neutral-600 dark:text-neutral-200"
               >
                 Work With Us
@@ -78,6 +76,7 @@ const Footer: FC = () => {
             <div className="flex justify-center">
               <a
                 href="https://twitter.com/BCharityFi"
+                target="_blank"
                 className="mr-6 text-neutral-600 dark:text-neutral-200"
               >
                 <svg
@@ -91,6 +90,7 @@ const Footer: FC = () => {
               </a>
               <a
                 href="https://www.instagram.com/bcharityofficial/"
+                target="_blank"
                 className="mr-6 text-neutral-600 dark:text-neutral-200"
               >
                 <svg
@@ -103,7 +103,8 @@ const Footer: FC = () => {
                 </svg>
               </a>
               <a
-                href="https://github.com/BCharity-Net/SocialFi"
+                href="https://github.com/bcharityfi/2023csj"
+                target="_blank"
                 className="text-neutral-600 dark:text-neutral-200"
               >
                 <svg
@@ -116,25 +117,16 @@ const Footer: FC = () => {
                 </svg>
               </a>
             </div>
-
-            <div className="flex justify-center space-x-5 py-3">
-              <a className="w-20" href="../../../">
-                <img src="/logo.png " alt="bcharity-logo"></img>
-              </a>
-              <a className="w-20 mt-2" href="https://ecssen.ca">
-                <img src="/ecssen.png" alt="ecssen-logo"></img>
-              </a>
-            </div>
           </div>
         </div>
       </div>
       <hr className="h-px my-0 bg-gray-200 border-0 dark:bg-gray-700"></hr>
       <div className="overflow-y-auto h-20 flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
         <div className="mr-12 hidden lg:block">
-          <span>
+          <a href="https://ecssen.ca" target="_blank">
             Bcharity is a website developed by Ecssen, a registered charity.
             #8034586058609{' '}
-          </span>
+          </a>
         </div>
       </div>
     </footer>

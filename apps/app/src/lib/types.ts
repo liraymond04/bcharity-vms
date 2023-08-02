@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { ProfileFragment } from '@lens-protocol/client'
+import {
+  ProfileFragment,
+  PublicationMetadataV2Input
+} from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
@@ -10,15 +13,22 @@ export enum OpportunityMetadataVersion {
 export enum CauseMetadataVersion {
   '1.0.0' = '1.0.0'
 }
-
+export enum GoalMetadataVersion {
+  '1.0.0' = '1.0.0'
+}
 export enum ProfileMetadataVersions {
   '1.0.0'
+}
+export enum VhrRequestMetadataVersions {
+  '1.0.0' = '1.0.0'
 }
 
 export const MetadataVersion = {
   OpportunityMetadataVersion,
   CauseMetadataVersion,
-  ProfileMetadataVersions
+  GoalMetadataVersion,
+  ProfileMetadataVersions,
+  VhrRequestMetadataVersions
 }
 
 interface OrgPublishMetadata<T> {
@@ -31,7 +41,34 @@ interface OrgPublishMetadata<T> {
    */
   version: T
 }
+export interface GoalMetadata extends OrgPublishMetadata<GoalMetadataVersion> {
+  /**
+   * a uuid associated with a volunteer opporunity
+   */
 
+  /**
+   * the opportunity nam e
+   */
+  goal: string
+  /**
+   * opportunity start date in YYYY-MM-DD format
+   */
+
+  /**
+   * opportunity end date in YYYY-MM-DD format
+   */
+  goalDate: string
+  /**
+
+}
+
+/**
+ * Interface for a metadata field used when publishing a opportunity
+ */
+}
+export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof GoalMetadata | 'type'
+}
 export interface OpportunityMetadata
   extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
@@ -131,15 +168,26 @@ export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof CauseMetadata | 'type'
 }
 
+export interface VerifyMetadata {
+  hoursToVerify: string
+  comments: string
+}
+
+export interface VerifyMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof VerifyMetadata | 'type'
+}
+
 enum OrgPublish {
   /**
    * Tag to use for an organization publishing or modifying a volunteer opportunity
    */
-  Opportuntiy = 'ORG_PUBLISH_OPPORTUNITY',
+  Opportunity = 'ORG_PUBLISH_OPPORTUNITY',
   /**
    * Tag to use for an organization publishing or modifying a cause
    */
-  Cause = 'ORG_PUBLISH_CAUSE'
+  Cause = 'ORG_PUBLISH_CAUSE',
+
+  Goal = 'ORG_PUBLISH_Goal'
 }
 
 enum Bookmark {
@@ -151,6 +199,21 @@ enum Bookmark {
    * Tag to use for bookmarking a cause
    */
   Cause = 'BOOKMARK_CAUSE'
+}
+
+enum VhrRequest {
+  /**
+   * Tags realted to making and verifying VHR requests for a volunteer opportunity
+   */
+  Opportunity = 'VHR_REQUEST_OPPORTUNITY',
+  Reject = 'VHR_REJECT_REQUEST'
+}
+
+enum Donate {
+  /**
+   * Tags related to making donations
+   */
+  SetAmount = 'DONATE_SET_AMOUNT'
 }
 
 export type OpportunityMetadataRecord = Record<
@@ -166,7 +229,15 @@ export const PostTags = {
   /**
    * Collection of tags for bookmarking publications
    */
-  Bookmark
+  Bookmark,
+  /**
+   * Collection of tags for making VHR requests
+   */
+  VhrRequest,
+  /**
+   * Collection of tags for making donations
+   */
+  Donate
 }
 
 export enum MetadataDisplayType {
@@ -213,7 +284,18 @@ export interface ProfileMetadata {
    * Any custom attributes can be added here to save state for a profile
    */
   attributes: AttributeData[]
-  location: string | null
+}
+
+export interface VhrRequestMetadata extends PublicationMetadataV2Input {
+  /**
+   * The metadata version.
+   */
+  version: VhrRequestMetadataVersions
+
+  /**
+   * Any custom attributes can be added here for a VHR request
+   */
+  attributes: MetadataAttributeInput[]
 }
 
 /**
@@ -239,4 +321,13 @@ export interface IFormLocation {
   country: string
   province: string
   city: string
+}
+
+export interface VHRRequest {
+  hoursToVerify: string
+  comments: string
+  from: ProfileFragment
+  opportunity: OpportunityMetadata
+  id: string
+  createdAt: string
 }
