@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import usePublication from '@/lib/lens-protocol/usePublication'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'

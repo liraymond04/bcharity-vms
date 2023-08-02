@@ -16,8 +16,8 @@ import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
-import { PostTag } from '@/lib/metadata/PostTags'
-import { MetadataVersion, PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
@@ -92,7 +92,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     const metadata = buildMetadata<CauseMetadataRecord>(
       publisher,
-      [PostTag.PublishCause],
+      [PostTags.OrgPublish.Cause],
       {
         version: MetadataVersion.CauseMetadataVersion['1.0.0'],
         type: PostTags.OrgPublish.Opportunity,

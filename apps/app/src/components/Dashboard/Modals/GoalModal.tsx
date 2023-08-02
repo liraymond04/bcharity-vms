@@ -16,7 +16,8 @@ import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { GoalMetadataAttributeInput, PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
+import { GoalMetadataAttributeInput } from '@/lib/types'
 
 import Error from './Error'
 

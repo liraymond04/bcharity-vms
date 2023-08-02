@@ -13,7 +13,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { OpportunityMetadata } from '@/lib/metadata'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 

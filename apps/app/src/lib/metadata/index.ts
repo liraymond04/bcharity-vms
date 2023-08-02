@@ -15,6 +15,7 @@ import {
   OpportunityMetadataBuilder,
   OpportunityMetadataRecord
 } from './OpportunityMetadata'
+import { Bookmark, OrgPublish, PostTags, VhrRequest } from './PostTags'
 import {
   PublicationMetadata,
   PublicationMetadataBuilder,
@@ -30,6 +31,7 @@ export {
   LogVhrRequestMetadataBuilder,
   OpportunityMetadata,
   OpportunityMetadataBuilder,
+  PostTags,
   PublicationMetadata,
   PublicationMetadataBuilder
 }
@@ -40,3 +42,5 @@ export type {
   OpportunityMetadataRecord,
   PublicationMetadataFieldNames
 }
+
+export { Bookmark, OrgPublish, VhrRequest }

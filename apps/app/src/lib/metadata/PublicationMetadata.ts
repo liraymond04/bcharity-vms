@@ -6,7 +6,7 @@ import {
 
 import { getAttribute } from '../lens-protocol/getAttribute'
 import { InvalidMetadataException } from './InvalidMetadataException'
-import { PostTag } from './PostTags'
+import { PostTags } from './PostTags'
 
 /**
  * @type PublicationMetadataFieldNames
@@ -45,7 +45,7 @@ export class PublicationMetadata {
   /**
    * The PostTag type of the post or comment
    */
-  type: PostTag
+  type: string
   /**
    * the publication id of the post or comment
    */
@@ -108,7 +108,7 @@ export abstract class PublicationMetadataBuilder<
       )
     }
 
-    this.type = typeMaybe as PostTag
+    this.type = typeMaybe
     this.version = versionMaybe
     this.metadata_id = post.id
     this.createdAt = post.createdAt
@@ -119,7 +119,13 @@ export abstract class PublicationMetadataBuilder<
    * Utility function that searches the PostTag enum to see if a metadata string value matches a value in the enum
    */
   private isPostTag(tagString: string): boolean {
-    return !!Object.values(PostTag).find((t: string) => t === tagString)
+    const tag = Object.values(PostTags)
+      .map((v) => Object.values(v))
+      .flat(1)
+      .find((tagName) => tagName === tagName)
+
+    console.log('found tag', tag)
+    return !!tag
   }
 
   /**
@@ -141,7 +147,7 @@ export abstract class PublicationMetadataBuilder<
    * @private
    */
   private _validate() {
-    if (this.type === PostTag.NONE) {
+    if (this.type === '') {
       return new InvalidMetadataException(`Missing post tag`)
     }
     if (!this.version) {
@@ -181,7 +187,7 @@ export abstract class PublicationMetadataBuilder<
   /**
    * The post type, a string enum value in PostTags
    */
-  readonly type: PostTag
+  readonly type: string
   /**
    * The publication post id assigned by lens
    */

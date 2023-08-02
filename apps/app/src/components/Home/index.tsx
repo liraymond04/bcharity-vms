@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from 'react'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'
 import OrganizationCard from '../Organizations/OrganizationCard'

@@ -63,53 +63,6 @@ export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof GoalMetadata | 'type'
 }
 
-enum OrgPublish {
-  /**
-   * Tag to use for an organization publishing or modifying a volunteer opportunity
-   */
-  Opportunity = 'ORG_PUBLISH_OPPORTUNITY',
-  /**
-   * Tag to use for an organization publishing or modifying a cause
-   */
-  Cause = 'ORG_PUBLISH_CAUSE',
-
-  Goal = 'ORG_PUBLISH_Goal'
-}
-
-enum Bookmark {
-  /**
-   * Tag to use for bookmarking a volunteer opportunity
-   */
-  Opportunity = 'BOOKMARK_OPPORTUNITY',
-  /**
-   * Tag to use for bookmarking a cause
-   */
-  Cause = 'BOOKMARK_CAUSE'
-}
-
-enum VhrRequest {
-  /**
-   * Tags realted to making and verifying VHR requests for a volunteer opportunity
-   */
-  Opportunity = 'VHR_REQUEST_OPPORTUNITY',
-  Reject = 'VHR_REJECT_REQUEST'
-}
-
-export const PostTags = {
-  /**
-   * Collection of tags for organizations publishing and modifying
-   */
-  OrgPublish,
-  /**
-   * Collection of tags for bookmarking publications
-   */
-  Bookmark,
-  /**
-   * Collection of tags for making VHR requests
-   */
-  VhrRequest
-}
-
 export enum MetadataDisplayType {
   number = 'number',
   string = 'string',

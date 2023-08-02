@@ -8,9 +8,9 @@ import { useEffect, useState } from 'react'
 import {
   LogVhrRequestMetadata,
   LogVhrRequestMetadataBuilder,
-  OpportunityMetadata
+  OpportunityMetadata,
+  PostTags
 } from '../metadata'
-import { PostTags } from '../types'
 import getOpportunityMetadata from './getOpportunityMetadata'
 import lensClient from './lensClient'
 

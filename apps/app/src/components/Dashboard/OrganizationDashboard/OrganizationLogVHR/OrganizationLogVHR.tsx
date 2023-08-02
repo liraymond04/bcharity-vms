@@ -13,7 +13,7 @@ import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createCollect from '@/lib/lens-protocol/createCollect'
 import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../../Modals/Error'

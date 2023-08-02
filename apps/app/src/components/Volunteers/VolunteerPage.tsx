@@ -13,7 +13,7 @@ import {
   OpportunityMetadata,
   OpportunityMetadataBuilder
 } from '@/lib/metadata'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'

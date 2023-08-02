@@ -10,11 +10,11 @@ import { useState } from 'react'
 import { v4 } from 'uuid'
 
 import { APP_NAME } from '@/constants'
+import { LogVhrRequestMetadataRecord, PostTags } from '@/lib/metadata'
 
 import getUserLocale from '../getUserLocale'
 import uploadToIPFS from '../ipfs/ipfsUpload'
-import { LogVhrRequestMetadataRecord } from '../metadata'
-import { MetadataVersion, PostTags } from '../types'
+import { MetadataVersion } from '../types'
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
 import lensClient from './lensClient'

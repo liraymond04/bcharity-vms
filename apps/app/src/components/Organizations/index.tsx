@@ -13,7 +13,7 @@ import { getAttribute } from '@/lib/lens-protocol/getAttribute'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
