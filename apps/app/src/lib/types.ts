@@ -6,11 +6,13 @@ import {
 import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
-export enum OpportunityMetadataVersion {
+import { OpportunityMetadata } from './metadata'
+
+export enum omv {
   '1.0.0' = '1.0.0'
 }
 
-export enum CauseMetadataVersion {
+export enum cmv {
   '1.0.0' = '1.0.0'
 }
 
@@ -23,13 +25,13 @@ export enum VhrRequestMetadataVersions {
 }
 
 export const MetadataVersion = {
-  OpportunityMetadataVersion,
-  CauseMetadataVersion,
+  OpportunityMetadataVersion: omv,
+  CauseMetadataVersion: cmv,
   ProfileMetadataVersions,
   VhrRequestMetadataVersions
 }
 
-interface OrgPublishMetadata<T> {
+interface opm<T> {
   /**
    * ProfileFragment type data for the profile that created the post
    */
@@ -40,8 +42,7 @@ interface OrgPublishMetadata<T> {
   version: T
 }
 
-export interface OpportunityMetadata
-  extends OrgPublishMetadata<OpportunityMetadataVersion> {
+export interface _om extends opm<omv> {
   /**
    * a uuid associated with a volunteer opporunity
    */
@@ -85,11 +86,10 @@ export interface OpportunityMetadata
  */
 export interface OpportunityMetadataAttributeInput
   extends MetadataAttributeInput {
-  traitType: keyof OpportunityMetadata | 'type'
+  traitType: keyof _om | 'type'
 }
 
-export interface CauseMetadata
-  extends OrgPublishMetadata<CauseMetadataVersion> {
+interface _cm extends opm<cmv> {
   /**
    * a uuid associated with this cause
    */
@@ -136,7 +136,7 @@ export interface CauseMetadata
  * Interface for a metadata field used when publishing an cause
  */
 export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
-  traitType: keyof CauseMetadata | 'type'
+  traitType: keyof _cm | 'type'
 }
 
 export interface VerifyMetadata {
@@ -193,10 +193,7 @@ export const PostTags = {
   VhrRequest
 }
 
-export type OpportunityMetadataRecord = Record<
-  keyof OpportunityMetadata | 'type',
-  string
->
+export type OpportunityMetadataRecord = Record<keyof _om | 'type', string>
 
 export enum MetadataDisplayType {
   number = 'number',

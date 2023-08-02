@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import getAvatar from '@/lib/getAvatar'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { formatLocation } from '@/lib/lens-protocol/formatLocation'
-import { CauseMetadata } from '@/lib/types'
+import { CauseMetadata } from '@/lib/metadata'
 
 import Progress from '../Shared/Progress'
 import { Card } from '../UI/Card'

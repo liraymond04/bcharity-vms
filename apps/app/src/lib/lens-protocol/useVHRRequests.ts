@@ -1,7 +1,8 @@
 import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
-import { OpportunityMetadata, PostTags, VHRRequest } from '../types'
+import { OpportunityMetadata } from '../metadata'
+import { PostTags, VHRRequest } from '../types'
 import getOpportunityMetadata from './getOpportunityMetadata'
 import getVerifyMetadata from './getVerifyRequestMetadata'
 import lensClient from './lensClient'
@@ -59,7 +60,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
   const [error, setError] = useState('')
 
   const refetch = () => {
-    let opportunities: (OpportunityMetadata & { id: string })[] = []
+    let opportunities: OpportunityMetadata[] = []
 
     setLoading(true)
     setError('')
@@ -83,7 +84,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         const collectedIds = getCollectedPostIds({ profile: params.profile! })
 
         const postsComments = opportunities.map((op) => {
-          return getVHRRequestComments({ publicationId: op.id })
+          return getVHRRequestComments({ publicationId: op.metadata_id })
         })
 
         return Promise.all([collectedIds, ...postsComments])

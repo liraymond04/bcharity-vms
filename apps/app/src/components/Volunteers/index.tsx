@@ -8,7 +8,7 @@ import { useInView } from 'react-cool-inview'
 
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { OpportunityMetadata, PostTags } from '@/lib/types'
+import { _om, PostTags } from '@/lib/types'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import Divider from '../Shared/Divider'
@@ -16,7 +16,7 @@ import { Spinner } from '../UI/Spinner'
 import VolunteerCard from './VolunteerCard'
 
 const Volunteers: NextPage = () => {
-  const [posts, setPosts] = useState<[OpportunityMetadata, string][]>([])
+  const [posts, setPosts] = useState<[_om, string][]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -34,7 +34,7 @@ const Volunteers: NextPage = () => {
   })
 
   useEffect(() => {
-    let _posts: [OpportunityMetadata, string][] = []
+    let _posts: [_om, string][] = []
     let _categories: Set<string> = new Set()
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {

@@ -34,15 +34,10 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
     }
   })
 
-  const updatedPosts = allMetadata
-    .filter((post) => {
-      const unixTime = new Date(post.createdAt).getTime()
-      return unixTime === causeIdCreatedAtMap[post.cause_id]
-    })
-    .map((post) => {
-      const { createdAt, ...rest } = post
-      return rest
-    })
+  const updatedPosts = allMetadata.filter((post) => {
+    const unixTime = new Date(post.createdAt).getTime()
+    return unixTime === causeIdCreatedAtMap[post.cause_id]
+  })
 
   return updatedPosts
 }
