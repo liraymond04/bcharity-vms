@@ -2,12 +2,22 @@ import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
 import {
   PublicationMetadata,
-  PublicationMetadataBuilder
+  PublicationMetadataBuilder,
+  PublicationMetadataFields
 } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
 import { LogVhrRequestMetadataVersions } from '../types'
 import { OpportunityMetadata } from './OpportunityMetadata'
+
+/**
+ * @type OpportunityMetadataFields
+ * The types of opportunity metadata for form
+ */
+export type LogVhrRequestMetadataFields = Exclude<
+  keyof LogVhrRequestMetadata,
+  PublicationMetadataFields
+>
 
 /**
  * A data class that represents a VHR request

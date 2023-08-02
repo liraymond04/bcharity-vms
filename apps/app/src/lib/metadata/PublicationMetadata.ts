@@ -9,6 +9,20 @@ import { InvalidMetadataException } from './InvalidMetadataException'
 import { PostTag } from './PostTags'
 
 /**
+ * @type PublicationMetadataFields
+ * The publication metadata fields defined, so that they can be excluded from
+ * attribute input
+ *
+ * Does not using ts`keyof PublicationMetdata` due to buggy behavior with Exclude/Omit
+ */
+export type PublicationMetadataFields =
+  | 'version'
+  | 'type'
+  | 'metadata_id'
+  | 'createdAt'
+  | 'profile'
+
+/**
  * A base class for publication metadata
  */
 export class PublicationMetadata {

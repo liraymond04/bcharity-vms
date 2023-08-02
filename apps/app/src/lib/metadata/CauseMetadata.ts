@@ -2,11 +2,21 @@ import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
 import {
   PublicationMetadata,
-  PublicationMetadataBuilder
+  PublicationMetadataBuilder,
+  PublicationMetadataFields
 } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
 import { CauseMetadataVersion } from '../types'
+
+/**
+ * @type OpportunityMetadataFields
+ * The types of opportunity metadata for form
+ */
+export type CauseMetadataFields = Exclude<
+  keyof CauseMetadata,
+  PublicationMetadataFields
+>
 
 /**
  * A data class that represents some cause metadata
