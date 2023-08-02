@@ -365,8 +365,8 @@ const OrganizationCauses: React.FC = () => {
               onClose={onModifyClose}
               publisher={profile}
               id={currentModifyId}
-              defaultValues={getFormDefaults(currentModifyId)}
               currencyData={currencyData}
+              defaultValues={getFormDefaults(currentModifyId)}
             />
             <GoalModal
               open={GoalModalOpen}
