@@ -29,7 +29,6 @@ const OrganizationHome: React.FC = () => {
       }).then((data) => {
         if (data) {
           setProfile(data)
-          console.log('data', data)
         }
       })
     }
