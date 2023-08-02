@@ -47,11 +47,13 @@ const VHRs: NextPage = () => {
   return (
     <div className={`${inter500.className}`}>
       <div className="flex justify-around items-center">
-        <div className="text-3xl text-[#343434] mt-10">Top VHR Holders</div>
+        <div className="text-3xl text-[#343434] mt-10 dark:text-[#E2E2E2]">
+          Top VHR Holders
+        </div>
       </div>
       <div className="flex justify-around mb-20 flex-wrap">
-        <div className="min-w-[450px] mx-2 h-[550px] bg-[#F9F9F9] rounded-lg mt-10">
-          <div className="text-2xl text-[#626262] my-5 mx-auto w-fit h-fit">
+        <div className="min-w-[450px] mx-2 h-[550px] bg-[#F9F9F9] dark:bg-[#18004A] rounded-lg mt-10">
+          <div className="text-2xl text-[#626262] dark:text-[#E2E2E2] my-5 mx-auto w-fit h-fit">
             Volunteers
           </div>
           <div className="overflow-y-scroll h-[470px]">
@@ -85,8 +87,8 @@ const VHRs: NextPage = () => {
               ))}
           </div>
         </div>
-        <div className="min-w-[450px] mx-2 h-[550px] bg-[#F9F9F9] rounded-lg mt-10">
-          <div className="text-2xl text-[#626262] my-5 mx-auto w-fit h-fit">
+        <div className="min-w-[450px] mx-2 h-[550px] bg-[#F9F9F9] dark:bg-[#18004A] rounded-lg mt-10">
+          <div className="text-2xl text-[#626262] dark:text-[#E2E2E2] my-5 mx-auto w-fit h-fit">
             Organizations
           </div>
           <div className="overflow-y-scroll h-[470px]">
