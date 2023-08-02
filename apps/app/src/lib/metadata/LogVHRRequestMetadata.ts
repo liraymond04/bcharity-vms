@@ -11,10 +11,10 @@ import { LogVhrRequestMetadataVersions } from '../types'
 import { OpportunityMetadata } from './OpportunityMetadata'
 
 /**
- * @type OpportunityMetadataFields
+ * @type OpportunityMetadataRecord
  * The types of opportunity metadata for form
  */
-export type LogVhrRequestMetadataFields = Record<
+export type LogVhrRequestMetadataRecord = Record<
   Exclude<
     keyof LogVhrRequestMetadata,
     PublicationMetadataFieldNames | 'opportunity'

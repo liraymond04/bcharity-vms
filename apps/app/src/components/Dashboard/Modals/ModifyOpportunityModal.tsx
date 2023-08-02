@@ -10,7 +10,7 @@ import { TextArea } from '@/components/UI/TextArea'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { buildMetadata, OpportunityMetadataFields } from '@/lib/metadata'
+import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
 import { PostTag } from '@/lib/metadata/PostTags'
 import { MetadataVersion, PostTags } from '@/lib/types'
 
@@ -68,7 +68,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
 
-    const metadata = buildMetadata<OpportunityMetadataFields>(
+    const metadata = buildMetadata<OpportunityMetadataRecord>(
       publisher,
       [PostTag.PublishOpportunity],
       {

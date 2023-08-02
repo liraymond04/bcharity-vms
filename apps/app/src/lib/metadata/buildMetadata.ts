@@ -14,7 +14,7 @@ import getUserLocale from '../getUserLocale'
 /**
  * A function to build metadata of a type
  *
- * @template T The metadata record type, e.g. {@link OpportunityMetadataFields}
+ * @template T The metadata record type, e.g. {@link OpportunityMetadataRecord}
  * @param {ProfileFragment} publisher The profile making the post
  * @param {string[]} tags The array of PostTags for the post
  * @param {T} data the attribute data for the post
@@ -24,7 +24,7 @@ import getUserLocale from '../getUserLocale'
  *
  * ```ts
  * // from PublishOpportunityModal.tsx
- * const metadata = buildMetadata<OpportunityMetadataFields>(
+ * const metadata = buildMetadata<OpportunityMetadataRecord>(
  *   publisher,
  *   [PostTag.PublishOpportunity],
  *   {
@@ -38,8 +38,7 @@ import getUserLocale from '../getUserLocale'
  *
  * try {
  *   await checkAuth(publisher.ownedBy)
- *
- *   await createPost(
+ *   await createPost(publisher, metadata)
  * //...
  * ```
  *

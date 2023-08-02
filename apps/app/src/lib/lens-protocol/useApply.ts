@@ -13,7 +13,7 @@ import { APP_NAME } from '@/constants'
 
 import getUserLocale from '../getUserLocale'
 import uploadToIPFS from '../ipfs/ipfsUpload'
-import { LogVhrRequestMetadataFields } from '../metadata'
+import { LogVhrRequestMetadataRecord } from '../metadata'
 import { MetadataVersion, PostTags } from '../types'
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
@@ -39,7 +39,7 @@ const useApply = (params: Props) => {
         throw Error('Provided profile is null!')
       }
 
-      const data: LogVhrRequestMetadataFields = {
+      const data: LogVhrRequestMetadataRecord = {
         type: PostTags.VhrRequest.Opportunity,
         version: MetadataVersion.LogVhrRequestMetadataVersions['1.0.0'],
         hoursToVerify,

@@ -10,10 +10,10 @@ import { getAttribute } from '../lens-protocol/getAttribute'
 import { OpportunityMetadataVersion } from '../types'
 
 /**
- * @type OpportunityMetadataFields
+ * @type OpportunityMetadataRecord
  * The types of opportunity metadata for form
  */
-export type OpportunityMetadataFields = Record<
+export type OpportunityMetadataRecord = Record<
   Exclude<keyof OpportunityMetadata, PublicationMetadataFieldNames>,
   string
 >

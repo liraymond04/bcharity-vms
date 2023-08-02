@@ -11,7 +11,7 @@ import { TextArea } from '@/components/UI/TextArea'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { buildMetadata, OpportunityMetadataFields } from '@/lib/metadata'
+import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
 import { PostTag } from '@/lib/metadata/PostTags'
 import { MetadataVersion, PostTags } from '@/lib/types'
 
@@ -92,7 +92,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : ''
 
-    const metadata = buildMetadata<OpportunityMetadataFields>(
+    const metadata = buildMetadata<OpportunityMetadataRecord>(
       publisher,
       [PostTag.PublishOpportunity],
       {
@@ -106,17 +106,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
     try {
       await checkAuth(publisher.ownedBy)
-
-      await createPost(
-        publisher,
-        metadata,
-        {
-          freeCollectModule: {
-            followerOnly: false
-          }
-        },
-        { followerOnlyReferenceModule: false }
-      )
+      await createPost(publisher, metadata)
 
       reset()
       onClose(true)

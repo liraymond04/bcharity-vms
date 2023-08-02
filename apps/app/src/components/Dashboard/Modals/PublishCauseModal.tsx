@@ -17,7 +17,7 @@ import getTokenImage from '@/lib/getTokenImage'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { buildMetadata, CauseMetadataFields } from '@/lib/metadata'
+import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
 import { PostTag } from '@/lib/metadata/PostTags'
 import { MetadataVersion } from '@/lib/types'
 import { PostTags } from '@/lib/types'
@@ -118,7 +118,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : ''
 
-    const metadata = buildMetadata<CauseMetadataFields>(
+    const metadata = buildMetadata<CauseMetadataRecord>(
       publisher,
       [PostTag.PublishCause],
       {

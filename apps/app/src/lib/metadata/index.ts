@@ -2,18 +2,18 @@ import { buildMetadata } from './buildMetadata'
 import {
   CauseMetadata,
   CauseMetadataBuilder,
-  CauseMetadataFields
+  CauseMetadataRecord
 } from './CauseMetadata'
 import { InvalidMetadataException } from './InvalidMetadataException'
 import {
   LogVhrRequestMetadata,
   LogVhrRequestMetadataBuilder,
-  LogVhrRequestMetadataFields
+  LogVhrRequestMetadataRecord
 } from './LogVHRRequestMetadata'
 import {
   OpportunityMetadata,
   OpportunityMetadataBuilder,
-  OpportunityMetadataFields
+  OpportunityMetadataRecord
 } from './OpportunityMetadata'
 import {
   PublicationMetadata,
@@ -35,8 +35,8 @@ export {
 }
 
 export type {
-  CauseMetadataFields,
-  LogVhrRequestMetadataFields,
-  OpportunityMetadataFields,
+  CauseMetadataRecord,
+  LogVhrRequestMetadataRecord,
+  OpportunityMetadataRecord,
   PublicationMetadataFieldNames
 }
