@@ -41,20 +41,19 @@ export enum VhrRequest {
   Reject = 'VHR_REJECT_REQUEST'
 }
 
+enum Donate {
+  /**
+   * Tags related to making donations
+   */
+  SetAmount = 'DONATE_SET_AMOUNT'
+}
+
 /**
  * An object that holds the post tags used by the application
  */
 export const PostTags = {
-  /**
-   * Collection of tags for organizations publishing and modifying
-   */
   OrgPublish,
-  /**
-   * Collection of tags for bookmarking publications
-   */
   Bookmark,
-  /**
-   * Collection of tags for making VHR requests
-   */
-  VhrRequest
+  VhrRequest,
+  Donate
 }

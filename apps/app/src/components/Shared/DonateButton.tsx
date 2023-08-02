@@ -23,7 +23,7 @@ import createComment from '@/lib/lens-protocol/createComment'
 import { getAttribute } from '@/lib/lens-protocol/getAttribute'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
 import ErrorModal from '../Dashboard/Modals/Error'
