@@ -130,6 +130,54 @@ const DonateButton: FC<Props> = ({ post }) => {
     setError(undefined)
     setSetIsLoading(true)
     try {
+      // check if collect amount is original amount
+      if (post.collectModule.__typename !== 'FeeCollectModuleSettings')
+        throw 'Incorrect collect module!'
+      if (
+        parseFloat(formContribution) ===
+        parseFloat(post.collectModule.amount.value)
+      ) {
+        setCurrentPublication(post)
+        setCurrentContribution(formContribution)
+        return
+      }
+
+      // check if comment with collect amount exists
+      let hasAmount = false
+
+      const comments = await lensClient().publication.fetchAll({
+        commentsOf: post.id,
+        metadata: {
+          tags: {
+            all: [PostTags.Donate.SetAmount]
+          }
+        }
+      })
+
+      comments.items
+        .filter((comment) => !comment.hidden)
+        .every((comment) => {
+          if (
+            comment.__typename === 'Comment' &&
+            comment.collectModule.__typename === 'FeeCollectModuleSettings'
+          ) {
+            if (
+              parseFloat(comment.collectModule.amount.value) ===
+              parseFloat(formContribution)
+            ) {
+              hasAmount = true
+              setCurrentPublication(comment)
+              setCurrentContribution(formContribution)
+              return false
+            }
+          }
+        })
+
+      if (hasAmount) {
+        return
+      }
+
+      // create comment with new collect amount
       if (!currentUser) throw Error('Current user is null!')
       await checkAuth(currentUser.ownedBy)
 
@@ -269,7 +317,6 @@ const DonateButton: FC<Props> = ({ post }) => {
       comments.items
         .filter((comment) => !comment.hidden)
         .forEach((comment) => {
-          console.log(comment)
           if (
             comment.__typename === 'Comment' &&
             comment.collectModule.__typename === 'FeeCollectModuleSettings'
