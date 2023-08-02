@@ -13,7 +13,6 @@ import { getAttribute } from '../lens-protocol/getAttribute'
 export class OpportunityMetadata extends PublicationMetadata {
   /**
    * Creates an instance of OpportunityMetadata from an OpportunityMetadataBuilder.
-   * @date 8/2/2023 - 10:49:37 AM
    *
    * @constructor
    * @param {OpportunityMetadataBuilder} builder

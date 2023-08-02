@@ -1,10 +1,17 @@
-import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
+import {
+  CommentFragment,
+  ProfileFragment,
+  PublicationTypes
+} from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
-import { OpportunityMetadata } from '../metadata'
-import { PostTags, VHRRequest } from '../types'
+import {
+  LogVhrRequestMetadata,
+  LogVhrRequestMetadataBuilder,
+  OpportunityMetadata
+} from '../metadata'
+import { PostTags } from '../types'
 import getOpportunityMetadata from './getOpportunityMetadata'
-import getVerifyMetadata from './getVerifyRequestMetadata'
 import lensClient from './lensClient'
 
 interface getCollectedPostIdsParams {
@@ -55,7 +62,7 @@ interface useVHRRequestsParams {
 }
 
 const useVHRRequests = (params: useVHRRequestsParams) => {
-  const [requests, setRequests] = useState<VHRRequest[]>([])
+  const [requests, setRequests] = useState<LogVhrRequestMetadata[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -116,7 +123,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
           })
       })
       .then(({ collectedPostsIds, postsComments, rejectedPostMap }) => {
-        const data: VHRRequest[] = []
+        const data: LogVhrRequestMetadata[] = []
 
         postsComments.forEach((postComments, i) => {
           const filteredPosts = postComments.items.filter((p) => {
@@ -124,19 +131,14 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
             return !(rejectedPostMap[p.id] || accepted) && !p.hidden
           })
 
-          const metadata = getVerifyMetadata(filteredPosts)
+          filteredPosts.map((post) => {
+            const request = new LogVhrRequestMetadataBuilder(
+              new Set(['1.0.0']),
+              post as CommentFragment,
+              opportunities[i]
+            ).build()
 
-          metadata.forEach((p) => {
-            const verifyRequest: VHRRequest = {
-              opportunity: opportunities[i],
-              hoursToVerify: p.hoursToVerify,
-              comments: '',
-              from: p.from,
-              id: p.id,
-              createdAt: p.createdAt
-            }
-
-            data.push(verifyRequest)
+            data.push(request)
           })
         })
 

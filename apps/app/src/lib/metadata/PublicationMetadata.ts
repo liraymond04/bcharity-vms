@@ -10,7 +10,6 @@ import { PostTag } from './PostTags'
 
 /**
  * A base class for publication metadata
- * @date 8/1/2023 - 3:50:31 PM
  *
  * @export
  * @class PublicationMetadata
@@ -19,7 +18,6 @@ import { PostTag } from './PostTags'
 export class PublicationMetadata {
   /**
    * Creates an instance of PublicationMetadata.
-   * @date 8/1/2023 - 3:50:31 PM
    *
    * @constructor
    * @param {PublicationMetadataBuilder<PublicationMetadata>} builder
@@ -56,7 +54,6 @@ export class PublicationMetadata {
 
 /**
  * An abstract base class for building publication metadata
- * @date 8/1/2023 - 3:50:31 PM
  *
  * @export
  * @abstract
@@ -67,7 +64,6 @@ export class PublicationMetadata {
 export abstract class PublicationMetadataBuilder<T> {
   /**
    * A set of version strings
-   * @date 8/1/2023 - 3:50:31 PM
    *
    * @type {Set<string>}
    */
@@ -75,7 +71,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * Creates an instance of PublicationMetadataBuilder.
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @constructor
    * @param {Set<string>} versions a set of version strings that should be recognized by the builder
@@ -113,7 +108,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * Utility function that searches the PostTag enum to see if a metadata string value matches a value in the enum
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @param {string} tagString
    * @returns {boolean}
@@ -124,7 +118,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * Utility function that tests if a metadata string value matches a version in the versions set
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @param {string} versionString
    *
@@ -138,7 +131,6 @@ export abstract class PublicationMetadataBuilder<T> {
   /**
    * A virtual method called in {@link _validate()} to throw any validation errors
    * created by classes that extend this class
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @private
    * @abstract
@@ -148,7 +140,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * A method to validate the outputted metadata when attempting to build the data class
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @private
    * @returns {*}
@@ -173,7 +164,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * An abstract method to build the outputted metadata, after validation
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @protected
    * @abstract
@@ -183,7 +173,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * The bethod used to build the data class the builder builds
-   * @date 8/1/2023 - 3:50:30 PM
    *
    * @returns {T}
    */
@@ -197,7 +186,6 @@ export abstract class PublicationMetadataBuilder<T> {
 
   /**
    * The version string in the set versions
-   * @date 8/1/2023 - 3:59:57 PM
    *
    * @readonly
    * @type {string}
@@ -205,7 +193,6 @@ export abstract class PublicationMetadataBuilder<T> {
   readonly version: string
   /**
    * The post type, a string enum value in PostTags
-   * @date 8/1/2023 - 3:59:57 PM
    *
    * @readonly
    * @type {PostTag}
@@ -213,7 +200,6 @@ export abstract class PublicationMetadataBuilder<T> {
   readonly type: PostTag
   /**
    * The publication post id assigned by lens
-   * @date 8/1/2023 - 3:59:57 PM
    *
    * @readonly
    * @type {string}
@@ -221,7 +207,6 @@ export abstract class PublicationMetadataBuilder<T> {
   readonly metadata_id: string
   /**
    * The publication post createdAt date, from lens
-   * @date 8/1/2023 - 3:59:57 PM
    *
    * @readonly
    * @type {string}
@@ -229,7 +214,6 @@ export abstract class PublicationMetadataBuilder<T> {
   readonly createdAt: string
   /**
    * The profile that created the post, from lens
-   * @date 8/1/2023 - 3:59:57 PM
    *
    * @readonly
    * @type {ProfileFragment}

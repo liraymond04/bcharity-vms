@@ -2,10 +2,10 @@ import { LinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import React from 'react'
 
-import { VHRRequest } from '@/lib/types'
+import { LogVhrRequestMetadata } from '@/lib/metadata'
 
 interface IVHRDetailCardProps {
-  value: VHRRequest
+  value: LogVhrRequestMetadata
 }
 
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {

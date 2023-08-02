@@ -13,7 +13,6 @@ import { getAttribute } from '../lens-protocol/getAttribute'
 export class CauseMetadata extends PublicationMetadata {
   /**
    * Creates an instance of CauseMetadata from a CauseMetadataBuilder.
-   * @date 8/2/2023 - 10:49:37 AM
    *
    * @constructor
    * @param {CauseMetadataBuilder} builder

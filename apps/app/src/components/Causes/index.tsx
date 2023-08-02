@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react'
 
 import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { CauseMetadata, PostTags } from '@/lib/types'
+import { CauseMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/types'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
@@ -15,7 +16,7 @@ import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
 
 const Causes: NextPage = () => {
-  const [posts, setPosts] = useState<[CauseMetadata, string][]>([])
+  const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -40,11 +41,11 @@ const Causes: NextPage = () => {
   // const posts = useMemo(() => getCauseMetadata(data), [data])
 
   useEffect(() => {
-    let _posts: [CauseMetadata, string][] = []
+    let _posts: CauseMetadata[] = []
     let _categories: Set<string> = new Set()
     const metadata = getCauseMetadata(data)
     metadata.forEach((post) => {
-      _posts.push([post, post.id])
+      _posts.push(post)
       if (post.category) _categories.add(post.category)
     })
     setPosts(_posts)
@@ -103,11 +104,11 @@ const Causes: NextPage = () => {
           {posts
             .filter(
               (post) =>
-                selectedCategory === '' || post[0].category === selectedCategory
+                selectedCategory === '' || post.category === selectedCategory
             )
             .map((post) => (
-              <GridItemFour key={post[0].cause_id}>
-                <CauseCard cause={post[0]} id={post[1]} />
+              <GridItemFour key={post.cause_id}>
+                <CauseCard cause={post} />
               </GridItemFour>
             ))}
         </GridLayout>

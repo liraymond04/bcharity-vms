@@ -1,12 +1,9 @@
 /* eslint-disable no-unused-vars */
-import {
-  ProfileFragment,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
+import { ProfileFragment } from '@lens-protocol/client'
 import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
-import { OpportunityMetadata } from './metadata'
+import { CauseMetadata, OpportunityMetadata } from './metadata'
 
 export enum omv {
   '1.0.0' = '1.0.0'
@@ -60,108 +57,25 @@ export interface GoalMetadata extends opm<GoalMetadataVersion> {
    * opportunity end date in YYYY-MM-DD format
    */
   goalDate: string
-  /**
-
-}
-
-/**
- * Interface for a metadata field used when publishing a opportunity
- */
 }
 export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof GoalMetadata | 'type'
-}
-export interface _OpportunityMetadata extends opm<omv> {
-  /**
-   * a uuid associated with a volunteer opporunity
-   */
-  opportunity_id: string
-  /**
-   * the opportunity name
-   */
-  name: string
-  /**
-   * opportunity start date in YYYY-MM-DD format
-   */
-  startDate: string
-  /**
-   * opportunity end date in YYYY-MM-DD format
-   */
-  endDate: string
-  /**
-   * number of hours per week for this volunteer opportunity
-   */
-  hoursPerWeek: string
-  /**
-   * category associated with the volunteer opportunity
-   */
-  category: string
-  /**
-   * an optional url to link to an external webste
-   */
-  website: string
-  /**
-   * opportunity description
-   */
-  description: string
-  /**
-   * optional URL to image uploaded to IPFS. Empty string if no image
-   */
-  imageUrl: string
-}
-
-/**
- * Interface for a metadata field used when publishing a opportunity
- */
-
-interface _cm extends opm<cmv> {
-  /**
-   * a uuid associated with this cause
-   */
-  cause_id: string
-  /**
-   * the cause name
-   */
-  name: string
-  /**
-   * category associated with the cause
-   */
-  category: string
-  /**
-   * TODO
-   */
-  currency: string
-  /**
-   * TODO
-   */
-  contribution: string
-  /**
-   * TODO
-   */
-  goal: string
-  /**
-   * TODO
-   */
-  recipient: string
-  /**
-   * description for this fundraiser
-   */
-  description: string
-  /**
-   * optional URL to image uploaded to IPFS. Empty string if no image
-   */
-  imageUrl: string
-  /**
-   * Location in the form <City>, <State>, <Country>
-   */
-  location: string
 }
 
 /**
  * Interface for a metadata field used when publishing an cause
  */
 export interface CauseMetadataAttributeInput extends MetadataAttributeInput {
-  traitType: keyof _cm | 'type'
+  traitType: keyof CauseMetadata
+}
+
+/**
+ * Interface for a metadata field used when publishing a opportunity
+ */
+
+export interface OpportunityMetadataAttributeInput
+  extends MetadataAttributeInput {
+  traitType: keyof OpportunityMetadata
 }
 
 export interface VerifyMetadata {
@@ -271,18 +185,6 @@ export interface ProfileMetadata {
   attributes: AttributeData[]
 }
 
-export interface VhrRequestMetadata extends PublicationMetadataV2Input {
-  /**
-   * The metadata version.
-   */
-  version: VhrRequestMetadataVersions
-
-  /**
-   * Any custom attributes can be added here for a VHR request
-   */
-  attributes: MetadataAttributeInput[]
-}
-
 /**
  * Interface to hold location data, split into country, province, and city, all
  * portentially undefined
@@ -306,13 +208,4 @@ export interface IFormLocation {
   country: string
   province: string
   city: string
-}
-
-export interface VHRRequest {
-  hoursToVerify: string
-  comments: string
-  from: ProfileFragment
-  opportunity: OpportunityMetadata
-  id: string
-  createdAt: string
 }
