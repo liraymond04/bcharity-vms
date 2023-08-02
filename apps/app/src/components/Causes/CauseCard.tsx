@@ -11,10 +11,9 @@ import { Spinner } from '../UI/Spinner'
 
 interface ICauseCardProps {
   cause: CauseMetadata
-  id: string
 }
 
-const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
+const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
   useEffect(() => {
@@ -52,7 +51,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/fundraiser/${id}`, '_blank')
+        window.open(`/fundraiser/${cause.metadata_id}`, '_blank')
       }}
     >
       <Card className="w-80 h-96 my-5 p-2 flex flex-col items-stretch justify-between transition duration-100 hover:scale-105 hover:cursor-pointer">
