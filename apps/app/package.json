@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "doc": "typedoc -out docs ./src/lib/metadata"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
@@ -28,6 +29,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.2"
+    "@types/uuid": "^9.0.2",
+    "typedoc": "^0.24.8"
   }
 }

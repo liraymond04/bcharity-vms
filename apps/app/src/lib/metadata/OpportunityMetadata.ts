@@ -1,7 +1,7 @@
 import {
   PublicationMetadata,
   PublicationMetadataBuilder
-} from '@/lib/types/PostMetadata'
+} from '@/lib/metadata/PostMetadata'
 
 /**
  * A data class that represents some opportunity metadata
