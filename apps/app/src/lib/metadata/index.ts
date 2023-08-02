@@ -1,3 +1,4 @@
+import { CauseMetadata, CauseMetadataBuilder } from './CauseMetadata'
 import { InvalidMetadataException } from './InvalidMetadataException'
 import {
   OpportunityMetadata,
@@ -9,6 +10,8 @@ import {
 } from './PublicationMetadata'
 
 export {
+  CauseMetadata,
+  CauseMetadataBuilder,
   InvalidMetadataException,
   OpportunityMetadata,
   OpportunityMetadataBuilder,
