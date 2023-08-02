@@ -1,6 +1,5 @@
 import {
   PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
@@ -19,10 +18,10 @@ import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import {
-  MetadataVersion,
-  OpportunityMetadataAttributeInput,
-  PostTags
-} from '@/lib/types'
+  buildMetadataAttributes,
+  OpportunityMetadataFields
+} from '@/lib/metadata'
+import { MetadataVersion, PostTags } from '@/lib/types'
 
 import Error from './Error'
 
@@ -52,63 +51,19 @@ export const createPublishAttributes = (data: {
   id: string
   formData: IPublishOpportunityFormProps
 }) => {
-  const attributes: OpportunityMetadataAttributeInput[] = [
-    {
-      traitType: 'type',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: PostTags.OrgPublish.Opportunity
-    },
-    {
-      traitType: 'version',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: MetadataVersion.OpportunityMetadataVersion['1.0.0']
-    },
-    {
-      traitType: 'opportunity_id',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.id
-    },
-    {
-      traitType: 'name',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.name
-    },
-    {
-      traitType: 'startDate',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.startDate
-    },
-    {
-      traitType: 'endDate',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.endDate
-    },
-    {
-      traitType: 'hoursPerWeek',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.hoursPerWeek
-    },
-    {
-      traitType: 'category',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.category
-    },
-    {
-      traitType: 'website',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.website
-    },
-    {
-      traitType: 'description',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.description
-    },
-    {
-      traitType: 'imageUrl',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.imageUrl
-    }
-  ]
+  const attributes = buildMetadataAttributes<OpportunityMetadataFields>({
+    version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
+    type: PostTags.OrgPublish.Opportunity,
+    opportunity_id: data.id,
+    name: data.formData.name,
+    startDate: data.formData.startDate,
+    endDate: data.formData.endDate,
+    hoursPerWeek: data.formData.hoursPerWeek,
+    category: data.formData.category,
+    website: data.formData.website,
+    description: data.formData.description,
+    imageUrl: data.formData.imageUrl
+  })
 
   return attributes
 }

@@ -16,11 +16,9 @@ import { PostTag } from './PostTags'
  * Does not using ts`keyof PublicationMetdata` due to buggy behavior with Exclude/Omit
  */
 export type PublicationMetadataFieldNames =
-  | 'version'
-  | 'type'
-  | 'metadata_id'
-  | 'createdAt'
-  | 'profile'
+  // | 'version'
+  // | 'type'
+  'metadata_id' | 'createdAt' | 'from'
 
 /**
  * A base class for publication metadata

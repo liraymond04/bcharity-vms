@@ -1,6 +1,5 @@
 import {
   PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
@@ -23,7 +22,8 @@ import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { CauseMetadataAttributeInput, MetadataVersion } from '@/lib/types'
+import { buildMetadataAttributes, CauseMetadataFields } from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 import { PostTags } from '@/lib/types'
 
 import Error from './Error'
@@ -60,68 +60,20 @@ export const createPublishAttributes = (data: {
   id: string
   formData: IPublishCauseFormProps
 }) => {
-  const attributes: CauseMetadataAttributeInput[] = [
-    {
-      traitType: 'type',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: PostTags.OrgPublish.Cause
-    },
-    {
-      traitType: 'version',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: MetadataVersion.CauseMetadataVersion['1.0.0']
-    },
-    {
-      traitType: 'cause_id',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.id
-    },
-    {
-      traitType: 'name',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.name
-    },
-    {
-      traitType: 'category',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.category
-    },
-    {
-      traitType: 'location',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: `${data.formData.country}-${data.formData.province}-${data.formData.city}`
-    },
-    {
-      traitType: 'currency',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.currency
-    },
-    {
-      traitType: 'contribution',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.contribution
-    },
-    {
-      traitType: 'goal',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.goal
-    },
-    {
-      traitType: 'recipient',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.recipient
-    },
-    {
-      traitType: 'description',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.description
-    },
-    {
-      traitType: 'imageUrl',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.imageUrl
-    }
-  ]
+  const attributes = buildMetadataAttributes<CauseMetadataFields>({
+    type: PostTags.OrgPublish.Cause,
+    cause_id: data.id,
+    name: data.formData.name,
+    category: data.formData.category,
+    currency: data.formData.currency,
+    contribution: data.formData.contribution,
+    goal: data.formData.goal,
+    recipient: data.formData.recipient,
+    description: data.formData.description,
+    imageUrl: data.formData.imageUrl,
+    location: `${data.formData.country}-${data.formData.province}-${data.formData.city}`,
+    version: MetadataVersion.CauseMetadataVersion['1.0.0']
+  })
 
   return attributes
 }
