@@ -6,12 +6,13 @@ import {
 } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
+import { OpportunityMetadataVersion } from '../types'
 
 /**
  * A data class that represents some opportunity metadata
  */
 export class OpportunityMetadata extends PublicationMetadata {
-  static MetdataVersions = ['1.0.0']
+  static MetdataVersions = Object.values(OpportunityMetadataVersion)
 
   /**
    * Creates an instance of OpportunityMetadata from an OpportunityMetadataBuilder.

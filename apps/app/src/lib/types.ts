@@ -5,29 +5,32 @@ import { ICity, ICountry, IState } from 'country-state-city'
 
 import { CauseMetadata, OpportunityMetadata } from './metadata'
 
-export enum omv {
+export enum OpportunityMetadataVersion {
   '1.0.0' = '1.0.0'
 }
 
-export enum cmv {
+export enum CauseMetadataVersion {
   '1.0.0' = '1.0.0'
 }
+
+export enum LogVhrRequestMetadataVersions {
+  '1.0.0' = '1.0.0'
+}
+
 export enum GoalMetadataVersion {
   '1.0.0' = '1.0.0'
 }
+
 export enum ProfileMetadataVersions {
   '1.0.0'
 }
-export enum VhrRequestMetadataVersions {
-  '1.0.0' = '1.0.0'
-}
 
 export const MetadataVersion = {
-  OpportunityMetadataVersion: omv,
-  CauseMetadataVersion: cmv,
+  OpportunityMetadataVersion,
+  CauseMetadataVersion,
   GoalMetadataVersion,
   ProfileMetadataVersions,
-  VhrRequestMetadataVersions
+  LogVhrRequestMetadataVersions
 }
 
 interface opm<T> {

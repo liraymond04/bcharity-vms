@@ -6,6 +6,7 @@ import {
 } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
+import { LogVhrRequestMetadataVersions } from '../types'
 import { OpportunityMetadata } from './OpportunityMetadata'
 
 /**
@@ -15,7 +16,7 @@ export class LogVhrRequestMetadata extends PublicationMetadata {
   /**
    * The metadata versions of this type of metadata
    */
-  static MetadataVersions = ['1.0.0']
+  static MetadataVersions = Object.values(LogVhrRequestMetadataVersions)
 
   /**
    * Creates an instance of OpportunityMetadata from an OpportunityMetadataBuilder.

@@ -148,15 +148,11 @@ export abstract class PublicationMetadataBuilder<
 
   /**
    * An abstract method to build the outputted metadata, after validation
-   *
-   * @protected
-   * @abstract
-   * @returns {T}
    */
   protected abstract buildObject(): T
 
   /**
-   * The bethod used to build the data class the builder builds
+   * The bethod used to build the data class
    */
   build() {
     const exception = this._validate()

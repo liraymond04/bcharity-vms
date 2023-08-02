@@ -13,8 +13,8 @@ import lensClient from './lensClient'
 const createPost = async (
   profile: Profile,
   metadata: PublicationMetadataV2Input,
-  collectModule: CollectModuleParams,
-  referenceModule: ReferenceModuleParams
+  collectModule?: CollectModuleParams,
+  referenceModule?: ReferenceModuleParams
 ) => {
   const contentURI = await uploadToIPFS(metadata)
 
@@ -36,8 +36,12 @@ const createPost = async (
   const typedDataResult = await lensClient().publication.createPostTypedData({
     profileId,
     contentURI,
-    collectModule,
-    referenceModule
+    collectModule: collectModule ?? {
+      freeCollectModule: {
+        followerOnly: false
+      }
+    },
+    referenceModule: referenceModule ?? { followerOnlyReferenceModule: false }
   })
 
   const signature = await signTypedData(

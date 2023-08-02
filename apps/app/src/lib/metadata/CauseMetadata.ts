@@ -6,12 +6,13 @@ import {
 } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
+import { CauseMetadataVersion } from '../types'
 
 /**
  * A data class that represents some cause metadata
  */
 export class CauseMetadata extends PublicationMetadata {
-  static MetdataVersions = ['1.0.0']
+  static MetdataVersions = Object.values(CauseMetadataVersion)
 
   /**
    * Creates an instance of CauseMetadata from a CauseMetadataBuilder.
