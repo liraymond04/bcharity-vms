@@ -62,7 +62,7 @@ const UserDispatcher: React.FC = () => {
     <div className="container mx-auto px-40 py-40">
       <div
         className="rounded-lg shadow-l flex flex-col px-9 py-8 
-          bg-[#D7BFFF] dark:bg-blue-500 outline outline-1 outline-gray-200 outline-offset-2"
+          bg-[#D7BFFF] dark:bg-Card outline outline-1 outline-gray-200 outline-offset-2"
       >
         <h1 className="text-2xl font-bold dark:text-gray-50">
           Enable dispatcher?

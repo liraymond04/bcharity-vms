@@ -124,7 +124,7 @@ const VolunteerLogHours: React.FC = () => {
           />
         </div>
         <button
-          className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+          className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-indigo-400 dark:bg-indigo-200 dark:border-purple-800 dark:hover:bg-indigo-300"
           onClick={() => {
             setSelectedSortBy('')
             setSelectedCategory('')
