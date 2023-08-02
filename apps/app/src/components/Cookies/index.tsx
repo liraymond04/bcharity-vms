@@ -7,13 +7,13 @@ const Cookies: NextPage = () => {
     <>
       <SEO title="Cookies • BCharity VMS" />
 
-      <div className="flex flex-col justify-center text-center border-b-8 border-indigo-700 border-dotted py-10 mx-32">
+      <div className="flex flex-col justify-center text-center border-b-8 border-indigo-700 dark:border-sky-200 border-dotted py-10 mx-32">
         <div>
           <div className="my-5 text-3xl font-bold">Cookies</div>
           <div>Updated May 18th, 2022</div>
         </div>
       </div>
-      <div className="flex justify-left items-center border my-10 mx-20">
+      <div className="flex justify-left items-center border my-10 mx-20 dark:bg-Card">
         <div className="flex my-8 mx-20 flex-col">
           <div className="space-y-3">
             <div>

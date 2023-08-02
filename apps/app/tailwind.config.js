@@ -18,7 +18,10 @@ module.exports = {
         NavBar: '#23172D',
         SideBar: '#23224A',
         Card: '#18004A',
-        Input: '#00254A'
+        Input: '#00254A',
+        Within: '#CEBBF8',
+        back: '#0f172a',
+        front: '#1e254a'
       },
       typography(theme) {
         return {

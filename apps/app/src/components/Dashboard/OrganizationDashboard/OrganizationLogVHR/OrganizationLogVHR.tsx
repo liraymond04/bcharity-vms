@@ -130,7 +130,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   return (
     <div className="mx-4 my-8 flex flex-col max-h-screen">
       <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-        <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-black">
+        <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 dark:border-indigo-900 border-2 ml-10 mr-10 dark:bg-Input">
           <input
             className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
             type="text"
@@ -160,7 +160,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
       <button onClick={() => refetch()}>Refresh</button>
       {!loading ? (
         <>
-          <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 shadow-md shadow-black px-4 py-3 rounded-md mt-10">
+          <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-10">
             {data.map((value) => {
               const selected = value.id === selectedId
 

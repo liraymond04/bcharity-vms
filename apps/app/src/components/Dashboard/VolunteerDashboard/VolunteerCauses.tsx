@@ -1,6 +1,9 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { PublicationSortCriteria } from '@lens-protocol/client'
-import { PostFragment, PublicationFragment } from '@lens-protocol/client'
+import {
+  PostFragment,
+  PublicationFragment,
+  PublicationSortCriteria
+} from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -80,7 +83,7 @@ const VolunteerCauses: React.FC = () => {
     <div className={className}>
       <div className="w-full bg-gray-200 rounded-full h-5 ">
         <div
-          className="bg-green-400 h-5 rounded-full"
+          className="bg-green-400 dark:bg-[#54787e] h-5 rounded-full"
           style={{
             width: `${Math.min(Math.trunc((progress / total) * 100), 100)}%`
           }}
@@ -137,7 +140,7 @@ const VolunteerCauses: React.FC = () => {
 
       <GridItemTwelve>
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-black">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
@@ -162,7 +165,7 @@ const VolunteerCauses: React.FC = () => {
               ></DashboardDropDown>
             </div>
             <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-indigo-400 dark:bg-indigo-200 dark:border-purple-800 dark:hover:bg-indigo-300"
               onClick={() => {
                 setSelectedCategory('')
               }}
