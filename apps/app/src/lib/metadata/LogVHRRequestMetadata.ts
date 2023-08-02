@@ -3,7 +3,7 @@ import { CommentFragment, PostFragment } from '@lens-protocol/client'
 import {
   PublicationMetadata,
   PublicationMetadataBuilder,
-  PublicationMetadataFields
+  PublicationMetadataFieldNames
 } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
@@ -14,9 +14,9 @@ import { OpportunityMetadata } from './OpportunityMetadata'
  * @type OpportunityMetadataFields
  * The types of opportunity metadata for form
  */
-export type LogVhrRequestMetadataFields = Exclude<
-  keyof LogVhrRequestMetadata,
-  PublicationMetadataFields
+export type LogVhrRequestMetadataFields = Record<
+  Exclude<keyof LogVhrRequestMetadata, PublicationMetadataFieldNames>,
+  string
 >
 
 /**
