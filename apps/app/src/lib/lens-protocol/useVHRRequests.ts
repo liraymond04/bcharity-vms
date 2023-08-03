@@ -6,8 +6,8 @@ import {
 import { useEffect, useState } from 'react'
 
 import {
-  filterMetadata,
   InvalidMetadataException,
+  isComment,
   LogVhrRequestMetadata,
   LogVhrRequestMetadataBuilder,
   OpportunityMetadata,
@@ -128,18 +128,12 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         const data: LogVhrRequestMetadata[] = []
 
         postsComments.forEach((postComments, i) => {
-          const filterOptions = {
-            publicationType: PublicationTypes.Comment,
-            showHidden: false
-          }
-
-          const filteredPosts = filterMetadata(
-            postComments.items,
-            filterOptions
-          ).filter((p) => {
-            const accepted = !!collectedPostsIds.find((id) => p.id === id)
-            return !(rejectedPostMap[p.id] || accepted) && !p.hidden
-          })
+          const filteredPosts = postComments.items
+            .filter(isComment)
+            .filter((p) => {
+              const accepted = !!collectedPostsIds.find((id) => p.id === id)
+              return !(rejectedPostMap[p.id] || accepted) && !p.hidden
+            })
 
           filteredPosts.map((post) => {
             try {

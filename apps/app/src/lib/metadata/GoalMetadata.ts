@@ -10,7 +10,7 @@ import { getAttribute } from '../lens-protocol/getAttribute'
 import { GoalMetadataVersion } from '../types'
 
 /**
- * The types of opportunity metadata for form
+ * The types of goal metadata for form
  */
 
 export type GoalMetadataRecord = Record<
@@ -19,7 +19,7 @@ export type GoalMetadataRecord = Record<
 >
 
 /**
- * A data class that represents some cause metadata
+ * A data class that represents some goal metadata
  */
 export class GoalMetadata extends PublicationMetadata {
   static MetdataVersions = Object.values(GoalMetadataVersion)
@@ -38,13 +38,13 @@ export class GoalMetadata extends PublicationMetadata {
    */
   goal: string
   /**
-   * The cause name
+   * date in YYYY-MM-DD format for when goal was set
    */
   goalDate: string
 }
 
 /**
- * Builder class for CauseMetadata
+ * Builder class for GoalMetadata
  */
 export class GoalMetadataBuilder extends PublicationMetadataBuilder<GoalMetadata> {
   constructor(post: PostFragment | CommentFragment) {

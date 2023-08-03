@@ -45,9 +45,12 @@ export enum VhrRequest {
   Reject = 'VHR_REJECT_REQUEST'
 }
 
-enum Donate {
+/**
+ * Tags related to making donations
+ */
+export enum Donate {
   /**
-   * Tags related to making donations
+   * Tag to use for setting a donation amount
    */
   SetAmount = 'DONATE_SET_AMOUNT'
 }

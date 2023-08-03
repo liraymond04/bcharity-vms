@@ -4,7 +4,6 @@ import {
   CauseMetadataBuilder,
   CauseMetadataRecord
 } from './CauseMetadata'
-import { isComment, isMirror, isPost } from './filterMetadata'
 import {
   GoalMetadata,
   GoalMetadataBuilder,
@@ -16,12 +15,13 @@ import {
   LogVhrRequestMetadataBuilder,
   LogVhrRequestMetadataRecord
 } from './LogVHRRequestMetadata'
+import { isComment, isMirror, isPost } from './metadataFilters'
 import {
   OpportunityMetadata,
   OpportunityMetadataBuilder,
   OpportunityMetadataRecord
 } from './OpportunityMetadata'
-import { Bookmark, OrgPublish, PostTags, VhrRequest } from './PostTags'
+import { Bookmark, Donate, OrgPublish, PostTags, VhrRequest } from './PostTags'
 import {
   PublicationMetadata,
   PublicationMetadataBuilder,
@@ -55,4 +55,4 @@ export type {
   PublicationMetadataFieldNames
 }
 
-export { Bookmark, OrgPublish, VhrRequest }
+export { Bookmark, Donate, OrgPublish, VhrRequest }
