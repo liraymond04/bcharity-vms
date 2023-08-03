@@ -9,10 +9,14 @@ import {
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 
-import { getAttribute } from '@/lib/lens-protocol/getAttribute'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { PostTags } from '@/lib/metadata'
+import {
+  CauseMetadataBuilder,
+  isPost,
+  OpportunityMetadataBuilder,
+  PostTags
+} from '@/lib/metadata'
 import { getOpportunityMetadata } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
@@ -82,14 +86,16 @@ const Organizations: NextPage = () => {
         const cause_ids = new Set<string>()
 
         result.items.filter((res) => {
-          if (!res.hidden && res.__typename === 'Post') {
-            const opp_id = getAttribute(
-              res.metadata.attributes,
-              'opportunity_id'
-            )
-            const cause_id = getAttribute(res.metadata.attributes, 'cause_id')
-            if (opp_id !== '') opportunity_ids.add(opp_id)
-            if (cause_id !== '') cause_ids.add(cause_id)
+          if (!res.hidden && isPost(res)) {
+            try {
+              const id = new OpportunityMetadataBuilder(res).build().id
+              opportunity_ids.add(id)
+            } catch (e) {}
+
+            try {
+              const id = new CauseMetadataBuilder(res).build().id
+              cause_ids.add(id)
+            } catch (e) {}
           }
         })
 
