@@ -115,7 +115,7 @@ const VolunteerPage: NextPage = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-1">
             <BookmarkButton
-              publicationId={opportunity.metadata_id}
+              publicationId={opportunity.post_id}
               postTag={PostTags.Bookmark.Opportunity}
             />
             <div className="text-2xl font-bold text-brand-600">
@@ -155,7 +155,7 @@ const VolunteerPage: NextPage = () => {
           )}
           <ApplyButton
             hoursDefault={opportunity.hoursPerWeek}
-            publicationId={opportunity.metadata_id}
+            publicationId={opportunity.post_id}
             organizationId={opportunity.from.id}
           />
         </div>

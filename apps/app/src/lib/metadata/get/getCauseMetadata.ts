@@ -5,10 +5,11 @@ import {
   CauseMetadataBuilder,
   InvalidMetadataException,
   isPost
-} from '../metadata'
+} from '..'
+import { getMostRecent } from './getMostRecent'
 
 const getCauseMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: CauseMetadata[] = data
+  const metadata: CauseMetadata[] = data
     .filter(isPost)
     .map((post) => {
       try {
@@ -24,24 +25,7 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
     })
     .filter((o): o is CauseMetadata => o !== null)
 
-  const causeIdCreatedAtMap: Record<string, number> = {}
-
-  allMetadata.forEach((val) => {
-    const unixTime = new Date(val.createdAt).getTime()
-    if (
-      !causeIdCreatedAtMap[val.cause_id] ||
-      causeIdCreatedAtMap[val.cause_id] < unixTime
-    ) {
-      causeIdCreatedAtMap[val.cause_id] = unixTime
-    }
-  })
-
-  const updatedPosts = allMetadata.filter((post) => {
-    const unixTime = new Date(post.createdAt).getTime()
-    return unixTime === causeIdCreatedAtMap[post.cause_id]
-  })
-
-  return updatedPosts
+  return getMostRecent<CauseMetadata>(metadata)
 }
 
 export default getCauseMetadata

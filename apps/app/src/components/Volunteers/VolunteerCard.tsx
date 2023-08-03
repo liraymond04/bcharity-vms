@@ -56,7 +56,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/volunteer/${post.metadata_id}`, '_blank')
+        window.open(`/volunteer/${post.post_id}`, '_blank')
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">

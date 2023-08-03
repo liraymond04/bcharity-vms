@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { ProfileFragment } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
 export enum OpportunityMetadataVersion {
@@ -28,17 +27,6 @@ export const MetadataVersion = {
   GoalMetadataVersion,
   ProfileMetadataVersions,
   LogVhrRequestMetadataVersions
-}
-
-interface opm<T> {
-  /**
-   * ProfileFragment type data for the profile that created the post
-   */
-  from: ProfileFragment
-  /**
-   * The metadata schema version
-   */
-  version: T
 }
 
 export enum MetadataDisplayType {

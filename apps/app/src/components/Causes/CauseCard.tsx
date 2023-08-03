@@ -60,7 +60,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
       let total = 0
 
       const publication = await lensClient().publication.fetch({
-        publicationId: cause.metadata_id
+        publicationId: cause.post_id
       })
 
       if (publication?.__typename !== 'Post')
@@ -74,7 +74,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
 
       // get comment totals
       const comments = await lensClient().publication.fetchAll({
-        commentsOf: cause.metadata_id,
+        commentsOf: cause.post_id,
         metadata: {
           tags: { all: [PostTags.Donate.SetAmount] }
         }
@@ -107,7 +107,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/fundraiser/${cause.metadata_id}`, '_blank')
+        window.open(`/fundraiser/${cause.post_id}`, '_blank')
       }}
     >
       <Card className="w-80 h-96 my-5 p-2 flex flex-col items-stretch justify-between transition duration-100 hover:scale-105 hover:cursor-pointer">

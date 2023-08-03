@@ -1,13 +1,13 @@
 import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
-import {
-  PublicationMetadata,
-  PublicationMetadataBuilder,
-  PublicationMetadataFieldNames
-} from '@/lib/metadata/PublicationMetadata'
+import { PublicationMetadataFieldNames } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
 import { CauseMetadataVersion } from '../types'
+import {
+  UpdateableMetadata,
+  UpdateableMetadataBuilder
+} from './UpdateableMetadata'
 
 /**
  * The types of opportunity metadata for form
@@ -21,7 +21,7 @@ export type CauseMetadataRecord = Record<
 /**
  * A data class that represents some cause metadata
  */
-export class CauseMetadata extends PublicationMetadata {
+export class CauseMetadata extends UpdateableMetadata {
   static MetdataVersions = Object.values(CauseMetadataVersion)
 
   /**
@@ -85,7 +85,7 @@ export class CauseMetadata extends PublicationMetadata {
 /**
  * Builder class for CauseMetadata
  */
-export class CauseMetadataBuilder extends PublicationMetadataBuilder<CauseMetadata> {
+export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadata> {
   constructor(post: PostFragment | CommentFragment) {
     super(new Set(CauseMetadata.MetdataVersions), post)
 

@@ -32,7 +32,7 @@ export class PublicationMetadata {
    */
   constructor(builder: PublicationMetadataBuilder<PublicationMetadata>) {
     this.version = builder.version
-    this.metadata_id = builder.metadata_id
+    this.post_id = builder.post_id
     this.type = builder.type
     this.createdAt = builder.createdAt
     this.from = builder.from
@@ -49,7 +49,7 @@ export class PublicationMetadata {
   /**
    * the publication id of the post or comment
    */
-  metadata_id: string
+  post_id: string
   /**
    * The ISO6801 string of the time
    */
@@ -110,7 +110,7 @@ export abstract class PublicationMetadataBuilder<
 
     this.type = typeMaybe
     this.version = versionMaybe
-    this.metadata_id = post.id
+    this.post_id = post.id
     this.createdAt = post.createdAt
     this.from = post.profile
   }
@@ -190,7 +190,7 @@ export abstract class PublicationMetadataBuilder<
   /**
    * The publication post id assigned by lens
    */
-  readonly metadata_id: string
+  readonly post_id: string
   /**
    * The publication post createdAt date, from lens
    */

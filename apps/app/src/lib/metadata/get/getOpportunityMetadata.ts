@@ -5,10 +5,10 @@ import {
   isPost,
   OpportunityMetadata,
   OpportunityMetadataBuilder
-} from '../metadata'
+} from '..'
+import { getMostRecent } from './getMostRecent'
 
 /**
- * @file getOpportunityMetadata.ts
  * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
  *
  * @param `data` post data (usually returned by the data part of the hook `usePostData()`)
@@ -17,7 +17,7 @@ import {
  *
  */
 const getOpportunityMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: OpportunityMetadata[] = data
+  const metadata: OpportunityMetadata[] = data
     .filter(isPost)
     .map((post) => {
       try {
@@ -33,24 +33,7 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
     })
     .filter((o): o is OpportunityMetadata => o !== null)
 
-  const opportunityIdCreatedAtMap: Record<string, number> = {}
-
-  allMetadata.forEach((val) => {
-    const unixTime = new Date(val.createdAt).getTime()
-    if (
-      !opportunityIdCreatedAtMap[val.opportunity_id] ||
-      opportunityIdCreatedAtMap[val.opportunity_id] < unixTime
-    ) {
-      opportunityIdCreatedAtMap[val.opportunity_id] = unixTime
-    }
-  })
-
-  const updatedPosts = allMetadata.filter((post) => {
-    const unixTime = new Date(post.createdAt).getTime()
-    return unixTime === opportunityIdCreatedAtMap[post.opportunity_id]
-  })
-
-  return updatedPosts
+  return getMostRecent<OpportunityMetadata>(metadata)
 }
 
 export default getOpportunityMetadata

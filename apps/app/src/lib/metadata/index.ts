@@ -27,6 +27,7 @@ import {
   PublicationMetadataBuilder,
   PublicationMetadataFieldNames
 } from './PublicationMetadata'
+import { UpdateableMetadata } from './UpdateableMetadata'
 
 export {
   buildMetadata,
@@ -44,7 +45,8 @@ export {
   OpportunityMetadataBuilder,
   PostTags,
   PublicationMetadata,
-  PublicationMetadataBuilder
+  PublicationMetadataBuilder,
+  UpdateableMetadata
 }
 
 export type {

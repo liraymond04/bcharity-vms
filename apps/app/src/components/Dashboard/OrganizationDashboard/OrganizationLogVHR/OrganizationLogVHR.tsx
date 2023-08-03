@@ -32,7 +32,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 
   const selectedValue = useMemo(() => {
-    return data.find((val) => val.metadata_id === selectedId) ?? null
+    return data.find((val) => val.post_id === selectedId) ?? null
   }, [data, selectedId])
 
   const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
@@ -162,19 +162,17 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         <>
           <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-10">
             {data.map((value) => {
-              const selected = value.metadata_id === selectedId
+              const selected = value.post_id === selectedId
 
               return (
                 <VHRVerifyCard
-                  pending={!!pendingIds[value.metadata_id]}
+                  pending={!!pendingIds[value.post_id]}
                   selected={selected}
-                  key={value.metadata_id}
+                  key={value.post_id}
                   value={value}
-                  onClick={() =>
-                    setSelectedId(selected ? '' : value.metadata_id)
-                  }
-                  onAcceptClick={() => onAcceptClick(value.metadata_id)}
-                  onRejectClick={() => onRejectClick(value.metadata_id)}
+                  onClick={() => setSelectedId(selected ? '' : value.post_id)}
+                  onAcceptClick={() => onAcceptClick(value.post_id)}
+                  onRejectClick={() => onRejectClick(value.post_id)}
                 />
               )
             })}

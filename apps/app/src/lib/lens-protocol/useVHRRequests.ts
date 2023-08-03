@@ -13,7 +13,7 @@ import {
   OpportunityMetadata,
   PostTags
 } from '../metadata'
-import getOpportunityMetadata from './getOpportunityMetadata'
+import getOpportunityMetadata from '../metadata/get/getOpportunityMetadata'
 import lensClient from './lensClient'
 
 interface getCollectedPostIdsParams {
@@ -93,7 +93,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         const collectedIds = getCollectedPostIds({ profile: params.profile! })
 
         const postsComments = opportunities.map((op) => {
-          return getVHRRequestComments({ publicationId: op.metadata_id })
+          return getVHRRequestComments({ publicationId: op.post_id })
         })
 
         return Promise.all([collectedIds, ...postsComments])

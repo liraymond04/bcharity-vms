@@ -8,10 +8,10 @@ import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { OpportunityMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
+import getOpportunityMetadata from '@/lib/metadata/get/getOpportunityMetadata'
 import testSearch from '@/lib/search'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
@@ -155,7 +155,7 @@ const VolunteerVHRTab: React.FC = () => {
               )
               .map((op) => (
                 <BrowseCard
-                  key={op.opportunity_id}
+                  key={op.id}
                   imageSrc={op.imageUrl}
                   avatarSrc={getAvatar(op.from)}
                   name={op.name}

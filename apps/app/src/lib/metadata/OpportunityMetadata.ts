@@ -1,13 +1,13 @@
 import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
-import {
-  PublicationMetadata,
-  PublicationMetadataBuilder,
-  PublicationMetadataFieldNames
-} from '@/lib/metadata/PublicationMetadata'
+import { PublicationMetadataFieldNames } from '@/lib/metadata/PublicationMetadata'
 
 import { getAttribute } from '../lens-protocol/getAttribute'
 import { OpportunityMetadataVersion } from '../types'
+import {
+  UpdateableMetadata,
+  UpdateableMetadataBuilder
+} from './UpdateableMetadata'
 
 /**
  * @type OpportunityMetadataRecord
@@ -21,7 +21,7 @@ export type OpportunityMetadataRecord = Record<
 /**
  * A data class that represents some opportunity metadata
  */
-export class OpportunityMetadata extends PublicationMetadata {
+export class OpportunityMetadata extends UpdateableMetadata {
   static MetdataVersions = Object.values(OpportunityMetadataVersion)
 
   /**
@@ -29,7 +29,6 @@ export class OpportunityMetadata extends PublicationMetadata {
    */
   constructor(builder: OpportunityMetadataBuilder) {
     super(builder)
-    this.opportunity_id = builder.opportunity_id
     this.name = builder.name
     this.startDate = builder.startDate
     this.endDate = builder.endDate
@@ -39,11 +38,7 @@ export class OpportunityMetadata extends PublicationMetadata {
     this.description = builder.description
     this.imageUrl = builder.imageUrl
   }
-  /**
-   * A uuid associated with a volunteer opporunity
-   */
 
-  opportunity_id: string
   /**
    * The opportunity name
    */
@@ -81,22 +76,18 @@ export class OpportunityMetadata extends PublicationMetadata {
 /**
  * Builder class for OpportunityMetadata
  */
-export class OpportunityMetadataBuilder extends PublicationMetadataBuilder<OpportunityMetadata> {
+export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<OpportunityMetadata> {
   constructor(post: PostFragment | CommentFragment) {
     super(new Set(OpportunityMetadata.MetdataVersions), post)
 
-    this._opportunity_id = getAttribute(
-      post.metadata.attributes,
-      'opportunity_id'
-    )
-    this._name = getAttribute(post.metadata.attributes, 'name')
-    this._startDate = getAttribute(post.metadata.attributes, 'startDate')
-    this._endDate = getAttribute(post.metadata.attributes, 'endDate')
-    this._hoursPerWeek = getAttribute(post.metadata.attributes, 'hoursPerWeek')
-    this._category = getAttribute(post.metadata.attributes, 'category')
-    this._website = getAttribute(post.metadata.attributes, 'website')
-    this._description = getAttribute(post.metadata.attributes, 'description')
-    this._imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
+    this.name = getAttribute(post.metadata.attributes, 'name')
+    this.startDate = getAttribute(post.metadata.attributes, 'startDate')
+    this.endDate = getAttribute(post.metadata.attributes, 'endDate')
+    this.hoursPerWeek = getAttribute(post.metadata.attributes, 'hoursPerWeek')
+    this.category = getAttribute(post.metadata.attributes, 'category')
+    this.website = getAttribute(post.metadata.attributes, 'website')
+    this.description = getAttribute(post.metadata.attributes, 'description')
+    this.imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
   }
 
   buildObject(): OpportunityMetadata {
@@ -107,41 +98,12 @@ export class OpportunityMetadataBuilder extends PublicationMetadataBuilder<Oppor
     return null
   }
 
-  private _opportunity_id: string = ''
-  private _name: string = ''
-  private _startDate: string = ''
-  private _endDate: string = ''
-  private _hoursPerWeek: string = ''
-  private _category: string = ''
-  private _website: string = ''
-  private _description: string = ''
-  private _imageUrl: string = ''
-
-  get opportunity_id() {
-    return this._opportunity_id
-  }
-  get name() {
-    return this._name
-  }
-  get startDate() {
-    return this._startDate
-  }
-  get endDate() {
-    return this._endDate
-  }
-  get hoursPerWeek() {
-    return this._hoursPerWeek
-  }
-  get category() {
-    return this._category
-  }
-  get website() {
-    return this._website
-  }
-  get description() {
-    return this._description
-  }
-  get imageUrl() {
-    return this._imageUrl
-  }
+  readonly name: string = ''
+  readonly startDate: string = ''
+  readonly endDate: string = ''
+  readonly hoursPerWeek: string = ''
+  readonly category: string = ''
+  readonly website: string = ''
+  readonly description: string = ''
+  readonly imageUrl: string = ''
 }
