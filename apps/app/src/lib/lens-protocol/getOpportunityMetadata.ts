@@ -1,7 +1,17 @@
-import { PostFragment, PublicationFragment } from '@lens-protocol/client'
+import {
+  PostFragment,
+  PublicationFragment,
+  PublicationTypes
+} from '@lens-protocol/client'
 
-import { OpportunityMetadata, OpportunityMetadataBuilder } from '../metadata'
-import { MetadataVersion } from '../types'
+import {
+  filterMetadata,
+  InvalidMetadataException,
+  MetadataFilterOptions,
+  OpportunityMetadata,
+  OpportunityMetadataBuilder
+} from '../metadata'
+
 /**
  * @file getOpportunityMetadata.ts
  * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
@@ -11,21 +21,29 @@ import { MetadataVersion } from '../types'
  * @returns filtered opportunity post metadata, showing only the most recent posts
  *
  */
-const getOpportunityMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: OpportunityMetadata[] = data
-    .filter(
-      (post) =>
-        post.__typename === 'Post' &&
-        post.metadata.attributes.length > 1 &&
-        post.metadata.attributes[1]?.value ===
-          MetadataVersion.OpportunityMetadataVersion['1.0.0'] &&
-        !post.hidden
-    )
+const getOpportunityMetadata = (
+  data: PublicationFragment[],
+  showHidden = false
+) => {
+  const filterOptions: MetadataFilterOptions = {
+    publicationType: PublicationTypes.Post,
+    showHidden
+  }
+
+  const allMetadata: OpportunityMetadata[] = filterMetadata(data, filterOptions)
     .map((post) => {
-      const builder = new OpportunityMetadataBuilder(post as PostFragment)
-      const metadata = builder.build()
-      return metadata
+      try {
+        return new OpportunityMetadataBuilder(post as PostFragment).build()
+      } catch (e) {
+        console.debug(
+          'warning: ignored metadata from post %o due to error %o',
+          (post as PostFragment).metadata,
+          (e as unknown as InvalidMetadataException).message
+        )
+        return null
+      }
     })
+    .filter((o): o is OpportunityMetadata => o !== null)
 
   const opportunityIdCreatedAtMap: Record<string, number> = {}
 

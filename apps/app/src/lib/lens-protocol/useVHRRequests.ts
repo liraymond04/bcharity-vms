@@ -6,6 +6,8 @@ import {
 import { useEffect, useState } from 'react'
 
 import {
+  filterMetadata,
+  InvalidMetadataException,
   LogVhrRequestMetadata,
   LogVhrRequestMetadataBuilder,
   OpportunityMetadata,
@@ -126,18 +128,35 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         const data: LogVhrRequestMetadata[] = []
 
         postsComments.forEach((postComments, i) => {
-          const filteredPosts = postComments.items.filter((p) => {
+          const filterOptions = {
+            publicationType: PublicationTypes.Comment,
+            showHidden: false
+          }
+
+          const filteredPosts = filterMetadata(
+            postComments.items,
+            filterOptions
+          ).filter((p) => {
             const accepted = !!collectedPostsIds.find((id) => p.id === id)
             return !(rejectedPostMap[p.id] || accepted) && !p.hidden
           })
 
           filteredPosts.map((post) => {
-            const request = new LogVhrRequestMetadataBuilder(
-              post as CommentFragment,
-              opportunities[i]
-            ).build()
+            try {
+              const request = new LogVhrRequestMetadataBuilder(
+                post as CommentFragment,
+                opportunities[i]
+              ).build()
 
-            data.push(request)
+              data.push(request)
+            } catch (e) {
+              console.debug(
+                'warning: ignored metadata from post %o due to error %o',
+                (post as CommentFragment).metadata,
+                (e as unknown as InvalidMetadataException).message
+              )
+              return null
+            }
           })
         })
 

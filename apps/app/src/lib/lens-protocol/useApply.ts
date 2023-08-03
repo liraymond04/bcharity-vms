@@ -46,7 +46,7 @@ const useApply = (params: Props) => {
         comments
       }
 
-      const attributes: MetadataAttributeInput[] = Object.values(data).map(
+      const attributes: MetadataAttributeInput[] = Object.entries(data).map(
         ([k, v]) => {
           return {
             traitType: k,

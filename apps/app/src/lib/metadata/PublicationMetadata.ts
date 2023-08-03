@@ -122,9 +122,8 @@ export abstract class PublicationMetadataBuilder<
     const tag = Object.values(PostTags)
       .map((v) => Object.values(v))
       .flat(1)
-      .find((tagName) => tagName === tagName)
+      .find((tagName) => tagName === tagString)
 
-    console.log('found tag', tag)
     return !!tag
   }
 

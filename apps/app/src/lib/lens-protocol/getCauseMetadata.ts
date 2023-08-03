@@ -1,23 +1,37 @@
-import { PostFragment, PublicationFragment } from '@lens-protocol/client'
+import {
+  PostFragment,
+  PublicationFragment,
+  PublicationTypes
+} from '@lens-protocol/client'
 
-import { CauseMetadata, CauseMetadataBuilder } from '../metadata'
-import { MetadataVersion } from '../types'
+import {
+  CauseMetadata,
+  CauseMetadataBuilder,
+  filterMetadata,
+  InvalidMetadataException,
+  MetadataFilterOptions
+} from '../metadata'
 
-const getCauseMetadata = (data: PublicationFragment[]) => {
-  const allMetadata: CauseMetadata[] = data
-    .filter(
-      (post) =>
-        post.__typename === 'Post' &&
-        post.metadata.attributes.length > 1 &&
-        post.metadata.attributes[1]?.value ===
-          MetadataVersion.CauseMetadataVersion['1.0.0'] &&
-        !post.hidden
-    )
+const getCauseMetadata = (data: PublicationFragment[], showHidden = false) => {
+  const filterOptions: MetadataFilterOptions = {
+    publicationType: PublicationTypes.Post,
+    showHidden
+  }
 
+  const allMetadata: CauseMetadata[] = filterMetadata(data, filterOptions)
     .map((post) => {
-      const builder = new CauseMetadataBuilder(post as PostFragment)
-      return builder.build()
+      try {
+        return new CauseMetadataBuilder(post as PostFragment).build()
+      } catch (e) {
+        console.debug(
+          'warning: ignored metadata from post %o due to error %o',
+          (post as PostFragment).metadata,
+          (e as unknown as InvalidMetadataException).message
+        )
+        return null
+      }
     })
+    .filter((o): o is CauseMetadata => o !== null)
 
   const causeIdCreatedAtMap: Record<string, number> = {}
 

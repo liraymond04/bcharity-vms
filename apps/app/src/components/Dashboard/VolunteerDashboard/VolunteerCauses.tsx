@@ -1,9 +1,5 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import {
-  PostFragment,
-  PublicationFragment,
-  PublicationSortCriteria
-} from '@lens-protocol/client'
+import { PostFragment, PublicationSortCriteria } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -23,9 +19,7 @@ import BrowseCauseCard from './BrowseCauseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
-  const [posts, setPosts] = useState<
-    (CauseMetadata & { pub: PublicationFragment })[]
-  >([])
+  const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [searchValue, setSearchValue] = useState('')
@@ -185,13 +179,13 @@ const VolunteerCauses: React.FC = () => {
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
               )
-              .map((op) => (
+              .map((op, i) => (
                 <BrowseCauseCard
                   key={op.cause_id}
                   imageSrc={op.imageUrl}
                   avatarSrc={getAvatar(op.from)}
                   name={op.name}
-                  post={op.pub as PostFragment}
+                  post={postData[i] as PostFragment}
                 />
               ))
           ) : (
