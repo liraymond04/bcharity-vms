@@ -2,7 +2,6 @@ import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
 import { PublicationMetadataFieldNames } from '@/lib/metadata/PublicationMetadata'
 
-import { getAttribute } from '../lens-protocol/getAttribute'
 import { OpportunityMetadataVersion } from '../types'
 import {
   UpdateableMetadata,
@@ -80,14 +79,26 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
   constructor(post: PostFragment | CommentFragment) {
     super(new Set(OpportunityMetadata.MetdataVersions), post)
 
-    this.name = getAttribute(post.metadata.attributes, 'name')
-    this.startDate = getAttribute(post.metadata.attributes, 'startDate')
-    this.endDate = getAttribute(post.metadata.attributes, 'endDate')
-    this.hoursPerWeek = getAttribute(post.metadata.attributes, 'hoursPerWeek')
-    this.category = getAttribute(post.metadata.attributes, 'category')
-    this.website = getAttribute(post.metadata.attributes, 'website')
-    this.description = getAttribute(post.metadata.attributes, 'description')
-    this.imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
+    if (this.version === OpportunityMetadataVersion['1.0.0']) {
+      this.id = this.getAttribute('opportunity_id')
+      this.name = this.getAttribute('name')
+      this.startDate = this.getAttribute('startDate')
+      this.endDate = this.getAttribute('endDate')
+      this.hoursPerWeek = this.getAttribute('hoursPerWeek')
+      this.category = this.getAttribute('category')
+      this.website = this.getAttribute('website')
+      this.description = this.getAttribute('description')
+      this.imageUrl = this.getAttribute('imageUrl')
+    } else if (this.version === OpportunityMetadataVersion['1.0.1']) {
+      this.name = this.getAttribute('name')
+      this.startDate = this.getAttribute('startDate')
+      this.endDate = this.getAttribute('endDate')
+      this.hoursPerWeek = this.getAttribute('hoursPerWeek')
+      this.category = this.getAttribute('category')
+      this.website = this.getAttribute('website')
+      this.description = this.getAttribute('description')
+      this.imageUrl = this.getAttribute('imageUrl')
+    }
   }
 
   buildObject(): OpportunityMetadata {

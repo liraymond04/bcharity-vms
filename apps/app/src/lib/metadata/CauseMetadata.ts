@@ -2,7 +2,6 @@ import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
 import { PublicationMetadataFieldNames } from '@/lib/metadata/PublicationMetadata'
 
-import { getAttribute } from '../lens-protocol/getAttribute'
 import { CauseMetadataVersion } from '../types'
 import {
   UpdateableMetadata,
@@ -84,15 +83,28 @@ export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadat
   constructor(post: PostFragment | CommentFragment) {
     super(new Set(CauseMetadata.MetdataVersions), post)
 
-    this.name = getAttribute(post.metadata.attributes, 'name')
-    this.category = getAttribute(post.metadata.attributes, 'category')
-    this.currency = getAttribute(post.metadata.attributes, 'currency')
-    this.contribution = getAttribute(post.metadata.attributes, 'contribution')
-    this.goal = getAttribute(post.metadata.attributes, 'goal')
-    this.recipient = getAttribute(post.metadata.attributes, 'recipient')
-    this.description = getAttribute(post.metadata.attributes, 'description')
-    this.location = getAttribute(post.metadata.attributes, 'location')
-    this.imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
+    if (this.version === CauseMetadataVersion['1.0.0']) {
+      this.id = this.getAttribute('cause_id')
+      this.name = this.getAttribute('name')
+      this.category = this.getAttribute('category')
+      this.currency = this.getAttribute('currency')
+      this.contribution = this.getAttribute('contribution')
+      this.goal = this.getAttribute('goal')
+      this.recipient = this.getAttribute('recipient')
+      this.description = this.getAttribute('description')
+      this.location = this.getAttribute('location')
+      this.imageUrl = this.getAttribute('imageUrl')
+    } else if (this.version === CauseMetadataVersion['1.0.1']) {
+      this.name = this.getAttribute('name')
+      this.category = this.getAttribute('category')
+      this.currency = this.getAttribute('currency')
+      this.contribution = this.getAttribute('contribution')
+      this.goal = this.getAttribute('goal')
+      this.recipient = this.getAttribute('recipient')
+      this.description = this.getAttribute('description')
+      this.location = this.getAttribute('location')
+      this.imageUrl = this.getAttribute('imageUrl')
+    }
   }
 
   buildObject(): CauseMetadata {
@@ -112,4 +124,5 @@ export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadat
   readonly description: string = ''
   readonly imageUrl: string = ''
   readonly location: string = ''
+  readonly id: string = ''
 }

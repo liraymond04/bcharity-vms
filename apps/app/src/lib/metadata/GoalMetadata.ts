@@ -6,7 +6,6 @@ import {
   PublicationMetadataFieldNames
 } from '@/lib/metadata/PublicationMetadata'
 
-import { getAttribute } from '../lens-protocol/getAttribute'
 import { GoalMetadataVersion } from '../types'
 
 /**
@@ -50,8 +49,8 @@ export class GoalMetadataBuilder extends PublicationMetadataBuilder<GoalMetadata
   constructor(post: PostFragment | CommentFragment) {
     super(new Set(GoalMetadata.MetdataVersions), post)
 
-    this._goal = getAttribute(post.metadata.attributes, 'goal')
-    this._goalDate = getAttribute(post.metadata.attributes, 'goalDate')
+    this._goal = this.getAttribute('goal')
+    this._goalDate = this.getAttribute('goalDate')
   }
 
   buildObject(): GoalMetadata {

@@ -6,8 +6,8 @@ import {
   PublicationMetadataFieldNames
 } from '@/lib/metadata/PublicationMetadata'
 
-import { getAttribute } from '../lens-protocol/getAttribute'
 import { LogVhrRequestMetadataVersions } from '../types'
+import { InvalidMetadataException } from './InvalidMetadataException'
 import { OpportunityMetadata } from './OpportunityMetadata'
 
 /**
@@ -58,19 +58,29 @@ export class LogVhrRequestMetadata extends PublicationMetadata {
 }
 
 export class LogVhrRequestMetadataBuilder extends PublicationMetadataBuilder<LogVhrRequestMetadata> {
+  /**
+   *
+   * @param post The post
+   * @param opportunity The opportunity
+   *
+   * @throws {@link InvalidMetadataException} when an invalid version is found or when
+   */
   constructor(
     post: PostFragment | CommentFragment,
     opportunity: OpportunityMetadata
   ) {
     super(new Set(LogVhrRequestMetadata.MetadataVersions), post)
 
-    this._opportunity = opportunity
+    this.opportunity = opportunity
 
-    this._hoursToVerify = getAttribute(
-      post.metadata.attributes,
-      'hoursToVerify'
+    if (this.version === LogVhrRequestMetadataVersions['1.0.0']) {
+      this.hoursToVerify = this.getAttribute('hoursToVerify')
+      this.comments = this.getAttribute('comments')
+    }
+
+    throw new InvalidMetadataException(
+      `Version ${this.version} is not a valid version`
     )
-    this._comments = getAttribute(post.metadata.attributes, 'comments')
   }
 
   buildObject(): LogVhrRequestMetadata {
@@ -81,17 +91,7 @@ export class LogVhrRequestMetadataBuilder extends PublicationMetadataBuilder<Log
     return null
   }
 
-  private _opportunity: OpportunityMetadata
-  private _hoursToVerify: string
-  private _comments: string
-
-  get opportunity() {
-    return this._opportunity
-  }
-  get hoursToVerify() {
-    return this._hoursToVerify
-  }
-  get comments() {
-    return this._comments
-  }
+  readonly opportunity: OpportunityMetadata
+  readonly hoursToVerify: string
+  readonly comments: string
 }

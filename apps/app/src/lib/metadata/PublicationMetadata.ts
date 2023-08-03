@@ -4,7 +4,6 @@ import {
   ProfileFragment
 } from '@lens-protocol/client'
 
-import { getAttribute } from '../lens-protocol/getAttribute'
 import { InvalidMetadataException } from './InvalidMetadataException'
 import { PostTags } from './PostTags'
 
@@ -70,9 +69,13 @@ export abstract class PublicationMetadataBuilder<
   /**
    * A set of version strings
    *
-   * @type {Set<string>}
    */
   versions: Set<string>
+
+  /**
+   * A copy of the post to build from
+   */
+  post: PostFragment | CommentFragment
 
   /**
    * Creates an instance of PublicationMetadataBuilder.
@@ -87,32 +90,57 @@ export abstract class PublicationMetadataBuilder<
    */
   constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
     this.versions = versions
+    this.post = post
 
-    const typeMaybe = getAttribute(post.metadata.attributes, 'type')
-    const versionMaybe = getAttribute(post.metadata.attributes, 'version')
+    const attributeMap = new Map<string, string>()
 
-    if (!typeMaybe) {
-      throw new InvalidMetadataException(`Missing post tag`)
-    }
-    if (!this.isPostTag(typeMaybe)) {
+    post.metadata.attributes.forEach((fragment) => {
+      if (fragment.traitType && fragment.value) {
+        attributeMap.set(fragment.traitType, fragment.value)
+      }
+    })
+
+    this.attributeMap = attributeMap
+
+    const type = this.getAttribute('type')
+    const version = this.getAttribute('version')
+
+    if (!this.isPostTag(type)) {
       throw new InvalidMetadataException(
-        `Post tag "${typeMaybe}" does not exist in PostTags`
+        `Post tag "${type}" does not exist in PostTags`
       )
     }
-    if (!versionMaybe) {
-      throw new InvalidMetadataException(`Missing metadata version`)
-    }
-    if (!this.isVersion(versionMaybe)) {
+    if (!this.isVersion(version)) {
       throw new InvalidMetadataException(
-        `Metadata version ${versionMaybe} does not exist in "${versions.entries()}"`
+        `Metadata version ${version} does not exist in "${versions.entries()}"`
       )
     }
 
-    this.type = typeMaybe
-    this.version = versionMaybe
+    this.type = type
+    this.version = version
     this.post_id = post.id
     this.createdAt = post.createdAt
     this.from = post.profile
+  }
+
+  /**
+   * Utility function to get an attribute from the attribute map, throwing an
+   * exception if the key does not exist
+   */
+
+  protected getAttribute(key: string) {
+    const value = this.attributeMap.get(key)
+    if (!value)
+      throw new InvalidMetadataException(`Metadata missing key ${key}`)
+    return value
+  }
+
+  /**
+   * Utility function to set an attribute in the attribute map, used when
+   * adapting metadata of old versions
+   */
+  protected setAttribute(key: string, value: string) {
+    this.attributeMap.set(key, value)
   }
 
   /**
@@ -141,29 +169,6 @@ export abstract class PublicationMetadataBuilder<
   protected abstract getValidationErrors(): InvalidMetadataException | null
 
   /**
-   * A method to validate the outputted metadata when attempting to build the data class
-   *
-   * @private
-   */
-  private _validate() {
-    if (this.type === '') {
-      return new InvalidMetadataException(`Missing post tag`)
-    }
-    if (!this.version) {
-      return new InvalidMetadataException(`missing version`)
-    }
-    if (!this.isVersion(this.version)) {
-      return new InvalidMetadataException(
-        `Metadata version "${
-          this.version
-        }" does not exist in "${this.versions.entries()}"`
-      )
-    }
-
-    return this.getValidationErrors()
-  }
-
-  /**
    * An abstract method to build the outputted metadata, after validation
    */
   protected abstract buildObject(): T
@@ -172,7 +177,7 @@ export abstract class PublicationMetadataBuilder<
    * The bethod used to build the data class
    */
   build() {
-    const exception = this._validate()
+    const exception = this.getValidationErrors()
 
     if (exception !== null) throw exception
 
@@ -199,4 +204,8 @@ export abstract class PublicationMetadataBuilder<
    * The profile that created the post, from lens
    */
   readonly from: ProfileFragment
+  /**
+   * The attributes found
+   */
+  private readonly attributeMap: Map<string, string>
 }

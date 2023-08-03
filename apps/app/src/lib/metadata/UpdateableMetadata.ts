@@ -1,6 +1,5 @@
 import { CommentFragment, PostFragment } from '@lens-protocol/client'
 
-import { getAttribute } from '../lens-protocol/getAttribute'
 import {
   PublicationMetadata,
   PublicationMetadataBuilder
@@ -21,9 +20,22 @@ export class UpdateableMetadata extends PublicationMetadata {
 export abstract class UpdateableMetadataBuilder<
   T extends UpdateableMetadata
 > extends PublicationMetadataBuilder<T> {
+  /**
+   *
+   * @param versions Metadata versions
+   * @param post The post
+   *
+   * TODO add note about old versions and id
+   */
   constructor(versions: Set<string>, post: PostFragment | CommentFragment) {
     super(versions, post)
-    this.id = getAttribute(post.metadata.attributes, 'id')
+
+    try {
+      this.id = this.getAttribute('id')
+    } catch (e) {
+      this.id = ''
+    }
   }
-  readonly id: string
+
+  id: string
 }
