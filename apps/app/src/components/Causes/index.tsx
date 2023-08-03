@@ -4,10 +4,10 @@ import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 
-import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
+import getCauseMetadata from '@/lib/metadata/get/getCauseMetadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
@@ -106,7 +106,7 @@ const Causes: NextPage = () => {
                 selectedCategory === '' || post.category === selectedCategory
             )
             .map((post) => (
-              <GridItemFour key={post.cause_id}>
+              <GridItemFour key={post.id}>
                 <CauseCard cause={post} />
               </GridItemFour>
             ))}
