@@ -1,5 +1,10 @@
 import { UpdateableMetadata } from '..'
 
+/**
+ *
+ * @param data Metadata that inherits from {@link UpdateableMetadata}
+ * @returns T[], only the most recent posts
+ */
 export const getMostRecent = <T extends UpdateableMetadata>(data: T[]) => {
   const idTimeMap: Record<string, number> = {}
 

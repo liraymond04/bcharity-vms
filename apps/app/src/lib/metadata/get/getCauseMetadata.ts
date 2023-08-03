@@ -9,7 +9,15 @@ import {
 import { getMostRecent } from './getMostRecent'
 import { logIgnoreWarning } from './logIgnoreWarning'
 
-const getCauseMetadata = (data: PublicationFragment[]) => {
+/**
+ * Extracts cause metadata from lens posts, showing only the most recent posts
+ *
+ * @param `data` post data (usually returned by the data part of the hook `usePostData()`)
+ *
+ * @returns filtered CauseMetadata[] with only the most recent posts
+ *
+ */
+export const getCauseMetadata = (data: PublicationFragment[]) => {
   const metadata: CauseMetadata[] = data
     .filter(isPost)
     .map((post) => {
@@ -24,5 +32,3 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
 
   return getMostRecent<CauseMetadata>(metadata)
 }
-
-export default getCauseMetadata

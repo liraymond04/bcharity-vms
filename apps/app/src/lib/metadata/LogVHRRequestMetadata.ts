@@ -57,6 +57,9 @@ export class LogVhrRequestMetadata extends PublicationMetadata {
   comments: string
 }
 
+/**
+ * Builder class for {@link LogVhrRequestMetadata}
+ */
 export class LogVhrRequestMetadataBuilder extends PublicationMetadataBuilder<LogVhrRequestMetadata> {
   /**
    *

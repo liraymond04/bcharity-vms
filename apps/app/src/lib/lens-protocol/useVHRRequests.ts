@@ -13,7 +13,7 @@ import {
   OpportunityMetadata,
   PostTags
 } from '../metadata'
-import getOpportunityMetadata from '../metadata/get/getOpportunityMetadata'
+import { getOpportunityMetadata } from '../metadata/get/getOpportunityMetadata'
 import lensClient from './lensClient'
 
 interface getCollectedPostIdsParams {

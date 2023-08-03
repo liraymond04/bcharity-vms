@@ -10,14 +10,14 @@ import { getMostRecent } from './getMostRecent'
 import { logIgnoreWarning } from './logIgnoreWarning'
 
 /**
- * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
+ * Extracts opportunity metadata from lens posts, showing only the most recent posts
  *
  * @param `data` post data (usually returned by the data part of the hook `usePostData()`)
  *
- * @returns filtered opportunity post metadata, showing only the most recent posts
+ * @returns filtered OpportunityMetadata[] with only the most recent posts
  *
  */
-const getOpportunityMetadata = (data: PublicationFragment[]) => {
+export const getOpportunityMetadata = (data: PublicationFragment[]) => {
   const metadata: OpportunityMetadata[] = data
     .filter(isPost)
     .map((post) => {
@@ -32,5 +32,3 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
 
   return getMostRecent<OpportunityMetadata>(metadata)
 }
-
-export default getOpportunityMetadata

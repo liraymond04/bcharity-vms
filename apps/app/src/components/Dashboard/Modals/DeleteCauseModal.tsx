@@ -7,7 +7,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import getCauseMetadata from '@/lib/metadata/get/getCauseMetadata'
+import { getCauseMetadata } from '@/lib/metadata'
 
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'

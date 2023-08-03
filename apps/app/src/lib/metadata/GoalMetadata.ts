@@ -43,7 +43,7 @@ export class GoalMetadata extends PublicationMetadata {
 }
 
 /**
- * Builder class for GoalMetadata
+ * Builder class for {@link GoalMetadata}
  */
 export class GoalMetadataBuilder extends PublicationMetadataBuilder<GoalMetadata> {
   constructor(post: PostFragment | CommentFragment) {

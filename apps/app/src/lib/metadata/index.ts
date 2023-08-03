@@ -4,6 +4,9 @@ import {
   CauseMetadataBuilder,
   CauseMetadataRecord
 } from './CauseMetadata'
+import { getCauseMetadata } from './get/getCauseMetadata'
+import { getMostRecent } from './get/getMostRecent'
+import { getOpportunityMetadata } from './get/getOpportunityMetadata'
 import {
   GoalMetadata,
   GoalMetadataBuilder,
@@ -27,12 +30,18 @@ import {
   PublicationMetadataBuilder,
   PublicationMetadataFieldNames
 } from './PublicationMetadata'
-import { UpdateableMetadata } from './UpdateableMetadata'
+import {
+  UpdateableMetadata,
+  UpdateableMetadataBuilder
+} from './UpdateableMetadata'
 
 export {
   buildMetadata,
   CauseMetadata,
   CauseMetadataBuilder,
+  getCauseMetadata,
+  getMostRecent,
+  getOpportunityMetadata,
   GoalMetadata,
   GoalMetadataBuilder,
   InvalidMetadataException,
@@ -46,7 +55,8 @@ export {
   PostTags,
   PublicationMetadata,
   PublicationMetadataBuilder,
-  UpdateableMetadata
+  UpdateableMetadata,
+  UpdateableMetadataBuilder
 }
 
 export type {

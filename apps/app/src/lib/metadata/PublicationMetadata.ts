@@ -78,7 +78,8 @@ export abstract class PublicationMetadataBuilder<
   post: PostFragment | CommentFragment
 
   /**
-   * Creates an instance of PublicationMetadataBuilder.
+   * Creates an instance of PublicationMetadataBuilder. Also builds the {@link attributeMap}
+   * so that it can be used by builders that inherit from this class with {@link getAttribute}
    *
    * @constructor
    * @param {Set<string>} versions
@@ -124,7 +125,7 @@ export abstract class PublicationMetadataBuilder<
   }
 
   /**
-   * Utility function to get an attribute from the attribute map, throwing an
+   * Utility function to get an value from the attribute map, throwing an
    * exception if the key does not exist
    */
 
@@ -164,8 +165,8 @@ export abstract class PublicationMetadataBuilder<
   }
 
   /**
-   * A virtual method called in {@link _validate()} to throw any validation errors
-   * created by classes that extend this class
+   * An abstract method called in {@link build()} to throw any final validation errors
+   * when building the metadata
    */
   protected abstract getValidationErrors(): InvalidMetadataException | null
 
@@ -206,7 +207,8 @@ export abstract class PublicationMetadataBuilder<
    */
   readonly from: ProfileFragment
   /**
-   * The attributes found
+   * The attribute map generated from the attributes array. Each `traitType` field
+   * is assigned a key with a corresponding value from the `value` field
    */
   private readonly attributeMap: Map<string, string>
 }

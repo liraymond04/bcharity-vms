@@ -77,7 +77,7 @@ export class CauseMetadata extends UpdateableMetadata {
 }
 
 /**
- * Builder class for CauseMetadata
+ * Builder class for {@link CauseMetadata}
  */
 export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadata> {
   constructor(post: PostFragment | CommentFragment) {

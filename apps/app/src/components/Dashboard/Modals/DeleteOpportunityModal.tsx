@@ -7,7 +7,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import getOpportunityMetadata from '@/lib/metadata/get/getOpportunityMetadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 
 import Error from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'

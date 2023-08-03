@@ -20,7 +20,7 @@ import lensClient from '@/lib/lens-protocol/lensClient'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { OpportunityMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
-import getOpportunityMetadata from '@/lib/metadata/get/getOpportunityMetadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 

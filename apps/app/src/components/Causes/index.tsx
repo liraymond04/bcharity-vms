@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
-import getCauseMetadata from '@/lib/metadata/get/getCauseMetadata'
+import { getCauseMetadata } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
