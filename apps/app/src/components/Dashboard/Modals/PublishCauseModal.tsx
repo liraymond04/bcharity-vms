@@ -130,7 +130,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
         contribution: formData.contribution,
         goal: formData.goal,
         recipient: formData.recipient,
-        description: formData.recipient,
+        description: formData.description,
         location: `${formData.country}-${formData.province}-${formData.city}`,
         imageUrl
       }
