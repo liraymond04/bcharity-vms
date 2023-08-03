@@ -10,9 +10,9 @@ import { getAttribute } from '../lens-protocol/getAttribute'
 import { CauseMetadataVersion } from '../types'
 
 /**
- * @type OpportunityMetadataRecord
  * The types of opportunity metadata for form
  */
+
 export type CauseMetadataRecord = Record<
   Exclude<keyof CauseMetadata, PublicationMetadataFieldNames>,
   string

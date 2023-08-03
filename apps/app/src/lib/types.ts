@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { ProfileFragment } from '@lens-protocol/client'
-import { MetadataAttributeInput } from '@lens-protocol/client'
 import { ICity, ICountry, IState } from 'country-state-city'
 
 export enum OpportunityMetadataVersion {
@@ -40,27 +39,6 @@ interface opm<T> {
    * The metadata schema version
    */
   version: T
-}
-export interface GoalMetadata extends opm<GoalMetadataVersion> {
-  /**
-   * a uuid associated with a volunteer opporunity
-   */
-
-  /**
-   * the opportunity nam e
-   */
-  goal: string
-  /**
-   * opportunity start date in YYYY-MM-DD format
-   */
-
-  /**
-   * opportunity end date in YYYY-MM-DD format
-   */
-  goalDate: string
-}
-export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
-  traitType: keyof GoalMetadata | 'type'
 }
 
 export enum MetadataDisplayType {
