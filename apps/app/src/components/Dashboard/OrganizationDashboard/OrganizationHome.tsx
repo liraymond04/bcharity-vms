@@ -1,13 +1,12 @@
+import { LocationMarkerIcon } from '@heroicons/react/outline'
 import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
 import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
-import Slug from '@/components/Shared/Slug'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -148,21 +147,11 @@ const OrganizationHome: React.FC = () => {
                         {currentUser?.handle}
                       </p>
                       {getSlug() !== '' && (
-                        <div className="flex flex-row">
-                          <div></div>
-                          <Link href="">
-                            <div className="truncate">
-                              <img
-                                src="/location-marker.png "
-                                className="w-8 h-8"
-                                alt="location-marker"
-                              ></img>
-                            </div>
-                          </Link>
-                          <Slug
-                            className=" font-semibold text-lg mt-2"
-                            slug={getSlug()}
-                          />
+                        <div className="flex flex-row space-x-2">
+                          <LocationMarkerIcon className="h-6 w-6" />
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-xl sm:text-xl">
+                            {getSlug()}
+                          </span>
                         </div>
                       )}
                     </div>
