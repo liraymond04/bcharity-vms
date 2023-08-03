@@ -69,6 +69,25 @@ export interface GoalMetadata extends OrgPublishMetadata<GoalMetadataVersion> {
 export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof GoalMetadata | 'type'
 }
+export interface VHRGoalMetadata
+  extends OrgPublishMetadata<GoalMetadataVersion> {
+  /**
+   * new vhr goal value set
+   */
+  goal: string
+
+  /**
+   * date in YYYY-MM-DD format for when goal was set
+   */
+  goalDate: string
+}
+
+/**
+ * Interface for a new vhr goal for organizations
+ */
+export interface VHRGoalMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof VHRGoalMetadata | 'type'
+}
 export interface OpportunityMetadata
   extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
@@ -187,7 +206,15 @@ enum OrgPublish {
    */
   Cause = 'ORG_PUBLISH_CAUSE',
 
-  Goal = 'ORG_PUBLISH_Goal'
+  /**
+   * Tag to use for an organization setting a cause goal
+   */
+  Goal = 'ORG_PUBLISH_Goal',
+
+  /**
+   * Tag to use for an organization setting a vhr goal
+   */
+  VHRGoal = 'ORG_PUBLISH_VHRGoal'
 }
 
 enum Bookmark {
