@@ -29,7 +29,6 @@ export class CauseMetadata extends UpdateableMetadata {
    */
   constructor(builder: CauseMetadataBuilder) {
     super(builder)
-    this.cause_id = builder.cause_id
     this.name = builder.name
     this.category = builder.category
     this.currency = builder.currency
@@ -40,10 +39,6 @@ export class CauseMetadata extends UpdateableMetadata {
     this.imageUrl = builder.imageUrl
     this.location = builder.location
   }
-  /**
-   * A uuid associated with this cause
-   */
-  cause_id: string
   /**
    * The cause name
    */
@@ -89,16 +84,15 @@ export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadat
   constructor(post: PostFragment | CommentFragment) {
     super(new Set(CauseMetadata.MetdataVersions), post)
 
-    this._cause_id = getAttribute(post.metadata.attributes, 'cause_id')
-    this._name = getAttribute(post.metadata.attributes, 'name')
-    this._category = getAttribute(post.metadata.attributes, 'category')
-    this._currency = getAttribute(post.metadata.attributes, 'currency')
-    this._contribution = getAttribute(post.metadata.attributes, 'contribution')
-    this._goal = getAttribute(post.metadata.attributes, 'goal')
-    this._recipient = getAttribute(post.metadata.attributes, 'recipient')
-    this._description = getAttribute(post.metadata.attributes, 'description')
-    this._location = getAttribute(post.metadata.attributes, 'location')
-    this._imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
+    this.name = getAttribute(post.metadata.attributes, 'name')
+    this.category = getAttribute(post.metadata.attributes, 'category')
+    this.currency = getAttribute(post.metadata.attributes, 'currency')
+    this.contribution = getAttribute(post.metadata.attributes, 'contribution')
+    this.goal = getAttribute(post.metadata.attributes, 'goal')
+    this.recipient = getAttribute(post.metadata.attributes, 'recipient')
+    this.description = getAttribute(post.metadata.attributes, 'description')
+    this.location = getAttribute(post.metadata.attributes, 'location')
+    this.imageUrl = getAttribute(post.metadata.attributes, 'imageUrl')
   }
 
   buildObject(): CauseMetadata {
@@ -109,45 +103,13 @@ export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadat
     return null
   }
 
-  private _cause_id: string = ''
-  private _name: string = ''
-  private _category: string = ''
-  private _currency: string = ''
-  private _contribution: string = ''
-  private _goal: string = ''
-  private _recipient: string = ''
-  private _description: string = ''
-  private _imageUrl: string = ''
-  private _location: string = ''
-
-  get cause_id() {
-    return this._cause_id
-  }
-  get name() {
-    return this._name
-  }
-  get category() {
-    return this._category
-  }
-  get currency() {
-    return this._currency
-  }
-  get contribution() {
-    return this._contribution
-  }
-  get goal() {
-    return this._goal
-  }
-  get recipient() {
-    return this._recipient
-  }
-  get description() {
-    return this._description
-  }
-  get location() {
-    return this._location
-  }
-  get imageUrl() {
-    return this._imageUrl
-  }
+  readonly name: string = ''
+  readonly category: string = ''
+  readonly currency: string = ''
+  readonly contribution: string = ''
+  readonly goal: string = ''
+  readonly recipient: string = ''
+  readonly description: string = ''
+  readonly imageUrl: string = ''
+  readonly location: string = ''
 }

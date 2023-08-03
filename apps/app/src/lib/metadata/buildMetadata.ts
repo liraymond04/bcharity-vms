@@ -30,7 +30,7 @@ import getUserLocale from '../getUserLocale'
  *   {
  *     version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
  *     type: PostTags.OrgPublish.Opportunity,
- *     opportunity_id: v4(),
+ *     id: v4(),
  *     ...formData,
  *     imageUrl
  *   }

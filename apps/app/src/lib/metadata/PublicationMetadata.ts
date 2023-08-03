@@ -18,7 +18,7 @@ import { PostTags } from './PostTags'
 export type PublicationMetadataFieldNames =
   // | 'version'
   // | 'type'
-  'metadata_id' | 'createdAt' | 'from'
+  'post_id' | 'createdAt' | 'from'
 
 /**
  * A base class for publication metadata
