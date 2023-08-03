@@ -30,5 +30,6 @@ export const getCauseMetadata = (data: PublicationFragment[]) => {
     })
     .filter((o): o is CauseMetadata => o !== null)
 
+  console.log(metadata)
   return getMostRecent<CauseMetadata>(metadata)
 }

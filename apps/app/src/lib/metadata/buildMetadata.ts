@@ -76,6 +76,8 @@ const buildMetadata = <T extends Record<string, string>>(
     appId: APP_NAME
   }
 
+  console.log('built metadata', metadata)
+
   return metadata
 }
 
