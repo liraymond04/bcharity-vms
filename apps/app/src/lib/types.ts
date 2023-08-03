@@ -69,6 +69,35 @@ export interface GoalMetadata extends OrgPublishMetadata<GoalMetadataVersion> {
 export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof GoalMetadata | 'type'
 }
+export interface VHRGoalMetadata
+  extends OrgPublishMetadata<GoalMetadataVersion> {
+  /**
+   * a uuid associated with a volunteer opporunity
+   */
+
+  /**
+   * the opportunity nam e
+   */
+  goal: string
+  /**
+   * opportunity start date in YYYY-MM-DD format
+   */
+
+  /**
+   * opportunity end date in YYYY-MM-DD format
+   */
+  goalDate: string
+  /**
+
+}
+
+/**
+ * Interface for a metadata field used when publishing a opportunity
+ */
+}
+export interface VHRGoalMetadataAttributeInput extends MetadataAttributeInput {
+  traitType: keyof VHRGoalMetadata | 'type'
+}
 export interface OpportunityMetadata
   extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
@@ -187,7 +216,8 @@ enum OrgPublish {
    */
   Cause = 'ORG_PUBLISH_CAUSE',
 
-  Goal = 'ORG_PUBLISH_Goal'
+  Goal = 'ORG_PUBLISH_Goal',
+  VHRGoal = 'ORG_PUBLISH_VHRGoal'
 }
 
 enum Bookmark {
