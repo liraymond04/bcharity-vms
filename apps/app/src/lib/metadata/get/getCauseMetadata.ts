@@ -1,4 +1,4 @@
-import { PostFragment, PublicationFragment } from '@lens-protocol/client'
+import { PublicationFragment } from '@lens-protocol/client'
 
 import {
   CauseMetadata,
@@ -7,6 +7,7 @@ import {
   isPost
 } from '..'
 import { getMostRecent } from './getMostRecent'
+import { logIgnoreWarning } from './logIgnoreWarning'
 
 const getCauseMetadata = (data: PublicationFragment[]) => {
   const metadata: CauseMetadata[] = data
@@ -15,11 +16,7 @@ const getCauseMetadata = (data: PublicationFragment[]) => {
       try {
         return new CauseMetadataBuilder(post).build()
       } catch (e) {
-        console.debug(
-          'warning: ignored metadata from post %o due to error %o',
-          (post as PostFragment).metadata,
-          (e as unknown as InvalidMetadataException).message
-        )
+        logIgnoreWarning(post, e as InvalidMetadataException)
         return null
       }
     })

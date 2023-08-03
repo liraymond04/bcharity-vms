@@ -95,7 +95,7 @@ export abstract class PublicationMetadataBuilder<
     const attributeMap = new Map<string, string>()
 
     post.metadata.attributes.forEach((fragment) => {
-      if (fragment.traitType && fragment.value) {
+      if (fragment.traitType !== null && fragment.value !== null) {
         attributeMap.set(fragment.traitType, fragment.value)
       }
     })
@@ -130,8 +130,9 @@ export abstract class PublicationMetadataBuilder<
 
   protected getAttribute(key: string) {
     const value = this.attributeMap.get(key)
-    if (!value)
-      throw new InvalidMetadataException(`Metadata missing key ${key}`)
+    if (value === undefined) {
+      throw new InvalidMetadataException(`Metadata missing key "${key}"`)
+    }
     return value
   }
 

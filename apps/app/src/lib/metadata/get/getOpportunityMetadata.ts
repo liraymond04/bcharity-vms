@@ -7,6 +7,7 @@ import {
   OpportunityMetadataBuilder
 } from '..'
 import { getMostRecent } from './getMostRecent'
+import { logIgnoreWarning } from './logIgnoreWarning'
 
 /**
  * @brief Extracts opportunity metadata from lens posts, showing only the most recent posts
@@ -23,11 +24,7 @@ const getOpportunityMetadata = (data: PublicationFragment[]) => {
       try {
         return new OpportunityMetadataBuilder(post).build()
       } catch (e) {
-        console.debug(
-          'warning: ignored metadata from post %o due to error %o',
-          post.metadata,
-          (e as unknown as InvalidMetadataException).message
-        )
+        logIgnoreWarning(post, e as InvalidMetadataException)
         return null
       }
     })
