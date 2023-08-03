@@ -71,7 +71,6 @@ export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
 }
 export interface VHRGoalMetadata
   extends OrgPublishMetadata<GoalMetadataVersion> {
-
   /**
    * new vhr goal value set
    */
@@ -86,11 +85,9 @@ export interface VHRGoalMetadata
 /**
  * Interface for a new vhr goal for organizations
  */
-}
 export interface VHRGoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof VHRGoalMetadata | 'type'
 }
-
 export interface OpportunityMetadata
   extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
