@@ -61,8 +61,12 @@ const buildMetadata = <T extends Record<string, string>>(
   let _content = ''
   let _name = ''
 
-  _content.concat(...tags.map((t) => `#${t} `)).trim()
-  _name.concat(...tags.map((t) => `${t} `), `by ${publisher.handle}`)
+  tags.forEach((t) => {
+    _content = _content + `#${t} `
+    _name = _name + `${t} `
+  })
+
+  _name.concat(`by ${publisher.handle}`)
 
   const metadata: PublicationMetadataV2Input = {
     version: '2.0.0',
@@ -76,7 +80,7 @@ const buildMetadata = <T extends Record<string, string>>(
     appId: APP_NAME
   }
 
-  console.log('built metadata', metadata)
+  // console.log('built metadata', metadata)
 
   return metadata
 }

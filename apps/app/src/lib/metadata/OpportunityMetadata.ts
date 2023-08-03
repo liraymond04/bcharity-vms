@@ -80,7 +80,7 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
     super(new Set(OpportunityMetadata.MetdataVersions), post)
 
     if (this.version === OpportunityMetadataVersion['1.0.0']) {
-      this.id = this.getAttribute('opportunity_id')
+      super.id = this.getAttribute('opportunity_id')
       this.name = this.getAttribute('name')
       this.startDate = this.getAttribute('startDate')
       this.endDate = ''
@@ -106,7 +106,7 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
   }
 
   getValidationErrors() {
-    return null
+    return super.getValidationErrors()
   }
 
   readonly name: string = ''

@@ -112,7 +112,7 @@ export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadat
   }
 
   getValidationErrors() {
-    return null
+    return super.getValidationErrors()
   }
 
   readonly name: string = ''
@@ -124,5 +124,4 @@ export class CauseMetadataBuilder extends UpdateableMetadataBuilder<CauseMetadat
   readonly description: string = ''
   readonly imageUrl: string = ''
   readonly location: string = ''
-  readonly id: string = ''
 }

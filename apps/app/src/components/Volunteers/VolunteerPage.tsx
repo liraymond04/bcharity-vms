@@ -87,7 +87,7 @@ const VolunteerPage: NextPage = () => {
   const getDateString = (o: OpportunityMetadata) => {
     const ongoing = !o.endDate
 
-    if (ongoing) {
+    if (!ongoing) {
       return `${o.startDate} to ${o.endDate}`
     } else {
       return `${o.startDate} - Ongoing`

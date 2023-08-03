@@ -38,8 +38,6 @@ const Causes: NextPage = () => {
     true
   )
 
-  // const posts = useMemo(() => getCauseMetadata(data), [data])
-
   useEffect(() => {
     let _posts: CauseMetadata[] = []
     let _categories: Set<string> = new Set()

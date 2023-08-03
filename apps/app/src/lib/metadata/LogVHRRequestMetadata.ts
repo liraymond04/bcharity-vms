@@ -79,11 +79,11 @@ export class LogVhrRequestMetadataBuilder extends PublicationMetadataBuilder<Log
     if (this.version === LogVhrRequestMetadataVersions['1.0.0']) {
       this.hoursToVerify = this.getAttribute('hoursToVerify')
       this.comments = this.getAttribute('comments')
+    } else {
+      throw new InvalidMetadataException(
+        `Version "${this.version}" is not a valid version`
+      )
     }
-
-    throw new InvalidMetadataException(
-      `Version ${this.version} is not a valid version`
-    )
   }
 
   buildObject(): LogVhrRequestMetadata {

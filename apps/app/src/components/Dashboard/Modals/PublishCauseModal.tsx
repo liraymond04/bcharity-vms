@@ -119,10 +119,10 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     const metadata = buildMetadata<CauseMetadataRecord>(
       publisher,
-      [PostTags.OrgPublish.Opportunity],
+      [PostTags.OrgPublish.Cause],
       {
         version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Opportunity,
+        type: PostTags.OrgPublish.Cause,
         id: v4(),
         name: formData.name,
         category: formData.category,
