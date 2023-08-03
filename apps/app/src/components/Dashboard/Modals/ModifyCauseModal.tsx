@@ -96,7 +96,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       {
         version: MetadataVersion.CauseMetadataVersion['1.0.0'],
         type: PostTags.OrgPublish.Opportunity,
-        cause_id: id,
+        id,
         name: formData.name,
         category: formData.category,
         currency: formData.currency,

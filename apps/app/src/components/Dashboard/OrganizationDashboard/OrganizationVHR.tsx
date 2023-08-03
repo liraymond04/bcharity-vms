@@ -125,7 +125,7 @@ const OrganizationVHRTab: React.FC = () => {
   }, [data])
 
   const getFormDefaults = (id: string): IPublishOpportunityFormProps => {
-    const d = postMetadata.find((val) => val?.opportunity_id === id)
+    const d = postMetadata.find((val) => val?.id === id)
 
     return d
       ? {

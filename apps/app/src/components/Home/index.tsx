@@ -121,7 +121,7 @@ const Home: NextPage = () => {
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {posts.map((post) => (
-                    <div key={post.opportunity_id} className="my-2 mx-6">
+                    <div key={post.id} className="my-2 mx-6">
                       <VolunteerCard post={post} />
                     </div>
                   ))}

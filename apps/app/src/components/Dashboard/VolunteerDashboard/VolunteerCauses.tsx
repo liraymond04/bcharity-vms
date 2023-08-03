@@ -7,10 +7,10 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
-import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
+import getCauseMetadata from '@/lib/metadata/get/getCauseMetadata'
 import testSearch from '@/lib/search'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
@@ -181,7 +181,7 @@ const VolunteerCauses: React.FC = () => {
               )
               .map((op, i) => (
                 <BrowseCauseCard
-                  key={op.cause_id}
+                  key={op.id}
                   imageSrc={op.imageUrl}
                   avatarSrc={getAvatar(op.from)}
                   name={op.name}

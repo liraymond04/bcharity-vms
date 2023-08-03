@@ -6,8 +6,8 @@ import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import getCauseMetadata from '@/lib/metadata/get/getCauseMetadata'
 
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
@@ -35,7 +35,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ids = getCauseMetadata(postData).map((p) => p.metadata_id)
+    const ids = getCauseMetadata(postData).map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])

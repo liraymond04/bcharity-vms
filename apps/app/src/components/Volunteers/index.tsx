@@ -112,7 +112,7 @@ const Volunteers: NextPage = () => {
                 selectedCategory === '' || post.category === selectedCategory
             )
             .map((post, idx, arr) => (
-              <GridItemFour key={post.opportunity_id}>
+              <GridItemFour key={post.id}>
                 <span ref={idx === arr.length - 1 ? observe : null}>
                   <VolunteerCard post={post} />
                 </span>
