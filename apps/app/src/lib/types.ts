@@ -209,7 +209,14 @@ enum OrgPublish {
    */
   Cause = 'ORG_PUBLISH_CAUSE',
 
+  /**
+   * Tag to use for an organization setting a cause goal
+   */
   Goal = 'ORG_PUBLISH_Goal',
+
+  /**
+   * Tag to use for an organization setting a vhr goal
+   */
   VHRGoal = 'ORG_PUBLISH_VHRGoal'
 }
 
