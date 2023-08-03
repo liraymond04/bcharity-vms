@@ -1,5 +1,10 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { PublicationSortCriteria } from '@lens-protocol/client'
+import {
+  PublicationFragment,
+  PublicationSortCriteria,
+  PublicationsQueryRequest,
+  PublicationTypes
+} from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -9,24 +14,52 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import usePostData from '@/lib/lens-protocol/usePostData'
 import testSearch from '@/lib/search'
 import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
+import VHRGoalModal from '../Modals/VHRGoalModal'
 import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
+  const { currentUser: profile } = useAppPersistStore()
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
+  const [GoalModalOpen, setGoalModalOpen] = useState(false)
+  const { data, error, refetch } = usePostData({
+    profileId: profile?.id,
+    metadata: {
+      tags: { all: [PostTags.OrgPublish.Opportunity] }
+    }
+  })
+  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
 
+  const onPublishClose = (shouldRefetch: boolean) => {
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+
+  const onGoalClose = (shouldRefetch: boolean) => {
+    setGoalModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+  const onGoalOpen = () => {
+    setGoalModalOpen(true)
+  }
   const {
     data: postData,
     error: postDataError,
@@ -56,7 +89,19 @@ const VolunteerVHRTab: React.FC = () => {
     setCategories(_categories)
     setPosts(_posts)
   }, [postData])
+  useEffect(() => {
+    const param: PublicationsQueryRequest = {
+      metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+      profileId: profile!.id,
+      publicationTypes: [PublicationTypes.Post]
+    }
 
+    lensClient()
+      .publication.fetchAll(param)
+      .then((data) => {
+        setpostdata(data.items)
+      })
+  }, [profile])
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -71,15 +116,16 @@ const VolunteerVHRTab: React.FC = () => {
                     VHR Amount:
                   </div>
                   <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
-                    {Number(balanceData?.value)} / {vhrGoal}
+                    {postdata[0]?.__typename === 'Post'
+                      ? postdata[0]?.metadata.attributes[0]?.value
+                      : ' '}
+                    / {vhrGoal}
                   </div>
                 </div>
                 <Link
                   href=""
-                  className="text-brand-500 hover:text-brand-600"
-                  onClick={() => {
-                    console.log('Set a goal')
-                  }}
+                  className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
+                  onClick={onGoalOpen}
                 >
                   Set a goal
                 </Link>
@@ -88,15 +134,6 @@ const VolunteerVHRTab: React.FC = () => {
                   total={vhrGoal}
                   className="mt-10 mb-10"
                 />
-                {Number(balanceData?.value) < vhrGoal ? (
-                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2x l">
-                    {vhrGoal - Number(balanceData?.value)} away from goal!
-                  </div>
-                ) : (
-                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2xl">
-                    Reached goal!
-                  </div>
-                )}
               </>
             )}
           </div>
@@ -165,6 +202,11 @@ const VolunteerVHRTab: React.FC = () => {
           ) : (
             <Spinner />
           )}
+          <VHRGoalModal
+            open={GoalModalOpen}
+            onClose={onGoalClose}
+            publisher={profile}
+          />
         </div>
       </GridItemTwelve>
     </GridLayout>
