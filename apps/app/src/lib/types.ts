@@ -71,33 +71,26 @@ export interface GoalMetadataAttributeInput extends MetadataAttributeInput {
 }
 export interface VHRGoalMetadata
   extends OrgPublishMetadata<GoalMetadataVersion> {
-  /**
-   * a uuid associated with a volunteer opporunity
-   */
 
   /**
-   * the opportunity nam e
+   * new vhr goal value set
    */
   goal: string
-  /**
-   * opportunity start date in YYYY-MM-DD format
-   */
 
   /**
-   * opportunity end date in YYYY-MM-DD format
+   * date in YYYY-MM-DD format for when goal was set
    */
   goalDate: string
-  /**
-
 }
 
 /**
- * Interface for a metadata field used when publishing a opportunity
+ * Interface for a new vhr goal for organizations
  */
 }
 export interface VHRGoalMetadataAttributeInput extends MetadataAttributeInput {
   traitType: keyof VHRGoalMetadata | 'type'
 }
+
 export interface OpportunityMetadata
   extends OrgPublishMetadata<OpportunityMetadataVersion> {
   /**
