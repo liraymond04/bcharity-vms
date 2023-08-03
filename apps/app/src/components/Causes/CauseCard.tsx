@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
+import { CURRENCIES } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { formatLocation } from '@/lib/lens-protocol/formatLocation'
-import { CauseMetadata } from '@/lib/types'
+import lensClient from '@/lib/lens-protocol/lensClient'
+import { CauseMetadata, PostTags } from '@/lib/types'
 
 import Progress from '../Shared/Progress'
 import { Card } from '../UI/Card'
@@ -49,6 +52,63 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
     }
   }
 
+  const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
+    useState<boolean>(false)
+  const [totalDonated, setTotalDonated] = useState<number>(0)
+  const getTotalDonated = async () => {
+    setTotalDonatedIsLoading(true)
+    try {
+      let total = 0
+
+      const publication = await lensClient().publication.fetch({
+        publicationId: id
+      })
+
+      if (publication?.__typename !== 'Post')
+        throw Error('Incorrect publication type!')
+      if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
+        throw Error('Incorrect collect module!')
+
+      total +=
+        publication.stats.totalAmountOfCollects *
+        parseFloat(publication.collectModule.amount.value)
+
+      // get comment totals
+      const comments = await lensClient().publication.fetchAll({
+        commentsOf: id,
+        metadata: {
+          tags: {
+            all: [PostTags.Donate.SetAmount]
+          }
+        }
+      })
+
+      comments.items
+        .filter((comment) => !comment.hidden)
+        .forEach((comment) => {
+          if (
+            comment.__typename === 'Comment' &&
+            comment.collectModule.__typename === 'FeeCollectModuleSettings'
+          )
+            total +=
+              comment.stats.totalAmountOfCollects *
+              parseFloat(comment.collectModule.amount.value)
+        })
+
+      setTotalDonated(total)
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
+    } finally {
+      setTotalDonatedIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getTotalDonated()
+  }, [totalDonated])
+
   return (
     <div
       onClick={() => {
@@ -65,11 +125,24 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
           </p>
           <p className="text-lg font-semibold leading-7">{cause.name}</p>
           <p className="text-lg grow overflow-auto">{cause.description}</p>
-          <div className="mt-auto">
-            <p className="text-zinc-500 text-xs">Last donation X minutes ago</p>
-            <Progress progress={10000} total={10000} />
-            <p className="text-sm font-bold">$10000 raised out of $10000</p>
-          </div>
+          {totalDonatedIsLoading ? (
+            <Spinner />
+          ) : (
+            <div className="mt-auto">
+              {/* <p className="text-zinc-500 text-xs"> */}
+              {/*   Last donation X minutes ago */}
+              {/* </p> */}
+              <Progress
+                progress={totalDonated}
+                total={parseFloat(cause.goal)}
+              />
+              <p className="text-sm font-bold line-clamp-2">
+                {totalDonated}{' '}
+                {CURRENCIES[cause.currency as keyof typeof CURRENCIES].symbol}{' '}
+                raised out of {cause.goal}
+              </p>
+            </div>
+          )}
         </div>
       </Card>
     </div>

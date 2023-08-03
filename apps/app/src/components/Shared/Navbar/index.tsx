@@ -73,7 +73,7 @@ const Navbar: FC = () => {
   }, [currentUser, isAuthenticated])
 
   return (
-    <div className="sticky z-20 top-0 flex justify-between bg-white dark:bg-NavBar bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
+    <div className="sticky z-20 top-0 flex justify-between bg-white dark:bg-indigo-950 bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
       <div className="flex items-center">
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
@@ -172,7 +172,9 @@ const Navbar: FC = () => {
                   >
                     <div
                       className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
-                        pathname == '/vhrs' ? 'text-purple-600' : 'text-black'
+                        pathname == '/vhrs'
+                          ? 'text-purple-600'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
                       VHRs
@@ -258,10 +260,10 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/vhrs'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
                   VHRs

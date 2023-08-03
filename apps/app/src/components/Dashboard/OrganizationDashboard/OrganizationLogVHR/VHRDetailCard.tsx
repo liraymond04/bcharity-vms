@@ -10,12 +10,12 @@ interface IVHRDetailCardProps {
 
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
   return (
-    <div className="flex h-72 bg-brand-200 shadow-md shadow-black px-4 py-3 rounded-md mt-8">
+    <div className="flex h-72 bg-brand-200 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-8">
       <div className="flex flex-col grow shrink-0">
         <Link href="">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
-            <p className="text-black font-semibold text-lg">
+            <p className="text-black dark:text-teal-100 font-semibold text-lg">
               {value.from.handle}
             </p>
           </div>
@@ -24,7 +24,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
         <Link href="">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
-            <p className="text-black font-semibold text-lg">
+            <p className="text-black dark:text-teal-100 font-semibold text-lg">
               {value.opportunity.name}
             </p>
           </div>

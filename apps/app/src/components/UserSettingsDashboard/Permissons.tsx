@@ -141,19 +141,19 @@ const Permissons: React.FC = () => {
         <Card>
           <div className="p-3">
             <div className=" rounded-xl border-amber-950 border-width:3">
-              <div className="text-s font-bold text-black sm:text-s p-2">
+              <div className="text-s font-bold text-black dark:text-white sm:text-s p-2">
                 Allow/Remove modules
               </div>
-              <div className="text-m font-normal text-black p-2">
+              <div className="text-m font-normal text-black dark:text-white p-2">
                 In order to use the collect feature you need to allow the
                 corresponding modules. You can allow and revoke permissions for
                 modules at any time.
               </div>
-              <div className="text-m font-normal text-black p-2">
+              <div className="text-m font-normal text-black dark:text-white p-2">
                 Select Currency:
               </div>
               <select
-                className="ml-2 bg-white rounded-xl border border-gray-300 outline-none dark:bg-gray-800 disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
+                className="ml-2 bg-white rounded-xl border border-gray-300 outline-none dark:bg-Input disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
                 onChange={async (e) => {
                   getResults(e.target.value)
                     .then((res) => {
@@ -190,9 +190,9 @@ const Permissons: React.FC = () => {
                   return (
                     <div className="mb-3" key={index}>
                       <Card>
-                        <div className="bg-white rounded-xl flex justify-end p-2 items-center">
+                        <div className="bg-white dark:bg-Input rounded-xl flex justify-end p-2 items-center">
                           <div className="px-2 pt-2 pb-1">
-                            <div className="flex text-s font-normal text-black">
+                            <div className="flex text-s font-normal text-black dark:text-white">
                               <div className="mr-1">{data.module}</div>
                               <HelpTooltip content="The Fee Collect Module all p-1ows for any follower to collect the associated publication provided they pay a fee set by the poster." />
                             </div>

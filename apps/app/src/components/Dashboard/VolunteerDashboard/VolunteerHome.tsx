@@ -139,7 +139,7 @@ const VolunteerHome: React.FC = () => {
                     </div>
 
                     <div className="h-[60vh]">
-                      <div className="overflow-y-scroll w-full mt-20 h-full border border-gray-400 dark:border-black rounded-md">
+                      <div className="overflow-y-scroll w-full mt-20 h-full border border-sky-200 dark:border-black rounded-md bg-teal-50 dark:bg-Within dark:opacity-10">
                         <div className="w-full">
                           {postdata.map((post, index) => {
                             if (post.__typename === 'Post')

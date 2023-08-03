@@ -117,6 +117,30 @@ export const DEFAULT_COLLECT_TOKEN = IS_MAINNET
   ? '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   : '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
 
+// Whitelisted currencies
+export const CURRENCIES = {
+  '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889': {
+    symbol: 'WMATIC',
+    name: 'Wrapped Matic'
+  },
+  '0x3C68CE8504087f89c640D02d133646d98e64ddd9': {
+    symbol: 'WETH',
+    name: 'WETH'
+  },
+  '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e': {
+    symbol: 'USDC',
+    name: 'USDC'
+  },
+  '0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F': {
+    symbol: 'DAI',
+    name: 'DAI'
+  },
+  '0x7beCBA11618Ca63Ead5605DE235f6dD3b25c530E': {
+    symbol: 'NCT',
+    name: 'Toucan Protocol: Nature Carbon Tonne'
+  }
+}
+
 //VHR and GOOD Conversion
 export const VHR_TOKEN = '0x28EE241ab245699968F2980D3D1b1d23120ab8BE'
 export const GOOD_TOKEN = '0xd21932b453f0dC0918384442D7AaD5B033C4217B'

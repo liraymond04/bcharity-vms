@@ -239,6 +239,13 @@ enum VhrRequest {
   Reject = 'VHR_REJECT_REQUEST'
 }
 
+enum Donate {
+  /**
+   * Tags related to making donations
+   */
+  SetAmount = 'DONATE_SET_AMOUNT'
+}
+
 export type OpportunityMetadataRecord = Record<
   keyof OpportunityMetadata | 'type',
   string
@@ -256,7 +263,11 @@ export const PostTags = {
   /**
    * Collection of tags for making VHR requests
    */
-  VhrRequest
+  VhrRequest,
+  /**
+   * Collection of tags for making donations
+   */
+  Donate
 }
 
 export enum MetadataDisplayType {
