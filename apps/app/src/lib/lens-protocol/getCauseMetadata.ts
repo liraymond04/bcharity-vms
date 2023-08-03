@@ -1,27 +1,18 @@
-import {
-  PostFragment,
-  PublicationFragment,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { PostFragment, PublicationFragment } from '@lens-protocol/client'
 
 import {
   CauseMetadata,
   CauseMetadataBuilder,
-  filterMetadata,
   InvalidMetadataException,
-  MetadataFilterOptions
+  isPost
 } from '../metadata'
 
-const getCauseMetadata = (data: PublicationFragment[], showHidden = false) => {
-  const filterOptions: MetadataFilterOptions = {
-    publicationType: PublicationTypes.Post,
-    showHidden
-  }
-
-  const allMetadata: CauseMetadata[] = filterMetadata(data, filterOptions)
+const getCauseMetadata = (data: PublicationFragment[]) => {
+  const allMetadata: CauseMetadata[] = data
+    .filter(isPost)
     .map((post) => {
       try {
-        return new CauseMetadataBuilder(post as PostFragment).build()
+        return new CauseMetadataBuilder(post).build()
       } catch (e) {
         console.debug(
           'warning: ignored metadata from post %o due to error %o',

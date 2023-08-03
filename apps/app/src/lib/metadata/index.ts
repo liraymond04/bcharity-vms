@@ -4,7 +4,7 @@ import {
   CauseMetadataBuilder,
   CauseMetadataRecord
 } from './CauseMetadata'
-import filterMetadata, { MetadataFilterOptions } from './filterMetadata'
+import { isComment, isMirror, isPost } from './filterMetadata'
 import { InvalidMetadataException } from './InvalidMetadataException'
 import {
   LogVhrRequestMetadata,
@@ -27,8 +27,10 @@ export {
   buildMetadata,
   CauseMetadata,
   CauseMetadataBuilder,
-  filterMetadata,
   InvalidMetadataException,
+  isComment,
+  isMirror,
+  isPost,
   LogVhrRequestMetadata,
   LogVhrRequestMetadataBuilder,
   OpportunityMetadata,
@@ -41,7 +43,6 @@ export {
 export type {
   CauseMetadataRecord,
   LogVhrRequestMetadataRecord,
-  MetadataFilterOptions,
   OpportunityMetadataRecord,
   PublicationMetadataFieldNames
 }

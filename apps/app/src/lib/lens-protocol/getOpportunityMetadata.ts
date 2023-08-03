@@ -1,13 +1,8 @@
-import {
-  PostFragment,
-  PublicationFragment,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { PublicationFragment } from '@lens-protocol/client'
 
 import {
-  filterMetadata,
   InvalidMetadataException,
-  MetadataFilterOptions,
+  isPost,
   OpportunityMetadata,
   OpportunityMetadataBuilder
 } from '../metadata'
@@ -21,23 +16,16 @@ import {
  * @returns filtered opportunity post metadata, showing only the most recent posts
  *
  */
-const getOpportunityMetadata = (
-  data: PublicationFragment[],
-  showHidden = false
-) => {
-  const filterOptions: MetadataFilterOptions = {
-    publicationType: PublicationTypes.Post,
-    showHidden
-  }
-
-  const allMetadata: OpportunityMetadata[] = filterMetadata(data, filterOptions)
+const getOpportunityMetadata = (data: PublicationFragment[]) => {
+  const allMetadata: OpportunityMetadata[] = data
+    .filter(isPost)
     .map((post) => {
       try {
-        return new OpportunityMetadataBuilder(post as PostFragment).build()
+        return new OpportunityMetadataBuilder(post).build()
       } catch (e) {
         console.debug(
           'warning: ignored metadata from post %o due to error %o',
-          (post as PostFragment).metadata,
+          post.metadata,
           (e as unknown as InvalidMetadataException).message
         )
         return null

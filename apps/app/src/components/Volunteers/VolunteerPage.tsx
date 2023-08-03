@@ -1,5 +1,4 @@
 import { ExternalLinkIcon, HomeIcon } from '@heroicons/react/outline'
-import { PostFragment } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -10,6 +9,7 @@ import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
   InvalidMetadataException,
+  isPost,
   OpportunityMetadata,
   OpportunityMetadataBuilder
 } from '@/lib/metadata'
@@ -36,16 +36,21 @@ const VolunteerPage: NextPage = () => {
   const { data, loading, fetch, error } = usePublication()
 
   const [opoprtunityError, setOpportunityError] = useState(false)
+  const [wrongPostType, setWrongPostType] = useState(false)
 
   const opportunity = useMemo(() => {
     if (!data) return
+    if (!isPost(data)) {
+      setWrongPostType(true)
+      return
+    }
+
     try {
-      return new OpportunityMetadataBuilder(data as PostFragment).build()
+      return new OpportunityMetadataBuilder(data).build()
     } catch (e) {
       if (e instanceof InvalidMetadataException) {
         setOpportunityError(true)
       }
-      return
     }
   }, [data])
 
@@ -103,7 +108,7 @@ const VolunteerPage: NextPage = () => {
 
     if (!opportunity) return <Spinner />
 
-    return opoprtunityError ? (
+    return wrongPostType || opoprtunityError ? (
       <WrongPost />
     ) : (
       <div className="p-6">
