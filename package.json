@@ -55,6 +55,7 @@
     "js-cookie": "^3.0.5",
     "jssoup": "^0.0.15",
     "next-themes": "^0.2.1",
+    "node-fetch": "^3.3.2",
     "react-cool-inview": "^3.0.1",
     "react-hook-form": "^7.45.1",
     "react-hot-toast": "^2.4.1",

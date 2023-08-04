@@ -60,6 +60,7 @@ export const API_URL = IS_MAINNET
 export const POLYGONSCAN_URL = IS_MAINNET
   ? 'https://polygonscan.com'
   : 'https://mumbai.polygonscan.com'
+export const CORS_PROXY = 'https://corsproxy.io/?'
 export const VHR_TOP_HOLDERS_URL =
   'https://mumbai.polygonscan.com/token/tokenholderchart/0x28ee241ab245699968f2980d3d1b1d23120ab8be'
 export const RARIBLE_URL = IS_MAINNET

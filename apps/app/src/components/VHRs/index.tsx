@@ -3,7 +3,7 @@ import JSSoup from 'jssoup'
 import { NextPage } from 'next'
 import { SetStateAction, useEffect, useState } from 'react'
 
-import { VHR_TOP_HOLDERS_URL } from '@/constants'
+import { CORS_PROXY, VHR_TOP_HOLDERS_URL } from '@/constants'
 import isVerified from '@/lib/isVerified'
 import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
 
@@ -59,7 +59,8 @@ const VHRs: NextPage = () => {
     setVolunteersIsLoading(true)
     setOrganizationsIsLoading(true)
     try {
-      const response = await fetch(`api/cors?url=${VHR_TOP_HOLDERS_URL}`)
+      const url = CORS_PROXY + encodeURIComponent(VHR_TOP_HOLDERS_URL)
+      const response = await fetch(url)
       const html = await response.text()
 
       // scraping
