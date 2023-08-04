@@ -64,9 +64,7 @@ const UserDispatcher: React.FC = () => {
         className="rounded-lg shadow-l flex flex-col px-9 py-8 
           bg-[#D7BFFF] dark:bg-blue-500 outline outline-1 outline-gray-200 outline-offset-2"
       >
-        <h1 className="text-2xl font-bold dark:text-gray-50">
-          Enable dispatcher?
-        </h1>
+        <h1 className="text-2xl font-bold">Enable dispatcher?</h1>
         <h1 className="text-lg font-medium">
           We suggest enabling dispatcher so that your transactions in BCharity
           don't need to be signed.

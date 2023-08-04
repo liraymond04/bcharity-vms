@@ -10,19 +10,17 @@ html {
 
 body {
   font-family: 'BCharity', Helvetica, Arial, sans-serif;
-  @apply bg-gray-50;
-  @apply dark:bg-black;
+  @apply bg-base-100;
+  @apply text-black dark:text-white;
 }
 
 table {
-  @apply bg-white;
-  @apply dark:bg-gray-900;
+  @apply bg-base-100;
 }
 
 .shimmer {
   @apply animate-pulse;
-  @apply bg-gray-300;
-  @apply dark:bg-gray-600;
+  @apply bg-base-300;
 }
 
 .menu-item {
@@ -45,7 +43,7 @@ table {
 
 ::-webkit-file-upload-button {
   @apply px-3 py-2 mr-2 border-0 cursor-pointer rounded-l-xl;
-  @apply bg-gray-200 dark:bg-gray-900;
+  @apply bg-base-content;
 }
 
 .bg-hero {
@@ -85,7 +83,7 @@ table {
 }
 
 .react-autosuggest__input {
-  @apply rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full;
+  @apply rounded-xl bg-base-100 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full;
 }
 
 .react-autosuggest__input--focused {
@@ -102,7 +100,7 @@ table {
 }
 
 .react-autosuggest__suggestions-container--open {
-  @apply bg-white dark:bg-black border-solid border block font-light text-base overflow-y-auto absolute;
+  @apply bg-base-100 border-solid border block font-light text-base overflow-y-auto absolute;
   top: 51px;
   width: 280px;
   border-color: rgba(170, 170, 170, 1);
@@ -124,11 +122,11 @@ table {
 }
 
 .react-autosuggest__suggestion--highlighted {
-  @apply bg-gray-300 dark:bg-gray-800;
+  @apply bg-base-200;
 }
 
 .dropdown-active {
-  @apply bg-gray-100 dark:bg-gray-800;
+  @apply bg-base-100;
 }
 
 .divider {
