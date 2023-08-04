@@ -16,7 +16,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { CauseMetadata } from '@/lib/metadata'
+import { CauseMetadata, isPost } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
@@ -197,8 +197,8 @@ const OrganizationCauses: React.FC = () => {
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
                     VHR raised out of{' '}
-                    {postdata[0]?.__typename === 'Post'
-                      ? postdata[0]?.metadata.attributes[0]?.value
+                    {postdata[0] && isPost(postdata[0])
+                      ? postdata[0].metadata.attributes[0]?.value
                       : ' '}
                   </div>
                 </div>
