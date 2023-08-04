@@ -13,11 +13,12 @@ import { toast } from 'react-hot-toast'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { CauseMetadata, PostTags } from '@/lib/types'
+import { CauseMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getCauseMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
@@ -160,7 +161,7 @@ const OrganizationCauses: React.FC = () => {
   )
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
-    const d = postMetadata.find((val) => val?.cause_id === id)
+    const d = postMetadata.find((val) => val?.id === id)
 
     const [country, province, city] = d?.location.split('-', 3) ?? ['', '', '']
 

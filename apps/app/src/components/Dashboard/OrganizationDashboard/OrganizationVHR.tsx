@@ -16,10 +16,11 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { OpportunityMetadata, PostTags } from '@/lib/types'
+import { OpportunityMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
@@ -124,7 +125,7 @@ const OrganizationVHRTab: React.FC = () => {
   }, [data])
 
   const getFormDefaults = (id: string): IPublishOpportunityFormProps => {
-    const d = postMetadata.find((val) => val?.opportunity_id === id)
+    const d = postMetadata.find((val) => val?.id === id)
 
     return d
       ? {

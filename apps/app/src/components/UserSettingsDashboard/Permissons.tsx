@@ -186,7 +186,6 @@ const Permissons: React.FC = () => {
               </select>
               <div className="p-2 w-[75%]">
                 {moduleData.map((data, index) => {
-                  // console.log(data, index)
                   return (
                     <div className="mb-3" key={index}>
                       <Card>

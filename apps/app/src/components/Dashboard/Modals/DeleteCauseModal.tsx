@@ -1,8 +1,4 @@
-import {
-  PostFragment,
-  ProfileFragment,
-  PublicationFragment
-} from '@lens-protocol/client'
+import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
@@ -11,6 +7,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import { getCauseMetadata } from '@/lib/metadata'
 
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
@@ -38,15 +35,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ids = postData
-      .filter(
-        (post) =>
-          post.__typename === 'Post' && !!post.metadata.attributes[2].value
-      )
-      .filter(
-        (post) => (post as PostFragment).metadata.attributes[2].value === id
-      )
-      .map((post) => post.id)
+    const ids = getCauseMetadata(postData).map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])

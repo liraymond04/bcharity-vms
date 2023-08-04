@@ -1,56 +1,27 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
+import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { v4 } from 'uuid'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
-import { APP_NAME } from '@/constants'
-import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { GoalMetadataAttributeInput, PostTags } from '@/lib/types'
+import { buildMetadata, GoalMetadataRecord, PostTags } from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
 import Error from './Error'
 
 export interface IPublishGoalFormProps {
   goal: string
-
   goalDate: string
 }
 
 export const emptyPublishFormData: IPublishGoalFormProps = {
   goal: '',
-
   goalDate: ''
-}
-
-export const createPublishAttributes = (
-  id: string,
-  data: IPublishGoalFormProps
-) => {
-  const attributes: GoalMetadataAttributeInput[] = [
-    {
-      traitType: 'goal',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.goal
-    },
-
-    {
-      traitType: 'goalDate',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.goalDate
-    }
-  ]
-
-  return attributes
 }
 
 interface IPublishGoalModalProps {
@@ -64,11 +35,9 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
   onClose,
   publisher
 }) => {
-  const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [image, setImage] = useState<File | null>(null)
 
   const form = useForm<IPublishGoalFormProps>()
 
@@ -78,15 +47,6 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
     register,
     formState: { errors }
   } = form
-
-  const validUrl = (url: string) => {
-    try {
-      new URL(url)
-      return true
-    } catch (e) {
-      return false
-    }
-  }
 
   const onCancel = () => {
     reset()
@@ -104,33 +64,17 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
       return
     }
 
-    const attributes = createPublishAttributes(v4(), data)
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: v4(),
-      content: `#${PostTags.OrgPublish.Goal}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Goal],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Goal} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata: PublicationMetadataV2Input =
+      buildMetadata<GoalMetadataRecord>(publisher, [PostTags.OrgPublish.Goal], {
+        ...data,
+        version: MetadataVersion.GoalMetadataVersion['1.0.0'],
+        type: PostTags.OrgPublish.Goal
+      })
 
     try {
       await checkAuth(publisher.ownedBy)
 
-      await createPost(
-        publisher,
-        metadata,
-        {
-          freeCollectModule: {
-            followerOnly: false
-          }
-        },
-        { followerOnlyReferenceModule: false }
-      )
+      await createPost(publisher, metadata)
 
       reset()
       onClose(true)
