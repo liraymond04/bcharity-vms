@@ -15,7 +15,6 @@ import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
 import { PostTags } from '@/lib/metadata'
 import testSearch from '@/lib/search'
-import { PostTags } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../../Modals/Error'
