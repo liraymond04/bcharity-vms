@@ -8,10 +8,10 @@ import {
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'
 import OrganizationCard from '../Organizations/OrganizationCard'
@@ -121,8 +121,8 @@ const Home: NextPage = () => {
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {posts.map((post) => (
-                    <div key={post.opportunity_id} className="my-2 mx-6">
-                      <VolunteerCard post={post} id={post.id} />
+                    <div key={post.id} className="my-2 mx-6">
+                      <VolunteerCard post={post} />
                     </div>
                   ))}
                 </div>

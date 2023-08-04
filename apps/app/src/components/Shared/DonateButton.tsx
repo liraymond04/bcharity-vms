@@ -20,10 +20,9 @@ import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createComment from '@/lib/lens-protocol/createComment'
-import { getAttribute } from '@/lib/lens-protocol/getAttribute'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { PostTags } from '@/lib/types'
+import { CauseMetadata, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
 import ErrorModal from '../Dashboard/Modals/Error'
@@ -36,26 +35,22 @@ import Uniswap from './Uniswap'
 
 interface Props {
   post: PostFragment
+  cause: CauseMetadata
 }
 
 export interface IDonateFormProps {
   contribution: string
 }
 
-const DonateButton: FC<Props> = ({ post }) => {
+const DonateButton: FC<Props> = ({ post, cause }) => {
   const { currentUser } = useAppPersistStore()
   const [showModal, setShowModal] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
   const selectedCurrencySymbol =
-    CURRENCIES[
-      getAttribute(
-        post.metadata.attributes,
-        'currency'
-      ) as keyof typeof CURRENCIES
-    ].symbol
+    CURRENCIES[cause.currency as keyof typeof CURRENCIES].symbol
 
   const [currentContribution, setCurrentContribution] = useState<string>(
-    getAttribute(post.metadata.attributes, 'contribution')
+    cause.contribution
   )
   const [formContribution, setFormContribution] =
     useState<string>(currentContribution)
@@ -361,7 +356,7 @@ const DonateButton: FC<Props> = ({ post }) => {
           >
             <div className="flex flex-row ">
               <div className="text-purple-500 text-5xl font-bold">
-                Donate to {getAttribute(post.metadata.attributes, 'name')}
+                Donate to {cause.name}
               </div>
             </div>
             <div className="text-gray-500  mt-2 text-2xl font-bold">
@@ -375,16 +370,14 @@ const DonateButton: FC<Props> = ({ post }) => {
               <div>
                 <Progress
                   progress={totalDonated}
-                  total={parseFloat(
-                    getAttribute(post.metadata.attributes, 'goal')
-                  )}
+                  total={parseFloat(cause.goal)}
                   className="my-4"
                 />
                 <div className="flex flex-row font-semibold mb-6">
                   <div className="mr-3 text-purple-600 font-semibold">
                     {totalDonated} {selectedCurrencySymbol}
                   </div>
-                  raised of {getAttribute(post.metadata.attributes, 'goal')}!
+                  raised of {cause.goal}!
                 </div>
               </div>
             )}

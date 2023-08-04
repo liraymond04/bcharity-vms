@@ -6,7 +6,7 @@ import getAvatar from '@/lib/getAvatar'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { CauseMetadata, PostTags } from '@/lib/types'
+import { CauseMetadata, isComment, PostTags } from '@/lib/metadata'
 
 import Progress from '../Shared/Progress'
 import { Card } from '../UI/Card'
@@ -14,10 +14,9 @@ import { Spinner } from '../UI/Spinner'
 
 interface ICauseCardProps {
   cause: CauseMetadata
-  id: string
 }
 
-const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
+const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
       let total = 0
 
       const publication = await lensClient().publication.fetch({
-        publicationId: id
+        publicationId: cause.post_id
       })
 
       if (publication?.__typename !== 'Post')
@@ -75,21 +74,17 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
 
       // get comment totals
       const comments = await lensClient().publication.fetchAll({
-        commentsOf: id,
+        commentsOf: cause.post_id,
         metadata: {
-          tags: {
-            all: [PostTags.Donate.SetAmount]
-          }
+          tags: { all: [PostTags.Donate.SetAmount] }
         }
       })
 
       comments.items
-        .filter((comment) => !comment.hidden)
+        .filter((p) => !p.hidden)
+        .filter(isComment)
         .forEach((comment) => {
-          if (
-            comment.__typename === 'Comment' &&
-            comment.collectModule.__typename === 'FeeCollectModuleSettings'
-          )
+          if (comment.collectModule.__typename === 'FeeCollectModuleSettings')
             total +=
               comment.stats.totalAmountOfCollects *
               parseFloat(comment.collectModule.amount.value)
@@ -112,7 +107,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause, id }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/fundraiser/${id}`, '_blank')
+        window.open(`/fundraiser/${cause.post_id}`, '_blank')
       }}
     >
       <Card className="w-80 h-96 my-5 p-2 flex flex-col items-stretch justify-between transition duration-100 hover:scale-105 hover:cursor-pointer">

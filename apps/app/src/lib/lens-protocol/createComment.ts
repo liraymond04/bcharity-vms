@@ -14,8 +14,12 @@ const createComment = async (
   publicationId: string,
   profile: Profile,
   metadata: PublicationMetadataV2Input,
-  collectModule?: CollectModuleParams,
-  referenceModule?: ReferenceModuleParams
+  collectModule: CollectModuleParams = {
+    freeCollectModule: { followerOnly: false }
+  },
+  referenceModule: ReferenceModuleParams = {
+    followerOnlyReferenceModule: false
+  }
 ) => {
   const contentURI = await uploadToIPFS(metadata)
 
@@ -26,12 +30,8 @@ const createComment = async (
       publicationId,
       profileId,
       contentURI,
-      collectModule: collectModule ?? {
-        freeCollectModule: {
-          followerOnly: false
-        }
-      },
-      referenceModule: referenceModule ?? { followerOnlyReferenceModule: false }
+      collectModule,
+      referenceModule
     }
   )
 

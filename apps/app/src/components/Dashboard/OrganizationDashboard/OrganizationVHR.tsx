@@ -16,10 +16,11 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { OpportunityMetadata, PostTags } from '@/lib/types'
+import { OpportunityMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
@@ -124,7 +125,7 @@ const OrganizationVHRTab: React.FC = () => {
   }, [data])
 
   const getFormDefaults = (id: string): IPublishOpportunityFormProps => {
-    const d = postMetadata.find((val) => val?.opportunity_id === id)
+    const d = postMetadata.find((val) => val?.id === id)
 
     return d
       ? {
@@ -229,7 +230,7 @@ const OrganizationVHRTab: React.FC = () => {
               onClick={onNew}
               className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
-              <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <PlusSmIcon className="w-8 text-white" />
               <div className="text-white mr-3 mt-1 font-bold">
                 Create new opportunity
               </div>

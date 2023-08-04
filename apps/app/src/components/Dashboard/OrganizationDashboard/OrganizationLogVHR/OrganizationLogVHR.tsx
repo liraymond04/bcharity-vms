@@ -13,6 +13,7 @@ import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createCollect from '@/lib/lens-protocol/createCollect'
 import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
+import { PostTags } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 import { PostTags } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
@@ -33,7 +34,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 
   const selectedValue = useMemo(() => {
-    return data.find((val) => val.id === selectedId) ?? null
+    return data.find((val) => val.post_id === selectedId) ?? null
   }, [data, selectedId])
 
   const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
@@ -196,17 +197,17 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
                 )
               })
               .map((value) => {
-                const selected = value.id === selectedId
+                const selected = value.post_id === selectedId
 
                 return (
                   <VHRVerifyCard
-                    pending={!!pendingIds[value.id]}
+                    pending={!!pendingIds[value.post_id]}
                     selected={selected}
-                    key={value.id}
+                    key={value.post_id}
                     value={value}
-                    onClick={() => setSelectedId(selected ? '' : value.id)}
-                    onAcceptClick={() => onAcceptClick(value.id)}
-                    onRejectClick={() => onRejectClick(value.id)}
+                    onClick={() => setSelectedId(selected ? '' : value.post_id)}
+                    onAcceptClick={() => onAcceptClick(value.post_id)}
+                    onRejectClick={() => onRejectClick(value.post_id)}
                   />
                 )
               })}

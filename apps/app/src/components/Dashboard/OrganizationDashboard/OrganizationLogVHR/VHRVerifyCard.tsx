@@ -3,12 +3,12 @@ import React from 'react'
 
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHRRequest } from '@/lib/types'
+import { LogVhrRequestMetadata } from '@/lib/metadata'
 
 interface IVHRVerifyCardProps {
   selected?: boolean
   pending: boolean
-  value: VHRRequest
+  value: LogVhrRequestMetadata
   onClick: VoidFunction
   onAcceptClick: () => void
   onRejectClick: () => void

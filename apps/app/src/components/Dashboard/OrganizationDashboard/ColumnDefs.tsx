@@ -28,7 +28,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <PencilIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onEditClick(event.data['opportunity_id'])
+        params.onEditClick(event.data['id'])
       },
       width: 50
     },
@@ -40,7 +40,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <TrashIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onDeleteClick(event.data['opportunity_id'])
+        params.onDeleteClick(event.data['id'])
       },
       width: 50
     },
@@ -132,7 +132,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <PencilIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onEditClick(event.data['cause_id'])
+        params.onEditClick(event.data['id'])
       },
       width: 50
     },
@@ -144,7 +144,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
         return <TrashIcon className="w-4 inline" />
       },
       onCellClicked: (event: CellClickedEvent) => {
-        params.onDeleteClick(event.data['cause_id'])
+        params.onDeleteClick(event.data['id'])
       },
       width: 50
     },

@@ -1,7 +1,3 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { Erc20Fragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
@@ -15,19 +11,16 @@ import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
-import getUserLocale from '@/lib/getUserLocale'
 import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
-import { PostTags } from '@/lib/types'
+import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
 import Error from './Error'
-import {
-  createPublishAttributes,
-  IPublishCauseFormProps
-} from './PublishCauseModal'
+import { IPublishCauseFormProps } from './PublishCauseModal'
 
 interface IPublishCauseModalProps {
   open: boolean
@@ -97,22 +90,24 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
     const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
 
-    const attributes = createPublishAttributes({
-      id,
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: id,
-      content: `#${PostTags.OrgPublish.Cause}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Cause],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Cause} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<CauseMetadataRecord>(
+      publisher,
+      [PostTags.OrgPublish.Cause],
+      {
+        version: MetadataVersion.CauseMetadataVersion['1.0.1'],
+        type: PostTags.OrgPublish.Cause,
+        id,
+        name: formData.name,
+        category: formData.category,
+        currency: formData.currency,
+        contribution: formData.contribution,
+        goal: formData.goal,
+        recipient: formData.recipient,
+        description: formData.description,
+        location: `${formData.country}-${formData.province}-${formData.city}`,
+        imageUrl
+      }
+    )
 
     const collectModuleParams = {
       feeCollectModule: {
