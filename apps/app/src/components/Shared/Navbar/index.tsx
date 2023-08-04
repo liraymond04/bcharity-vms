@@ -264,7 +264,7 @@ const Navbar: FC = () => {
                     pathname == '/organizations'
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
-                  } ${inter500.className} ${auth ? '' : 'mr-10'}`}
+                  } ${inter500.className} ${auth ? '' : 'mr-4'}`}
                 >
                   ORGANIZATIONS
                 </div>
@@ -293,7 +293,7 @@ const Navbar: FC = () => {
               >
                 <button>
                   <div
-                    className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                    className={`text-lg p-3 rounded-lg mr-4 hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                       pathname == '/dashboard'
                         ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                         : 'text-black dark:text-sky-50'
@@ -306,15 +306,13 @@ const Navbar: FC = () => {
             )}
           </div>
         )}
-        <div className="relative my-auto mr-10">
+        <div className="relative my-auto">
           <TranslateButton />
         </div>
-        {screenSize != 'smallPhone' && (
-          <div className="my-auto mr-10">
-            <ThemeButton />
-          </div>
-        )}
-        <div className="my-auto mr-10">
+        <div className="my-auto mr-4">
+          <ThemeButton />
+        </div>
+        <div className="my-auto sm:mr-10 mr-4">
           <MenuItems />
         </div>
       </div>
