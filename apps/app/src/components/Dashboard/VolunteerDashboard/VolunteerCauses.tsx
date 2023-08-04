@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getAvatar from '@/lib/getAvatar'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
@@ -182,9 +181,7 @@ const VolunteerCauses: React.FC = () => {
               .map((op, i) => (
                 <BrowseCauseCard
                   key={op.id}
-                  imageSrc={op.imageUrl}
-                  avatarSrc={getAvatar(op.from)}
-                  name={op.name}
+                  cause={op}
                   post={postData[i] as PostFragment}
                 />
               ))
