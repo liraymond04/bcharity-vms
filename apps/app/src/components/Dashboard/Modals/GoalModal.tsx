@@ -176,7 +176,6 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
               label="Goal Date"
               type="date"
               placeholder="yyyy-mm-dd"
-              change={() => {}}
               {...register('goalDate', {})}
             />
           </Form>

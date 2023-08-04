@@ -135,6 +135,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const {
     handleSubmit,
     reset,
+    resetField,
     register,
     formState: { errors }
   } = form
@@ -242,13 +243,15 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="End Date"
               type="date"
               placeholder="yyyy-mm-dd"
-              hasTick
-              change={() => {
-                form.setValue('endDate', '')
-                setEndDateDisabled(!endDateDisabled)
-              }}
               disabled={!endDateDisabled}
               {...register('endDate', {})}
+              name="hasTick"
+              onChange={(e) => {
+                if (e.target.value === 'on') {
+                  resetField('endDate')
+                  setEndDateDisabled(!endDateDisabled)
+                }
+              }}
             />
             <Input
               label="Expected number of hours"
