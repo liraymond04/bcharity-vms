@@ -9,8 +9,7 @@ import {
 } from './UpdateableMetadata'
 
 /**
- * @type OpportunityMetadataRecord
- * The types of opportunity metadata for form
+ * The type of opportunity data used in {@link buildMetadata}
  */
 export type OpportunityMetadataRecord = Record<
   Exclude<keyof OpportunityMetadata, PublicationMetadataFieldNames>,

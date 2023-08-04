@@ -11,7 +11,7 @@ import { InvalidMetadataException } from './InvalidMetadataException'
 import { OpportunityMetadata } from './OpportunityMetadata'
 
 /**
- * The type for Application data
+ * The type of application data used in {@link buildMetadata}
  */
 export type ApplicationMetadataRecord = Record<
   Exclude<

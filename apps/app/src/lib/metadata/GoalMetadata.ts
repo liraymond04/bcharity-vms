@@ -9,7 +9,7 @@ import {
 import { GoalMetadataVersion } from '../types'
 
 /**
- * The types of goal metadata for form
+ * The type of goal metadata used in {@link buildMetadata}
  */
 
 export type GoalMetadataRecord = Record<

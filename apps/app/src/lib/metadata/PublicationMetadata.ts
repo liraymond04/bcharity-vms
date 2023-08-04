@@ -8,11 +8,10 @@ import { InvalidMetadataException } from './InvalidMetadataException'
 import { PostTags } from './PostTags'
 
 /**
- * @type PublicationMetadataFieldNames
  * The publication metadata fields defined, so that they can be excluded from
  * attribute input
  *
- * Does not using ts`keyof PublicationMetdata` due to buggy behavior with Exclude/Omit
+ * Does not using `keyof PublicationMetdata` due to buggy behavior with Exclude/Omit
  */
 export type PublicationMetadataFieldNames =
   // | 'version'

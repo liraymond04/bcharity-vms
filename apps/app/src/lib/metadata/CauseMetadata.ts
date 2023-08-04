@@ -9,7 +9,7 @@ import {
 } from './UpdateableMetadata'
 
 /**
- * The types of opportunity metadata for form
+ * The type of cause data used in {@link buildMetadata}
  */
 
 export type CauseMetadataRecord = Record<

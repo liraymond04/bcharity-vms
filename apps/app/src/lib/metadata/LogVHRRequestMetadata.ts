@@ -11,7 +11,7 @@ import { InvalidMetadataException } from './InvalidMetadataException'
 import { OpportunityMetadata } from './OpportunityMetadata'
 
 /**
- * The type for LogVhrRequest data
+ * The type of LogVhrRequest data used in {@link buildMetadata}
  */
 export type LogVhrRequestMetadataRecord = Record<
   Exclude<
