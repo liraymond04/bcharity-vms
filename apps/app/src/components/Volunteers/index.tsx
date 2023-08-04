@@ -18,9 +18,9 @@ import VolunteerCard from './VolunteerCard'
 const Volunteers: NextPage = () => {
   const [posts, setPosts] = useState<[OpportunityMetadata, string][]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
-
+  const [org, setOrg] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-
+  const [selectedOrg, setSelectedOrg] = useState<string>('')
   const [searchValue, setSearchValue] = useState('')
 
   const { data, error, loading, pageInfo, fetchMore } = useExplorePublications(
@@ -39,13 +39,17 @@ const Volunteers: NextPage = () => {
   useEffect(() => {
     let _posts: [OpportunityMetadata, string][] = []
     let _categories: Set<string> = new Set()
+    let _Orgs: Set<string> = new Set()
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {
       _posts.push([post, post.id])
       if (post.category) _categories.add(post.category)
+      if (post.from.handle) _Orgs.add(post.from.handle)
+      console.log('post', post)
     })
     setPosts(_posts)
     setCategories(_categories)
+    setOrg(_Orgs)
   }, [data])
 
   const { observe } = useInView({
@@ -78,22 +82,33 @@ const Volunteers: NextPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
-            <div className="h-[50px] z-10 ">
-              <DashboardDropDown
-                label="Filter:"
-                options={Array.from(categories)}
-                onClick={(c) => setSelectedCategory(c)}
-                selected={selectedCategory}
-              ></DashboardDropDown>
+            <div className="flex flex-row">
+              <div className="h-[50px] z-10 ">
+                <DashboardDropDown
+                  label="Filter:"
+                  options={Array.from(categories)}
+                  onClick={(c) => setSelectedCategory(c)}
+                  selected={selectedCategory}
+                ></DashboardDropDown>
+              </div>
+              <div className="h-[50px] z-10 ">
+                <DashboardDropDown
+                  label="Organizations:"
+                  options={Array.from(org)}
+                  onClick={(c) => setSelectedOrg(c)}
+                  selected={selectedOrg}
+                ></DashboardDropDown>
+              </div>
+              <button
+                className="ml-3 min-w-[110px] h-fit text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
+                onClick={() => {
+                  setSelectedCategory('')
+                  setSelectedOrg('')
+                }}
+              >
+                Clear Filters
+              </button>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
-              onClick={() => {
-                setSelectedCategory('')
-              }}
-            >
-              Clear Filters
-            </button>
           </div>
         </div>
         <Divider className="mt-5" />
@@ -108,7 +123,9 @@ const Volunteers: NextPage = () => {
           {posts
             .filter(
               (post) =>
-                selectedCategory === '' || post[0].category === selectedCategory
+                (selectedCategory === '' ||
+                  post[0].category === selectedCategory) &&
+                (selectedOrg === '' || post[0].from.handle === selectedOrg)
             )
             .map((post, idx, arr) => (
               <GridItemFour key={post[0]?.opportunity_id}>
