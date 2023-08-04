@@ -324,7 +324,7 @@ const OrganizationCauses: React.FC = () => {
             >
               <PlusSmIcon className="w-8 text-white" />
               <div className="text-white mr-3 mt-1 font-bold">
-                Create new fundraiser
+                Create new project
               </div>
             </button>
             <div
