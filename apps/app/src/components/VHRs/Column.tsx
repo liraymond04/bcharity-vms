@@ -51,7 +51,7 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
             </div>
           ))}
         {isLoading && (
-          <div className="flex justify-between items-center w-[400px] h-[80px] mx-auto my-2 border-[#DDDDDD]">
+          <div className="flex justify-between items-center w-[80%] h-[80px] mx-auto my-2 border-[#DDDDDD]">
             <Spinner />
           </div>
         )}
