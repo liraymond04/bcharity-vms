@@ -25,8 +25,16 @@ export default async function handler(
 
   function getRequest(url: string | string[] | undefined) {
     return new Promise<Response>((resolve) => {
+      const options = {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
+        }
+      }
+
       const req = https.get(
         url,
+        options,
         (resp: {
           on: (
             arg0: string,
