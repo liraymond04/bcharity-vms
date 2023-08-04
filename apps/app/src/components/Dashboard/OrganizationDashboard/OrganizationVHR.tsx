@@ -178,7 +178,6 @@ const OrganizationVHRTab: React.FC = () => {
                   total={vhrGoal}
                   className="mt-10 mb-10"
                 />
-
                 <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
                   Our Cause
                 </div>

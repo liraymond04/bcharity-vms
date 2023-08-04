@@ -167,7 +167,7 @@ export interface CauseMetadata
    */
   recipient: string
   /**
-   * description for this fundraiser
+   * description for this project
    */
   description: string
   /**
