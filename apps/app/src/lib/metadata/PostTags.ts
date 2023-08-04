@@ -11,6 +11,14 @@ export enum OrgPublish {
    */
   Cause = 'ORG_PUBLISH_CAUSE',
   /**
+   * Tag to use for an organization publishing or modifying a volunteer opportunity draft
+   */
+  OpportunityDraft = 'ORG_PUBLISH_OPPORTUNITY_DRAFT',
+  /**
+   * Tag to use for an organization publishing or modifying a cause draft
+   */
+  CauseDraft = 'ORG_PUBLISH_CAUSE_DRAFT',
+  /**
    * Tag to use for an organization setting a cause goal
    */
   Goal = 'ORG_PUBLISH_Goal',

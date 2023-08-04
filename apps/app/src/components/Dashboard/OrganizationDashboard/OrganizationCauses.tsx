@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
@@ -138,27 +139,6 @@ const OrganizationCauses: React.FC = () => {
   }, [currencyError])
 
   const [vhrGoal] = useState(600) // use hardcoded goal for now
-
-  const Progress = ({
-    progress,
-    total,
-    className
-  }: {
-    progress: number
-    total: number
-    className?: string
-  }) => (
-    <div className={className}>
-      <div className="w-full bg-gray-200 rounded-full h-5 ">
-        <div
-          className="bg-green-400 h-5 rounded-full"
-          style={{
-            width: `${Math.min(Math.trunc((progress / total) * 100), 100)}%`
-          }}
-        ></div>
-      </div>
-    </div>
-  )
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
     const d = postMetadata.find((val) => val?.id === id)
@@ -324,7 +304,7 @@ const OrganizationCauses: React.FC = () => {
             >
               <PlusSmIcon className="w-8 text-white" />
               <div className="text-white mr-3 mt-1 font-bold">
-                Create new fundraiser
+                Create new project
               </div>
             </button>
             <div

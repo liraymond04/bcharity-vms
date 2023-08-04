@@ -121,10 +121,8 @@ const Navbar: FC = () => {
                 </li>
                 {showMenu && (
                   <Link
-                    href="/fundraisers"
-                    aria-current={
-                      pathname == '/fundraisers' ? 'page' : undefined
-                    }
+                    href="/projetcs"
+                    aria-current={pathname == '/projects' ? 'page' : undefined}
                   >
                     <div
                       className={`flex justify-center px-10 py-5 bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] dark:border-[#312f66] ${
@@ -225,18 +223,18 @@ const Navbar: FC = () => {
         {!(screenSize == 'phone' || screenSize == 'smallPhone') && (
           <div className="flex w-[60] justify-around items-center">
             <Link
-              href="/fundraisers"
-              aria-current={pathname == '/fundraisers' ? 'page' : undefined}
+              href="/projects"
+              aria-current={pathname == '/projects' ? 'page' : undefined}
             >
               <button>
                 <div
                   className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
-                    pathname == '/fundraisers'
+                    pathname == '/projects'
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
-                  FUNDRAISERS
+                  PROJECTS
                 </div>
               </button>
             </Link>
