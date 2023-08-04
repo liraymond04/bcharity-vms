@@ -174,7 +174,6 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
               label="Goal Date"
               type="date"
               placeholder="yyyy-mm-dd"
-              change={() => {}}
               {...register('goalDate', {})}
             />
           </Form>
