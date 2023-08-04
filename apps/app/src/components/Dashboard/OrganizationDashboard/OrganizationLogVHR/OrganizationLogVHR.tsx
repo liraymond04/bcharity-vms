@@ -13,7 +13,7 @@ import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createCollect from '@/lib/lens-protocol/createCollect'
 import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../../Modals/Error'
@@ -32,7 +32,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 
   const selectedValue = useMemo(() => {
-    return data.find((val) => val.id === selectedId) ?? null
+    return data.find((val) => val.post_id === selectedId) ?? null
   }, [data, selectedId])
 
   const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
@@ -162,17 +162,17 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         <>
           <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-10">
             {data.map((value) => {
-              const selected = value.id === selectedId
+              const selected = value.post_id === selectedId
 
               return (
                 <VHRVerifyCard
-                  pending={!!pendingIds[value.id]}
+                  pending={!!pendingIds[value.post_id]}
                   selected={selected}
-                  key={value.id}
+                  key={value.post_id}
                   value={value}
-                  onClick={() => setSelectedId(selected ? '' : value.id)}
-                  onAcceptClick={() => onAcceptClick(value.id)}
-                  onRejectClick={() => onRejectClick(value.id)}
+                  onClick={() => setSelectedId(selected ? '' : value.post_id)}
+                  onAcceptClick={() => onAcceptClick(value.post_id)}
+                  onRejectClick={() => onRejectClick(value.post_id)}
                 />
               )
             })}

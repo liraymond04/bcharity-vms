@@ -6,9 +6,10 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-cool-inview'
 
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { OpportunityMetadata, PostTags } from '@/lib/types'
+import { OpportunityMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import Divider from '../Shared/Divider'
@@ -16,7 +17,7 @@ import { Spinner } from '../UI/Spinner'
 import VolunteerCard from './VolunteerCard'
 
 const Volunteers: NextPage = () => {
-  const [posts, setPosts] = useState<[OpportunityMetadata, string][]>([])
+  const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [org, setOrg] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -37,12 +38,12 @@ const Volunteers: NextPage = () => {
   )
 
   useEffect(() => {
-    let _posts: [OpportunityMetadata, string][] = []
+    let _posts: OpportunityMetadata[] = []
     let _categories: Set<string> = new Set()
     let _Orgs: Set<string> = new Set()
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {
-      _posts.push([post, post.id])
+      _posts.push(post)
       if (post.category) _categories.add(post.category)
       if (post.from.handle) _Orgs.add(post.from.handle)
       console.log('post', post)
@@ -124,16 +125,15 @@ const Volunteers: NextPage = () => {
             .filter(
               (post) =>
                 (selectedCategory === '' ||
-                  post[0].category === selectedCategory) &&
-                (selectedOrg === '' || post[0].from.handle === selectedOrg)
+                  post.category === selectedCategory) &&
+                (selectedOrg === '' || post.from.handle === selectedOrg)
             )
-            .map((post, idx, arr) => (
-              <GridItemFour key={post[0]?.opportunity_id}>
-                <span ref={idx === arr.length - 1 ? observe : null}>
-                  <VolunteerCard post={post[0]} id={post[1]} />
-                </span>
+            .map((post) => (
+              <GridItemFour key={post.id}>
+                <VolunteerCard post={post} />
               </GridItemFour>
             ))}
+
           {pageInfo?.next && (
             <span className="flex justify-center p-5">
               <Spinner size="md" />

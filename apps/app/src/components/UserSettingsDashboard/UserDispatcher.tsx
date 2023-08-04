@@ -19,7 +19,6 @@ const UserDispatcher: React.FC = () => {
     const _getProfile = async () => {
       if (currentUser) {
         const profile = await getProfile({ id: currentUser.id })
-        console.log(profile?.dispatcher)
         setIsEnabled(profile?.dispatcher !== null)
         setIsLoading(false)
       }

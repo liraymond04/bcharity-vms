@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react'
 
 import DonateButton from '@/components/Shared/DonateButton'
 import { Card } from '@/components/UI/Card'
+import getAvatar from '@/lib/getAvatar'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
+import { CauseMetadata } from '@/lib/metadata'
 
 const inter500 = Inter({
   subsets: ['latin'],
@@ -12,31 +14,24 @@ const inter500 = Inter({
 })
 
 interface IBrowseCardProps {
-  imageSrc: string
-  avatarSrc?: string
-  name: string
+  cause: CauseMetadata
   post: PostFragment
 }
 
-const BrowseCauseCard: React.FC<IBrowseCardProps> = ({
-  imageSrc,
-  avatarSrc,
-  name,
-  post
-}) => {
+const BrowseCauseCard: React.FC<IBrowseCardProps> = ({ cause, post }) => {
   const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
   useEffect(() => {
-    if (imageSrc) {
-      getIPFSBlob(imageSrc).then((url) => setResolvedImageUrl(url))
+    if (cause.imageUrl) {
+      getIPFSBlob(cause.imageUrl).then((url) => setResolvedImageUrl(url))
     }
-  }, [imageSrc])
+  }, [cause.imageUrl])
 
   const getDisplayedImage = () => {
-    if (!imageSrc) {
+    if (!cause.imageUrl) {
       return (
         <img
-          src={avatarSrc}
+          src={getAvatar(cause.from)}
           className="h-[200px]"
           alt="Organization profile picture"
         />
@@ -57,12 +52,12 @@ const BrowseCauseCard: React.FC<IBrowseCardProps> = ({
       <div className="flex flex-col items-stretch">
         {getDisplayedImage()}
         <p className={`text-center mt-5 text-xl ${inter500.className}`}>
-          {name}
+          {cause.name}
         </p>
       </div>
       <div className="relative mb-10">
         <div className="absolute right-0">
-          <DonateButton post={post} />
+          <DonateButton post={post} cause={cause} />
         </div>
       </div>
     </Card>

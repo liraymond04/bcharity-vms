@@ -2,10 +2,10 @@ import { LinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import React from 'react'
 
-import { VHRRequest } from '@/lib/types'
+import { LogVhrRequestMetadata } from '@/lib/metadata'
 
 interface IVHRDetailCardProps {
-  value: VHRRequest
+  value: LogVhrRequestMetadata
 }
 
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
@@ -28,9 +28,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
               {value.opportunity.name}
             </p>
           </div>
-          <p className="ml-10 text-fuchsia-700">
-            {value.opportunity.opportunity_id}
-          </p>
+          <p className="ml-10 text-fuchsia-700">{value.opportunity.id}</p>
         </Link>
         <div className="flex justify-between font-semibold text-lg mt-4">
           <p>
