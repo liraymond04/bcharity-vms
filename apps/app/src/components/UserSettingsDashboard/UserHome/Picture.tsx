@@ -30,7 +30,6 @@ const Picture: FC<Props> = ({ profile }) => {
     setUploading(true)
     try {
       const attachment = await uploadToIPFS(evt.target.files![0])
-      console.log(attachment)
       if (attachment) {
         setAvatar(attachment)
       }

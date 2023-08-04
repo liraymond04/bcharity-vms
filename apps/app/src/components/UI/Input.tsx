@@ -1,6 +1,12 @@
 import clsx from 'clsx'
 import dynamic from 'next/dynamic'
-import { ComponentProps, forwardRef, ReactNode, useId } from 'react'
+import {
+  ChangeEventHandler,
+  ComponentProps,
+  forwardRef,
+  ReactNode,
+  useId
+} from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FieldError } from './Form'
@@ -13,7 +19,11 @@ interface Props extends Omit<ComponentProps<'input'>, 'prefix'> {
   className?: string
   helper?: ReactNode
   error?: boolean
-  change?: Function
+  onChange?: ChangeEventHandler<HTMLInputElement>
+  name?: string
+}
+
+interface ExtraProps {
   hasTick?: boolean
 }
 
@@ -30,20 +40,24 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
         <div className="flex items-center mb-1 space-x-1.5">
           <div className="font-medium text-gray-800 dark:text-gray-200">
             <label
-              style={{ width: '500px', float: 'right', marginRight: '-400px' }}
+              style={{
+                width: '500px',
+                float: 'right',
+                marginRight: '-400px'
+              }}
             >
               {label}
             </label>
           </div>
           <div>
-            {props.hasTick && (
+            {props.name === 'hasTick' && (
               <>
                 <input
                   type="checkbox"
                   style={{ position: 'relative' }}
-                  onClick={() => {
-                    if (!props.change) return
-                    props.change()
+                  onChange={(e) => {
+                    if (!props.onChange) return
+                    props.onChange(e)
                   }}
                 />
                 <label style={{ position: 'relative' }}>{t('Ongoing')}</label>

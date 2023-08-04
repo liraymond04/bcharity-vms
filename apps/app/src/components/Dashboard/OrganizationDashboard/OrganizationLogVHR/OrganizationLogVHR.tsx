@@ -3,7 +3,7 @@ import {
   PublicationMainFocus,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { v4 } from 'uuid'
 
 import { Spinner } from '@/components/UI/Spinner'
@@ -13,7 +13,8 @@ import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createCollect from '@/lib/lens-protocol/createCollect'
 import createComment from '@/lib/lens-protocol/createComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
-import { PostTags } from '@/lib/types'
+import { PostTags } from '@/lib/metadata'
+import testSearch from '@/lib/search'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../../Modals/Error'
@@ -32,10 +33,15 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 
   const selectedValue = useMemo(() => {
-    return data.find((val) => val.id === selectedId) ?? null
+    return data.find((val) => val.post_id === selectedId) ?? null
   }, [data, selectedId])
 
   const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
+
+  const [categories, setCategories] = useState<string[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+
+  const [searchValue, setSearchValue] = useState<string>('')
 
   const setIdPending = (id: string) => {
     const newPendingIds = { ...pendingIds, [id]: true }
@@ -127,6 +133,12 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
     }
   }
 
+  useEffect(() => {
+    let result = new Set<string>()
+    data.map((value) => result.add(value.opportunity.category))
+    setCategories(Array.from(result))
+  })
+
   return (
     <div className="mx-4 my-8 flex flex-col max-h-screen">
       <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
@@ -134,11 +146,11 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
           <input
             className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
             type="text"
-            // value={searchValue}
+            value={searchValue}
             placeholder="Search"
-            // onChange={(e) => {
-            //   setSearchValue(e.target.value)
-            // }}
+            onChange={(e) => {
+              setSearchValue(e.target.value)
+            }}
           />
           <div className="h-5 w-5 mr-5">
             <SearchIcon />
@@ -149,9 +161,12 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
           <div className="h-[50px] z-10 ">
             <DashboardDropDown
               label="Filter:"
-              options={[]}
-              onClick={(c) => console.log('change filter', c)}
-              selected={''}
+              options={Array.from(categories)}
+              onClick={(c) => {
+                if (c == selectedCategory) setSelectedCategory('')
+                else setSelectedCategory(c)
+              }}
+              selected={selectedCategory}
             />
           </div>
         </div>
@@ -161,21 +176,40 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
       {!loading ? (
         <>
           <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-10">
-            {data.map((value) => {
-              const selected = value.id === selectedId
+            {data
+              .filter((value) => {
+                return (
+                  (selectedCategory == '' ||
+                    selectedCategory == value.opportunity.category) &&
+                  testSearch(
+                    value.opportunity.category +
+                      ' ' +
+                      value.opportunity.startDate +
+                      ' ' +
+                      value.opportunity.endDate +
+                      ' ' +
+                      value.from.handle +
+                      ' ' +
+                      value.opportunity.name,
+                    searchValue
+                  )
+                )
+              })
+              .map((value) => {
+                const selected = value.post_id === selectedId
 
-              return (
-                <VHRVerifyCard
-                  pending={!!pendingIds[value.id]}
-                  selected={selected}
-                  key={value.id}
-                  value={value}
-                  onClick={() => setSelectedId(selected ? '' : value.id)}
-                  onAcceptClick={() => onAcceptClick(value.id)}
-                  onRejectClick={() => onRejectClick(value.id)}
-                />
-              )
-            })}
+                return (
+                  <VHRVerifyCard
+                    pending={!!pendingIds[value.post_id]}
+                    selected={selected}
+                    key={value.post_id}
+                    value={value}
+                    onClick={() => setSelectedId(selected ? '' : value.post_id)}
+                    onAcceptClick={() => onAcceptClick(value.post_id)}
+                    onRejectClick={() => onRejectClick(value.post_id)}
+                  />
+                )
+              })}
           </div>
           {selectedValue && <VHRDetailCard value={selectedValue} />}
         </>

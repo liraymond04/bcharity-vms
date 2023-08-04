@@ -33,7 +33,6 @@ const useEnabledCurrencies = (address: string | undefined) => {
     }
 
     if (address && run) {
-      console.log(run)
       getEnabledCurrencies()
       run = false
     }
