@@ -16,7 +16,7 @@ import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { OpportunityMetadata } from '@/lib/metadata'
+import { isPost, OpportunityMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getOpportunityMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
@@ -117,8 +117,8 @@ const VolunteerVHRTab: React.FC = () => {
                     VHR Amount:
                   </div>
                   <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
-                    {postdata[0]?.__typename === 'Post'
-                      ? postdata[0]?.metadata.attributes[0]?.value
+                    {postdata[0] && isPost(postdata[0])
+                      ? postdata[0].metadata.attributes[0]?.value
                       : ' '}
                     / {vhrGoal}
                   </div>

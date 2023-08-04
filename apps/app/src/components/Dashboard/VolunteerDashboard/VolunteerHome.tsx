@@ -12,6 +12,7 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import { isPost } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
@@ -142,7 +143,7 @@ const VolunteerHome: React.FC = () => {
                       <div className="overflow-y-scroll w-full mt-20 h-full border border-sky-200 dark:border-black rounded-md bg-teal-50 dark:bg-Within dark:opacity-10">
                         <div className="w-full">
                           {postdata.map((post, index) => {
-                            if (post.__typename === 'Post')
+                            if (isPost(post))
                               return (
                                 <div className="w-full lg:flex" key={post.id}>
                                   <div
