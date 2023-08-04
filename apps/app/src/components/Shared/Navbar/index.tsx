@@ -24,12 +24,14 @@ const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState<string>('')
 
   const updateSize = () => {
-    if (window.innerWidth >= 1050) {
+    if (window.innerWidth >= 1300) {
       setScreenSize('wideDesktop')
-    } else if (window.innerWidth >= 870) {
+    } else if (window.innerWidth >= 1150) {
       setScreenSize('smallDesktop')
-    } else {
+    } else if (window.innerWidth >= 500) {
       setScreenSize('phone')
+    } else {
+      setScreenSize('smallPhone')
     }
   }
 
@@ -90,24 +92,30 @@ const Navbar: FC = () => {
             BCharity
           </Link>
         )}
-        {screenSize == 'phone' && (
+        {(screenSize == 'phone' || screenSize == 'smallPhone') && (
           <div className="absolute left-20 top-7">
             <div className="flex-col items-center justify-center">
               <ul>
                 <li onClick={displayWindow} className="hover:cursor-pointer">
                   <div
                     className={`w-8 h-1 my-1 rounded-sm" ${
-                      showMenu ? 'bg-gray-400' : 'bg-black'
+                      showMenu
+                        ? 'bg-gray-400 dark:bg-gray-600'
+                        : 'bg-black dark:bg-gray-400'
                     }`}
                   ></div>
                   <div
                     className={`w-8 h-1 my-1 rounded-sm " ${
-                      showMenu ? 'bg-gray-400' : 'bg-black'
+                      showMenu
+                        ? 'bg-gray-400 dark:bg-gray-600'
+                        : 'bg-black dark:bg-gray-400'
                     }`}
                   ></div>
                   <div
                     className={`w-8 h-1 my-1 rounded-sm " ${
-                      showMenu ? 'bg-gray-400' : 'bg-black'
+                      showMenu
+                        ? 'bg-gray-400 dark:bg-gray-600'
+                        : 'bg-black dark:bg-gray-400'
                     }`}
                   ></div>
                 </li>
@@ -119,13 +127,15 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] ${
+                      className={`flex justify-center px-10 py-5 bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] dark:border-[#312f66] ${
                         pathname == '/fundraisers'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      FUNDRAISERS
+                      <p className="opacity-70 hover:opacity-100 duration-200">
+                        FUNDRAISERS
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -137,13 +147,15 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/volunteers'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      VOLUNTEERS
+                      <p className="opacity-70 hover:opacity-100 duration-200">
+                        VOLUNTEERS
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -155,13 +167,15 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/organizations'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      ORGANIZATIONS
+                      <p className="opacity-70 hover:opacity-100 duration-200">
+                        ORGANIZATIONS
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -171,13 +185,15 @@ const Navbar: FC = () => {
                     aria-current={pathname == '/vhrs' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/vhrs'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      VHRs
+                      <p className="opacity-70 hover:opacity-100 duration-200">
+                        VHRs
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -187,13 +203,15 @@ const Navbar: FC = () => {
                     aria-current={pathname == '/dashboard' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/dashboard'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      DASHBOARD
+                      <p className="opacity-70 hover:opacity-100 duration-200">
+                        DASHBOARD
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -204,7 +222,7 @@ const Navbar: FC = () => {
       </div>
 
       <div className="flex">
-        {!(screenSize == 'phone') && (
+        {!(screenSize == 'phone' || screenSize == 'smallPhone') && (
           <div className="flex w-[60] justify-around items-center">
             <Link
               href="/fundraisers"
@@ -293,9 +311,11 @@ const Navbar: FC = () => {
         <div className="relative my-auto mr-10">
           <TranslateButton />
         </div>
-        <div className="my-auto mr-10">
-          <ThemeButton />
-        </div>
+        {screenSize != 'smallPhone' && (
+          <div className="my-auto mr-10">
+            <ThemeButton />
+          </div>
+        )}
         <div className="my-auto mr-10">
           <MenuItems />
         </div>
