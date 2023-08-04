@@ -121,18 +121,18 @@ const Navbar: FC = () => {
                 </li>
                 {showMenu && (
                   <Link
-                    href="/projetcs"
+                    href="/projects"
                     aria-current={pathname == '/projects' ? 'page' : undefined}
                   >
                     <div
                       className={`flex justify-center px-10 py-5 bg-white dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] dark:border-[#312f66] ${
-                        pathname == '/fundraisers'
+                        pathname == '/projects'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        FUNDRAISERS
+                        PROJECTS
                       </p>
                     </div>
                   </Link>
