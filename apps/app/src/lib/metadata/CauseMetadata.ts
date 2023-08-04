@@ -63,7 +63,7 @@ export class CauseMetadata extends UpdateableMetadata {
    */
   recipient: string
   /**
-   * description for this fundraiser
+   * description for this project
    */
   description: string
   /**
