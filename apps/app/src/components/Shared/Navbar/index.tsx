@@ -177,7 +177,7 @@ const Navbar: FC = () => {
                     </div>
                   </Link>
                 )}
-                {showMenu && auth && (
+                {showMenu && (
                   <Link
                     href="/vhrs"
                     aria-current={pathname == '/vhrs' ? 'page' : undefined}
