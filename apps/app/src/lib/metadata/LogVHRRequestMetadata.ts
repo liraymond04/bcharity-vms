@@ -11,8 +11,7 @@ import { InvalidMetadataException } from './InvalidMetadataException'
 import { OpportunityMetadata } from './OpportunityMetadata'
 
 /**
- * @type OpportunityMetadataRecord
- * The types of opportunity metadata for form
+ * The type for LogVhrRequest data
  */
 export type LogVhrRequestMetadataRecord = Record<
   Exclude<

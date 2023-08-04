@@ -35,6 +35,20 @@ export enum Bookmark {
 }
 
 /**
+ * A group of tags related to Applications
+ */
+export enum Application {
+  /**
+   * Tag to use for applying to an opportunity
+   */
+  Apply = 'VOLUNTEER_APPLY_OPPORTUNITY',
+  /**
+   * Tag to use for rejecting a request
+   */
+  REJECT = 'ORGANIZATION_REJECT_APPLICATION'
+}
+
+/**
  * A group of tags related to VHR requests
  */
 export enum VhrRequest {
@@ -62,5 +76,6 @@ export const PostTags = {
   OrgPublish,
   Bookmark,
   VhrRequest,
-  Donate
+  Donate,
+  Application
 }

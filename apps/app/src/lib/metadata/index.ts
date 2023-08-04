@@ -1,3 +1,7 @@
+import {
+  ApplicationMetadata,
+  ApplicationMetadataBuilder
+} from './ApplicationMetadata'
 import { buildMetadata } from './buildMetadata'
 import {
   CauseMetadata,
@@ -24,7 +28,14 @@ import {
   OpportunityMetadataBuilder,
   OpportunityMetadataRecord
 } from './OpportunityMetadata'
-import { Bookmark, Donate, OrgPublish, PostTags, VhrRequest } from './PostTags'
+import {
+  Application,
+  Bookmark,
+  Donate,
+  OrgPublish,
+  PostTags,
+  VhrRequest
+} from './PostTags'
 import {
   PublicationMetadata,
   PublicationMetadataBuilder,
@@ -36,27 +47,31 @@ import {
 } from './UpdateableMetadata'
 
 export {
-  buildMetadata,
+  ApplicationMetadata,
+  ApplicationMetadataBuilder,
   CauseMetadata,
   CauseMetadataBuilder,
-  getCauseMetadata,
-  getMostRecent,
-  getOpportunityMetadata,
   GoalMetadata,
   GoalMetadataBuilder,
   InvalidMetadataException,
-  isComment,
-  isMirror,
-  isPost,
   LogVhrRequestMetadata,
   LogVhrRequestMetadataBuilder,
   OpportunityMetadata,
   OpportunityMetadataBuilder,
-  PostTags,
   PublicationMetadata,
   PublicationMetadataBuilder,
   UpdateableMetadata,
   UpdateableMetadataBuilder
+}
+
+export {
+  buildMetadata,
+  getCauseMetadata,
+  getMostRecent,
+  getOpportunityMetadata,
+  isComment,
+  isMirror,
+  isPost
 }
 
 export type {
@@ -67,4 +82,4 @@ export type {
   PublicationMetadataFieldNames
 }
 
-export { Bookmark, Donate, OrgPublish, VhrRequest }
+export { Application, Bookmark, Donate, OrgPublish, PostTags, VhrRequest }
