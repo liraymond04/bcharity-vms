@@ -24,7 +24,11 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
             >
               <div className="flex items-center">
                 <div className="ml-2 text-[#7E7E7E]">{index + 1}</div>
-                <div className="w-10 h-10 bg-[#498ade] mx-4 rounded-full"></div>
+                <img
+                  src={value.avatar}
+                  alt="Profile avatar"
+                  className="object-cover w-10 h-10 mx-4 rounded-full"
+                />
                 <a href={`/user/${value.handle}`} target="_blank">
                   <div
                     className={`${
