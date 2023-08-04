@@ -107,7 +107,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/fundraiser/${cause.post_id}`, '_blank')
+        window.open(`/project/${cause.post_id}`, '_blank')
       }}
     >
       <Card className="w-80 h-96 my-5 p-2 flex flex-col items-stretch justify-between transition duration-100 hover:scale-105 hover:cursor-pointer">

@@ -32,7 +32,7 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationVHRTab />
     },
     {
-      label: 'Fundraisers',
+      label: 'Projects',
       icon: <GlobeIcon className="w-4 inline" />,
       component: <OrganizationCausesTab />
     },
