@@ -321,7 +321,7 @@ const OrganizationCauses: React.FC = () => {
               onClick={onNew}
               className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
-              <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <PlusSmIcon className="w-8 text-white" />
               <div className="text-white mr-3 mt-1 font-bold">
                 Create new fundraiser
               </div>
