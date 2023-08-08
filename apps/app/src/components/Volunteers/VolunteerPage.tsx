@@ -1,11 +1,11 @@
 import { ExternalLinkIcon, HomeIcon } from '@heroicons/react/outline'
+import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
   InvalidMetadataException,
@@ -95,17 +95,6 @@ const VolunteerPage: NextPage = () => {
   }
 
   const Body = () => {
-    const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-    useEffect(() => {
-      if (!opportunity) return
-      if (opportunity.imageUrl) {
-        getIPFSBlob(opportunity.imageUrl).then((url) =>
-          setResolvedImageUrl(url)
-        )
-      }
-    }, [opportunity])
-
     if (!opportunity) return <Spinner />
 
     return wrongPostType || opoprtunityError ? (
@@ -134,12 +123,12 @@ const VolunteerPage: NextPage = () => {
           <FollowButton followId={opportunity.from.id} />
         </div>
         <div className="pt-6 pb-4">{opportunity.description}</div>
-        {resolvedImageUrl && (
+        {opportunity.imageUrl && (
           <div>
-            <img
+            <MediaRenderer
               key="attachment"
               className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
-              src={resolvedImageUrl}
+              src={opportunity.imageUrl}
               alt={'image attachment'}
             />
           </div>

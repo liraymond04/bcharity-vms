@@ -1,3 +1,4 @@
+import { useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
 import { v4 } from 'uuid'
@@ -23,6 +24,8 @@ import { Card } from '../UI/Card'
 import SelectAvatar from './UserHome/SelectAvatar'
 
 const VolunteerHomeTab: React.FC = () => {
+  const { mutateAsync: upload } = useStorageUpload()
+
   const { currentUser } = useAppPersistStore()
   const [name, setName] = useState<string>('')
   const [location, setLocation] = useState<string>('')
@@ -86,7 +89,7 @@ const VolunteerHomeTab: React.FC = () => {
             }
           ]
 
-          const avatarUrl = cover ? await uploadToIPFS(cover) : null
+          const avatarUrl = cover ? (await upload({ data: [cover] }))[0] : null
 
           const metadata: ProfileMetadata = {
             version: MetadataVersion.ProfileMetadataVersions['1.0.0'],

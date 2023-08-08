@@ -1,5 +1,6 @@
 import { PencilIcon } from '@heroicons/react/outline'
 import { ProfileFragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { ChangeEvent, FC, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -9,7 +10,6 @@ import ChooseFile from '@/components/Shared/ChooseFile'
 import { Button } from '@/components/UI/Button'
 import { ErrorMessage } from '@/components/UI/ErrorMessage'
 import { Spinner } from '@/components/UI/Spinner'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
@@ -19,6 +19,8 @@ interface Props {
 }
 
 const Picture: FC<Props> = ({ profile }) => {
+  const { mutateAsync: upload } = useStorageUpload()
+
   const { t } = useTranslation('common')
   const [avatar, setAvatar] = useState<string>()
   const [uploading, setUploading] = useState<boolean>(false)
@@ -29,7 +31,7 @@ const Picture: FC<Props> = ({ profile }) => {
     evt.preventDefault()
     setUploading(true)
     try {
-      const attachment = await uploadToIPFS(evt.target.files![0])
+      const attachment = (await upload({ data: [evt.target.files![0]] }))[0]
       if (attachment) {
         setAvatar(attachment)
       }

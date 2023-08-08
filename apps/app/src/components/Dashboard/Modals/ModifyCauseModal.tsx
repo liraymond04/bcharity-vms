@@ -1,5 +1,6 @@
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { Erc20Fragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -12,9 +13,8 @@ import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import getTokenImage from '@/lib/getTokenImage'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
@@ -39,6 +39,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   defaultValues,
   currencyData
 }) => {
+  const { createPost } = useCreatePost()
+
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
 
   const {
@@ -49,6 +51,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
     clearErrors,
     formState: { errors }
   } = form
+
+  const { mutateAsync: upload } = useStorageUpload()
 
   const { t } = useTranslation('common')
 
@@ -88,7 +92,9 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
+    const imageUrl = image
+      ? (await upload({ data: [image] }))[0]
+      : defaultValues.imageUrl
 
     const metadata = buildMetadata<CauseMetadataRecord>(
       publisher,

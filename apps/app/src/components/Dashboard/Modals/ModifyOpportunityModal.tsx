@@ -1,4 +1,5 @@
 import { ProfileFragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -7,9 +8,8 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import {
   buildMetadata,
   OpportunityMetadataRecord,
@@ -35,6 +35,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   publisher,
   defaultValues
 }) => {
+  const { createPost } = useCreatePost()
+
+  const { mutateAsync: upload } = useStorageUpload()
+
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -70,7 +74,9 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
+    const imageUrl = image
+      ? (await upload({ data: [image] }))[0]
+      : defaultValues.imageUrl
 
     const metadata = buildMetadata<OpportunityMetadataRecord>(
       publisher,

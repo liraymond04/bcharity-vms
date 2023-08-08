@@ -1,9 +1,9 @@
+import { MediaRenderer } from '@thirdweb-dev/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { CURRENCIES } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
@@ -17,14 +17,6 @@ interface ICauseCardProps {
 }
 
 const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
-  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-  useEffect(() => {
-    if (cause.imageUrl) {
-      getIPFSBlob(cause.imageUrl).then((url) => setResolvedImageUrl(url))
-    }
-  }, [cause])
-
   const getDisplayedImage = () => {
     if (!cause.imageUrl) {
       return (
@@ -34,18 +26,12 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
           className="object-cover h-full w-auto m-auto"
         />
       )
-    } else if (!resolvedImageUrl) {
-      return (
-        <div className="h-full flex items-center justify-center">
-          <Spinner size="lg" />
-        </div>
-      )
     } else {
       return (
-        <img
-          src={resolvedImageUrl}
+        <MediaRenderer
+          src={cause.imageUrl}
           alt="Volunteer opportunity related image"
-          className="object-cover h-full w-full m-auto"
+          className="!object-cover !h-full !w-full m-auto"
         />
       )
     }
