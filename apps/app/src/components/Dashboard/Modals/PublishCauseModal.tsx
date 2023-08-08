@@ -1,5 +1,6 @@
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { Erc20Fragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +15,6 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { DEFAULT_COLLECT_TOKEN } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createPost from '@/lib/lens-protocol/createPost'
 import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
@@ -64,6 +64,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   publisher,
   currencyData
 }) => {
+  const { mutateAsync: upload } = useStorageUpload()
+
   const form = useForm<IPublishCauseFormProps>({
     defaultValues: { ...emptyPublishFormData }
   })
@@ -115,7 +117,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : ''
+    const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
     const metadata = buildMetadata<CauseMetadataRecord>(
       publisher,
