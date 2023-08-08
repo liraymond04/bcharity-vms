@@ -75,7 +75,7 @@ const Navbar: FC = () => {
   }, [currentUser, isAuthenticated])
 
   return (
-    <div className="sticky z-20 top-0 flex justify-between bg-white dark:bg-indigo-950 bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
+    <div className="sticky z-50 top-0 flex justify-between bg-white dark:bg-indigo-950 bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
       <div className="flex items-center">
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
@@ -121,7 +121,7 @@ const Navbar: FC = () => {
                 </li>
                 {showMenu && (
                   <Link
-                    href="/projetcs"
+                    href="/projects"
                     aria-current={pathname == '/projects' ? 'page' : undefined}
                   >
                     <div
@@ -132,7 +132,7 @@ const Navbar: FC = () => {
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        FUNDRAISERS
+                        PROJECTS
                       </p>
                     </div>
                   </Link>
@@ -177,7 +177,7 @@ const Navbar: FC = () => {
                     </div>
                   </Link>
                 )}
-                {showMenu && auth && (
+                {showMenu && (
                   <Link
                     href="/vhrs"
                     aria-current={pathname == '/vhrs' ? 'page' : undefined}

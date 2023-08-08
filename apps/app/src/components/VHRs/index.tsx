@@ -4,6 +4,7 @@ import { NextPage } from 'next'
 import { SetStateAction, useEffect, useState } from 'react'
 
 import { CORS_PROXY, VHR_TOP_HOLDERS_URL } from '@/constants'
+import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
 import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
 
@@ -17,7 +18,7 @@ export interface Item {
   handle: string
   amount: number
   percentage: string
-  org: boolean
+  avatar: string
 }
 
 const inter500 = Inter({
@@ -41,13 +42,14 @@ const VHRs: NextPage = () => {
   ) => {
     let arr: Item[] = []
     for (let i = 0; i < items.length; i++) {
-      let item = Object.create(items[i])
+      let item: Item = Object.create(items[i])
       let profiles = await getProfilesOwnedBy(item.address)
       profiles = profiles.filter(
         (profile) => isVerified(profile.id) === verified
       )
       item.handle = profiles[0]?.handle
       if (profiles.length > 0) {
+        item.avatar = getAvatar(profiles[0])
         arr.push(item)
         setData(arr)
       }
@@ -78,7 +80,7 @@ const VHRs: NextPage = () => {
             handle: '',
             amount: Number(cur[2]?.replace(/,/g, '')),
             percentage: cur[3],
-            org: false
+            avatar: ''
           }
           index++
         }

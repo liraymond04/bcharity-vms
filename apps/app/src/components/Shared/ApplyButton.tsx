@@ -88,8 +88,8 @@ const ApplyButton: FC<Props> = ({
                 })}
               />
               <TextArea
-                label="Comments"
-                placeholder="If you have any comments, enter them here"
+                label="Comments & Proof Links"
+                placeholder="If you have any comments or links to provide as proof, enter them here"
                 error={!!errors.comments?.type}
                 {...register('comments', { required: false, maxLength: 1000 })}
               />

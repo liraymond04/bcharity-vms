@@ -82,26 +82,26 @@ const Volunteers: NextPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
-            <div className="flex flex-row">
-              <div className="h-[50px] z-10 ">
+          <div className="flex flex-wrap gap-y-5 justify-around w-[820px]">
+            <div className="flex flex-row flex-wrap w-full items-center">
+              <div className="h-[50px] my-2 z-20">
                 <DashboardDropDown
-                  label="Filter:"
+                  label="Category:"
                   options={Array.from(categories)}
                   onClick={(c) => setSelectedCategory(c)}
                   selected={selectedCategory}
                 ></DashboardDropDown>
               </div>
-              <div className="h-[50px] z-10 ">
+              <div className="h-[50px] my-2 z-10">
                 <DashboardDropDown
-                  label="Organizations:"
+                  label="Organization:"
                   options={Array.from(org)}
                   onClick={(c) => setSelectedOrg(c)}
                   selected={selectedOrg}
                 ></DashboardDropDown>
               </div>
               <button
-                className="ml-3 min-w-[110px] h-fit mt-3  text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
+                className="ml-3 min-w-[110px] h-fit my-2 first-letter:mb-2 text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
                 onClick={() => {
                   setSelectedCategory('')
                   setSelectedOrg('')

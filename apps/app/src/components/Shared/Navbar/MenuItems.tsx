@@ -213,7 +213,6 @@ const MenuItems: FC = () => {
             alt="Lens Logo"
           />
         }
-        className="mr-10"
         onClick={() => {
           setShowLoginModal(!showLoginModal)
         }}
