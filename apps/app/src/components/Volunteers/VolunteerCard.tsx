@@ -1,27 +1,18 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { MediaRenderer } from '@thirdweb-dev/react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { OpportunityMetadata } from '@/lib/metadata'
 
 import { Card } from '../UI/Card'
-import { Spinner } from '../UI/Spinner'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
 }
 
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
-  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-  useEffect(() => {
-    if (post.imageUrl) {
-      getIPFSBlob(post.imageUrl).then((url) => setResolvedImageUrl(url))
-    }
-  }, [post])
-
   const getDisplayedImage = () => {
     if (!post.imageUrl) {
       return (
@@ -36,18 +27,12 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
           }}
         />
       )
-    } else if (!resolvedImageUrl) {
-      return (
-        <div className="h-full flex items-center justify-center rounded-l-xl">
-          <Spinner size="lg" />
-        </div>
-      )
     } else {
       return (
-        <img
-          src={resolvedImageUrl}
+        <MediaRenderer
+          src={post.imageUrl}
           alt="Volunteer opportunity related image"
-          className="h-full w-auto m-auto rounded-l-xl"
+          className="!object-cover !h-full rounded-l-xl"
         />
       )
     }

@@ -1,5 +1,6 @@
 import '../styles.css'
 
+import { ThirdwebProvider } from '@thirdweb-dev/react'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
@@ -40,13 +41,22 @@ const config = createConfig({
 })
 
 const App = ({ Component, pageProps }: AppProps) => {
+  console.log(
+    'using thirdweb client id',
+    process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID
+  )
   return (
     <WagmiConfig config={config}>
-      <ThemeProvider defaultTheme="light" attribute="class">
-        <SiteLayout>
-          <Component {...pageProps} />
-        </SiteLayout>
-      </ThemeProvider>
+      <ThirdwebProvider
+        activeChain="mumbai"
+        clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}
+      >
+        <ThemeProvider defaultTheme="light" attribute="class">
+          <SiteLayout>
+            <Component {...pageProps} />
+          </SiteLayout>
+        </ThemeProvider>
+      </ThirdwebProvider>
     </WagmiConfig>
   )
 }

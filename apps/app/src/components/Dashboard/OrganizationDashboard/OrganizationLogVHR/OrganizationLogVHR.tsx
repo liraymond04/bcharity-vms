@@ -11,7 +11,7 @@ import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import createCollect from '@/lib/lens-protocol/createCollect'
-import createComment from '@/lib/lens-protocol/createComment'
+import useCreateComment from '@/lib/lens-protocol/useCreateComment'
 import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
 import { PostTags } from '@/lib/metadata'
 import testSearch from '@/lib/search'
@@ -25,6 +25,8 @@ import VHRVerifyCard from './VHRVerifyCard'
 interface IOrganizationLogVHRProps {}
 
 const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
+  const { createComment } = useCreateComment()
+
   const { currentUser: profile } = useAppPersistStore()
 
   const { loading, data, error, refetch } = useVHRRequests({ profile })
