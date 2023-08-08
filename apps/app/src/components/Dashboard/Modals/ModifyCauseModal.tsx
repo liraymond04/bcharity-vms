@@ -14,7 +14,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import getTokenImage from '@/lib/getTokenImage'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
@@ -39,6 +39,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   defaultValues,
   currencyData
 }) => {
+  const { createPost } = useCreatePost()
+
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
 
   const {

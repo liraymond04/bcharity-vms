@@ -19,9 +19,9 @@ import { APP_NAME, CURRENCIES } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createComment from '@/lib/lens-protocol/createComment'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import useCreateComment from '@/lib/lens-protocol/useCreateComment'
 import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
@@ -43,6 +43,8 @@ export interface IDonateFormProps {
 }
 
 const DonateButton: FC<Props> = ({ post, cause }) => {
+  const { createComment } = useCreateComment()
+
   const { currentUser } = useAppPersistStore()
   const [showModal, setShowModal] = useState<boolean>(false)
   const [error, setError] = useState<Error>()

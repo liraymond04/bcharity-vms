@@ -10,19 +10,19 @@ import { signTypedData } from '@wagmi/core'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
-const useCreatePost = (
-  profile: ProfileFragment,
-  metadata: PublicationMetadataV2Input,
-  collectModule: CollectModuleParams = {
-    freeCollectModule: { followerOnly: false }
-  },
-  referenceModule: ReferenceModuleParams = {
-    followerOnlyReferenceModule: false
-  }
-) => {
+const useCreatePost = () => {
   const { mutateAsync: upload } = useStorageUpload()
 
-  const createPost = async () => {
+  const createPost = async (
+    profile: ProfileFragment,
+    metadata: PublicationMetadataV2Input,
+    collectModule: CollectModuleParams = {
+      freeCollectModule: { followerOnly: false }
+    },
+    referenceModule: ReferenceModuleParams = {
+      followerOnlyReferenceModule: false
+    }
+  ) => {
     const contentURI = (await upload({ data: [metadata] }))[0]
 
     // create a post via dispatcher, you need to have the dispatcher enabled for the profile

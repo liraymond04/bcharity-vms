@@ -9,7 +9,7 @@ import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import {
   buildMetadata,
   OpportunityMetadataRecord,
@@ -35,6 +35,8 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   publisher,
   defaultValues
 }) => {
+  const { createPost } = useCreatePost()
+
   const { mutateAsync: upload } = useStorageUpload()
 
   const [isPending, setIsPending] = useState<boolean>(false)

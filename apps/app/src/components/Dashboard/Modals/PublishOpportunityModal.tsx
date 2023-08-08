@@ -10,7 +10,7 @@ import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata/PostTags'
 import { MetadataVersion } from '@/lib/types'
@@ -50,6 +50,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
+  const { createPost } = useCreatePost()
+
   const { mutateAsync: upload } = useStorageUpload()
 
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)

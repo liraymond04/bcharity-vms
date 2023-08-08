@@ -16,7 +16,7 @@ import { TextArea } from '@/components/UI/TextArea'
 import { DEFAULT_COLLECT_TOKEN } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
@@ -64,6 +64,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   publisher,
   currencyData
 }) => {
+  const { createPost } = useCreatePost()
+
   const { mutateAsync: upload } = useStorageUpload()
 
   const form = useForm<IPublishCauseFormProps>({

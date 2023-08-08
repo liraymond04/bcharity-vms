@@ -10,20 +10,20 @@ import { signTypedData } from '@wagmi/core'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
-const useCreateComment = (
-  publicationId: string,
-  profile: Profile,
-  metadata: PublicationMetadataV2Input,
-  collectModule: CollectModuleParams = {
-    freeCollectModule: { followerOnly: false }
-  },
-  referenceModule: ReferenceModuleParams = {
-    followerOnlyReferenceModule: false
-  }
-) => {
+const useCreateComment = () => {
   const { mutateAsync: upload } = useStorageUpload()
 
-  const createComment = async () => {
+  const createComment = async (
+    publicationId: string,
+    profile: Profile,
+    metadata: PublicationMetadataV2Input,
+    collectModule: CollectModuleParams = {
+      freeCollectModule: { followerOnly: false }
+    },
+    referenceModule: ReferenceModuleParams = {
+      followerOnlyReferenceModule: false
+    }
+  ) => {
     const contentURI = (await upload({ data: [metadata] }))[0]
 
     const profileId: string = profile.id
