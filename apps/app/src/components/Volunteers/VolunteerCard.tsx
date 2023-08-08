@@ -32,7 +32,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
         <MediaRenderer
           src={post.imageUrl}
           alt="Volunteer opportunity related image"
-          className="h-full w-auto m-auto rounded-l-xl"
+          className="!object-cover !h-full rounded-l-xl"
         />
       )
     }

@@ -38,7 +38,7 @@ const BrowseCard: React.FC<IBrowseCardProps> = ({
       return (
         <MediaRenderer
           src={imageSrc}
-          className="h-[200px]"
+          className="!object-cover !h-[200px]"
           alt="Volunteer opportunity related picture"
         />
       )

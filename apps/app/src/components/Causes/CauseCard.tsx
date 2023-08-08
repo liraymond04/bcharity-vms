@@ -31,7 +31,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
         <MediaRenderer
           src={cause.imageUrl}
           alt="Volunteer opportunity related image"
-          className="object-cover h-full w-full m-auto"
+          className="!object-cover !h-full !w-full m-auto"
         />
       )
     }
