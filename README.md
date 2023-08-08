@@ -44,3 +44,15 @@ Add dependencies to the Next.js app,
 ```bash
 pnpm i -w app [package-name]
 ```
+
+## Contributors
+
+Feel free to contribute to this project but please read the [Contributing Guidelines](CONTRIBUTING.md) before opening an issue or PR so you understand the branching strategy and local development environment.
+
+<a href="https://github.com/liraymond04/bcharity-vms/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=liraymond04/bcharity-vms" />
+</a>
+
+## License
+
+bcharity-vms is open-sourced software licensed under the © [AGPLv3](LICENSE).
