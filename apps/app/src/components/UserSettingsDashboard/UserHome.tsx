@@ -1,4 +1,4 @@
-import { useStorageUpload } from '@thirdweb-dev/react'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
 import { v4 } from 'uuid'
@@ -7,7 +7,6 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
@@ -25,6 +24,7 @@ import SelectAvatar from './UserHome/SelectAvatar'
 
 const VolunteerHomeTab: React.FC = () => {
   const { mutateAsync: upload } = useStorageUpload()
+  const sdk = useSDK()
 
   const { currentUser } = useAppPersistStore()
   const [name, setName] = useState<string>('')
@@ -100,7 +100,11 @@ const VolunteerHomeTab: React.FC = () => {
             attributes
           }
 
-          const metadataUrl = await uploadToIPFS(metadata)
+          const metadataUrl = sdk?.storage.resolveScheme(
+            (await upload({ data: [metadata] }))[0]
+          )
+
+          if (!metadataUrl) throw Error('Metadata upload failed')
 
           const typedDataResult =
             await lensClient().profile.createSetProfileMetadataTypedData({
