@@ -1,9 +1,9 @@
 import { Inter } from '@next/font/google'
+import { MediaRenderer } from '@thirdweb-dev/react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { Card } from '@/components/UI/Card'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 
 const inter500 = Inter({
   subsets: ['latin'],
@@ -25,14 +25,6 @@ const BrowseCard: React.FC<IBrowseCardProps> = ({
   buttonText,
   buttonHref
 }) => {
-  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-  useEffect(() => {
-    if (imageSrc) {
-      getIPFSBlob(imageSrc).then((url) => setResolvedImageUrl(url))
-    }
-  }, [imageSrc])
-
   const getDisplayedImage = () => {
     if (!imageSrc) {
       return (
@@ -44,8 +36,8 @@ const BrowseCard: React.FC<IBrowseCardProps> = ({
       )
     } else {
       return (
-        <img
-          src={resolvedImageUrl}
+        <MediaRenderer
+          src={imageSrc}
           className="h-[200px]"
           alt="Volunteer opportunity related picture"
         />

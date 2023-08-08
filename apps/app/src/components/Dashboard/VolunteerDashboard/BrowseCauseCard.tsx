@@ -1,11 +1,11 @@
 import { PostFragment } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
-import React, { useEffect, useState } from 'react'
+import { MediaRenderer } from '@thirdweb-dev/react'
+import React from 'react'
 
 import DonateButton from '@/components/Shared/DonateButton'
 import { Card } from '@/components/UI/Card'
 import getAvatar from '@/lib/getAvatar'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { CauseMetadata } from '@/lib/metadata'
 
 const inter500 = Inter({
@@ -19,14 +19,6 @@ interface IBrowseCardProps {
 }
 
 const BrowseCauseCard: React.FC<IBrowseCardProps> = ({ cause, post }) => {
-  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-  useEffect(() => {
-    if (cause.imageUrl) {
-      getIPFSBlob(cause.imageUrl).then((url) => setResolvedImageUrl(url))
-    }
-  }, [cause.imageUrl])
-
   const getDisplayedImage = () => {
     if (!cause.imageUrl) {
       return (
@@ -38,8 +30,8 @@ const BrowseCauseCard: React.FC<IBrowseCardProps> = ({ cause, post }) => {
       )
     } else {
       return (
-        <img
-          src={resolvedImageUrl}
+        <MediaRenderer
+          src={cause.imageUrl}
           className="h-[200px]"
           alt="Volunteer opportunity related picture"
         />
