@@ -91,7 +91,7 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
     } else if (this.version === OpportunityMetadataVersion['1.0.1']) {
       this.name = this.getAttribute('name')
       this.startDate = this.getAttribute('startDate')
-      this.endDate = this.getAttribute('endDate')
+      this.endDate = this.getAttribute('endDate', { default: '' })
       this.hoursPerWeek = this.getAttribute('hoursPerWeek')
       this.category = this.getAttribute('category')
       this.website = this.getAttribute('website')
