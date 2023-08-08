@@ -6,7 +6,7 @@ import getAvatar from '@/lib/getAvatar'
 import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { CauseMetadata, isComment, PostTags } from '@/lib/metadata'
+import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 
 import Progress from '../Shared/Progress'
 import { Card } from '../UI/Card'
@@ -54,6 +54,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
     useState<boolean>(false)
   const [totalDonated, setTotalDonated] = useState<number>(0)
+
   const getTotalDonated = async () => {
     setTotalDonatedIsLoading(true)
     try {
@@ -63,8 +64,9 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
         publicationId: cause.post_id
       })
 
-      if (publication?.__typename !== 'Post')
+      if (publication === null || !isPost(publication)) {
         throw Error('Incorrect publication type!')
+      }
       if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
         throw Error('Incorrect collect module!')
 

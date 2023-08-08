@@ -3,21 +3,13 @@ import { SearchIcon } from '@heroicons/react/outline'
 import {
   ProfileFragment,
   PublicationSortCriteria,
-  PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
 import { NextPage } from 'next'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import {
-  CauseMetadataBuilder,
-  isPost,
-  OpportunityMetadataBuilder,
-  PostTags
-} from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { isPost, PostTags } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
@@ -26,13 +18,19 @@ import { Spinner } from '../UI/Spinner'
 import OrganizationCard from './OrganizationCard'
 
 const Organizations: NextPage = () => {
+  const [searchValue, setSearchValue] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [profiles, setProfiles] = useState<ProfileFragment[]>([])
+  const [postings, setPostings] = useState<Record<string, number>>({})
+
   const {
-    data,
+    data: opportunityOrCausePublications,
     error: exploreError,
     loading
   } = useExplorePublications(
     {
       sortCriteria: PublicationSortCriteria.Latest,
+      publicationTypes: [PublicationTypes.Post],
       metadata: {
         tags: {
           oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
@@ -43,74 +41,31 @@ const Organizations: NextPage = () => {
     true
   )
 
-  const [otherError, setOtherError] = useState(false)
-
-  const posts = useMemo(() => getOpportunityMetadata(data), [data])
-
-  const [profiles, setProfiles] = useState<ProfileFragment[]>([])
-  const [postings, setPostings] = useState<number[]>([])
-
-  const [searchValue, setSearchValue] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('')
-
   useEffect(() => {
-    const uniqueIds: Set<string> = new Set()
+    const _profiles: Record<string, ProfileFragment> = {}
+    const _postings: Record<string, number> = {}
 
-    posts.forEach((post) => uniqueIds.add(post.from.id))
+    const filtered = opportunityOrCausePublications
+      .filter(isPost)
+      .filter((p) => !p.hidden)
 
-    if (uniqueIds.size > 0)
-      lensClient()
-        .profile.fetchAll({ profileIds: Array.from(uniqueIds) })
-        .then((res) => setProfiles(res.items))
-        .catch((err) => {
-          console.log(err)
-          setOtherError(true)
-        })
-  }, [posts])
+    filtered.forEach((p) => {
+      const id = p.profile.id
 
-  const generateRequest = (profileId: string) => {
-    const param: PublicationsQueryRequest = {
-      profileId,
-      publicationTypes: [PublicationTypes.Post],
-      metadata: {
-        tags: {
-          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportunity]
-        }
+      if (!_profiles[id]) {
+        _profiles[id] = p.profile
       }
-    }
 
-    return lensClient()
-      .publication.fetchAll(param)
-      .then((result) => {
-        const opportunity_ids = new Set<string>()
-        const cause_ids = new Set<string>()
+      if (_postings[id] === undefined) {
+        _postings[id] = 0
+      }
 
-        result.items.filter((res) => {
-          if (!res.hidden && isPost(res)) {
-            try {
-              const id = new OpportunityMetadataBuilder(res).build().id
-              opportunity_ids.add(id)
-            } catch (e) {}
+      _postings[id] = _postings[id] + 1
+    })
 
-            try {
-              const id = new CauseMetadataBuilder(res).build().id
-              cause_ids.add(id)
-            } catch (e) {}
-          }
-        })
-
-        return opportunity_ids.size + cause_ids.size
-      })
-  }
-
-  useEffect(() => {
-    Promise.all(profiles.map((profile) => generateRequest(profile.id)))
-      .then((lengths) => setPostings(lengths))
-      .catch((err) => {
-        setOtherError(true)
-        console.log(err)
-      })
-  }, [profiles])
+    setProfiles(Object.values(_profiles))
+    setPostings(_postings)
+  }, [opportunityOrCausePublications])
 
   return (
     <>
@@ -160,14 +115,17 @@ const Organizations: NextPage = () => {
         </div>
       ) : (
         <GridLayout>
-          {profiles.map((profile, index) => (
+          {profiles.map((profile) => (
             <GridItemFour key={profile.id}>
-              <OrganizationCard profile={profile} postings={postings[index]} />
+              <OrganizationCard
+                profile={profile}
+                postings={postings[profile.id]}
+              />
             </GridItemFour>
           ))}
         </GridLayout>
       )}
-      {(exploreError || otherError) && (
+      {exploreError && (
         <div className="text-sm text-red-700 dark:text-red-200">
           Something went wrong
         </div>
