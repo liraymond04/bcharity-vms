@@ -4,5 +4,17 @@
     "not-found": "This page could not be found.",
     "go-home": "Go Home"
   },
+  "components": {
+    "shared": {
+      "navbar": {
+        "name": "BCharity",
+        "projects": "PROJECTS",
+        "volunteers": "VOLUNTEERS",
+        "organizations": "ORGANIZATIONS",
+        "vhrs": "VHRs",
+        "dashboard": "DASHBOARD"
+      }
+    }
+  },
   "locale-name": "English"
 }

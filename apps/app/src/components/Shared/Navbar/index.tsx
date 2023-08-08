@@ -51,7 +51,9 @@ const useScreenSize = () => {
 }
 
 const Navbar: FC = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar'
+  })
   const { pathname } = useRouter()
   const { isAuthenticated, currentUser } = useAppPersistStore()
   const [auth, setAuth] = useState<boolean>(false)
@@ -89,7 +91,7 @@ const Navbar: FC = () => {
             className={`m-5 text-2xl text-violet-800 dark:text-white tracking-wider ${inter500.className}`}
             href="/"
           >
-            BCharity
+            {t('name')}
           </Link>
         )}
         {(screenSize == 'phone' || screenSize == 'smallPhone') && (
@@ -132,7 +134,7 @@ const Navbar: FC = () => {
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        PROJECTS
+                        {t('projects')}
                       </p>
                     </div>
                   </Link>
@@ -152,7 +154,7 @@ const Navbar: FC = () => {
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        VOLUNTEERS
+                        {t('volunteers')}
                       </p>
                     </div>
                   </Link>
@@ -172,7 +174,7 @@ const Navbar: FC = () => {
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        ORGANIZATIONS
+                        {t('organizations')}
                       </p>
                     </div>
                   </Link>
@@ -190,7 +192,7 @@ const Navbar: FC = () => {
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        VHRs
+                        {t('vhrs')}
                       </p>
                     </div>
                   </Link>
@@ -208,7 +210,7 @@ const Navbar: FC = () => {
                       } ${inter500.className}`}
                     >
                       <p className="opacity-70 hover:opacity-100 duration-200">
-                        DASHBOARD
+                        {t('dashboard')}
                       </p>
                     </div>
                   </Link>
@@ -234,7 +236,7 @@ const Navbar: FC = () => {
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
-                  PROJECTS
+                  {t('projects')}
                 </div>
               </button>
             </Link>
@@ -250,7 +252,7 @@ const Navbar: FC = () => {
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
-                  VOLUNTEERS
+                  {t('volunteers')}
                 </div>
               </button>
             </Link>
@@ -266,7 +268,7 @@ const Navbar: FC = () => {
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className} ${auth ? '' : 'mr-4'}`}
                 >
-                  ORGANIZATIONS
+                  {t('organizations')}
                 </div>
               </button>
             </Link>
@@ -282,7 +284,7 @@ const Navbar: FC = () => {
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
                 >
-                  VHRs
+                  {t('vhrs')}
                 </div>
               </button>
             </Link>
@@ -299,7 +301,7 @@ const Navbar: FC = () => {
                         : 'text-black dark:text-sky-50'
                     } ${inter500.className}`}
                   >
-                    DASHBOARD
+                    {t('dashboard')}
                   </div>
                 </button>
               </Link>

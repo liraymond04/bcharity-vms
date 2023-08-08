@@ -2,5 +2,11 @@
   "locale-name": "简体中文",
   "404.lost": "哎呀，迷路了？",
   "404.not-found": "无法找到该页面。",
-  "404.go-home": "回家"
+  "404.go-home": "回家",
+  "components.shared.navbar.name": "BCharity",
+  "components.shared.navbar.projects": "项目",
+  "components.shared.navbar.volunteers": "志愿者",
+  "components.shared.navbar.organizations": "组织机构",
+  "components.shared.navbar.vhrs": "VHR",
+  "components.shared.navbar.dashboard": "仪表板"
 }
