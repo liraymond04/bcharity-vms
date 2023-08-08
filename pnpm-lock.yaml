@@ -20,6 +20,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.1.1(react-hook-form@7.45.1)
+      '@inlang/cli':
+        specifier: ^0.13.3
+        version: 0.13.3
       '@lens-protocol/client':
         specifier: ^1.2.0
         version: 1.2.0(encoding@0.1.13)(ethers@5.7.2)
@@ -62,6 +65,9 @@ importers:
       ag-grid.css:
         specifier: link:ag-grid-community/styles/ag-grid.css
         version: link:ag-grid-community/styles/ag-grid.css
+      app:
+        specifier: workspace:^
+        version: link:apps/app
       clsx:
         specifier: ^1.1.1
         version: 1.2.1
@@ -1013,6 +1019,12 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+
+  /@inlang/cli@0.13.3:
+    resolution: {integrity: sha512-6pdLmdHuaTJAfW+Zct2yHwHIIKE01zrDw+/fPXyzFe0ycq/W9YNj7CVA+KElqRhHjwJWqYbhvpJ3G6RABIO4Hw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    dev: false
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
