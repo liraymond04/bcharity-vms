@@ -5,17 +5,28 @@ import {
   LinkIcon,
   ViewListIcon
 } from '@heroicons/react/outline'
+import { PublicationTypes } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
-import { useState } from 'react'
+import React, { useMemo, useState } from 'react'
+
+import usePostData from '@/lib/lens-protocol/usePostData'
+import {
+  LogVhrRequestMetadata,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
+import { useAppPersistStore } from '@/store/app'
 
 import DashboardDropDown from './DashboardDropDown'
+
+interface IVolunteerLogHoursProps {}
 
 const inter500 = Inter({
   subsets: ['latin'],
   weight: ['500']
 })
 
-const generateDate = () => {
+/**const generateDate = () => {
   let year = (Math.floor(Math.random() * 5) + 2018).toString()
 
   let month = (Math.floor(Math.random() * 12) + 1).toString()
@@ -53,6 +64,7 @@ const generateData = () => {
   }
   return data
 }
+*/
 
 const resetIndice = () => {
   let indice = []
@@ -62,7 +74,25 @@ const resetIndice = () => {
   return indice
 }
 
-const VolunteerLogHours: React.FC = () => {
+const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
+  const { currentUser: profile } = useAppPersistStore()
+  const { currentUser } = useAppPersistStore()
+  const [requests, setRequests] = useState<LogVhrRequestMetadata[]>([])
+
+  const { loading, data, error, refetch } = usePostData({
+    profileId: profile?.id,
+    publicationTypes: [PublicationTypes.Comment],
+    metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
+  })
+  console.log(data)
+  const [selectedId, setSelectedId] = useState('')
+
+  const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
+
+  const selectedValue = useMemo(() => {
+    return metaData.find((val) => val.post_id === selectedId) ?? null
+  }, [data, selectedId])
+
   const [selectedSortBy, setSelectedSortBy] = useState<string>('')
   const sortByOptions = ['Start Date', 'End Date', 'Total Hours']
 
@@ -71,26 +101,26 @@ const VolunteerLogHours: React.FC = () => {
 
   const [displayIndex, setDisplayIndex] = useState(-1)
 
-  const [data, setdata] = useState(generateData())
+  const [metaData, setMetaData] = useState<OpportunityMetadata[]>([])
   const [indice, setIndice] = useState(resetIndice())
 
   const sortByStartDate = () => {
     indice.sort((a, b) => {
-      if (data[a].start < data[b].start) return -1
+      if (metaData[a].startDate < metaData[b].startDate) return -1
       else return 1
     })
   }
 
   const sortByEndDate = () => {
     indice.sort((a, b) => {
-      if (data[a].end < data[b].end) return -1
+      if (metaData[a].endDate < metaData[b].endDate) return -1
       else return 1
     })
   }
 
   const sortByHours = () => {
     indice.sort((a, b) => {
-      if (data[a].hour < data[b].hour) return -1
+      if (metaData[a].hoursPerWeek < metaData[b].hoursPerWeek) return -1
       else return 1
     })
   }
@@ -144,7 +174,8 @@ const VolunteerLogHours: React.FC = () => {
         {indice
           .filter(
             (idx) =>
-              selectedCategory == '' || data[idx].category == selectedCategory
+              selectedCategory == '' ||
+              metaData[idx].category == selectedCategory
           )
           .map((op) => (
             <div
@@ -160,11 +191,13 @@ const VolunteerLogHours: React.FC = () => {
             >
               <div className="flex justify-between items-center ml-10">
                 <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
-                  {data[op].name}
+                  {metaData[op].name}
                 </p>
-                <p className="mx-5 w-[100px]">{data[op].start}</p>
-                <p className="mx-5 w-[100px]">{data[op].end}</p>
-                <p className="mx-5 w-[100px]">{data[op].hour} hours</p>
+                <p className="mx-5 w-[100px]">{metaData[op].startDate}</p>
+                <p className="mx-5 w-[100px]">{metaData[op].endDate}</p>
+                <p className="mx-5 w-[100px]">
+                  {metaData[op].hoursPerWeek} hours
+                </p>
               </div>
               <a href="https://google.com" target="_blank">
                 <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
@@ -180,26 +213,27 @@ const VolunteerLogHours: React.FC = () => {
             <div className="flex justify-around mt-5 text-xl h-fit">
               <div className="flex items-center">
                 <LinkIcon className="w-5 h-5 mr-4" />
-                {data[displayIndex].name}
+                {metaData[displayIndex].name}
               </div>
             </div>
             <div className="flex items-center ml-5 mt-5">
               <CalendarIcon className="w-5 h-5 mr-2" />
-              {data[displayIndex].start} to {data[displayIndex].end}
+              {metaData[displayIndex].startDate} to{' '}
+              {metaData[displayIndex].endDate}
             </div>
             <div className="flex items-center ml-5 mt-2">
-              <ClockIcon className="w-5 h-5 mr-2" /> {data[displayIndex].hour}{' '}
-              hours in total
+              <ClockIcon className="w-5 h-5 mr-2" />{' '}
+              {metaData[displayIndex].hoursPerWeek} hours in total
             </div>
             <div className="flex items-center ml-5 mt-2">
               <ViewListIcon className="w-5 h-5 mr-2" />{' '}
-              {data[displayIndex].category}
+              {metaData[displayIndex].category}
             </div>
           </div>
           <div className="h-[250px] self-center w-[2px] bg-[#D8C0EC]"></div>
           <div className="flex justify-around w-[400px]">
             <div className="w-[350px] mt-5 mb-5 overflow-scroll">
-              {data[displayIndex].description}
+              {metaData[displayIndex].description}
             </div>
           </div>
         </div>
