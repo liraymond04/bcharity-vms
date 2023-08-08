@@ -104,12 +104,20 @@ const OrganizationHome: React.FC = () => {
                   <div className="inset-0 flex justify-center items-center ml-0 mt-2">
                     12/20/2020
                   </div>
-                  <div className="inset-0 flex justify-center items-center ml-0 mt-10">
-                    <h1>PREVIOUS VOLUNTEERS </h1>
+
+                  <div className="inset-0 flex justify-left items-center ml-20 mt-20">
+                    <h1>Followers: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowers}
+                    </div>
                   </div>
-                  <div className="inset-0 flex justify-center items-center ml-0 mt-5">
-                    {currentUser.stats.totalFollowing}
+                  <div className="relative inset-0 flex justify-left items-center ml-20 mt-10">
+                    <h1>Following: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowing}
+                    </div>
                   </div>
+
                   <div className="ml-12 flex flex-row">
                     <svg
                       className="h-8 w-8 mt-20 mr-3"

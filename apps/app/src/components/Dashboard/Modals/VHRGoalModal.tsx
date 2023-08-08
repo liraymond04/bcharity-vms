@@ -8,7 +8,7 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import { buildMetadata, GoalMetadataRecord, PostTags } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
 
@@ -35,6 +35,8 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
   onClose,
   publisher
 }) => {
+  const { createPost } = useCreatePost()
+
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')

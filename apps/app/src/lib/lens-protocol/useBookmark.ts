@@ -4,6 +4,7 @@ import {
   PublicationMainFocus,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,7 +13,6 @@ import { v4 } from 'uuid'
 import { APP_NAME } from '@/constants'
 
 import getUserLocale from '../getUserLocale'
-import uploadToIPFS from '../ipfs/ipfsUpload'
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
@@ -23,6 +23,7 @@ interface Props {
 
 const useBookmark = (params: Props) => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const { mutateAsync: upload } = useStorageUpload()
 
   const [bookmarked, setBookmarked] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
@@ -94,7 +95,7 @@ const useBookmark = (params: Props) => {
         throw Error(e('already-bookmarked'))
       }
 
-      const contentURI = await uploadToIPFS(metadata)
+      const contentURI = (await upload({ data: [metadata] }))[0]
 
       const typedDataResult =
         await lensClient().publication.createCommentTypedData({
