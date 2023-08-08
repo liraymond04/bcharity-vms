@@ -9,8 +9,35 @@
     "status-message": "We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.",
     "go-home": "Go Home"
   },
+  "errors": {
+    "incorrect-publication-type": "Incorrect publication type!",
+    "incorrect-collect-module": "Incorrect collect module!",
+    "user-null": "Current user is null!",
+    "profile-null": "Provided profile is null!",
+    "already-bookmarked": "Publication has already been bookmarked!"
+  },
   "components": {
+    "causes": {
+      "filter": "Filter",
+      "clear-filters": "Clear Filters",
+      "browse-projects": "Browse Projects",
+      "something-wrong": "Something went wrong.",
+      "raised": "raised out of",
+      "incorrect-url": "This publication cannot be accessed. Please check that your URL is correct.",
+      "go-home": "Go Home"
+    },
     "shared": {
+      "donate-button": {
+        "donate-to": "Donate to",
+        "raised-of": "raised of",
+        "invalid-amount": "Invalid amount",
+        "set": "Set",
+        "check-balance": "Check Balance",
+        "error-occurred": "An error occurred",
+        "try-again": "Please try again",
+        "donate": "Donate",
+        "cancel": "Cancel"
+      },
       "navbar": {
         "name": "BCharity",
         "projects": "PROJECTS",

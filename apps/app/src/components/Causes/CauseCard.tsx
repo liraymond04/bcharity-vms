@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
@@ -17,6 +18,8 @@ interface ICauseCardProps {
 }
 
 const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
+  const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [resolvedImageUrl, setResolvedImageUrl] = useState('')
 
   useEffect(() => {
@@ -65,10 +68,10 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
       })
 
       if (publication === null || !isPost(publication)) {
-        throw Error('Incorrect publication type!')
+        throw Error(e('incorrect-publication-type'))
       }
       if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
-        throw Error('Incorrect collect module!')
+        throw Error(e('incorrect-collect-module'))
 
       total +=
         publication.stats.totalAmountOfCollects *
@@ -133,10 +136,13 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
                 progress={totalDonated}
                 total={parseFloat(cause.goal)}
               />
-              <p className="text-sm font-bold line-clamp-2">
+              <p
+                className="text-sm font-bold line-clamp-2"
+                suppressHydrationWarning
+              >
                 {totalDonated}{' '}
                 {CURRENCIES[cause.currency as keyof typeof CURRENCIES].symbol}{' '}
-                raised out of {cause.goal}
+                {t('raised')} {cause.goal}
               </p>
             </div>
           )}

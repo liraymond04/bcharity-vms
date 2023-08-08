@@ -12,6 +12,7 @@ import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { fetchBalance, signTypedData } from '@wagmi/core'
 import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import Progress from '@/components/Shared/Progress'
@@ -43,6 +44,11 @@ export interface IDonateFormProps {
 }
 
 const DonateButton: FC<Props> = ({ post, cause }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.donate-button'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { currentUser } = useAppPersistStore()
   const [showModal, setShowModal] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
@@ -84,14 +90,14 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
   const getBalance = async () => {
     setCheckBalanceLoading(true)
     try {
-      if (!currentUser) throw Error('Current user is null!')
+      if (!currentUser) throw Error(e('user-null'))
       if (!isPost(currentPublication) && !isComment(currentPublication))
-        throw Error('Incorrect publication type!')
+        throw Error(e('incorrect-publication-type'))
       if (
         currentPublication.collectModule.__typename !==
         'FeeCollectModuleSettings'
       )
-        throw Error('Incorrect collect module type!')
+        throw Error(e('incorrect-collect-module'))
 
       const balance = await fetchBalance({
         address: `0x${currentUser.ownedBy.substring(2)}`,
@@ -124,7 +130,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
     try {
       // check if collect amount is original amount
       if (post.collectModule.__typename !== 'FeeCollectModuleSettings')
-        throw 'Incorrect collect module!'
+        throw e('incorrect-collect-module')
       if (
         parseFloat(formContribution) ===
         parseFloat(post.collectModule.amount.value)
@@ -167,7 +173,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
       }
 
       // create comment with new collect amount
-      if (!currentUser) throw Error('Current user is null!')
+      if (!currentUser) throw Error(e('user-null'))
       await checkAuth(currentUser.ownedBy)
 
       const attributes: MetadataAttributeInput[] = []
@@ -186,7 +192,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
 
       const prevCollectModule = post.collectModule
       if (prevCollectModule.__typename !== 'FeeCollectModuleSettings') {
-        throw Error('Improper publication collect module!')
+        throw Error(e('incorrect-collect-module'))
       }
 
       const collectModule: CollectModuleParams = {
@@ -226,7 +232,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
       })
 
       if (!publication || !isComment(publication))
-        throw Error('Incorrect publication type!')
+        throw Error(e('incorrect-publication-type'))
 
       setCurrentPublication(publication)
       setCurrentContribution(formContribution)
@@ -244,7 +250,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
     setError(undefined)
     setDonateIsLoading(true)
     try {
-      if (!currentUser) throw Error('Current user is null!')
+      if (!currentUser) throw Error(e('user-null'))
       await checkAuth(currentUser.ownedBy)
 
       const typedDataResult =
@@ -285,9 +291,9 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
       })
 
       if (publication === null || !isPost(publication))
-        throw Error('Incorrect publication type!')
+        throw Error(e('incorrect-publication-type'))
       if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
-        throw Error('Incorrect collect module!')
+        throw Error(e('incorrect-collect-module'))
 
       total +=
         publication.stats.totalAmountOfCollects *
@@ -349,8 +355,11 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <div className="flex flex-row ">
-              <div className="text-purple-500 text-5xl font-bold">
-                Donate to {cause.name}
+              <div
+                className="text-purple-500 text-5xl font-bold"
+                suppressHydrationWarning
+              >
+                {t('donate-to')} {cause.name}
               </div>
             </div>
             <div className="text-gray-500  mt-2 text-2xl font-bold">
@@ -367,11 +376,14 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
                   total={parseFloat(cause.goal)}
                   className="my-4"
                 />
-                <div className="flex flex-row font-semibold mb-6">
+                <div
+                  className="flex flex-row font-semibold mb-6"
+                  suppressHydrationWarning
+                >
                   <div className="mr-3 text-purple-600 font-semibold">
                     {totalDonated} {selectedCurrencySymbol}
                   </div>
-                  raised of {cause.goal}!
+                  {t('raised-of')} {cause.goal}!
                 </div>
               </div>
             )}
@@ -398,7 +410,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
                   required: true,
                   min: {
                     value: 1,
-                    message: 'Invalid amount'
+                    message: t('invalid-amount')
                   }
                 })}
                 onChange={(e) => {
@@ -412,8 +424,9 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
                   currentContribution === formContribution || _setIsLoading
                 }
                 onClick={onSet}
+                suppressHydrationWarning
               >
-                Set
+                {t('set')}
               </Button>
             </div>
             {!currencyEnough && (
@@ -431,15 +444,18 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
                   icon={checkBalanceLoading && <Spinner size="sm" />}
                   disabled={checkBalanceLoading}
                   onClick={getBalance}
+                  suppressHydrationWarning
                 >
-                  Check Balance
+                  {t('check-balance')}
                 </Button>
               </div>
             )}
           </Form>
           {error && (
             <ErrorModal
-              message={`An error occured: ${error.message}. Please try again.`}
+              message={`${t('error-occurred')}: ${error.message}. ${t(
+                'try-again'
+              )}.`}
             />
           )}
         </div>
@@ -458,15 +474,17 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
               currentContribution !== formContribution ||
               !currencyEnough
             }
+            suppressHydrationWarning
           >
-            Donate
+            {t('donate')}
           </Button>
           <Button
             onClick={onCancel}
             variant="secondary"
             className="px-6 py-2 font-medium"
+            suppressHydrationWarning
           >
-            Cancel
+            {t('cancel')}
           </Button>
         </div>
       </Modal>
@@ -474,8 +492,9 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
         onClick={() => {
           setShowModal(true)
         }}
+        suppressHydrationWarning
       >
-        Donate
+        {t('donate')}
       </Button>
     </>
   )

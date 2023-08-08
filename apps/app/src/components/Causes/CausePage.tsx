@@ -27,8 +27,9 @@ import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
 const CausePage: NextPage = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const { data, loading, fetch, error } = usePublication()
-  const { t } = useTranslation('common')
   const {
     query: { id },
     isReady
@@ -62,13 +63,11 @@ const CausePage: NextPage = () => {
   const WrongPost = () => {
     return (
       <div className="py-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold">
-          {t('Incorrect publication type')}
+        <h1 className="mb-4 text-3xl font-bold" suppressHydrationWarning>
+          {e('Incorrect publication type')}
         </h1>
-        <div className="mb-4">
-          {t(
-            'This publication cannot be accessed. Please check that your URL is correct.'
-          )}
+        <div className="mb-4" suppressHydrationWarning>
+          {t('incorrect-url')}
         </div>
         <Link href="/">
           <Button
@@ -76,7 +75,7 @@ const CausePage: NextPage = () => {
             size="lg"
             icon={<HomeIcon className="w-4 h-4" />}
           >
-            <div>{t('Go Home')}</div>
+            <div suppressHydrationWarning>{t('go-home')}</div>
           </Button>
         </Link>
       </div>
@@ -137,7 +136,7 @@ const CausePage: NextPage = () => {
 
   return (
     <>
-      <SEO title="Cause Opportunity • BCharity VMS" />
+      <SEO title="Project • BCharity VMS" />
       <GridLayout>
         <GridItemTwelve>
           <Card>

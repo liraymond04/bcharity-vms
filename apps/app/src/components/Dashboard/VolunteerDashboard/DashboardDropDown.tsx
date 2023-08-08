@@ -18,7 +18,9 @@ const DashboardDropDown: React.FC<Props> = ({
 
   return (
     <div className="flex">
-      <div className={`mx-5 mt-3 dark:text-sky-100`}>{label}</div>
+      <div className={`mx-5 mt-3 dark:text-sky-100`} suppressHydrationWarning>
+        {label}
+      </div>
       <div className={`${open && 'shadow-2xl'}`}>
         <div
           onClick={() => setOpen(!open)}
