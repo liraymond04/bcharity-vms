@@ -90,6 +90,7 @@ const Navbar: FC = () => {
           <Link
             className={`m-5 text-2xl text-violet-800 dark:text-white tracking-wider ${inter500.className}`}
             href="/"
+            suppressHydrationWarning
           >
             {t('name')}
           </Link>
@@ -133,7 +134,10 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
                         {t('projects')}
                       </p>
                     </div>
@@ -153,7 +157,10 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
                         {t('volunteers')}
                       </p>
                     </div>
@@ -173,7 +180,10 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
                         {t('organizations')}
                       </p>
                     </div>
@@ -191,7 +201,10 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
                         {t('vhrs')}
                       </p>
                     </div>
@@ -209,7 +222,10 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
                         {t('dashboard')}
                       </p>
                     </div>
@@ -235,6 +251,7 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
                   {t('projects')}
                 </div>
@@ -251,6 +268,7 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
                   {t('volunteers')}
                 </div>
@@ -267,6 +285,7 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className} ${auth ? '' : 'mr-4'}`}
+                  suppressHydrationWarning
                 >
                   {t('organizations')}
                 </div>
@@ -283,6 +302,7 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
                   {t('vhrs')}
                 </div>
@@ -300,6 +320,7 @@ const Navbar: FC = () => {
                         ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                         : 'text-black dark:text-sky-50'
                     } ${inter500.className}`}
+                    suppressHydrationWarning
                   >
                     {t('dashboard')}
                   </div>

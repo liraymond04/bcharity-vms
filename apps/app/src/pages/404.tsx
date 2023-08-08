@@ -18,15 +18,20 @@ export default function Custom404() {
         height={240}
       />
       <div className="py-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold">{t('lost')}</h1>
-        <div className="mb-4">{t('not-found')}</div>
+        <h1 className="mb-4 text-3xl font-bold" suppressHydrationWarning>
+          {t('lost')}
+        </h1>
+        <div className="mb-4" suppressHydrationWarning>
+          {t('not-found')}
+        </div>
         <Link href="/">
           <Button
             className="flex mx-auto item-center"
             size="lg"
             icon={<HomeIcon className="w-4 h-4" />}
+            suppressHydrationWarning
           >
-            <div>{t('go-home')}</div>
+            <div suppressHydrationWarning>{t('go-home')}</div>
           </Button>
         </Link>
       </div>
