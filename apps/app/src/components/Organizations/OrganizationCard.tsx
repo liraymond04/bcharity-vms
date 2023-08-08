@@ -22,9 +22,9 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
 }) => {
   return (
     <Card>
-      <div className="flex m-1 mr-2">
+      <div className="flex m-5 mr-2">
         <img
-          className="w-[100px] h-[100px] rounded-md mr-3"
+          className="w-[100px] h-[100px] fill-current mr-3"
           src={getAvatar(profile)}
           alt={`${profile.handle}'s profile picture`}
         />
