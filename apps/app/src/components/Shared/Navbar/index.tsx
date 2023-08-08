@@ -125,7 +125,7 @@ const Navbar: FC = () => {
                     aria-current={pathname == '/projects' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center px-10 py-5 bg-white dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] dark:border-[#312f66] ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] dark:border-[#312f66] ${
                         pathname == '/projects'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
@@ -145,7 +145,7 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center px-10 py-5 bg-white dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/volunteers'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
@@ -165,7 +165,7 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center px-10 py-5 bg-white dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/organizations'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
@@ -183,7 +183,7 @@ const Navbar: FC = () => {
                     aria-current={pathname == '/vhrs' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center px-10 py-5 bg-white dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/vhrs'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
@@ -201,7 +201,7 @@ const Navbar: FC = () => {
                     aria-current={pathname == '/dashboard' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center px-10 py-5 bg-white dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/dashboard'
                           ? 'text-purple-600'
                           : 'text-black dark:text-sky-50'
