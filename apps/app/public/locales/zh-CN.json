@@ -8,5 +8,8 @@
   "components.shared.navbar.volunteers": "志愿者",
   "components.shared.navbar.organizations": "组织机构",
   "components.shared.navbar.vhrs": "VHR",
-  "components.shared.navbar.dashboard": "仪表板"
+  "components.shared.navbar.dashboard": "仪表板",
+  "500.something-wrong": "看来出了什么问题！",
+  "500.status-message": "我们会自动跟踪这些错误，但如果问题仍然存在，请随时与我们联系。与此同时，尝试刷新。",
+  "500.go-home": "回家"
 }

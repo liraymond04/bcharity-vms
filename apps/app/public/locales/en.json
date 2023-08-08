@@ -4,6 +4,11 @@
     "not-found": "This page could not be found.",
     "go-home": "Go Home"
   },
+  "500": {
+    "something-wrong": "Looks like something went wrong!",
+    "status-message": "We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.",
+    "go-home": "Go Home"
+  },
   "components": {
     "shared": {
       "navbar": {
