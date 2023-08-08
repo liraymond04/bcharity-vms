@@ -44,7 +44,11 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
         if (bookmarked) {
           removeBookmark(currentUser, publicationId)
         } else {
-          addBookmark(currentUser, publicationId)
+          addBookmark(currentUser, publicationId).then((result) => {
+            if (result?.isFailure()) {
+              console.log(result.error)
+            }
+          })
         }
       }}
     >
