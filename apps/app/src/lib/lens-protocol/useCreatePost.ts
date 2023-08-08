@@ -4,13 +4,14 @@ import {
   PublicationMetadataV2Input,
   ReferenceModuleParams
 } from '@lens-protocol/client'
-import { useStorageUpload } from '@thirdweb-dev/react'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
 const useCreatePost = () => {
+  const sdk = useSDK()
   const { mutateAsync: upload } = useStorageUpload()
 
   const createPost = async (
@@ -23,8 +24,13 @@ const useCreatePost = () => {
       followerOnlyReferenceModule: false
     }
   ) => {
-    const contentURI = (await upload({ data: [metadata] }))[0]
+    const contentURI = sdk?.storage.resolveScheme(
+      (await upload({ data: [metadata] }))[0]
+    )
 
+    if (!contentURI) throw 'Metadata upload failed'
+
+    console.log(contentURI)
     // create a post via dispatcher, you need to have the dispatcher enabled for the profile
     // const viaDispatcherResult =
     //   await lensClient.publication.createPostViaDispatcher({

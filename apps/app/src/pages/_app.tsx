@@ -41,11 +41,15 @@ const config = createConfig({
 })
 
 const App = ({ Component, pageProps }: AppProps) => {
+  console.log(
+    'using thirdweb client id',
+    process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID
+  )
   return (
     <WagmiConfig config={config}>
       <ThirdwebProvider
         activeChain="mumbai"
-        clientId={process.env.THIRDWEB_CLIENT_ID}
+        clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}
       >
         <ThemeProvider defaultTheme="light" attribute="class">
           <SiteLayout>

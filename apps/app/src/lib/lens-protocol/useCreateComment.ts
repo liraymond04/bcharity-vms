@@ -4,7 +4,7 @@ import {
   ReferenceModuleParams
 } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
-import { useStorageUpload } from '@thirdweb-dev/react'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 
 import getSignature from './getSignature'
@@ -12,6 +12,7 @@ import lensClient from './lensClient'
 
 const useCreateComment = () => {
   const { mutateAsync: upload } = useStorageUpload()
+  const sdk = useSDK()
 
   const createComment = async (
     publicationId: string,
@@ -24,7 +25,11 @@ const useCreateComment = () => {
       followerOnlyReferenceModule: false
     }
   ) => {
-    const contentURI = (await upload({ data: [metadata] }))[0]
+    const contentURI = sdk?.storage.resolveScheme(
+      (await upload({ data: [metadata] }))[0]
+    )
+
+    if (!contentURI) throw 'Metadata upload failed'
 
     const profileId: string = profile.id
 
