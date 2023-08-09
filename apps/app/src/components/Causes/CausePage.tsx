@@ -95,7 +95,7 @@ const CausePage: NextPage = () => {
               publicationId={cause.post_id}
               postTag={PostTags.Bookmark.Cause}
             />
-            <div className="text-5xl font-bold text-black p-2 bg-purple-300 rounded-lg">
+            <div className="text-5xl font-bold text-black dark:text-white p-2 bg-purple-300 dark:bg-indigo-950 rounded-lg">
               {cause.name}
             </div>
             <div className="text-3xl text-gray-400 font-bold pl-5">
@@ -107,7 +107,7 @@ const CausePage: NextPage = () => {
           <div className=" w-2/3">
             <div className="flex space-x-3 items-center mt-8">
               <div className="flex flex-row">
-                <FollowButton followId={cause.from.id} />
+                <FollowButton followId={cause.from.id} size="lg" />
                 <div className="ml-5 mt-1 text-xl">
                   Status: Accepting Donations
                 </div>
@@ -124,19 +124,19 @@ const CausePage: NextPage = () => {
                 />
               </div>
             )}
-            <div className="flex flex-row">
+            <div className="flex flex-row items-center m-2">
               <img
-                className=" w-8 h-8 ml-2 mr-2 rounded-full"
+                className=" w-8 h-8 mr-2 rounded-full"
                 src={getAvatar(cause.from)}
                 alt="Rounded avatar"
               />
-              <div className="text-xl font-semibold text-gray-600">
+              <div className="text-xl font-semibold text-gray-600 dark:text-white">
                 {cause.from.handle} is organizing this fundraiser
               </div>
             </div>
             <div className="mt-10 text-3xl font-bold ">About Organization:</div>
 
-            <div className="pt-6 pb-4 mr-10 text-xl font-semibold text-gray-600">
+            <div className="pt-6 pb-4 mr-10 text-xl font-semibold text-gray-600 dark:text-white">
               dolor sit amet, consectetur adipiscing elit. Donec purus tellus,
               condimentum sit amet quam at, placerat cursus nulla. Etiam ex
               nibh, maximus ut egestas quis, gravida sit amet orci. Maecenas
@@ -153,22 +153,22 @@ const CausePage: NextPage = () => {
               Share
             </Button>
 
-            <div className="text-3xl font-semibold text-gray-800 mt-10">
+            <div className="text-3xl font-semibold text-gray-800 dark:text-white mt-10">
               Organizer
             </div>
             <div className="flex flex-row">
-              <div className="text-2xl font-semibold text-gray-600">
+              <div className="text-2xl font-semibold text-gray-600 dark:text-white">
                 {cause.from.handle}
                 <div className="text-xl">Calgary, AB</div>
               </div>
             </div>
-            <button className="  mt-6 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            <button className="  mt-6 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 dark:text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
               <span className="relative w-32 px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                 Contact
               </span>
             </button>
           </div>
-          <div className="shadow-xl w-1/3 bg-slate-100">
+          <div className="py-10 shadow-xl w-1/3 bg-slate-100 dark:bg-indigo-950 rounded-md">
             <div className="flex items-center">
               <div className="text-2xl font-bold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
                 ${88}
