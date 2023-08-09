@@ -22,7 +22,6 @@ interface Props {
 
 const useBookmark = (params: Props) => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { mutateAsync: upload } = useStorageUpload()
   const { createComment } = useCreateComment()
 
   const [bookmarked, setBookmarked] = useState<boolean>(false)
