@@ -3,6 +3,7 @@ import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
@@ -16,6 +17,7 @@ import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
 
 const Causes: NextPage = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
@@ -73,7 +75,7 @@ const Causes: NextPage = () => {
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
-                label="Filter:"
+                label={`${t('filter')}:`}
                 options={Array.from(categories)}
                 onClick={(c) => setSelectedCategory(c)}
                 selected={selectedCategory}
@@ -84,13 +86,16 @@ const Causes: NextPage = () => {
               onClick={() => {
                 setSelectedCategory('')
               }}
+              suppressHydrationWarning
             >
-              Clear Filters
+              {t('clear-filters')}
             </button>
           </div>
         </div>
         <Divider className="mt-5" />
-        <p className="font-bold text-2xl"> Browse Projects </p>
+        <p className="font-bold text-2xl" suppressHydrationWarning>
+          {t('browse-projects')}
+        </p>
       </div>
       {loading ? (
         <div className="flex justify-center">
@@ -111,7 +116,9 @@ const Causes: NextPage = () => {
         </GridLayout>
       )}
       {exploreError && (
-        <div className="text-sm text-center">Something went wrong.</div>
+        <div className="text-sm text-center" suppressHydrationWarning>
+          {t('something-wrong')}
+        </div>
       )}
     </>
   )

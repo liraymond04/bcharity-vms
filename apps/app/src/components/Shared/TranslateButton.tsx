@@ -28,7 +28,7 @@ const TranslateButton: FC = () => {
             )}
           >
             <div className="flex content-center items-center font-bold">
-              <div>{t('locale-name')}</div>
+              <div suppressHydrationWarning>{t('locale-name')}</div>
               {/* <svg
                 className="h-7 w-7 text-indigo-500"
                 fill="none"

@@ -51,7 +51,9 @@ const useScreenSize = () => {
 }
 
 const Navbar: FC = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar'
+  })
   const { pathname } = useRouter()
   const { isAuthenticated, currentUser } = useAppPersistStore()
   const [auth, setAuth] = useState<boolean>(false)
@@ -88,8 +90,9 @@ const Navbar: FC = () => {
           <Link
             className={`m-5 text-2xl text-violet-800 dark:text-white tracking-wider ${inter500.className}`}
             href="/"
+            suppressHydrationWarning
           >
-            BCharity
+            {t('name')}
           </Link>
         )}
         {(screenSize == 'phone' || screenSize == 'smallPhone') && (
@@ -131,8 +134,11 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
-                        PROJECTS
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('projects')}
                       </p>
                     </div>
                   </Link>
@@ -151,8 +157,11 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
-                        VOLUNTEERS
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('volunteers')}
                       </p>
                     </div>
                   </Link>
@@ -171,8 +180,11 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
-                        ORGANIZATIONS
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('organizations')}
                       </p>
                     </div>
                   </Link>
@@ -189,8 +201,11 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
-                        VHRs
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('vhrs')}
                       </p>
                     </div>
                   </Link>
@@ -207,8 +222,11 @@ const Navbar: FC = () => {
                           : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      <p className="opacity-70 hover:opacity-100 duration-200">
-                        DASHBOARD
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('dashboard')}
                       </p>
                     </div>
                   </Link>
@@ -233,8 +251,9 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
-                  PROJECTS
+                  {t('projects')}
                 </div>
               </button>
             </Link>
@@ -249,8 +268,9 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
-                  VOLUNTEERS
+                  {t('volunteers')}
                 </div>
               </button>
             </Link>
@@ -265,8 +285,9 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className} ${auth ? '' : 'mr-4'}`}
+                  suppressHydrationWarning
                 >
-                  ORGANIZATIONS
+                  {t('organizations')}
                 </div>
               </button>
             </Link>
@@ -281,8 +302,9 @@ const Navbar: FC = () => {
                       ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                       : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
-                  VHRs
+                  {t('vhrs')}
                 </div>
               </button>
             </Link>
@@ -298,8 +320,9 @@ const Navbar: FC = () => {
                         ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
                         : 'text-black dark:text-sky-50'
                     } ${inter500.className}`}
+                    suppressHydrationWarning
                   >
-                    DASHBOARD
+                    {t('dashboard')}
                   </div>
                 </button>
               </Link>

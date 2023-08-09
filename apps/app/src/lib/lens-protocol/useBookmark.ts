@@ -5,6 +5,7 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import { APP_NAME } from '@/constants'
@@ -20,6 +21,7 @@ interface Props {
 }
 
 const useBookmark = (params: Props) => {
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const { createComment } = useCreateComment()
 
   const [bookmarked, setBookmarked] = useState<boolean>(false)
@@ -50,7 +52,7 @@ const useBookmark = (params: Props) => {
     setIsLoading(true)
     try {
       if (profile === null) {
-        throw Error('Provided profile is null!')
+        throw Error(e('profile-null'))
       }
 
       const comments = await getComments(profile, id)
@@ -73,7 +75,7 @@ const useBookmark = (params: Props) => {
     setIsLoading(true)
     try {
       if (profile === null) {
-        throw Error('Provided profile is null!')
+        throw Error(e('profile-null'))
       }
 
       const attributes: MetadataAttributeInput[] = []
@@ -93,7 +95,7 @@ const useBookmark = (params: Props) => {
 
       const comments = await getComments(profile, id)
       if (comments.length > 0) {
-        throw Error('Publication has already been bookmarked!')
+        throw Error(e('already-bookmarked'))
       }
 
       const result = await createComment(id, profile, metadata)
@@ -117,7 +119,7 @@ const useBookmark = (params: Props) => {
     setIsLoading(true)
     try {
       if (profile === null) {
-        throw Error('Provided profile is null!')
+        throw Error(e('profile-null'))
       }
 
       await checkAuth(profile.ownedBy)
