@@ -5,92 +5,86 @@ import {
   LinkIcon,
   ViewListIcon
 } from '@heroicons/react/outline'
+import { PostFragment, PublicationTypes } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
+import { Spinner } from '@/components/UI/Spinner'
+import usePostData from '@/lib/lens-protocol/usePostData'
+import {
+  getOpportunityMetadata,
+  isComment,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
+import { useAppPersistStore } from '@/store/app'
+
+import Error from '../Modals/Error'
 import DashboardDropDown from './DashboardDropDown'
+
+interface IVolunteerLogHoursProps {}
 
 const inter500 = Inter({
   subsets: ['latin'],
   weight: ['500']
 })
 
-const generateDate = () => {
-  let year = (Math.floor(Math.random() * 5) + 2018).toString()
+const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
+  const { currentUser: profile } = useAppPersistStore()
 
-  let month = (Math.floor(Math.random() * 12) + 1).toString()
-  if (month.length < 2) month = '0' + month
+  const { loading, data, error, refetch } = usePostData({
+    profileId: profile?.id,
+    publicationTypes: [PublicationTypes.Comment],
+    metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
+  })
+  const [metaData, setMetaData] = useState<OpportunityMetadata[]>([])
+  const [indice, setIndice] = useState<number[]>([])
+  const [categories, setCategories] = useState<string[]>([])
 
-  let day = (Math.floor(Math.random() * 30) + 1).toString()
-  if (day.length < 2) day = '0' + day
+  useEffect(() => {
+    const _metaData = data
+      .filter(isComment)
+      .map((v) => v.mainPost)
+      .filter((v): v is PostFragment => v.__typename === 'Post')
 
-  return year + '-' + month + '-' + day
-}
+    setMetaData(getOpportunityMetadata(_metaData))
+    setIndice(resetIndice())
+    const _categories = new Set<string>()
+    metaData.forEach((v) => _categories.add(v.category))
+    setCategories(Array.from(_categories))
+  }, [data])
 
-const generateCategory = () => {
-  let x = Math.floor(Math.random() * 5)
-  if (x == 0) return 'Education'
-  else if (x == 1) return 'Entertainment'
-  else if (x == 2) return 'Sport'
-  else if (x == 3) return 'Healthcare'
-  else return 'Food'
-}
-
-const generateData = () => {
-  var data = []
-  for (let i = 0; i < 20; i++) {
-    const op = {
-      name: 'Opportunity ' + (i + 1),
-      start: generateDate(),
-      end: generateDate(),
-      hour: Math.floor(Math.random() * 10),
-      description:
-        'hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. hello this is a description about this volunteer opportunity. ',
-      website: 'https://google.com',
-      category: generateCategory()
+  const resetIndice = () => {
+    let indice = []
+    for (let i = 0; i < metaData.length; i++) {
+      indice.push(i)
     }
-    data.push(op)
+    return indice
   }
-  return data
-}
 
-const resetIndice = () => {
-  let indice = []
-  for (let i = 0; i < 20; i++) {
-    indice.push(i)
-  }
-  return indice
-}
-
-const VolunteerLogHours: React.FC = () => {
   const [selectedSortBy, setSelectedSortBy] = useState<string>('')
   const sortByOptions = ['Start Date', 'End Date', 'Total Hours']
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const categories = ['Education', 'Healthcare', 'Food', 'Entertainment']
-
   const [displayIndex, setDisplayIndex] = useState(-1)
-
-  const [data, setdata] = useState(generateData())
-  const [indice, setIndice] = useState(resetIndice())
 
   const sortByStartDate = () => {
     indice.sort((a, b) => {
-      if (data[a].start < data[b].start) return -1
+      if (metaData[a].startDate < metaData[b].startDate) return -1
       else return 1
     })
   }
 
   const sortByEndDate = () => {
     indice.sort((a, b) => {
-      if (data[a].end < data[b].end) return -1
+      if (metaData[a].endDate < metaData[b].endDate) return -1
       else return 1
     })
   }
 
   const sortByHours = () => {
     indice.sort((a, b) => {
-      if (data[a].hour < data[b].hour) return -1
+      if (metaData[a].hoursPerWeek < metaData[b].hoursPerWeek) return -1
       else return 1
     })
   }
@@ -141,36 +135,45 @@ const VolunteerLogHours: React.FC = () => {
           displayIndex == -1 ? 'max-h-[470px]' : 'max-h-[250px]'
         } `}
       >
-        {indice
-          .filter(
-            (idx) =>
-              selectedCategory == '' || data[idx].category == selectedCategory
-          )
-          .map((op) => (
-            <div
-              className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer hover:h-[60px] duration-100 ${
-                inter500.className
-              } ${displayIndex == op ? 'bg-blue-200' : ''}`}
-              key={op}
-              onClick={() => {
-                if (displayIndex == -1 || displayIndex != op)
-                  setDisplayIndex(op)
-                else setDisplayIndex(-1)
-              }}
-            >
-              <div className="flex justify-between items-center ml-10">
-                <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
-                  {data[op].name}
-                </p>
-                <p className="mx-5 w-[100px]">{data[op].start}</p>
-                <p className="mx-5 w-[100px]">{data[op].end}</p>
-                <p className="mx-5 w-[100px]">{data[op].hour} hours</p>
-              </div>
-              <a href="https://google.com" target="_blank">
-                <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
-              </a>
-            </div>
-          ))}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {indice
+              .filter(
+                (idx) =>
+                  selectedCategory === '' ||
+                  metaData[idx].category == selectedCategory
+              )
+              .map((op) => (
+                <div
+                  className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer hover:h-[60px] duration-100 ${
+                    inter500.className
+                  } ${displayIndex == op ? 'bg-blue-200' : ''}`}
+                  key={op}
+                  onClick={() => {
+                    if (displayIndex == -1 || displayIndex != op)
+                      setDisplayIndex(op)
+                    else setDisplayIndex(-1)
+                  }}
+                >
+                  <div className="flex justify-between items-center ml-10">
+                    <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
+                      {metaData[op].name}
+                    </p>
+                    <p className="mx-5 w-[100px]">{metaData[op].startDate}</p>
+                    <p className="mx-5 w-[100px]">{metaData[op].endDate}</p>
+                    <p className="mx-5 w-[100px]">
+                      {metaData[op].hoursPerWeek} hours
+                    </p>
+                  </div>
+                  <a href="https://google.com" target="_blank">
+                    <ArrowCircleRightIcon className="mr-10 w-6 h-6" />
+                  </a>
+                </div>
+              ))}
+          </>
+        )}
       </div>
       {displayIndex != -1 && (
         <div
@@ -180,30 +183,32 @@ const VolunteerLogHours: React.FC = () => {
             <div className="flex justify-around mt-5 text-xl h-fit">
               <div className="flex items-center">
                 <LinkIcon className="w-5 h-5 mr-4" />
-                {data[displayIndex].name}
+                {metaData[displayIndex].name}
               </div>
             </div>
             <div className="flex items-center ml-5 mt-5">
               <CalendarIcon className="w-5 h-5 mr-2" />
-              {data[displayIndex].start} to {data[displayIndex].end}
+              {metaData[displayIndex].startDate} to{' '}
+              {metaData[displayIndex].endDate}
             </div>
             <div className="flex items-center ml-5 mt-2">
-              <ClockIcon className="w-5 h-5 mr-2" /> {data[displayIndex].hour}{' '}
-              hours in total
+              <ClockIcon className="w-5 h-5 mr-2" />{' '}
+              {metaData[displayIndex].hoursPerWeek} hours in total
             </div>
             <div className="flex items-center ml-5 mt-2">
               <ViewListIcon className="w-5 h-5 mr-2" />{' '}
-              {data[displayIndex].category}
+              {metaData[displayIndex].category}
             </div>
           </div>
           <div className="h-[250px] self-center w-[2px] bg-[#D8C0EC]"></div>
           <div className="flex justify-around w-[400px]">
             <div className="w-[350px] mt-5 mb-5 overflow-scroll">
-              {data[displayIndex].description}
+              {metaData[displayIndex].description}
             </div>
           </div>
         </div>
       )}
+      {error && <Error message={error}></Error>}
     </div>
   )
 }

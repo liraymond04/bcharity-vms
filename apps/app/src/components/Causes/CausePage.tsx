@@ -1,4 +1,5 @@
 import { HomeIcon } from '@heroicons/react/outline'
+import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -6,8 +7,6 @@ import { useEffect, useState } from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import getAvatar from '@/lib/getAvatar'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
   CauseMetadataBuilder,
@@ -84,15 +83,6 @@ const CausePage: NextPage = () => {
   }
 
   const Body = () => {
-    const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-    useEffect(() => {
-      if (!cause) return
-      if (cause.imageUrl) {
-        getIPFSBlob(cause.imageUrl).then((url) => setResolvedImageUrl(url))
-      }
-    }, [])
-
     if (!cause || !data || !isPost(data)) return <Spinner />
 
     return wrongPostType ? (
@@ -124,21 +114,20 @@ const CausePage: NextPage = () => {
               </div>
             </div>
 
-            {resolvedImageUrl && (
+            {cause.imageUrl && (
               <div>
-                <img
+                <MediaRenderer
                   key="attachment"
-                  className="object-cover mt-6 h-72 rounded-lg border-[3px] border-black margin mb-[20px]"
-                  src={resolvedImageUrl}
+                  className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                  src={cause.imageUrl}
                   alt={'image attachment'}
                 />
               </div>
             )}
-
             <div className="flex flex-row">
               <img
                 className=" w-8 h-8 ml-2 mr-2 rounded-full"
-                src={getAvatar(cause.from.coverPicture)}
+                src={cause.imageUrl}
                 alt="Rounded avatar"
               />
               <div className="text-xl font-semibold text-gray-600">
@@ -168,17 +157,12 @@ const CausePage: NextPage = () => {
               Organizer
             </div>
             <div className="flex flex-row">
-              <img
-                className=" w-8 h-8 ml-2 mr-2 rounded-full"
-                src={getAvatar(cause.from.coverPicture)}
-                alt="Rounded avatar"
-              />
-              <div className="text-2xl ml-3 font-semibold text-gray-600">
+              <div className="text-2xl font-semibold text-gray-600">
                 {cause.from.handle}
                 <div className="text-xl">Calgary, AB</div>
               </div>
             </div>
-            <button className="ml-16  mt-5 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            <button className="  mt-6 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
               <span className="relative w-32 px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                 Contact
               </span>

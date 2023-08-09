@@ -19,10 +19,10 @@ import { APP_NAME, CURRENCIES } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createComment from '@/lib/lens-protocol/createComment'
 import getSignature from '@/lib/lens-protocol/getSignature'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { CauseMetadata, PostTags } from '@/lib/metadata'
+import useCreateComment from '@/lib/lens-protocol/useCreateComment'
+import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
 import ErrorModal from '../Dashboard/Modals/Error'
@@ -43,6 +43,8 @@ export interface IDonateFormProps {
 }
 
 const DonateButton: FC<Props> = ({ post, cause }) => {
+  const { createComment } = useCreateComment()
+
   const { currentUser } = useAppPersistStore()
   const [showModal, setShowModal] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
@@ -85,10 +87,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
     setCheckBalanceLoading(true)
     try {
       if (!currentUser) throw Error('Current user is null!')
-      if (
-        currentPublication.__typename !== 'Post' &&
-        currentPublication.__typename !== 'Comment'
-      )
+      if (!isPost(currentPublication) && !isComment(currentPublication))
         throw Error('Incorrect publication type!')
       if (
         currentPublication.collectModule.__typename !==
@@ -153,18 +152,15 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
         .filter((comment) => !comment.hidden)
         .every((comment) => {
           if (
-            comment.__typename === 'Comment' &&
-            comment.collectModule.__typename === 'FeeCollectModuleSettings'
-          ) {
-            if (
-              parseFloat(comment.collectModule.amount.value) ===
+            isComment(comment) &&
+            comment.collectModule.__typename === 'FeeCollectModuleSettings' &&
+            parseFloat(comment.collectModule.amount.value) ===
               parseFloat(formContribution)
-            ) {
-              hasAmount = true
-              setCurrentPublication(comment)
-              setCurrentContribution(formContribution)
-              return false
-            }
+          ) {
+            hasAmount = true
+            setCurrentPublication(comment)
+            setCurrentContribution(formContribution)
+            return false
           }
         })
 
@@ -231,7 +227,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
         txHash: res.txHash
       })
 
-      if (publication?.__typename !== 'Comment')
+      if (!publication || !isComment(publication))
         throw Error('Incorrect publication type!')
 
       setCurrentPublication(publication)
@@ -290,7 +286,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
         publicationId: post.id
       })
 
-      if (publication?.__typename !== 'Post')
+      if (publication === null || !isPost(publication))
         throw Error('Incorrect publication type!')
       if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
         throw Error('Incorrect collect module!')
@@ -313,7 +309,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
         .filter((comment) => !comment.hidden)
         .forEach((comment) => {
           if (
-            comment.__typename === 'Comment' &&
+            isComment(comment) &&
             comment.collectModule.__typename === 'FeeCollectModuleSettings'
           )
             total +=

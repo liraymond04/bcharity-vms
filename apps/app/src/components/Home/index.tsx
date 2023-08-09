@@ -105,7 +105,7 @@ const Home: NextPage = () => {
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {profiles.map((profile, index) => (
-                    <div key={profile.id} className="my-2 mx-1">
+                    <div key={profile.id} className="my-2 mx-6">
                       <OrganizationCard
                         profile={profile}
                         postings={postings[index]}

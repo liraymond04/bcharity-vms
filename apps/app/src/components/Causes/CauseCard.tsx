@@ -1,12 +1,12 @@
+import { MediaRenderer } from '@thirdweb-dev/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { CURRENCIES } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
 import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { CauseMetadata, isComment, PostTags } from '@/lib/metadata'
+import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 
 import Progress from '../Shared/Progress'
 import { Card } from '../UI/Card'
@@ -17,14 +17,6 @@ interface ICauseCardProps {
 }
 
 const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
-  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-  useEffect(() => {
-    if (cause.imageUrl) {
-      getIPFSBlob(cause.imageUrl).then((url) => setResolvedImageUrl(url))
-    }
-  }, [cause])
-
   const getDisplayedImage = () => {
     if (!cause.imageUrl) {
       return (
@@ -34,18 +26,12 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
           className="object-cover h-full w-auto m-auto"
         />
       )
-    } else if (!resolvedImageUrl) {
-      return (
-        <div className="h-full flex items-center justify-center">
-          <Spinner size="lg" />
-        </div>
-      )
     } else {
       return (
-        <img
-          src={resolvedImageUrl}
+        <MediaRenderer
+          src={cause.imageUrl}
           alt="Volunteer opportunity related image"
-          className="object-cover h-full w-full m-auto"
+          className="!object-cover !h-full !w-full m-auto"
         />
       )
     }
@@ -54,6 +40,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
     useState<boolean>(false)
   const [totalDonated, setTotalDonated] = useState<number>(0)
+
   const getTotalDonated = async () => {
     setTotalDonatedIsLoading(true)
     try {
@@ -63,8 +50,9 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
         publicationId: cause.post_id
       })
 
-      if (publication?.__typename !== 'Post')
+      if (publication === null || !isPost(publication)) {
         throw Error('Incorrect publication type!')
+      }
       if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
         throw Error('Incorrect collect module!')
 

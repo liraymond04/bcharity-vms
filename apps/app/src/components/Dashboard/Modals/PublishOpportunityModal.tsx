@@ -1,4 +1,5 @@
 import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
@@ -8,9 +9,8 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
 import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata/PostTags'
 import { MetadataVersion } from '@/lib/types'
@@ -50,6 +50,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
+  const { createPost } = useCreatePost()
+
+  const { mutateAsync: upload } = useStorageUpload()
+
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
@@ -91,13 +95,13 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : ''
+    const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
     const metadata = buildMetadata<OpportunityMetadataRecord>(
       publisher,
       [PostTags.OrgPublish.Opportunity],
       {
-        version: MetadataVersion.OpportunityMetadataVersion['1.0.0'],
+        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
         type: PostTags.OrgPublish.Opportunity,
         id: v4(),
         ...formData,

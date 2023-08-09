@@ -18,15 +18,17 @@ const useFollow = (params: Props) => {
   const fetch = async (followerAddress: string, id: string) => {
     setIsLoading(true)
     try {
-      const result = await lensClient().profile.doesFollow({
-        followInfos: [
-          {
-            followerAddress,
-            profileId: id
-          }
-        ]
-      })
-      setFollowing(result[0].follows)
+      if (followerAddress) {
+        const result = await lensClient().profile.doesFollow({
+          followInfos: [
+            {
+              followerAddress,
+              profileId: id
+            }
+          ]
+        })
+        setFollowing(result[0].follows)
+      }
     } catch (e) {
       if (e instanceof Error) {
         setError(e)

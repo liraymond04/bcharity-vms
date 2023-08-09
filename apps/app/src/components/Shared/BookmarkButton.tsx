@@ -44,7 +44,11 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
         if (bookmarked) {
           removeBookmark(currentUser, publicationId)
         } else {
-          addBookmark(currentUser, publicationId)
+          addBookmark(currentUser, publicationId).then((result) => {
+            if (result?.isFailure()) {
+              console.log(result.error)
+            }
+          })
         }
       }}
     >
@@ -53,9 +57,9 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
       ) : (
         <div className="transition duration-100 hover:scale-125">
           {bookmarked ? (
-            <BookmarkSolid className="w-10 inline mb-1" />
+            <BookmarkSolid className="w-6 inline mb-1" />
           ) : (
-            <BookmarkIcon className="w-10 inline mb-1" />
+            <BookmarkIcon className="w-6 inline mb-1" />
           )}
         </div>
       )}
