@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import getAvatar from '@/lib/getAvatar'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
   CauseMetadataBuilder,
@@ -126,7 +127,7 @@ const CausePage: NextPage = () => {
             <div className="flex flex-row">
               <img
                 className=" w-8 h-8 ml-2 mr-2 rounded-full"
-                src={cause.imageUrl}
+                src={getAvatar(cause.from)}
                 alt="Rounded avatar"
               />
               <div className="text-xl font-semibold text-gray-600">
