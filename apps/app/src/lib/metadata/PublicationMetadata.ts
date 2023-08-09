@@ -128,9 +128,10 @@ export abstract class PublicationMetadataBuilder<
    * exception if the key does not exist
    */
 
-  protected getAttribute(key: string) {
+  protected getAttribute(key: string, optional?: { default: string }) {
     const value = this.attributeMap.get(key)
     if (value === undefined) {
+      if (optional) return optional.default
       throw new InvalidMetadataException(`Metadata missing key "${key}"`)
     }
     return value

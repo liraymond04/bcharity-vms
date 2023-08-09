@@ -4,8 +4,6 @@ import {
   PublicationMainFocus,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
-import { useStorageUpload } from '@thirdweb-dev/react'
-import { signTypedData } from '@wagmi/core'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
@@ -13,9 +11,10 @@ import { v4 } from 'uuid'
 import { APP_NAME } from '@/constants'
 
 import getUserLocale from '../getUserLocale'
+import { isComment } from '../metadata'
 import checkAuth from './checkAuth'
-import getSignature from './getSignature'
 import lensClient from './lensClient'
+import useCreateComment from './useCreateComment'
 
 interface Props {
   postTag: string
@@ -24,6 +23,7 @@ interface Props {
 const useBookmark = (params: Props) => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const { mutateAsync: upload } = useStorageUpload()
+  const { createComment } = useCreateComment()
 
   const [bookmarked, setBookmarked] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
@@ -39,7 +39,14 @@ const useBookmark = (params: Props) => {
       }
     })
 
-    return result.items
+    const comments = result.items
+      .filter(isComment)
+      .filter(
+        (comment) =>
+          !comment.hidden && comment.profile.ownedBy === profile.ownedBy
+      )
+
+    return comments
   }
 
   const fetch = async (profile: ProfileFragment | null, id: string) => {
@@ -49,8 +56,7 @@ const useBookmark = (params: Props) => {
         throw Error(e('profile-null'))
       }
 
-      const result = await getComments(profile, id)
-      const comments = result.filter((comment) => !comment.hidden)
+      const comments = await getComments(profile, id)
 
       if (comments.length > 0) {
         setBookmarked(true)
@@ -88,41 +94,17 @@ const useBookmark = (params: Props) => {
 
       await checkAuth(profile.ownedBy)
 
-      const result = await getComments(profile, id)
-      const comments = result.filter((comment) => !comment.hidden)
-
+      const comments = await getComments(profile, id)
       if (comments.length > 0) {
         throw Error(e('already-bookmarked'))
       }
 
-      const contentURI = (await upload({ data: [metadata] }))[0]
-
-      const typedDataResult =
-        await lensClient().publication.createCommentTypedData({
-          profileId: profile.id,
-          publicationId: id,
-          contentURI,
-          collectModule: {
-            freeCollectModule: {
-              followerOnly: false
-            }
-          },
-          referenceModule: { followerOnlyReferenceModule: false }
-        })
-
-      const signature = await signTypedData(
-        getSignature(typedDataResult.unwrap().typedData)
-      )
-
-      const broadcastResult = await lensClient().transaction.broadcast({
-        id: typedDataResult.unwrap().id,
-        signature: signature
-      })
+      const result = await createComment(id, profile, metadata)
 
       setBookmarked(true)
-
-      return broadcastResult
+      return result
     } catch (e) {
+      console.log(e)
       if (e instanceof Error) {
         setError(e)
       }
@@ -144,7 +126,10 @@ const useBookmark = (params: Props) => {
       await checkAuth(profile.ownedBy)
 
       const result = await getComments(profile, id)
-      const comments = result.filter((comment) => !comment.hidden)
+      const comments = result.filter(
+        (comment) =>
+          !comment.hidden && comment.profile.ownedBy === profile.ownedBy
+      )
 
       if (comments.length > 0) {
         comments.forEach(async (item) => {
