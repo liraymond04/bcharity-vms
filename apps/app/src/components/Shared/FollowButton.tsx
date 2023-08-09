@@ -36,7 +36,7 @@ const FollowButton: FC<Props> = ({ followId, icon, className }) => {
           followUser(currentUser.ownedBy, followId)
         }
       }}
-      size="sm"
+      size="lg"
       className={className}
     >
       {following ? 'Unfollow' : 'Follow'}
