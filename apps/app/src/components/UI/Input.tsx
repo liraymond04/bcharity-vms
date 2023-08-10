@@ -5,7 +5,10 @@ import {
   ComponentProps,
   forwardRef,
   ReactNode,
-  useId
+  useEffect,
+  useId,
+  useRef,
+  useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -23,16 +26,23 @@ interface Props extends Omit<ComponentProps<'input'>, 'prefix'> {
   name?: string
 }
 
-interface ExtraProps {
-  hasTick?: boolean
-}
-
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(
   { label, prefix, type = 'text', error, className = '', helper, ...props },
   ref
 ) {
   const id = useId()
   const { t } = useTranslation('common')
+
+  const [checked, setChecked] = useState<boolean>(false)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      const el = inputRef.current.children[0] as HTMLInputElement
+      setChecked(el.disabled)
+    }
+  }, [inputRef])
 
   return (
     <label className="w-full" htmlFor={id}>
@@ -50,13 +60,15 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             </label>
           </div>
           <div>
-            {props.name === 'hasTick' && (
+            {type === 'endDate' && (
               <>
                 <input
                   type="checkbox"
                   style={{ position: 'relative' }}
+                  checked={checked}
                   onChange={(e) => {
                     if (!props.onChange) return
+                    setChecked(!checked)
                     props.onChange(e)
                   }}
                 />
@@ -68,7 +80,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
           <HelpTooltip content={helper} />
         </div>
       )}
-      <div className="flex">
+      <div className="flex" ref={inputRef}>
         {prefix && (
           <span className="inline-flex items-center px-3 text-gray-500 bg-gray-100 dark:bg-Input rounded-l-xl border border-r-0 border-gray-300 roun xl dark:border-gray-700/80">
             {prefix}
@@ -83,7 +95,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             'bg-white dark:bg-front border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
             className
           )}
-          type={type}
+          type={type === 'endDate' ? 'date' : type}
           ref={ref}
           {...props}
         />

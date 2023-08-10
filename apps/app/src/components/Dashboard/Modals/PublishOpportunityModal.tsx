@@ -156,11 +156,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
             <Input
               label="End Date"
-              type="date"
+              type="endDate"
               placeholder="yyyy-mm-dd"
               disabled={!endDateDisabled}
+              error={!!errors.endDate?.type}
               {...register('endDate', {})}
-              name="hasTick"
               onChange={(e) => {
                 if (e.target.value === 'on') {
                   resetField('endDate')
