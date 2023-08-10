@@ -59,7 +59,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
               {label}
             </label>
           </div>
-          <div>
+          <div className="flex items-center">
             {type === 'endDate' && (
               <>
                 <input
@@ -72,7 +72,9 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
                     props.onChange(e)
                   }}
                 />
-                <label style={{ position: 'relative' }}>{t('Ongoing')}</label>
+                <label className="ml-2" style={{ position: 'relative' }}>
+                  {t('Ongoing')}
+                </label>
               </>
             )}
           </div>
