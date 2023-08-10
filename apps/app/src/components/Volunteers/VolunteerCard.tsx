@@ -49,7 +49,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
           <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
             {getDisplayedImage()}
           </div>
-          <div className="relative mx-5 mt-3 mb-1">
+          <div className="relative mx-5 mt-3 mb-1 max-w-[220px] w-full">
             <div className="font-bold text-2xl line-clamp-1">{post?.name}</div>
             <div className="text-xs">{post?.from.handle}</div>
             <div className="text-xs">{post?.startDate}</div>
