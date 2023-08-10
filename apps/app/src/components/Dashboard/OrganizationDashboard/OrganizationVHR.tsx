@@ -108,17 +108,19 @@ const OrganizationVHRTab: React.FC = () => {
     )
   }, [resolvedTheme])
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
-      profileId: profile!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [profile])
   useEffect(() => {
     setPostMetadata(getOpportunityMetadata(data))

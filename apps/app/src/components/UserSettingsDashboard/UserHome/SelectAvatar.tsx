@@ -28,7 +28,7 @@ const SelectAvatar: FC = () => {
       setIsLoading(false)
     }
 
-    _getProfile()
+    if (currentUser?.id) _getProfile()
   }, [currentUser?.id])
 
   interface TypeButtonProps {

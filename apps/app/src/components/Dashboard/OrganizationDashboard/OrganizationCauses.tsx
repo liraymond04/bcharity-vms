@@ -110,17 +110,19 @@ const OrganizationCauses: React.FC = () => {
     )
   }, [resolvedTheme])
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
-      profileId: profile!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [profile])
 
   const { currentUser } = useAppPersistStore()

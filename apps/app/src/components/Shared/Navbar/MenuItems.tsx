@@ -13,6 +13,7 @@ import { ProfileFragment as Profile } from '@lens-protocol/client'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GIT_COMMIT_SHA } from 'src/constants'
@@ -31,6 +32,7 @@ export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
 )
 
 const MenuItems: FC = () => {
+  const router = useRouter()
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false)
 
   const { disconnect } = useDisconnect()
@@ -121,6 +123,13 @@ const MenuItems: FC = () => {
                 as={NextLink}
                 href="/"
                 onClick={() => {
+                  if (
+                    router.pathname === '/dashboard' ||
+                    router.pathname === '/settings'
+                  ) {
+                    router.push('/')
+                  }
+                  setShowLoginModal(false)
                   setCurrentUser(null)
                   Cookies.remove('accessToken')
                   Cookies.remove('refreshToken')

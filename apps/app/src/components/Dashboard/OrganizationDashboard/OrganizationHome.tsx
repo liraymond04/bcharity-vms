@@ -16,7 +16,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const OrganizationHome: React.FC = () => {
-  const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
+  const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
   const [postdata, setpostdata] = useState<PublicationFragment[]>([])
@@ -41,16 +41,18 @@ const OrganizationHome: React.FC = () => {
   }, [currentUser, isAuthenticated])
 
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      profileId: currentUser!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (currentUser) {
+      const param: PublicationsQueryRequest = {
+        profileId: currentUser.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [currentUser])
 
   const [searchAddress, setSearchAddress] = useState<string>('')

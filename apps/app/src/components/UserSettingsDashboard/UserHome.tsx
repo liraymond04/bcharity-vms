@@ -39,6 +39,9 @@ const VolunteerHomeTab: React.FC = () => {
     const fetchProfileData = async () => {
       try {
         if (currentUser) {
+          setUserId(currentUser.id)
+          setUserHandle(currentUser.handle)
+
           const userProfile = await lensClient().profile.fetch({
             profileId: currentUser?.id
           })
@@ -130,6 +133,9 @@ const VolunteerHomeTab: React.FC = () => {
     }
   }
 
+  const [userId, setUserId] = useState('')
+  const [userHandle, setUserHandle] = useState('')
+
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -141,11 +147,11 @@ const VolunteerHomeTab: React.FC = () => {
             <div className="flex space-x-10">
               <div className="flex space-x-1 items-baseline">
                 <div>Profile ID:</div>{' '}
-                <div className="font-bold text-lg">{currentUser?.id}</div>
+                <div className="font-bold text-lg">{userId}</div>
               </div>
               <div className="flex space-x-1 items-baseline">
                 <div>Profile Handle:</div>{' '}
-                <div className="font-bold text-lg">{currentUser?.handle}</div>
+                <div className="font-bold text-lg">{userHandle}</div>
               </div>
             </div>
             <div>

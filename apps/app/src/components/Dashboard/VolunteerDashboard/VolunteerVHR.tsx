@@ -91,17 +91,19 @@ const VolunteerVHRTab: React.FC = () => {
     setPosts(_posts)
   }, [postData])
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
-      profileId: profile!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [profile])
   return (
     <GridLayout>
@@ -117,6 +119,7 @@ const VolunteerVHRTab: React.FC = () => {
                     VHR Amount:
                   </div>
                   <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
+                    {balanceData?.formatted}
                     {postdata[0] && isPost(postdata[0])
                       ? postdata[0].metadata.attributes[0]?.value
                       : ' '}
