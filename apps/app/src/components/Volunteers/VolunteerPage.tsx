@@ -101,16 +101,18 @@ const VolunteerPage: NextPage = () => {
       <WrongPost />
     ) : (
       <div className="p-6">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-1">
-            <BookmarkButton
-              publicationId={opportunity.post_id}
-              postTag={PostTags.Bookmark.Opportunity}
-            />
-            <div className="text-2xl font-bold text-brand-600">
+        <div className="grid md:grid-cols-[auto_100px] sm:grid-cols-[auto_100px] gap-x-4 w-full">
+          <div className="flex space-x-2 items-center overflow-hidden">
+            <div className="col-span-1">
+              <BookmarkButton
+                publicationId={opportunity.post_id}
+                postTag={PostTags.Bookmark.Opportunity}
+              />
+            </div>
+            <div className="text-2xl font-bold text-brand-600 truncate col-span-1">
               {opportunity.name}
             </div>
-            <div className="text-xl text-gray-400 font-bold pl-5">
+            <div className="text-xl text-gray-400 font-bold truncate col-span-1">
               {opportunity.category}
             </div>
           </div>
