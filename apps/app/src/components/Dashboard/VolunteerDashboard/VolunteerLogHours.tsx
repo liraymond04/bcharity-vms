@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/outline'
 import { PostFragment, PublicationTypes } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { Spinner } from '@/components/UI/Spinner'
@@ -181,10 +182,14 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
         >
           <div className="w-[400px]">
             <div className="flex justify-around mt-5 text-xl h-fit">
-              <div className="flex items-center">
+              <Link
+                className="flex items-center p-2"
+                href={`/volunteer/${metaData[displayIndex].post_id}`}
+                target="_blank"
+              >
                 <LinkIcon className="w-5 h-5 mr-4" />
                 {metaData[displayIndex].name}
-              </div>
+              </Link>
             </div>
             <div className="flex items-center ml-5 mt-5">
               <CalendarIcon className="w-5 h-5 mr-2" />
