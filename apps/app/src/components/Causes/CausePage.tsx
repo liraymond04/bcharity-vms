@@ -23,6 +23,7 @@ import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import BookmarkButton from '../Shared/BookmarkButton'
+import DonateButton from '../Shared/DonateButton'
 import FollowButton from '../Shared/FollowButton'
 import Progress from '../Shared/Progress'
 import { Button } from '../UI/Button'
@@ -207,10 +208,13 @@ const CausePage: NextPage = () => {
               nibh, maximus ut egestas quis, gravida sit amet orci.
             </div>
 
-            <Button size="lg" className="mr-10">
-              Donate
-            </Button>
-            <Button size="lg" className="mr-10 ml-56 ">
+            <DonateButton
+              size="lg"
+              className="mr-10"
+              post={data}
+              cause={cause}
+            />
+            <Button size="lg" className="mr-10 ml-56">
               Share
             </Button>
 
@@ -258,9 +262,12 @@ const CausePage: NextPage = () => {
             )}
 
             <div className="font-semibold text-2xl ">
-              <Button size="lg" className="relative h-12 w-5/6 mr-10 ml-8">
-                Donate Now
-              </Button>
+              <DonateButton
+                size="lg"
+                className="relative h-12 w-5/6 mr-10 ml-8"
+                post={data}
+                cause={cause}
+              />
               <Button size="lg" className="mr-10 mt-5 h-12 w-5/6 ml-8">
                 Share
               </Button>
