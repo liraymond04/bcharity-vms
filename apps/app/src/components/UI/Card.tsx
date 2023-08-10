@@ -1,19 +1,32 @@
 import clsx from 'clsx'
-import { FC, ReactNode } from 'react'
+import { FC, MouseEvent, ReactNode } from 'react'
 
 interface CardProps {
   children: ReactNode
   className?: string
   forceRounded?: boolean
   testId?: string
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void
 }
 
 export const Card: FC<CardProps> = ({
   children,
   className = '',
   forceRounded = false,
-  testId = ''
+  testId = '',
+  onClick
 }) => {
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    // Prevent click propagation if the target is a button
+    const et = event.target as HTMLInputElement
+    console.log(et)
+    if (et.tagName === 'BUTTON') {
+      event.stopPropagation()
+    } else if (onClick) {
+      onClick(event)
+    }
+  }
+
   return (
     <div
       className={clsx(
@@ -22,6 +35,7 @@ export const Card: FC<CardProps> = ({
         className
       )}
       data-test={testId}
+      onClick={handleClick}
     >
       {children}
     </div>
