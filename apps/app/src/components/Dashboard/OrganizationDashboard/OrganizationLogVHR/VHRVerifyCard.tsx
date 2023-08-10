@@ -35,7 +35,14 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
         <p>
           {value.opportunity.startDate} - {value.opportunity.endDate}
         </p>
-        <p className="ml-8 font-bold">{value.hoursToVerify} VHR</p>
+        <div className="ml-8 font-bold">
+          <p>
+            {value.hoursToVerify.toString().length < 10
+              ? value.hoursToVerify
+              : value.hoursToVerify.toString().substring(0, 10) + '...'}{' '}
+            VHR
+          </p>
+        </div>
         <p className="ml-8 font-bold">{value.from.handle}</p>
         <p className="ml-8 font-bold">{value.opportunity.name}</p>
         {pending ? (

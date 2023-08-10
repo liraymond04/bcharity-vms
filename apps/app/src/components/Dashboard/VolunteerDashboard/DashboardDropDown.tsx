@@ -55,7 +55,7 @@ const DashboardDropDown: React.FC<Props> = ({
               }}
             >
               {value == selected && <CheckIcon className="w-5 h-5" />}
-              <div className="w-fit">{value}</div>
+              <div className="w-fit text-center line-clamp-1">{value}</div>
               {value == selected && <div className="w-5"></div>}
             </div>
           ))}
