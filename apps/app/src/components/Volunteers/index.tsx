@@ -12,6 +12,7 @@ import { PostTags } from '@/lib/metadata'
 import { getOpportunityMetadata } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
+import ClearFilters from '../Shared/ClearFilters'
 import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
 import VolunteerCard from './VolunteerCard'
@@ -100,15 +101,12 @@ const Volunteers: NextPage = () => {
                   selected={selectedOrg}
                 ></DashboardDropDown>
               </div>
-              <button
-                className="ml-3 min-w-[110px] h-fit my-2 first-letter:mb-2 text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-[#fff2f2] dark:text-opacity-80 dark:bg-[#555591] dark:border-[#20203f] dark:hover:bg-[#20203f] dark:hover:text-opacity-100 dark:hover:text-[#ff8585]"
+              <ClearFilters
                 onClick={() => {
                   setSelectedCategory('')
                   setSelectedOrg('')
                 }}
-              >
-                Clear Filters
-              </button>
+              />
             </div>
           </div>
         </div>

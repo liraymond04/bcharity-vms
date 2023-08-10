@@ -9,6 +9,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import ClearFilters from '@/components/Shared/ClearFilters'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
@@ -166,14 +167,11 @@ const VolunteerVHRTab: React.FC = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-[#fff2f2] dark:text-opacity-80 dark:bg-[#555591] dark:border-[#20203f] dark:hover:bg-[#20203f] dark:hover:text-opacity-100 dark:hover:text-[#ff8585]"
+            <ClearFilters
               onClick={() => {
                 setSelectedCategory('')
               }}
-            >
-              Clear Filters
-            </button>
+            />
           </div>
 
           {postDataError && (
