@@ -19,7 +19,6 @@ export const Card: FC<CardProps> = ({
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     // Prevent click propagation if the target is a button
     const et = event.target as HTMLInputElement
-    console.log(et)
     if (et.tagName === 'BUTTON') {
       event.stopPropagation()
     } else if (onClick) {
