@@ -6,6 +6,7 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { useStorageUpload } from '@thirdweb-dev/react'
+import { useSDK } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { useState } from 'react'
 import { v4 } from 'uuid'
@@ -25,6 +26,7 @@ interface Props {
 
 const useApply = (params: Props) => {
   const { mutateAsync: upload } = useStorageUpload()
+  const sdk = useSDK()
 
   const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState<boolean>()
@@ -39,6 +41,10 @@ const useApply = (params: Props) => {
     try {
       if (profile === null) {
         throw Error('Provided profile is null!')
+      }
+
+      if (!sdk) {
+        throw Error('Metadata upload failed')
       }
 
       const data: LogVhrRequestMetadataRecord = {
@@ -72,7 +78,9 @@ const useApply = (params: Props) => {
 
       await checkAuth(profile.ownedBy)
 
-      const contentURI = (await upload({ data: [metadata] }))[0]
+      const contentURI = sdk?.storage.resolveScheme(
+        (await upload({ data: [metadata] }))[0]
+      )
 
       const typedDataResult =
         await lensClient().publication.createCommentTypedData({
