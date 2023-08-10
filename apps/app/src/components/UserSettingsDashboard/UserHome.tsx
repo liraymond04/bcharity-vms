@@ -134,23 +134,27 @@ const VolunteerHomeTab: React.FC = () => {
     <GridLayout>
       <GridItemTwelve>
         <Card>
-          <form className="my-5 mx-5" onSubmit={handleSubmit}>
-            <div>
-              <Input
-                label="Profile ID: "
-                type="text"
-                id="profileId"
-                className="text-gray-600 dark:text-gray-500"
-                value={currentUser?.id}
-                readOnly
-              />
+          <form
+            className="my-5 mx-5 flex-col space-y-4"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex space-x-10">
+              <div className="flex space-x-1 items-baseline">
+                <div>Profile ID:</div>{' '}
+                <div className="font-bold text-lg">{currentUser?.id}</div>
+              </div>
+              <div className="flex space-x-1 items-baseline">
+                <div>Profile Handle:</div>{' '}
+                <div className="font-bold text-lg">{currentUser?.handle}</div>
+              </div>
             </div>
             <div>
               <Input
                 label="Name: "
                 type="text"
                 id="name"
-                value={currentUser?.handle}
+                value={name}
+                placeholder="Gavin"
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
@@ -160,6 +164,7 @@ const VolunteerHomeTab: React.FC = () => {
                 type="text"
                 id="location"
                 value={location}
+                placeholder="Calgary"
                 onChange={(e) => setLocation(e.target.value)}
               />
             </div>
@@ -168,6 +173,7 @@ const VolunteerHomeTab: React.FC = () => {
                 label="Bio: "
                 id="bio"
                 value={bio}
+                placeholder="Tell us something about you!"
                 onChange={(e) => setBio(e.target.value)}
                 rows={5}
               />
@@ -178,6 +184,7 @@ const VolunteerHomeTab: React.FC = () => {
                 type="text"
                 id="website"
                 value={website}
+                placeholder="https://hooli.com"
                 onChange={(e) => setWebsite(e.target.value)}
               />
             </div>
