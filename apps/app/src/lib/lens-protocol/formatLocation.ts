@@ -14,5 +14,7 @@ export const formatLocation = (locationString: string) => {
     (p) => p.name === province
   )?.isoCode
 
+  if (!city || !provinceCode) return ''
+
   return `${city}, ${provinceCode}`.toUpperCase()
 }
