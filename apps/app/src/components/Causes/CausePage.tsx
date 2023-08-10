@@ -5,13 +5,17 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useMemo } from 'react'
+import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
+import { CURRENCIES } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
   CauseMetadataBuilder,
   InvalidMetadataException,
+  isComment,
   isPost,
   PostTags
 } from '@/lib/metadata'
@@ -59,6 +63,63 @@ const CausePage: NextPage = () => {
       fetch({ publicationId: Array.isArray(id) ? '' : id })
     }
   }, [id, isReady])
+
+  const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
+    useState<boolean>(false)
+  const [totalDonated, setTotalDonated] = useState<number>(0)
+
+  const getTotalDonated = async () => {
+    setTotalDonatedIsLoading(true)
+    try {
+      let total = 0
+
+      if (!cause) throw Error('Publication is null!')
+
+      const publication = await lensClient().publication.fetch({
+        publicationId: cause.post_id
+      })
+
+      if (publication === null || !isPost(publication)) {
+        throw Error(e('incorrect-publication-type'))
+      }
+      if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
+        throw Error(e('incorrect-collect-module'))
+
+      total +=
+        publication.stats.totalAmountOfCollects *
+        parseFloat(publication.collectModule.amount.value)
+
+      // get comment totals
+      const comments = await lensClient().publication.fetchAll({
+        commentsOf: cause.post_id,
+        metadata: {
+          tags: { all: [PostTags.Donate.SetAmount] }
+        }
+      })
+
+      comments.items
+        .filter((p) => !p.hidden)
+        .filter(isComment)
+        .forEach((comment) => {
+          if (comment.collectModule.__typename === 'FeeCollectModuleSettings')
+            total +=
+              comment.stats.totalAmountOfCollects *
+              parseFloat(comment.collectModule.amount.value)
+        })
+
+      setTotalDonated(total)
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
+    } finally {
+      setTotalDonatedIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getTotalDonated()
+  }, [totalDonated, cause])
 
   const WrongPost = () => {
     return (
@@ -169,20 +230,33 @@ const CausePage: NextPage = () => {
             </button>
           </div>
           <div className="py-10 shadow-xl w-1/3 bg-slate-100 dark:bg-indigo-950 rounded-md">
-            <div className="flex items-center">
-              <div className="text-2xl font-bold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
-                ${88}
+            {totalDonatedIsLoading ? (
+              <div className="flex justify-center items-center mb-10">
+                <Spinner />
               </div>
-              <div className="text-xl font-bold text-black dark:text-white sm:text-xl mt-8">
-                VHR raised out of {100}
-              </div>
-            </div>
+            ) : (
+              <div>
+                <div className="flex items-center">
+                  <div className="text-2xl font-bold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
+                    {totalDonated}
+                  </div>
+                  <div className="text-xl font-bold text-black dark:text-white sm:text-xl mt-8">
+                    {
+                      CURRENCIES[cause.currency as keyof typeof CURRENCIES]
+                        .symbol
+                    }{' '}
+                    raised out of {cause.goal}
+                  </div>
+                </div>
 
-            <Progress
-              progress={88}
-              total={100}
-              className="mt-10 mb-10 ml-5 mr-5 p-1"
-            />
+                <Progress
+                  progress={totalDonated}
+                  total={parseFloat(cause.goal)}
+                  className="mt-10 mb-10 ml-5 mr-5 p-1"
+                />
+              </div>
+            )}
+
             <div className="font-semibold text-2xl ">
               <Button size="lg" className="relative h-12 w-5/6 mr-10 ml-8">
                 Donate Now
