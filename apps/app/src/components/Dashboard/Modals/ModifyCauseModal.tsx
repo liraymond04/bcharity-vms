@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import FormDropdown from '@/components/Shared/FormDropdown'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
+import { FileInput } from '@/components/UI/FileInput'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
@@ -258,9 +259,10 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
-            <Input
+            <FileInput
+              defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label="Image (optional): "
-              type="file"
+              accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
