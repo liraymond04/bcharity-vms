@@ -41,6 +41,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   }, [id, postData])
 
   const onCancel = () => {
+    setErrorMessage('')
     onClose(false)
   }
 
