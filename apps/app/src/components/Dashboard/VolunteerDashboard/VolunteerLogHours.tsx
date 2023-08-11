@@ -10,6 +10,7 @@ import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
+import ClearFilters from '@/components/Shared/ClearFilters'
 import { Spinner } from '@/components/UI/Spinner'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import {
@@ -118,17 +119,11 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
             onClick={(c) => setSelectedCategory(c)}
           />
         </div>
-        <button
-          className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-indigo-400 dark:bg-indigo-200 dark:border-purple-800 dark:hover:bg-indigo-300"
+        <ClearFilters
           onClick={() => {
-            setSelectedSortBy('')
             setSelectedCategory('')
-            setIndice(resetIndice())
-            setDisplayIndex(-1)
           }}
-        >
-          Clear Filters
-        </button>
+        />
       </div>
 
       <div
@@ -148,7 +143,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
               )
               .map((op) => (
                 <div
-                  className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer hover:h-[60px] duration-100 ${
+                  className={`flex justify-between items-center my-5 tracking-wide w-[800px] h-[50px] bg-[#CEBBF8] bg-opacity-[0.50] rounded-md shadow-md hover:bg-opacity-100 hover:cursor-pointer hover:scale-y-110 duration-100 ${
                     inter500.className
                   } ${displayIndex == op ? 'bg-blue-200' : ''}`}
                   key={op}
