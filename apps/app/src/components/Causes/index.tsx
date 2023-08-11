@@ -9,6 +9,7 @@ import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
+import testSearch from '@/lib/search'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
@@ -99,7 +100,8 @@ const Causes: NextPage = () => {
           {posts
             .filter(
               (post) =>
-                selectedCategory === '' || post.category === selectedCategory
+                testSearch(post.name, searchValue) &&
+                (selectedCategory === '' || post.category === selectedCategory)
             )
             .map((post) => (
               <GridItemFour key={post.id}>
