@@ -67,6 +67,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     reset,
     resetField,
     register,
+    clearErrors,
     formState: { errors }
   } = form
 
@@ -80,7 +81,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   }
 
   const onCancel = () => {
+    clearErrors()
     reset()
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 

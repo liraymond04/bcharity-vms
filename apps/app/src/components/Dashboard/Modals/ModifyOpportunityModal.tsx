@@ -55,11 +55,15 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     reset,
     resetField,
     register,
+    clearErrors,
     formState: { errors }
   } = form
 
   const onCancel = () => {
+    clearErrors()
     reset(defaultValues)
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 

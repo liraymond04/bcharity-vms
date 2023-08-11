@@ -105,6 +105,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onCancel = () => {
     clearErrors()
     reset()
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
