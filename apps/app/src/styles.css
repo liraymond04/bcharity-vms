@@ -186,22 +186,22 @@ table {
 
 .ag-theme-alpine-dark {
   .ag-center-cols-viewport {
-    background-color: #1e1457;
+    background-color: #120946;
   }
 
   .ag-header-cell {
-    background-color: #1e1457;
+    background-color: #120946;
   }
 
   .ag-header-row-column {
-    background-color: rgb(37, 8, 105);
+    background-color: #1e1457;
   }
 
   .ag-cell {
-    background-color: #2a076b;
+    background-color: #270e54;
   }
 
   .ag-paging-panel {
-    background-color: #1e1457;
+    background-color: #120946;
   }
 }
