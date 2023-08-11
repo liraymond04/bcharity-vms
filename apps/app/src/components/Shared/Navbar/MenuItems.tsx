@@ -21,6 +21,7 @@ import { useAppPersistStore, useAppStore } from 'src/store/app'
 import { useDisconnect } from 'wagmi'
 
 import getAvatar from '@/lib/getAvatar'
+import isVerified from '@/lib/isVerified'
 
 import Slug from '../Slug'
 import Login from './Login'
@@ -95,7 +96,9 @@ const MenuItems: FC = () => {
               <div className="divider" />
               <Menu.Item
                 as={NextLink}
-                href="/settings"
+                href={`/p/${
+                  isVerified(currentUser?.id) ? 'organization' : 'volunteer'
+                }/${currentUser?.handle}`}
                 className={({ active }: { active: boolean }) =>
                   clsx({ 'dropdown-active': active }, 'menu-item')
                 }
