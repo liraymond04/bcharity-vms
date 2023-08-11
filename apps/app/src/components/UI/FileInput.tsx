@@ -100,7 +100,10 @@ export const FileInput = forwardRef<HTMLInputElement, Props>(function Input(
       <div
         className={`${clsx(
           { '!border-red-500 placeholder-red-500': error },
-          'rounded-xl bg-white dark:bg-front border border-gray-300 dark:border-gray-700/80 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20',
+          {
+            'opacity-60 bg-gray-500 bg-opacity-20': props.disabled
+          },
+          'rounded-xl bg-white dark:bg-front border border-gray-300 dark:border-gray-700/80',
           className
         )} flex min-w-0`}
       >
@@ -116,7 +119,11 @@ export const FileInput = forwardRef<HTMLInputElement, Props>(function Input(
             onChange={onFileChange}
             {...props}
           />
-          <span className="px-3 py-2 cursor-pointer">Select a file</span>
+          <span
+            className={`px-3 py-2 ${!props.disabled ? ' cursor-pointer' : ''}`}
+          >
+            Select a file
+          </span>
         </label>
         <p className="overflow-hidden whitespace-nowrap overflow-ellipsis">
           {getStatus()}
