@@ -36,19 +36,19 @@ const TabTitle: React.FC<ITabTitleProps> = ({
 
         {open && <p className={`text-[20px] font-sans`}>{label}</p>}
         {open && selected && (
-          <span className="absolute h-12 bg-violet-600 -right-1 w-1 z-10" />
+          <span className="absolute h-12 bg-blue-800 -right-1 w-1 z-10" />
         )}
         {label == '' &&
           (open ? (
             <div
-              className="absolute flex items-center justify-around hover:cursor-pointer h-12 bg-violet-400 opacity-50 -right-0 w-12 z-10 hover:bg-violet-500"
+              className="absolute flex items-center justify-around hover:cursor-pointer h-12 bg-[#A78CFA] opacity-50 -right-0 w-12 z-10 hover:bg-[#906bff] dark:bg-[#23224A] dark:hover:bg-[#35336f]"
               onClick={() => changeOpen()}
             >
               <ChevronLeftIcon className="w-8 h-8" />
             </div>
           ) : (
             <div
-              className="absolute flex items-center justify-around hover:cursor-pointer h-12 bg-violet-400 opacity-50 w-12 z-10 hover:bg-violet-500"
+              className="absolute flex items-center justify-around hover:cursor-pointer h-12 bg-[#A78CFA] opacity-50 w-12 z-10 hover:bg-[#906bff] dark:bg-[#23224A] dark:hover:bg-[#35336f]"
               onClick={() => changeOpen()}
             >
               <ChevronRightIcon className="w-8 h-8" />

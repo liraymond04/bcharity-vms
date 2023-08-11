@@ -2,35 +2,33 @@ import { LinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import React from 'react'
 
-import { VHRRequest } from '@/lib/types'
+import { LogVhrRequestMetadata } from '@/lib/metadata'
 
 interface IVHRDetailCardProps {
-  value: VHRRequest
+  value: LogVhrRequestMetadata
 }
 
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
   return (
-    <div className="flex h-72 bg-brand-200 shadow-md shadow-black px-4 py-3 rounded-md mt-8">
+    <div className="flex h-72 bg-brand-200 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-8">
       <div className="flex flex-col grow shrink-0">
-        <Link href="">
+        <Link href={`/p/volunteer/${value.from.handle}`} target="_blank">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
-            <p className="text-black font-semibold text-lg">
+            <p className="text-black dark:text-teal-100 font-semibold text-lg">
               {value.from.handle}
             </p>
           </div>
           <p className="ml-10 text-fuchsia-700">{value.from.id}</p>
         </Link>
-        <Link href="">
+        <Link href={`/volunteer/${value.opportunity.post_id}`} target="_blank">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
-            <p className="text-black font-semibold text-lg">
+            <p className="text-black dark:text-teal-100 font-semibold text-lg">
               {value.opportunity.name}
             </p>
           </div>
-          <p className="ml-10 text-fuchsia-700">
-            {value.opportunity.opportunity_id}
-          </p>
+          <p className="ml-10 text-fuchsia-700">{value.opportunity.id}</p>
         </Link>
         <div className="flex justify-between font-semibold text-lg mt-4">
           <p>

@@ -1,21 +1,30 @@
 import { PlusSmIcon } from '@heroicons/react/outline'
+import {
+  PublicationsQueryRequest,
+  PublicationTypes
+} from '@lens-protocol/client'
 import { AgGridReact } from 'ag-grid-react'
+import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { CauseMetadata, PostTags } from '@/lib/types'
+import { CauseMetadata, isPost } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getCauseMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import DeleteCauseModal from '../Modals/DeleteCauseModal'
 import Error from '../Modals/Error'
+import GoalModal from '../Modals/GoalModal'
 import ModifyCauseModal from '../Modals/ModifyCauseModal'
 import PublishCauseModal, {
   emptyPublishFormData,
@@ -42,9 +51,17 @@ const OrganizationCauses: React.FC = () => {
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [GoalModalOpen, setGoalModalOpen] = useState(false)
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+  const onGoalClose = (shouldRefetch: boolean) => {
+    setGoalModalOpen(false)
 
     if (shouldRefetch) {
       refetch()
@@ -68,7 +85,9 @@ const OrganizationCauses: React.FC = () => {
   const onNew = () => {
     setPublishModalOpen(true)
   }
-
+  const onGoalOpen = () => {
+    setGoalModalOpen(true)
+  }
   const onEdit = (id: string) => {
     setCurrentModifyId(id)
     setModifyModalOpen(true)
@@ -88,6 +107,27 @@ const OrganizationCauses: React.FC = () => {
       resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
     )
   }, [resolvedTheme])
+  useEffect(() => {
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
+
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setVhrGoal(
+            parseFloat(
+              data.items[0] && isPost(data.items[0])
+                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                : '0'
+            )
+          )
+        })
+    }
+  }, [profile])
 
   const { currentUser } = useAppPersistStore()
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
@@ -104,31 +144,10 @@ const OrganizationCauses: React.FC = () => {
     }
   }, [currencyError])
 
-  const [vhrGoal] = useState(600) // use hardcoded goal for now
-
-  const Progress = ({
-    progress,
-    total,
-    className
-  }: {
-    progress: number
-    total: number
-    className?: string
-  }) => (
-    <div className={className}>
-      <div className="w-full bg-gray-200 rounded-full h-5 ">
-        <div
-          className="bg-green-400 h-5 rounded-full"
-          style={{
-            width: `${Math.min(Math.trunc((progress / total) * 100), 100)}%`
-          }}
-        ></div>
-      </div>
-    </div>
-  )
+  const [vhrGoal, setVhrGoal] = useState(0)
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
-    const d = postMetadata.find((val) => val?.cause_id === id)
+    const d = postMetadata.find((val) => val?.id === id)
 
     const [country, province, city] = d?.location.split('-', 3) ?? ['', '', '']
 
@@ -153,6 +172,77 @@ const OrganizationCauses: React.FC = () => {
     <GridLayout>
       <GridItemTwelve>
         <Card>
+          <div className="p-10 m-10">
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <div className="flex items-center">
+                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pr-3">
+                    {Number(balanceData?.value)}
+                  </div>
+                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
+                    VHR raised out of {vhrGoal}
+                  </div>
+                </div>
+                <Link
+                  href=""
+                  className="text-brand-500 hover:text-brand-600 mt-6"
+                  onClick={onGoalOpen}
+                >
+                  Set a goal
+                </Link>
+
+                <Progress
+                  progress={Number(balanceData?.value)}
+                  total={vhrGoal}
+                  className="mt-10 mb-10"
+                />
+
+                <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
+                  Our Cause
+                </div>
+                <div className=" w-full lg:flex mt-5">
+                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-teal-50 dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
+                    dolor sit amet, consectetur adipiscing elit. Praesent
+                    dapibus, neque in auctor tincidunt, tellus libero elementum
+                    nisl, vitae tristique eros lorem in odio. Nullam et eros
+                    sem. Duis molestie libero vel consequat suscipit. Sed
+                    maximus lacus vitae sem euismod ornare. In lacinia tempor
+                    lacus, vitae porta lectus luctus ac. Cras ultrices nulla eu
+                    enim ullamcorper iaculis. Nam gravida nibh sed sem interdum
+                    hendrerit. Nunc posuere purus id massa malesuada
+                    pellentesque. Etiam ipsum metus, laoreet eu libero a,
+                    suscipit sagittis ante. Nulla at purus consequat libero
+                    imperdiet efficitur quis quis orci. Aliquam felis orci,
+                    pretium sit amet volutpat ac, bibendum eu velit. Vivamus
+                    mollis, neque in aliquam malesuada, elit mi euismod velit,
+                    ac sagittis metus enim aliquet elit. Quisque fringilla
+                    sapien nec magna porta varius. Mauris bibendum, dui in
+                    dapibus bibendum, ex sapien ultricies lacus, a eleifend
+                    mauris erat sit amet purus.tellus libero elementum nisl,
+                    vitae tristique eros lorem in odio. Nullam et eros sem. Duis
+                    molestie libero vel consequat suscipit. Sed maximus lacus
+                    vitae sem euismod ornare. In lacinia tempor lacus, vitae
+                    porta lectus luctus ac. Cras ultrices nulla eu enim
+                    ullamcorper iaculis. Nam gravida nibh sed sem interdum
+                    hendrerit. Nunc posuere purus id massa malesuada
+                    pellentesque. Etiam ipsum metus, laoreet eu libero a,
+                    suscipit sagittis ante. Nulla at purus consequat libero
+                    imperdiet efficitur quis quis orci. Aliquam felis orci,
+                    pretium sit amet volutpat ac, bibendum eu velit. Vivamus
+                    mollis, neque in aliquam malesuada, elit mi euismod velit,
+                    ac sagittis metus enim aliquet elit. Quisque fringilla
+                    sapien nec magna porta varius. Mauris bibendum, dui in
+                    dapibus bibendum, ex sapien ultricies lacus, a eleifend
+                    mauris erat sit amet purus.
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
           {isBalanceLoading && (
             <div className="p-12">
               <div className="flex items-center">
@@ -215,9 +305,9 @@ const OrganizationCauses: React.FC = () => {
               onClick={onNew}
               className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
-              <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <PlusSmIcon className="w-8 text-white" />
               <div className="text-white mr-3 mt-1 font-bold">
-                Create new fundraiser
+                Create new project
               </div>
             </button>
             <div
@@ -259,8 +349,13 @@ const OrganizationCauses: React.FC = () => {
               onClose={onModifyClose}
               publisher={profile}
               id={currentModifyId}
-              defaultValues={getFormDefaults(currentModifyId)}
               currencyData={currencyData}
+              defaultValues={getFormDefaults(currentModifyId)}
+            />
+            <GoalModal
+              open={GoalModalOpen}
+              onClose={onGoalClose}
+              publisher={profile}
             />
           </div>
         </Card>

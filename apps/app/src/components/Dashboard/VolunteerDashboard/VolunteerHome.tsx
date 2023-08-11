@@ -12,11 +12,12 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
+import { isPost } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const VolunteerHome: React.FC = () => {
-  const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
+  const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
   const [postdata, setpostdata] = useState<PublicationFragment[]>([])
@@ -29,16 +30,18 @@ const VolunteerHome: React.FC = () => {
   }, [currentUser, isAuthenticated])
 
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      profileId: currentUser!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (currentUser) {
+      const param: PublicationsQueryRequest = {
+        profileId: currentUser.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [currentUser])
 
   const [searchAddress, setSearchAddress] = useState<string>('')
@@ -139,10 +142,10 @@ const VolunteerHome: React.FC = () => {
                     </div>
 
                     <div className="h-[60vh]">
-                      <div className="overflow-y-scroll w-full mt-20 h-full border border-gray-400 dark:border-black rounded-md">
+                      <div className="overflow-y-scroll w-full mt-20 h-full border border-sky-200 dark:border-black rounded-md bg-teal-50 dark:bg-Within dark:opacity-10">
                         <div className="w-full">
                           {postdata.map((post, index) => {
-                            if (post.__typename === 'Post')
+                            if (isPost(post))
                               return (
                                 <div className="w-full lg:flex" key={post.id}>
                                   <div

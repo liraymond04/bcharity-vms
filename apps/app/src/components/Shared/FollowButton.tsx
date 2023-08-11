@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, ReactNode, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
 import useFollow from '@/lib/lens-protocol/useFollow'
@@ -9,9 +9,12 @@ import { Spinner } from '../UI/Spinner'
 
 interface Props {
   followId: string
+  icon?: ReactNode
+  className?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-const FollowButton: FC<Props> = ({ followId }) => {
+const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
   const { currentUser } = useAppPersistStore()
   const { following, isLoading, error, followUser, unfollowUser } = useFollow({
     followerAddress: currentUser?.ownedBy ?? '',
@@ -25,7 +28,7 @@ const FollowButton: FC<Props> = ({ followId }) => {
   return (
     <Button
       disabled={isLoading}
-      icon={isLoading && <Spinner size="sm" />}
+      icon={isLoading ? <Spinner size="sm" /> : icon}
       onClick={() => {
         if (!currentUser) return
         if (following) {
@@ -34,7 +37,8 @@ const FollowButton: FC<Props> = ({ followId }) => {
           followUser(currentUser.ownedBy, followId)
         }
       }}
-      size="sm"
+      size={size ? size : 'sm'}
+      className={className}
     >
       {following ? 'Unfollow' : 'Follow'}
     </Button>

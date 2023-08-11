@@ -1,10 +1,6 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { Erc20Fragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -17,14 +13,13 @@ import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@/constants'
+import { DEFAULT_COLLECT_TOKEN } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
-import getUserLocale from '@/lib/getUserLocale'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
-import { CauseMetadataAttributeInput, MetadataVersion } from '@/lib/types'
-import { PostTags } from '@/lib/types'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
+import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
 import Error from './Error'
 
@@ -56,76 +51,6 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
   city: ''
 }
 
-export const createPublishAttributes = (data: {
-  id: string
-  formData: IPublishCauseFormProps
-}) => {
-  const attributes: CauseMetadataAttributeInput[] = [
-    {
-      traitType: 'type',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: PostTags.OrgPublish.Cause
-    },
-    {
-      traitType: 'version',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: MetadataVersion.CauseMetadataVersion['1.0.0']
-    },
-    {
-      traitType: 'cause_id',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.id
-    },
-    {
-      traitType: 'name',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.name
-    },
-    {
-      traitType: 'category',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.category
-    },
-    {
-      traitType: 'location',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: `${data.formData.country}-${data.formData.province}-${data.formData.city}`
-    },
-    {
-      traitType: 'currency',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.currency
-    },
-    {
-      traitType: 'contribution',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.contribution
-    },
-    {
-      traitType: 'goal',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.goal
-    },
-    {
-      traitType: 'recipient',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.recipient
-    },
-    {
-      traitType: 'description',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.description
-    },
-    {
-      traitType: 'imageUrl',
-      displayType: PublicationMetadataDisplayTypes.String,
-      value: data.formData.imageUrl
-    }
-  ]
-
-  return attributes
-}
-
 interface IPublishCauseModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
@@ -139,6 +64,10 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   publisher,
   currencyData
 }) => {
+  const { createPost } = useCreatePost()
+
+  const { mutateAsync: upload } = useStorageUpload()
+
   const form = useForm<IPublishCauseFormProps>({
     defaultValues: { ...emptyPublishFormData }
   })
@@ -176,6 +105,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onCancel = () => {
     clearErrors()
     reset()
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -190,24 +121,26 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : ''
+    const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
-    const attributes = createPublishAttributes({
-      id: v4(),
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: v4(),
-      content: `#${PostTags.OrgPublish.Cause}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Cause],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Cause} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<CauseMetadataRecord>(
+      publisher,
+      [PostTags.OrgPublish.Cause],
+      {
+        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
+        type: PostTags.OrgPublish.Cause,
+        id: v4(),
+        name: formData.name,
+        category: formData.category,
+        currency: formData.currency,
+        contribution: formData.contribution,
+        goal: formData.goal,
+        recipient: formData.recipient,
+        description: formData.description,
+        location: `${formData.country}-${formData.province}-${formData.city}`,
+        imageUrl
+      }
+    )
 
     const collectModuleParams = {
       feeCollectModule: {
@@ -240,7 +173,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Fundraiser'}
+      title={'Publish New Project'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -253,7 +186,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Fundraiser name"
+              label="Project name"
               placeholder="Medical internship"
               error={!!errors.name?.type}
               {...register('name', {
@@ -334,7 +267,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <TextArea
               label="Description"
-              placeholder="Tell us more about this fundraiser"
+              placeholder="Tell us more about this project"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />

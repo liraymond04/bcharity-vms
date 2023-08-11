@@ -24,12 +24,14 @@ const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState<string>('')
 
   const updateSize = () => {
-    if (window.innerWidth >= 1050) {
+    if (window.innerWidth >= 1300) {
       setScreenSize('wideDesktop')
-    } else if (window.innerWidth >= 870) {
+    } else if (window.innerWidth >= 1150) {
       setScreenSize('smallDesktop')
-    } else {
+    } else if (window.innerWidth >= 500) {
       setScreenSize('phone')
+    } else {
+      setScreenSize('smallPhone')
     }
   }
 
@@ -49,7 +51,9 @@ const useScreenSize = () => {
 }
 
 const Navbar: FC = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar'
+  })
   const { pathname } = useRouter()
   const { isAuthenticated, currentUser } = useAppPersistStore()
   const [auth, setAuth] = useState<boolean>(false)
@@ -73,7 +77,7 @@ const Navbar: FC = () => {
   }, [currentUser, isAuthenticated])
 
   return (
-    <div className="sticky z-20 top-0 flex justify-between bg-white bg-opacity-80 max-h-20 border-b-2 border-gray-100">
+    <div className="sticky z-40 top-0 flex justify-between bg-white dark:bg-indigo-950 bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
       <div className="flex items-center">
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img
@@ -84,48 +88,58 @@ const Navbar: FC = () => {
         </Link>
         {screenSize == 'wideDesktop' && (
           <Link
-            className={`m-5 text-2xl text-violet-800 tracking-wider ${inter500.className}`}
+            className={`m-5 text-2xl text-violet-800 dark:text-white tracking-wider ${inter500.className}`}
             href="/"
+            suppressHydrationWarning
           >
-            BCharity
+            {t('name')}
           </Link>
         )}
-        {screenSize == 'phone' && (
+        {(screenSize == 'phone' || screenSize == 'smallPhone') && (
           <div className="absolute left-20 top-7">
             <div className="flex-col items-center justify-center">
               <ul>
                 <li onClick={displayWindow} className="hover:cursor-pointer">
                   <div
                     className={`w-8 h-1 my-1 rounded-sm" ${
-                      showMenu ? 'bg-gray-400' : 'bg-black'
+                      showMenu
+                        ? 'bg-gray-400 dark:bg-gray-600'
+                        : 'bg-black dark:bg-gray-400'
                     }`}
                   ></div>
                   <div
                     className={`w-8 h-1 my-1 rounded-sm " ${
-                      showMenu ? 'bg-gray-400' : 'bg-black'
+                      showMenu
+                        ? 'bg-gray-400 dark:bg-gray-600'
+                        : 'bg-black dark:bg-gray-400'
                     }`}
                   ></div>
                   <div
                     className={`w-8 h-1 my-1 rounded-sm " ${
-                      showMenu ? 'bg-gray-400' : 'bg-black'
+                      showMenu
+                        ? 'bg-gray-400 dark:bg-gray-600'
+                        : 'bg-black dark:bg-gray-400'
                     }`}
                   ></div>
                 </li>
                 {showMenu && (
                   <Link
-                    href="/fundraisers"
-                    aria-current={
-                      pathname == '/fundraisers' ? 'page' : undefined
-                    }
+                    href="/projects"
+                    aria-current={pathname == '/projects' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] ${
-                        pathname == '/fundraisers'
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-y-2 mt-[26px] dark:border-[#312f66] ${
+                        pathname == '/projects'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      FUNDRAISERS
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('projects')}
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -137,13 +151,18 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/volunteers'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      VOLUNTEERS
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('volunteers')}
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -155,13 +174,39 @@ const Navbar: FC = () => {
                     }
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/organizations'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      ORGANIZATIONS
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('organizations')}
+                      </p>
+                    </div>
+                  </Link>
+                )}
+                {showMenu && (
+                  <Link
+                    href="/vhrs"
+                    aria-current={pathname == '/vhrs' ? 'page' : undefined}
+                  >
+                    <div
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
+                        pathname == '/vhrs'
+                          ? 'text-purple-600'
+                          : 'text-black dark:text-sky-50'
+                      } ${inter500.className}`}
+                    >
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('vhrs')}
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -171,13 +216,18 @@ const Navbar: FC = () => {
                     aria-current={pathname == '/dashboard' ? 'page' : undefined}
                   >
                     <div
-                      className={`flex justify-center opacity-90 px-10 py-5 bg-gray-100 hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 ${
+                      className={`flex justify-center px-10 py-5 bg-[#FEFEFE] dark:bg-[#18004A] hover:text-purple-600 hover:cursor-pointer border-x-2 border-b-2 dark:border-[#312f66] ${
                         pathname == '/dashboard'
                           ? 'text-purple-600'
-                          : 'text-black'
+                          : 'text-black dark:text-sky-50'
                       } ${inter500.className}`}
                     >
-                      DASHBOARD
+                      <p
+                        className="opacity-70 hover:opacity-100 duration-200"
+                        suppressHydrationWarning
+                      >
+                        {t('dashboard')}
+                      </p>
                     </div>
                   </Link>
                 )}
@@ -188,21 +238,22 @@ const Navbar: FC = () => {
       </div>
 
       <div className="flex">
-        {!(screenSize == 'phone') && (
+        {!(screenSize == 'phone' || screenSize == 'smallPhone') && (
           <div className="flex w-[60] justify-around items-center">
             <Link
-              href="/fundraisers"
-              aria-current={pathname == '/fundraisers' ? 'page' : undefined}
+              href="/projects"
+              aria-current={pathname == '/projects' ? 'page' : undefined}
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
-                    pathname == '/fundraisers'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                    pathname == '/projects'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
-                  FUNDRAISERS
+                  {t('projects')}
                 </div>
               </button>
             </Link>
@@ -212,13 +263,14 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/volunteers'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
                   } ${inter500.className}`}
+                  suppressHydrationWarning
                 >
-                  VOLUNTEERS
+                  {t('volunteers')}
                 </div>
               </button>
             </Link>
@@ -228,13 +280,31 @@ const Navbar: FC = () => {
             >
               <button>
                 <div
-                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                     pathname == '/organizations'
-                      ? 'text-purple-500 bg-white'
-                      : 'text-black'
-                  } ${inter500.className} ${auth ? '' : 'mr-10'}`}
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
+                  } ${inter500.className} ${auth ? '' : 'mr-4'}`}
+                  suppressHydrationWarning
                 >
-                  ORGANIZATIONS
+                  {t('organizations')}
+                </div>
+              </button>
+            </Link>
+            <Link
+              href="/vhrs"
+              aria-current={pathname == '/vhrs' ? 'page' : undefined}
+            >
+              <button>
+                <div
+                  className={`text-lg p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                    pathname == '/vhrs'
+                      ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                      : 'text-black dark:text-sky-50'
+                  } ${inter500.className}`}
+                  suppressHydrationWarning
+                >
+                  {t('vhrs')}
                 </div>
               </button>
             </Link>
@@ -245,26 +315,27 @@ const Navbar: FC = () => {
               >
                 <button>
                   <div
-                    className={`text-lg p-3 rounded-lg mr-10 hover:bg-gray-100 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
+                    className={`text-lg p-3 rounded-lg mr-4 hover:bg-gray-100 dark:hover:bg-violet-800 bg-opacity-80 hover:bg-opacity-80 tracking-wider ${
                       pathname == '/dashboard'
-                        ? 'text-purple-500 bg-white'
-                        : 'text-black'
+                        ? 'text-purple-500 bg-white dark:text-indigo-300 dark:bg-violet-950'
+                        : 'text-black dark:text-sky-50'
                     } ${inter500.className}`}
+                    suppressHydrationWarning
                   >
-                    DASHBOARD
+                    {t('dashboard')}
                   </div>
                 </button>
               </Link>
             )}
           </div>
         )}
-        <div className="relative my-auto mr-10">
+        <div className="relative my-auto">
           <TranslateButton />
         </div>
-        <div className="my-auto mr-10">
+        <div className="my-auto mr-4">
           <ThemeButton />
         </div>
-        <div className="my-auto mr-10">
+        <div className="my-auto sm:mr-10 mr-4">
           <MenuItems />
         </div>
       </div>

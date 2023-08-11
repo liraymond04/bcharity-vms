@@ -1,9 +1,19 @@
-import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
+import {
+  CommentFragment,
+  ProfileFragment,
+  PublicationTypes
+} from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
-import { OpportunityMetadata, PostTags, VHRRequest } from '../types'
-import getOpportunityMetadata from './getOpportunityMetadata'
-import getVerifyMetadata from './getVerifyRequestMetadata'
+import {
+  InvalidMetadataException,
+  isComment,
+  LogVhrRequestMetadata,
+  LogVhrRequestMetadataBuilder,
+  OpportunityMetadata,
+  PostTags
+} from '../metadata'
+import { getOpportunityMetadata } from '../metadata/get/getOpportunityMetadata'
 import lensClient from './lensClient'
 
 interface getCollectedPostIdsParams {
@@ -54,12 +64,12 @@ interface useVHRRequestsParams {
 }
 
 const useVHRRequests = (params: useVHRRequestsParams) => {
-  const [requests, setRequests] = useState<VHRRequest[]>([])
+  const [requests, setRequests] = useState<LogVhrRequestMetadata[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const refetch = () => {
-    let opportunities: (OpportunityMetadata & { id: string })[] = []
+    let opportunities: OpportunityMetadata[] = []
 
     setLoading(true)
     setError('')
@@ -83,7 +93,7 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
         const collectedIds = getCollectedPostIds({ profile: params.profile! })
 
         const postsComments = opportunities.map((op) => {
-          return getVHRRequestComments({ publicationId: op.id })
+          return getVHRRequestComments({ publicationId: op.post_id })
         })
 
         return Promise.all([collectedIds, ...postsComments])
@@ -115,27 +125,32 @@ const useVHRRequests = (params: useVHRRequestsParams) => {
           })
       })
       .then(({ collectedPostsIds, postsComments, rejectedPostMap }) => {
-        const data: VHRRequest[] = []
+        const data: LogVhrRequestMetadata[] = []
 
         postsComments.forEach((postComments, i) => {
-          const filteredPosts = postComments.items.filter((p) => {
-            const accepted = !!collectedPostsIds.find((id) => p.id === id)
-            return !(rejectedPostMap[p.id] || accepted) && !p.hidden
-          })
+          const filteredPosts = postComments.items
+            .filter(isComment)
+            .filter((p) => {
+              const accepted = !!collectedPostsIds.find((id) => p.id === id)
+              return !(rejectedPostMap[p.id] || accepted) && !p.hidden
+            })
 
-          const metadata = getVerifyMetadata(filteredPosts)
+          filteredPosts.map((post) => {
+            try {
+              const request = new LogVhrRequestMetadataBuilder(
+                post as CommentFragment,
+                opportunities[i]
+              ).build()
 
-          metadata.forEach((p) => {
-            const verifyRequest: VHRRequest = {
-              opportunity: opportunities[i],
-              hoursToVerify: p.hoursToVerify,
-              comments: '',
-              from: p.from,
-              id: p.id,
-              createdAt: p.createdAt
+              data.push(request)
+            } catch (e) {
+              console.debug(
+                'warning: ignored metadata from post %o due to error %o',
+                (post as CommentFragment).metadata,
+                (e as unknown as InvalidMetadataException).message
+              )
+              return null
             }
-
-            data.push(verifyRequest)
           })
         })
 

@@ -1,13 +1,12 @@
+import { LocationMarkerIcon } from '@heroicons/react/outline'
 import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
 import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
-import Slug from '@/components/Shared/Slug'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
@@ -17,7 +16,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const OrganizationHome: React.FC = () => {
-  const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
+  const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
   const [postdata, setpostdata] = useState<PublicationFragment[]>([])
@@ -42,16 +41,18 @@ const OrganizationHome: React.FC = () => {
   }, [currentUser, isAuthenticated])
 
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      profileId: currentUser!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (currentUser) {
+      const param: PublicationsQueryRequest = {
+        profileId: currentUser.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [currentUser])
 
   const [searchAddress, setSearchAddress] = useState<string>('')
@@ -105,12 +106,20 @@ const OrganizationHome: React.FC = () => {
                   <div className="inset-0 flex justify-center items-center ml-0 mt-2">
                     12/20/2020
                   </div>
-                  <div className="inset-0 flex justify-center items-center ml-0 mt-10">
-                    <h1>PREVIOUS VOLUNTEERS </h1>
+
+                  <div className="inset-0 flex justify-left items-center ml-20 mt-20">
+                    <h1>Followers: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowers}
+                    </div>
                   </div>
-                  <div className="inset-0 flex justify-center items-center ml-0 mt-5">
-                    {currentUser.stats.totalFollowing}
+                  <div className="relative inset-0 flex justify-left items-center ml-20 mt-10">
+                    <h1>Following: </h1>
+                    <div className="ml-1">
+                      {currentUser.stats.totalFollowing}
+                    </div>
                   </div>
+
                   <div className="ml-12 flex flex-row">
                     <svg
                       className="h-8 w-8 mt-20 mr-3"
@@ -148,28 +157,18 @@ const OrganizationHome: React.FC = () => {
                         {currentUser?.handle}
                       </p>
                       {getSlug() !== '' && (
-                        <div className="flex flex-row">
-                          <div></div>
-                          <Link href="">
-                            <div className="truncate">
-                              <img
-                                src="/location-marker.png "
-                                className="w-8 h-8"
-                                alt="location-marker"
-                              ></img>
-                            </div>
-                          </Link>
-                          <Slug
-                            className=" font-semibold text-lg mt-2"
-                            slug={getSlug()}
-                          />
+                        <div className="flex flex-row space-x-2">
+                          <LocationMarkerIcon className="h-6 w-6" />
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-xl sm:text-xl">
+                            {getSlug()}
+                          </span>
                         </div>
                       )}
                     </div>
 
                     <div className="h-[60vh]">
                       <div className="mt-20 font-semibold text-lg">About:</div>
-                      <div className=" bg-white  dark:bg-slate-300 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
+                      <div className=" bg-teal-50  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
                         {currentUser.bio}
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Sed ac elementum tellus. Aenean tristique est et nisi

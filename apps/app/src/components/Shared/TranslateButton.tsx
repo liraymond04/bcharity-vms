@@ -22,13 +22,13 @@ const TranslateButton: FC = () => {
               'w-full text-left px-2 md:px-3 py-1 rounded-md font-black cursor-pointer text-sm tracking-wide',
               {
                 'text-black dark:text-white bg-gray-200 dark:bg-gray-800': open,
-                'text-gray-700 dark:text-gray-700 hover:text-black dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
+                'text-gray-700 dark:text-cyan-50 hover:text-black dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
                   !open
               }
             )}
           >
             <div className="flex content-center items-center font-bold">
-              <div>{t('locale-name')}</div>
+              <div suppressHydrationWarning>{t('locale-name')}</div>
               {/* <svg
                 className="h-7 w-7 text-indigo-500"
                 fill="none"

@@ -2,7 +2,12 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
+import {
+  PublicationsQueryRequest,
+  PublicationTypes
+} from '@lens-protocol/client'
 import { AgGridReact } from 'ag-grid-react'
+import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 
@@ -10,9 +15,11 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { OpportunityMetadata, PostTags } from '@/lib/types'
+import { isPost, OpportunityMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
@@ -23,6 +30,7 @@ import PublishOpportunityModal, {
   emptyPublishFormData,
   IPublishOpportunityFormProps
 } from '../Modals/PublishOpportunityModal'
+import VHRGoalModal from '../Modals/VHRGoalModal'
 import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
@@ -42,7 +50,7 @@ const OrganizationVHRTab: React.FC = () => {
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-
+  const [GoalModalOpen, setGoalModalOpen] = useState(false)
   const [currentModifyId, setCurrentModifyId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
 
@@ -68,7 +76,16 @@ const OrganizationVHRTab: React.FC = () => {
       refetch()
     }
   }
+  const onGoalClose = (shouldRefetch: boolean) => {
+    setGoalModalOpen(false)
 
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+  const onGoalOpen = () => {
+    setGoalModalOpen(true)
+  }
   const onNew = () => {
     setPublishModalOpen(true)
   }
@@ -88,13 +105,33 @@ const OrganizationVHRTab: React.FC = () => {
       resolvedTheme === 'light' ? 'ag-theme-alpine' : 'ag-theme-alpine-dark'
     )
   }, [resolvedTheme])
+  useEffect(() => {
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setVhrGoal(
+            parseFloat(
+              data.items[0] && isPost(data.items[0])
+                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                : '0'
+            )
+          )
+        })
+    }
+  }, [profile])
   useEffect(() => {
     setPostMetadata(getOpportunityMetadata(data))
   }, [data])
 
   const getFormDefaults = (id: string): IPublishOpportunityFormProps => {
-    const d = postMetadata.find((val) => val?.opportunity_id === id)
+    const d = postMetadata.find((val) => val?.id === id)
 
     return d
       ? {
@@ -111,7 +148,7 @@ const OrganizationVHRTab: React.FC = () => {
   }
 
   const { currentUser } = useAppPersistStore()
-  const [vhrGoal] = useState(600) // use hardcoded goal for now
+  const [vhrGoal, setVhrGoal] = useState(0)
 
   const { isLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
@@ -133,6 +170,13 @@ const OrganizationVHRTab: React.FC = () => {
                     VHR raised out of {vhrGoal}
                   </div>
                 </div>
+                <Link
+                  href=""
+                  className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
+                  onClick={onGoalOpen}
+                >
+                  Set a goal
+                </Link>
                 <Progress
                   progress={Number(balanceData?.value)}
                   total={vhrGoal}
@@ -142,7 +186,7 @@ const OrganizationVHRTab: React.FC = () => {
                   Our Cause
                 </div>
                 <div className=" w-full lg:flex mt-5">
-                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-x-stone-600 bg-white dark:bg-slate-500 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
+                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-teal-50 dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
                     dolor sit amet, consectetur adipiscing elit. Praesent
@@ -188,7 +232,7 @@ const OrganizationVHRTab: React.FC = () => {
               onClick={onNew}
               className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
-              <PlusSmIcon className="w-8 text-white dark:text-black" />
+              <PlusSmIcon className="w-8 text-white" />
               <div className="text-white mr-3 mt-1 font-bold">
                 Create new opportunity
               </div>
@@ -232,6 +276,11 @@ const OrganizationVHRTab: React.FC = () => {
               id={currentDeleteId}
               postData={data}
               values={getFormDefaults(currentDeleteId)}
+            />
+            <VHRGoalModal
+              open={GoalModalOpen}
+              onClose={onGoalClose}
+              publisher={profile}
             />
           </div>
         </Card>

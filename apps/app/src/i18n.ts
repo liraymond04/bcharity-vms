@@ -3,8 +3,8 @@ import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
-import zhCN from '../public/locales/common_chZN.json'
-import en from '../public/locales/common_en.json'
+import en from '../public/locales/en.json'
+import zhCN from '../public/locales/zh-CN.json'
 
 i18n
   .use(initReactI18next)
@@ -12,8 +12,6 @@ i18n
   .init({
     fallbackLng: 'en',
     preload: ['en'],
-    keySeparator: false,
-    interpolation: { escapeValue: false },
 
     resources: {
       en: {

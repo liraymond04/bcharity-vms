@@ -28,7 +28,7 @@ const SelectAvatar: FC = () => {
       setIsLoading(false)
     }
 
-    _getProfile()
+    if (currentUser?.id) _getProfile()
   }, [currentUser?.id])
 
   interface TypeButtonProps {
@@ -45,7 +45,7 @@ const SelectAvatar: FC = () => {
       }}
       className={clsx(
         {
-          'text-brand bg-brand-100 dark:bg-opacity-20 bg-opacity-100 font-bold':
+          'text-brand bg-brand-100 dark:bg-Input dark:bg-opacity-20 bg-opacity-100 font-bold':
             settingsType === type
         },
         'flex items-center space-x-2 rounded-lg px-4 sm:px-3 py-2 sm:py-1 text-brand hover:bg-brand-100 dark:hover:bg-opacity-20 hover:bg-opacity-100'

@@ -76,8 +76,8 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
       disabled={loading}
       {...rest}
     >
-      {icon}
-      <div>{children}</div>
+      <div className="pointer-events-none">{icon}</div>
+      <div className="pointer-events-none">{children}</div>
     </button>
   )
 })

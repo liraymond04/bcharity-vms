@@ -8,7 +8,7 @@ const Privacypolicy: NextPage = () => {
       <SEO title="Privacy Policy • BCharity VMS" />
 
       {/* Title + update the date here */}
-      <div className="flex flex-col justify-center text-center border-b-8 border-indigo-700 border-dotted py-10 mx-32">
+      <div className="flex flex-col justify-center text-center border-b-8 border-indigo-700 dark:border-sky-200 border-dotted py-10 mx-32">
         <div className="my-5 text-3xl font-bold">Privacy Policy</div>
         <div className="flex justify-center m-4 text-1 text-gray-400 font-bold">
           Updated July 12th, 2023
@@ -16,7 +16,7 @@ const Privacypolicy: NextPage = () => {
       </div>
 
       {/* The Private Policy is written here: */}
-      <div className="flex justify-left items-center border my-10 mx-32">
+      <div className="flex justify-left items-center border my-10 mx-32 dark:bg-Card">
         <div className="flex my-8 mx-20 flex-col">
           <div className="space-y-10"></div>
           <div className="mb-2 text-base">

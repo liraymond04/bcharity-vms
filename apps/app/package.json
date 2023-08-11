@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "doc": "typedoc -out docs ./src/lib/metadata"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
+    "@thirdweb-dev/react": "^3.14.28",
+    "@thirdweb-dev/storage": "^1.2.4",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -28,6 +31,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.2"
+    "@types/uuid": "^9.0.2",
+    "typedoc": "^0.24.8"
   }
 }

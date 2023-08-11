@@ -24,7 +24,7 @@ export const Modal: FC<Props> = ({
     <Transition.Root show={show} as={Fragment}>
       <Dialog
         as="div"
-        className="overflow-y-auto fixed inset-0 z-10"
+        className="overflow-y-auto fixed inset-0 z-50"
         onClose={onClose}
       >
         <div className="flex justify-center items-center p-4 min-h-screen text-center sm:block sm:p-0">
@@ -57,7 +57,7 @@ export const Modal: FC<Props> = ({
                 { 'sm:max-w-5xl': size === 'lg' },
                 { 'sm:max-w-3xl': size === 'md' },
                 { 'sm:max-w-lg': size === 'sm' },
-                'inline-block align-bottom bg-white dark:bg-gray-800 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full rounded-xl'
+                'inline-block align-bottom bg-white dark:bg-Card text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full rounded-xl'
               )}
             >
               <div className="flex justify-between items-center py-3.5 px-5 divider">

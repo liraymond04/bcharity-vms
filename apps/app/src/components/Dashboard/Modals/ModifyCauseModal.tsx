@@ -1,9 +1,6 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { Erc20Fragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -15,19 +12,15 @@ import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
-import getUserLocale from '@/lib/getUserLocale'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
-import { PostTags } from '@/lib/types'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
+import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
 import Error from './Error'
-import {
-  createPublishAttributes,
-  IPublishCauseFormProps
-} from './PublishCauseModal'
+import { IPublishCauseFormProps } from './PublishCauseModal'
 
 interface IPublishCauseModalProps {
   open: boolean
@@ -46,6 +39,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   defaultValues,
   currencyData
 }) => {
+  const { createPost } = useCreatePost()
+
   const form = useForm<IPublishCauseFormProps>({ defaultValues })
 
   const {
@@ -56,6 +51,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
     clearErrors,
     formState: { errors }
   } = form
+
+  const { mutateAsync: upload } = useStorageUpload()
 
   const { t } = useTranslation('common')
 
@@ -81,6 +78,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onCancel = () => {
     clearErrors()
     reset(defaultValues)
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -95,24 +94,28 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
+    const imageUrl = image
+      ? (await upload({ data: [image] }))[0]
+      : defaultValues.imageUrl
 
-    const attributes = createPublishAttributes({
-      id,
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: id,
-      content: `#${PostTags.OrgPublish.Cause}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Cause],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Cause} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<CauseMetadataRecord>(
+      publisher,
+      [PostTags.OrgPublish.Cause],
+      {
+        version: MetadataVersion.CauseMetadataVersion['1.0.1'],
+        type: PostTags.OrgPublish.Cause,
+        id,
+        name: formData.name,
+        category: formData.category,
+        currency: formData.currency,
+        contribution: formData.contribution,
+        goal: formData.goal,
+        recipient: formData.recipient,
+        description: formData.description,
+        location: `${formData.country}-${formData.province}-${formData.city}`,
+        imageUrl
+      }
+    )
 
     const collectModuleParams = {
       feeCollectModule: {
@@ -154,7 +157,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Modify Fundraiser'}
+      title={'Modify Project'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -167,7 +170,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Fundraiser name"
+              label="Project name"
               placeholder="Medical internship"
               error={!!errors.name?.type}
               {...register('name', {
@@ -251,7 +254,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <TextArea
               label="Description"
-              placeholder="Tell us more about this fundraiser"
+              placeholder="Tell us more about this project"
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />

@@ -3,6 +3,7 @@ import { Modal } from '@components/UI/Modal'
 import { t } from 'i18next'
 import Link from 'next/link'
 import { FC, Fragment, useState } from 'react'
+import React from 'react'
 
 import Progress from '@/components/Shared/Progress'
 import { Input } from '@/components/UI/Input'
@@ -19,12 +20,12 @@ const DonateToCauseModal: FC = () => {
   return (
     <>
       <Modal
-        size="lg"
         show={showModal}
         title=""
+        size="lg"
         onClose={() => setShowModal(false)}
       >
-        <div className="p-10">
+        <div className="pl-10">
           <div className="flex flex-row ">
             <div className="text-purple-500 text-5xl font-bold">
               Donate to Cause

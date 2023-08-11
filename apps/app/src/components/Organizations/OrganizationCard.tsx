@@ -7,6 +7,7 @@ import { ProfileFragment } from '@lens-protocol/client'
 
 import getAvatar from '@/lib/getAvatar'
 
+import FollowButton from '../Shared/FollowButton'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 
@@ -20,10 +21,15 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
   postings
 }) => {
   return (
-    <Card>
-      <div className="flex m-1 mr-2">
+    <Card
+      className="transition duration-100 hover:scale-105 hover:cursor-pointer"
+      onClick={() => {
+        window.open(`/p/organization/${profile.handle}`, '_blank')
+      }}
+    >
+      <div className="flex m-5 mr-2">
         <img
-          className="w-[100px] h-[100px] rounded-md mr-3"
+          className="w-[100px] h-[100px] fill-current mr-3"
           src={getAvatar(profile)}
           alt={`${profile.handle}'s profile picture`}
         />
@@ -45,9 +51,11 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
               <LocationMarkerIcon className="w-4 inline" />
               <p className="inline">LOCATION</p>
             </div>
-            <div className="bg-brand-300 p-1 rounded-md place-self-end">
-              <StarIcon className="w-4 align-end text-white" />
-            </div>
+            <FollowButton
+              icon={<StarIcon className="w-4 align-end text-white" />}
+              className="h-8 place-self-end"
+              followId={profile.id}
+            />
           </div>
         </div>
       </div>

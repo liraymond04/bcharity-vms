@@ -3,12 +3,12 @@ import React from 'react'
 
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { VHRRequest } from '@/lib/types'
+import { LogVhrRequestMetadata } from '@/lib/metadata'
 
 interface IVHRVerifyCardProps {
   selected?: boolean
   pending: boolean
-  value: VHRRequest
+  value: LogVhrRequestMetadata
   onClick: VoidFunction
   onAcceptClick: () => void
   onRejectClick: () => void
@@ -26,14 +26,23 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
     <Card>
       <div
         className={`${
-          selected ? 'bg-blue-100' : 'bg-violet-200'
+          selected
+            ? 'bg-blue-100 dark:bg-violet-500'
+            : 'bg-violet-200 dark:bg-Within dark:bg-opacity-10'
         } flex items-center shadow-sm shadow-black px-5 py-2`}
         onClick={onClick}
       >
         <p>
           {value.opportunity.startDate} - {value.opportunity.endDate}
         </p>
-        <p className="ml-8 font-bold">{value.hoursToVerify} VHR</p>
+        <div className="ml-8 font-bold">
+          <p>
+            {value.hoursToVerify.toString().length < 10
+              ? value.hoursToVerify
+              : value.hoursToVerify.toString().substring(0, 10) + '...'}{' '}
+            VHR
+          </p>
+        </div>
         <p className="ml-8 font-bold">{value.from.handle}</p>
         <p className="ml-8 font-bold">{value.opportunity.name}</p>
         {pending ? (

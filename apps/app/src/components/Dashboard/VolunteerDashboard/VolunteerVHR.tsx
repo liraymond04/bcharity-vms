@@ -1,32 +1,67 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { PublicationSortCriteria } from '@lens-protocol/client'
+import {
+  PublicationFragment,
+  PublicationSortCriteria,
+  PublicationsQueryRequest,
+  PublicationTypes
+} from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import ClearFilters from '@/components/Shared/ClearFilters'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
-import getOpportunityMetadata from '@/lib/lens-protocol/getOpportunityMetadata'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import usePostData from '@/lib/lens-protocol/usePostData'
+import { isPost, OpportunityMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getOpportunityMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
-import { OpportunityMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import Error from '../Modals/Error'
+import VHRGoalModal from '../Modals/VHRGoalModal'
 import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
+  const { currentUser: profile } = useAppPersistStore()
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
   const [searchValue, setSearchValue] = useState('')
+  const [GoalModalOpen, setGoalModalOpen] = useState(false)
+  const { data, error, refetch } = usePostData({
+    profileId: profile?.id,
+    metadata: {
+      tags: { all: [PostTags.OrgPublish.Opportunity] }
+    }
+  })
+  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
 
+  const onPublishClose = (shouldRefetch: boolean) => {
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+
+  const onGoalClose = (shouldRefetch: boolean) => {
+    setGoalModalOpen(false)
+
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+  const onGoalOpen = () => {
+    setGoalModalOpen(true)
+  }
   const {
     data: postData,
     error: postDataError,
@@ -56,7 +91,21 @@ const VolunteerVHRTab: React.FC = () => {
     setCategories(_categories)
     setPosts(_posts)
   }, [postData])
+  useEffect(() => {
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
+  }, [profile])
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -71,15 +120,17 @@ const VolunteerVHRTab: React.FC = () => {
                     VHR Amount:
                   </div>
                   <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
-                    {Number(balanceData?.value)} / {vhrGoal}
+                    {balanceData?.formatted}
+                    {postdata[0] && isPost(postdata[0])
+                      ? postdata[0].metadata.attributes[0]?.value
+                      : ' '}
+                    / {vhrGoal}
                   </div>
                 </div>
                 <Link
                   href=""
-                  className="text-brand-500 hover:text-brand-600"
-                  onClick={() => {
-                    console.log('Set a goal')
-                  }}
+                  className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
+                  onClick={onGoalOpen}
                 >
                   Set a goal
                 </Link>
@@ -88,15 +139,6 @@ const VolunteerVHRTab: React.FC = () => {
                   total={vhrGoal}
                   className="mt-10 mb-10"
                 />
-                {Number(balanceData?.value) < vhrGoal ? (
-                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2x l">
-                    {vhrGoal - Number(balanceData?.value)} away from goal!
-                  </div>
-                ) : (
-                  <div className="text-2xl font-normal text-black dark:text-white sm:text-2xl">
-                    Reached goal!
-                  </div>
-                )}
               </>
             )}
           </div>
@@ -104,7 +146,7 @@ const VolunteerVHRTab: React.FC = () => {
       </GridItemTwelve>
       <GridItemTwelve>
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-black">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
@@ -128,14 +170,11 @@ const VolunteerVHRTab: React.FC = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+            <ClearFilters
               onClick={() => {
                 setSelectedCategory('')
               }}
-            >
-              Clear Filters
-            </button>
+            />
           </div>
 
           {postDataError && (
@@ -154,7 +193,7 @@ const VolunteerVHRTab: React.FC = () => {
               )
               .map((op) => (
                 <BrowseCard
-                  key={op.opportunity_id}
+                  key={op.id}
                   imageSrc={op.imageUrl}
                   avatarSrc={getAvatar(op.from)}
                   name={op.name}
@@ -165,6 +204,11 @@ const VolunteerVHRTab: React.FC = () => {
           ) : (
             <Spinner />
           )}
+          <VHRGoalModal
+            open={GoalModalOpen}
+            onClose={onGoalClose}
+            publisher={profile}
+          />
         </div>
       </GridItemTwelve>
     </GridLayout>

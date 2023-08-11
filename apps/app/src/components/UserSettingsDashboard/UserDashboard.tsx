@@ -4,7 +4,7 @@ import {
   LockClosedIcon,
   TrashIcon
 } from '@heroicons/react/outline'
-import { CogIcon, UserIcon } from '@heroicons/react/outline'
+import { UserIcon } from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
 
@@ -16,7 +16,6 @@ import Permissons from './Permissons'
 import UserDelete from './UserDelete'
 import UserDispatcher from './UserDispatcher'
 import UserHome from './UserHome'
-import UserSettings from './UserSetting'
 export interface IDashboardTab extends ITabProps {
   component: React.ReactElement
 }
@@ -29,11 +28,6 @@ const UserDashboard: React.FC = () => {
       label: 'Profile',
       icon: <UserIcon className="inline" />,
       component: <UserHome />
-    },
-    {
-      label: 'Settings',
-      icon: <CogIcon className="inline" />,
-      component: <UserSettings />
     },
     {
       label: 'Dispatcher',

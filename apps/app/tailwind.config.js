@@ -14,7 +14,14 @@ module.exports = {
         green: colors.emerald,
         purple: colors.violet,
         yellow: colors.yellow,
-        brand: colors.violet
+        brand: colors.violet,
+        NavBar: '#23172D',
+        SideBar: '#23224A',
+        Card: '#18004A',
+        Input: '#00254A',
+        Within: '#CEBBF8',
+        back: '#0f172a',
+        front: '#1e254a'
       }
     }
   },

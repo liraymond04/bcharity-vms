@@ -18,11 +18,13 @@ const DashboardDropDown: React.FC<Props> = ({
 
   return (
     <div className="flex">
-      <div className={`mx-5 mt-3 dark:text-black`}>{label}</div>
+      <div className={`mx-5 mt-3 dark:text-sky-100`} suppressHydrationWarning>
+        {label}
+      </div>
       <div className={`${open && 'shadow-2xl'}`}>
         <div
           onClick={() => setOpen(!open)}
-          className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white dark:bg-black border-[1px]  ${
+          className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white dark:bg-Input border-[1px]  ${
             open
               ? 'rounded-t-md border-violet-300 border-b-gray-300'
               : 'rounded-md'
@@ -40,7 +42,7 @@ const DashboardDropDown: React.FC<Props> = ({
         {open &&
           options.map((value, index) => (
             <div
-              className={`flex items-center w-[200px] h-[35px] justify-around bg-white dark:bg-black border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 hover:border-l-[5px] hover:border-l-purple-800 dark:hover:border-l-purple-300 cursor-pointer  ${
+              className={`flex items-center w-[200px] h-[35px] justify-around bg-white dark:bg-Input border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 hover:border-l-[5px] hover:border-l-purple-800 dark:hover:border-l-purple-300 cursor-pointer  ${
                 index == options.length - 1
                   ? 'rounded-b-md border-b-violet-300'
                   : ''
@@ -53,7 +55,7 @@ const DashboardDropDown: React.FC<Props> = ({
               }}
             >
               {value == selected && <CheckIcon className="w-5 h-5" />}
-              <div className="w-fit">{value}</div>
+              <div className="w-fit text-center line-clamp-1">{value}</div>
               {value == selected && <div className="w-5"></div>}
             </div>
           ))}

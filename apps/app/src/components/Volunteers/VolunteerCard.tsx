@@ -1,31 +1,20 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { MediaRenderer } from '@thirdweb-dev/react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
-import getIPFSBlob from '@/lib/ipfs/getIPFSBlob'
-import { OpportunityMetadata } from '@/lib/types'
+import { OpportunityMetadata } from '@/lib/metadata'
 
 import { Card } from '../UI/Card'
-import { Spinner } from '../UI/Spinner'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
-  id: string
 }
 
-const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
-  const [resolvedImageUrl, setResolvedImageUrl] = useState('')
-
-  useEffect(() => {
-    if (post.imageUrl) {
-      getIPFSBlob(post.imageUrl).then((url) => setResolvedImageUrl(url))
-    }
-  }, [post])
-
+const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
   const getDisplayedImage = () => {
     if (!post.imageUrl) {
-      console.log('showing default')
       return (
         <div
           className="border-b dark:border-b-gray-700/80 h-full rounded-l-xl"
@@ -38,20 +27,12 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
           }}
         />
       )
-    } else if (!resolvedImageUrl) {
-      console.log('showing spinner')
-      return (
-        <div className="h-full flex items-center justify-center rounded-l-xl">
-          <Spinner size="lg" />
-        </div>
-      )
     } else {
-      console.log('showing image')
       return (
-        <img
-          src={resolvedImageUrl}
+        <MediaRenderer
+          src={post.imageUrl}
           alt="Volunteer opportunity related image"
-          className="h-full w-auto m-auto rounded-l-xl"
+          className="!object-cover !h-full rounded-l-xl"
         />
       )
     }
@@ -60,7 +41,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
   return (
     <div
       onClick={() => {
-        window.open(`/volunteer/${id}`, '_blank')
+        window.open(`/volunteer/${post.post_id}`, '_blank')
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
@@ -68,7 +49,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post, id }) => {
           <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
             {getDisplayedImage()}
           </div>
-          <div className="relative mx-5 mt-3 mb-1">
+          <div className="relative mx-5 mt-3 mb-1 max-w-[15vw]">
             <div className="font-bold text-2xl line-clamp-1">{post?.name}</div>
             <div className="text-xs">{post?.from.handle}</div>
             <div className="text-xs">{post?.startDate}</div>

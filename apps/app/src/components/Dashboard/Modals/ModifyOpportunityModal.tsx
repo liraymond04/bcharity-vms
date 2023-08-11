@@ -1,8 +1,5 @@
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import { ProfileFragment } from '@lens-protocol/client'
+import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -11,18 +8,17 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { APP_NAME } from '@/constants'
-import getUserLocale from '@/lib/getUserLocale'
-import uploadToIPFS from '@/lib/ipfs/ipfsUpload'
 import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createPost from '@/lib/lens-protocol/createPost'
-import { PostTags } from '@/lib/types'
+import useCreatePost from '@/lib/lens-protocol/useCreatePost'
+import {
+  buildMetadata,
+  OpportunityMetadataRecord,
+  PostTags
+} from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
 import Error from './Error'
-import {
-  createPublishAttributes,
-  IPublishOpportunityFormProps
-} from './PublishOpportunityModal'
+import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
   open: boolean
@@ -39,6 +35,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   publisher,
   defaultValues
 }) => {
+  const { createPost } = useCreatePost()
+
+  const { mutateAsync: upload } = useStorageUpload()
+
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -53,12 +53,17 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const {
     handleSubmit,
     reset,
+    resetField,
     register,
+    clearErrors,
     formState: { errors }
   } = form
 
   const onCancel = () => {
+    clearErrors()
     reset(defaultValues)
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -73,24 +78,21 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image ? await uploadToIPFS(image) : defaultValues.imageUrl
+    const imageUrl = image
+      ? (await upload({ data: [image] }))[0]
+      : defaultValues.imageUrl
 
-    const attributes = createPublishAttributes({
-      id,
-      formData: { ...formData, imageUrl }
-    })
-
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: id,
-      content: `#${PostTags.OrgPublish.Opportunity}`,
-      locale: getUserLocale(),
-      tags: [PostTags.OrgPublish.Opportunity],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.OrgPublish.Opportunity} by ${publisher?.handle}`,
-      attributes,
-      appId: APP_NAME
-    }
+    const metadata = buildMetadata<OpportunityMetadataRecord>(
+      publisher,
+      [PostTags.OrgPublish.Opportunity],
+      {
+        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
+        type: PostTags.OrgPublish.Opportunity,
+        id,
+        ...formData,
+        imageUrl
+      }
+    )
 
     checkAuth(publisher.ownedBy)
       .then(() =>
@@ -160,16 +162,17 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
             <Input
               label="End Date"
-              type="date"
-              hasTick
+              type="endDate"
               placeholder="yyyy-mm-dd"
-              change={() => {
-                form.setValue('endDate', '')
-                setEndDateDisabled(!endDateDisabled)
-              }}
               disabled={!endDateDisabled}
               error={!!errors.endDate?.type}
               {...register('endDate', {})}
+              onChange={(e) => {
+                if (e.target.value === 'on') {
+                  resetField('endDate')
+                  setEndDateDisabled(!endDateDisabled)
+                }
+              }}
             />
             <Input
               label="Expected number of hours"

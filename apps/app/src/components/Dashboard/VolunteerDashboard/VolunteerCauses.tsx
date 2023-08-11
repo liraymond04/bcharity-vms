@@ -1,20 +1,22 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { PublicationSortCriteria } from '@lens-protocol/client'
+import { PostFragment, PublicationSortCriteria } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import ClearFilters from '@/components/Shared/ClearFilters'
+import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getAvatar from '@/lib/getAvatar'
-import getCauseMetadata from '@/lib/lens-protocol/getCauseMetadata'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import { CauseMetadata } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getCauseMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
-import { CauseMetadata, PostTags } from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
-import BrowseCard from './BrowseCard'
+import BrowseCauseCard from './BrowseCauseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
@@ -65,27 +67,6 @@ const VolunteerCauses: React.FC = () => {
     }
   }, [currentUser, isAuthenticated])
 
-  const Progress = ({
-    progress,
-    total,
-    className
-  }: {
-    progress: number
-    total: number
-    className?: string
-  }) => (
-    <div className={className}>
-      <div className="w-full bg-gray-200 rounded-full h-5 ">
-        <div
-          className="bg-green-400 h-5 rounded-full"
-          style={{
-            width: `${Math.min(Math.trunc((progress / total) * 100), 100)}%`
-          }}
-        ></div>
-      </div>
-    </div>
-  )
-
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -134,7 +115,7 @@ const VolunteerCauses: React.FC = () => {
 
       <GridItemTwelve>
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-black">
+          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
@@ -158,14 +139,7 @@ const VolunteerCauses: React.FC = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer"
-              onClick={() => {
-                setSelectedCategory('')
-              }}
-            >
-              Clear Filters
-            </button>
+            <ClearFilters onClick={() => setSelectedCategory('')} />
           </div>
 
           {postDataError && <h1>error</h1>}
@@ -178,14 +152,11 @@ const VolunteerCauses: React.FC = () => {
                 (op) =>
                   selectedCategory === '' || op.category === selectedCategory
               )
-              .map((op) => (
-                <BrowseCard
-                  key={op.cause_id}
-                  imageSrc={op.imageUrl}
-                  avatarSrc={getAvatar(op.from)}
-                  name={op.name}
-                  buttonText="APPLY"
-                  buttonHref="."
+              .map((op, i) => (
+                <BrowseCauseCard
+                  key={op.id}
+                  cause={op}
+                  post={postData[i] as PostFragment}
                 />
               ))
           ) : (

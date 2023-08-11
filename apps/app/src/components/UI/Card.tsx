@@ -1,27 +1,40 @@
 import clsx from 'clsx'
-import { FC, ReactNode } from 'react'
+import { FC, MouseEvent, ReactNode } from 'react'
 
 interface CardProps {
   children: ReactNode
   className?: string
   forceRounded?: boolean
   testId?: string
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void
 }
 
 export const Card: FC<CardProps> = ({
   children,
   className = '',
   forceRounded = false,
-  testId = ''
+  testId = '',
+  onClick
 }) => {
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    // Prevent click propagation if the target is a button
+    const et = event.target as HTMLInputElement
+    if (et.tagName === 'BUTTON') {
+      event.stopPropagation()
+    } else if (onClick) {
+      onClick(event)
+    }
+  }
+
   return (
     <div
       className={clsx(
         forceRounded ? 'rounded-xl' : 'rounded-none sm:rounded-xl',
-        'border dark:border-gray-700/80 bg-purple-50 dark:bg-gray-900 drop-shadow-md',
+        'border dark:border-gray-700/80 bg-purple-50 dark:bg-Card drop-shadow-md',
         className
       )}
       data-test={testId}
+      onClick={handleClick}
     >
       {children}
     </div>

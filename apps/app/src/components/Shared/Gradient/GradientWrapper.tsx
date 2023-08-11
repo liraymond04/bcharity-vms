@@ -1,7 +1,5 @@
-import { useTheme } from 'next-themes'
 import React from 'react'
 
-import styles from './gradient.module.css'
 interface IGradientWrapperProps {
   children: React.ReactNode
   className?: string
@@ -16,19 +14,8 @@ const GradientWrapper: React.FC<IGradientWrapperProps> = ({
   children,
   className = ''
 }) => {
-  const { theme } = useTheme()
-
   return (
-    <div
-      className={
-        theme === 'light'
-          ? `${styles.gradient} ${className}`
-          : `${styles.darkgradient} ${className}`
-      }
-      suppressHydrationWarning
-    >
-      {children}
-    </div>
+    <div className={`gradient dark:darkgradient ${className}`}>{children}</div>
   )
 }
 
