@@ -205,3 +205,25 @@ table {
     background-color: #120946;
   }
 }
+
+.ag-theme-alpine {
+  .ag-center-cols-viewport {
+    background-color: #eceaf8;
+  }
+
+  .ag-header-cell {
+    background-color: #eee6ff;
+  }
+
+  .ag-header-row-column {
+    background-color: #eceaf8;
+  }
+
+  .ag-cell {
+    background-color: #e5d8ff;
+  }
+
+  .ag-paging-panel {
+    background-color: #eceaf8;
+  }
+}
