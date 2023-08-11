@@ -37,7 +37,8 @@ const CausePage: NextPage = () => {
   const { data, loading, fetch, error } = usePublication()
   const {
     query: { id },
-    isReady
+    isReady,
+    asPath
   } = useRouter()
 
   const [wrongPostType, setWrongPostType] = useState(false)
@@ -145,6 +146,14 @@ const CausePage: NextPage = () => {
   }
 
   const Body = () => {
+    const copyToClipboard = () => {
+      const host = window.location.host
+      const baseUrl = host.split(':').at(0) === 'localhost' ? 'http' : 'https'
+      const url = `${baseUrl}://${host}${asPath}`
+      navigator.clipboard.writeText(url)
+      toast.success('Copied url to clipboard')
+    }
+
     if (!cause || !data || !isPost(data)) return <Spinner />
 
     return wrongPostType ? (
@@ -214,7 +223,7 @@ const CausePage: NextPage = () => {
               post={data}
               cause={cause}
             />
-            <Button size="lg" className="mr-10 ml-56">
+            <Button size="lg" className="mr-10 ml-56" onClick={copyToClipboard}>
               Share
             </Button>
 
@@ -268,7 +277,11 @@ const CausePage: NextPage = () => {
                 post={data}
                 cause={cause}
               />
-              <Button size="lg" className="mr-10 mt-5 h-12 w-5/6 ml-8">
+              <Button
+                size="lg"
+                className="mr-10 mt-5 h-12 w-5/6 ml-8"
+                onClick={copyToClipboard}
+              >
                 Share
               </Button>
             </div>
