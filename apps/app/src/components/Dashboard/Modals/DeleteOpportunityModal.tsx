@@ -116,7 +116,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
               value={values.hoursPerWeek}
               disabled
             />
-            <Input label="Category" placeholder="Healthcare" disabled />
+            <Input label="Category" value={values.category} disabled />
             <Input
               label="Website (leave empty if not linking to external opportunity)"
               value={values.website}
@@ -124,7 +124,6 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
             />
             <TextArea
               label="Activity Description"
-              placeholder="Tell us more about this volunteer opportunity"
               value={values.description}
               disabled
             />
