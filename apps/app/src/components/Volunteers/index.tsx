@@ -10,6 +10,7 @@ import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { OpportunityMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getOpportunityMetadata } from '@/lib/metadata'
+import testSearch from '@/lib/search'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import ClearFilters from '../Shared/ClearFilters'
@@ -122,6 +123,7 @@ const Volunteers: NextPage = () => {
           {posts
             .filter(
               (post) =>
+                testSearch(post.name, searchValue) &&
                 (selectedCategory === '' ||
                   post.category === selectedCategory) &&
                 (selectedOrg === '' || post.from.handle === selectedOrg)
