@@ -41,6 +41,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   }, [id, postData])
 
   const onCancel = () => {
+    setErrorMessage('')
     onClose(false)
   }
 
