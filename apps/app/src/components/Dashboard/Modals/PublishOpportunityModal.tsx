@@ -100,23 +100,29 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
-
-    const metadata = buildMetadata<OpportunityMetadataRecord>(
-      publisher,
-      [PostTags.OrgPublish.Opportunity],
-      {
-        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Opportunity,
-        id: v4(),
-        ...formData,
-        imageUrl
-      }
-    )
-
     try {
+      const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
+
+      const metadata = buildMetadata<OpportunityMetadataRecord>(
+        publisher,
+        [PostTags.OrgPublish.Opportunity],
+        {
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
+          type: PostTags.OrgPublish.Opportunity,
+          id: v4(),
+          ...formData,
+          imageUrl
+        }
+      )
+
       await checkAuth(publisher.ownedBy)
-      await createPost(publisher, metadata)
+      const createPostResult = await createPost(publisher, metadata)
+
+      if (createPostResult.isFailure()) {
+        setError(true)
+        setErrorMessage(createPostResult.error.message)
+        throw createPostResult.error.message
+      }
 
       reset()
       onClose(true)

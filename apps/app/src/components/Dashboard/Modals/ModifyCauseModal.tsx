@@ -95,65 +95,63 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image
-      ? (await upload({ data: [image] }))[0]
-      : defaultValues.imageUrl
+    try {
+      const imageUrl = image
+        ? (await upload({ data: [image] }))[0]
+        : defaultValues.imageUrl
 
-    const metadata = buildMetadata<CauseMetadataRecord>(
-      publisher,
-      [PostTags.OrgPublish.Cause],
-      {
-        version: MetadataVersion.CauseMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Cause,
-        id,
-        name: formData.name,
-        category: formData.category,
-        currency: formData.currency,
-        contribution: formData.contribution,
-        goal: formData.goal,
-        recipient: formData.recipient,
-        description: formData.description,
-        location: `${formData.country}-${formData.province}-${formData.city}`,
-        imageUrl
-      }
-    )
-
-    const collectModuleParams = {
-      feeCollectModule: {
-        amount: {
-          currency,
-          value: formData.contribution
-        },
-        recipient: formData.recipient,
-        referralFee: 0,
-        followerOnly: false
-      }
-    }
-
-    checkAuth(publisher.ownedBy)
-      .then(() =>
-        createPost(publisher, metadata, collectModuleParams, {
-          followerOnlyReferenceModule: false
-        })
-      )
-      .then((res) => {
-        if (res.isFailure()) {
-          setError(true)
-          setErrorMessage(res.error.message)
-          throw res.error.message
+      const metadata = buildMetadata<CauseMetadataRecord>(
+        publisher,
+        [PostTags.OrgPublish.Cause],
+        {
+          version: MetadataVersion.CauseMetadataVersion['1.0.1'],
+          type: PostTags.OrgPublish.Cause,
+          id,
+          name: formData.name,
+          category: formData.category,
+          currency: formData.currency,
+          contribution: formData.contribution,
+          goal: formData.goal,
+          recipient: formData.recipient,
+          description: formData.description,
+          location: `${formData.country}-${formData.province}-${formData.city}`,
+          imageUrl
         }
-      })
-      .then(() => {
-        reset(formData)
-        onClose(true)
-      })
-      .catch((e) => {
-        setErrorMessage(e.message)
+      )
+
+      const collectModuleParams = {
+        feeCollectModule: {
+          amount: {
+            currency,
+            value: formData.contribution
+          },
+          recipient: formData.recipient,
+          referralFee: 0,
+          followerOnly: false
+        }
+      }
+
+      await checkAuth(publisher.ownedBy)
+      const createPostResult = await createPost(
+        publisher,
+        metadata,
+        collectModuleParams,
+        { followerOnlyReferenceModule: false }
+      )
+
+      if (createPostResult.isFailure()) {
         setError(true)
-      })
-      .finally(() => {
-        setIsPending(false)
-      })
+        setErrorMessage(createPostResult.error.message)
+        throw createPostResult.error.message
+      }
+
+      reset(formData)
+      onClose(true)
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setError(true)
+    }
+    setIsPending(false)
   }
 
   return (

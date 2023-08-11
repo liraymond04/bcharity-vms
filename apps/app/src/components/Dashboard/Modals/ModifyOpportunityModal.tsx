@@ -79,53 +79,39 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image
-      ? (await upload({ data: [image] }))[0]
-      : defaultValues.imageUrl
+    try {
+      const imageUrl = image
+        ? (await upload({ data: [image] }))[0]
+        : defaultValues.imageUrl
 
-    const metadata = buildMetadata<OpportunityMetadataRecord>(
-      publisher,
-      [PostTags.OrgPublish.Opportunity],
-      {
-        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Opportunity,
-        id,
-        ...formData,
-        imageUrl
-      }
-    )
-
-    checkAuth(publisher.ownedBy)
-      .then(() =>
-        createPost(
-          publisher,
-          metadata,
-          {
-            freeCollectModule: {
-              followerOnly: false
-            }
-          },
-          { followerOnlyReferenceModule: false }
-        )
-      )
-      .then((res) => {
-        if (res.isFailure()) {
-          setError(true)
-          setErrorMessage(res.error.message)
-          throw res.error.message
+      const metadata = buildMetadata<OpportunityMetadataRecord>(
+        publisher,
+        [PostTags.OrgPublish.Opportunity],
+        {
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
+          type: PostTags.OrgPublish.Opportunity,
+          id,
+          ...formData,
+          imageUrl
         }
-      })
-      .then(() => {
-        reset(formData)
-        onClose(true)
-      })
-      .catch((e) => {
-        setErrorMessage(e.message)
+      )
+
+      await checkAuth(publisher.ownedBy)
+      const createPostResult = await createPost(publisher, metadata)
+
+      if (createPostResult.isFailure()) {
         setError(true)
-      })
-      .finally(() => {
-        setIsPending(false)
-      })
+        setErrorMessage(createPostResult.error.message)
+        throw createPostResult.error.message
+      }
+
+      reset()
+      onClose(true)
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setError(true)
+    }
+    setIsPending(false)
   }
 
   return (
