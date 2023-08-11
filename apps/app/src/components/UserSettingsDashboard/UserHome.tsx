@@ -19,6 +19,7 @@ import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
+import { ErrorMessage } from '../UI/ErrorMessage'
 import { Spinner } from '../UI/Spinner'
 import SelectAvatar from './UserHome/SelectAvatar'
 
@@ -26,11 +27,16 @@ const VolunteerHomeTab: React.FC = () => {
   const { mutateAsync: upload } = useStorageUpload()
   const sdk = useSDK()
 
+  const [error, setError] = useState<Error>()
+
   const { currentUser } = useAppPersistStore()
   const [name, setName] = useState<string>('')
   const [location, setLocation] = useState<string>('')
   const [bio, setBio] = useState<string>('')
   const [website, setWebsite] = useState<string>('')
+  const [discord, setDiscord] = useState<string>('')
+  const [twitter, setTwitter] = useState<string>('')
+  const [linkedin, setLinkedin] = useState<string>('')
   const [cover, setCover] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -38,6 +44,7 @@ const VolunteerHomeTab: React.FC = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        setError(undefined)
         if (currentUser) {
           setUserId(currentUser.id)
           setUserHandle(currentUser.handle)
@@ -58,13 +65,27 @@ const VolunteerHomeTab: React.FC = () => {
                 (attr) => attr.key === 'website'
               )
               setWebsite(websiteAttribute?.value || '')
+              const discordAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'discord'
+              )
+              setDiscord(discordAttribute?.value || '')
+              const twitterAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'twitter'
+              )
+              setTwitter(twitterAttribute?.value || '')
+              const linkedinAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'linkedin'
+              )
+              setLinkedin(linkedinAttribute?.value || '')
             }
             setBio(userProfile.bio || '')
           }
           console.log('profile', userProfile)
         }
       } catch (error) {
-        console.error('Error fetching profile data:', error)
+        if (error instanceof Error) {
+          setError(error)
+        }
       }
     }
     fetchProfileData()
@@ -73,10 +94,18 @@ const VolunteerHomeTab: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setIsLoading(true)
+    setError(undefined)
 
     try {
       if (currentUser) {
         await checkAuth(currentUser?.ownedBy)
+
+        if (discord.length > 100)
+          throw Error('Length of Discord invite input is too long!')
+        if (twitter.length > 100)
+          throw Error('Length of Twitter profile input is too long!')
+        if (linkedin.length > 100)
+          throw Error('Length of LinkedIn profile input is too long!')
 
         const attributes: AttributeData[] = [
           {
@@ -90,6 +119,24 @@ const VolunteerHomeTab: React.FC = () => {
             traitType: 'location',
             value: location,
             key: 'location'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'discord',
+            value: discord,
+            key: 'discord'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'twitter',
+            value: twitter,
+            key: 'twitter'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'linkedin',
+            value: linkedin,
+            key: 'linkedin'
           }
         ]
 
@@ -127,7 +174,9 @@ const VolunteerHomeTab: React.FC = () => {
       }
       console.log('Profile saved successfully')
     } catch (error) {
-      console.error('Error updating profile:', error)
+      if (error instanceof Error) {
+        setError(error)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -196,6 +245,39 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <Input
+                label="Discord: "
+                type="text"
+                id="discord"
+                value={discord}
+                prefix="https://discord.gg/"
+                placeholder="4vKS59q5kV"
+                onChange={(e) => setDiscord(e.target.value)}
+              />
+            </div>
+            <div>
+              <Input
+                label="Twitter: "
+                type="text"
+                id="twitter"
+                value={twitter}
+                prefix="https://twitter.com/"
+                placeholder="Gavin"
+                onChange={(e) => setTwitter(e.target.value)}
+              />
+            </div>
+            <div>
+              <Input
+                label="LinkedIn: "
+                type="text"
+                id="linkedin"
+                value={linkedin}
+                prefix="https://linkedin.com/in/"
+                placeholder="gavin"
+                onChange={(e) => setLinkedin(e.target.value)}
+              />
+            </div>
+            <div>
+              <Input
                 label="Cover: "
                 type="file"
                 id="cover"
@@ -212,6 +294,7 @@ const VolunteerHomeTab: React.FC = () => {
                 Save
               </Button>
             </div>
+            {error && <ErrorMessage error={error} />}
           </form>
         </Card>
       </GridItemTwelve>
