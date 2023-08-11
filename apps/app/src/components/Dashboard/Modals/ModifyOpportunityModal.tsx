@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
+import { FileInput } from '@/components/UI/FileInput'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
@@ -205,9 +206,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
-            <Input
+            <FileInput
+              defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label="Image (optional): "
-              type="file"
+              accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
