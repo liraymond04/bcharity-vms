@@ -93,7 +93,7 @@ const MenuItems: FC = () => {
                   />
                 </div>
               </Menu.Item>
-              <div className="divider" />
+              <div className="custom-divider" />
               <Menu.Item
                 as={NextLink}
                 href={`/p/${
@@ -150,7 +150,7 @@ const MenuItems: FC = () => {
               </Menu.Item>
               {profiles?.length > 1 && (
                 <>
-                  <div className="divider" />
+                  <div className="custom-divider" />
                   <div className="overflow-auto m-2 max-h-36 no-scrollbar">
                     <div className="flex items-center px-4 pt-1 pb-2 space-x-1.5 text-sm font-bold text-gray-500">
                       <SwitchHorizontalIcon className="w-4 h-4" />
@@ -188,7 +188,7 @@ const MenuItems: FC = () => {
 
               {currentUser && GIT_COMMIT_SHA && (
                 <>
-                  <div className="divider" />
+                  <div className="custom-divider" />
                   <div className="py-3 px-6 text-xs flex items-center space-x-2">
                     <Link
                       href={`https://gitlab.com/bcharity/bcharity/-/commit/${GIT_COMMIT_SHA}`}

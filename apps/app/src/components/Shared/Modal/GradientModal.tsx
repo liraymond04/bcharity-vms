@@ -68,7 +68,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
               transform transition-all sm:my-8 sm:align-middle w-full rounded-xl 
               font-sans"
             >
-              <div className="flex justify-between items-center py-3.5 px-5">
+              <div className="flex justify-between items-center py-3.5 px-5 custom-divider">
                 <div className="flex items-center space-x-2 text-lg">
                   <div>{title}</div>
                 </div>
@@ -80,9 +80,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
                   <XIcon className="w-5 h-5" />
                 </button>
               </div>
-              <div className="divider m-0" />
-              <div className="py-2">{children}</div>
-              <div className="divider m-0" />
+              <div className="py-4 custom-divider">{children}</div>
               <div className="flex px-4 py-3 justify-between">
                 <Button
                   onClick={onSubmit}

@@ -154,7 +154,7 @@ table {
   @apply bg-base-100;
 }
 
-.divider {
+.custom-divider {
   @apply border-b dark:border-gray-700/80;
 }
 
