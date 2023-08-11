@@ -343,6 +343,7 @@ const OrganizationCauses: React.FC = () => {
               id={currentDeleteId}
               postData={data}
               values={getFormDefaults(currentDeleteId)}
+              currencyData={currencyData}
             />
             <ModifyCauseModal
               open={modifyModalOpen}
