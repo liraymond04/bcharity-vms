@@ -164,7 +164,7 @@ const CausePage: NextPage = () => {
               publicationId={cause.post_id}
               postTag={PostTags.Bookmark.Cause}
             />
-            <div className="text-5xl font-bold text-black dark:text-white p-2 bg-purple-300 dark:bg-indigo-950 rounded-lg">
+            <div className="text-5xl font-bold p-2 bg-purple-300 dark:bg-info-content rounded-lg">
               {cause.name}
             </div>
             <div className="text-3xl text-gray-400 font-bold pl-5">
