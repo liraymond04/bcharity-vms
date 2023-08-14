@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
+import { checkAuth } from '@/lib/lens-protocol'
 import useFollow from '@/lib/lens-protocol/useFollow'
 import { useAppPersistStore } from '@/store/app'
 
@@ -18,11 +19,11 @@ const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
   const { currentUser } = useAppPersistStore()
   const { following, isLoading, error, followUser, unfollowUser } = useFollow({
     followerAddress: currentUser?.ownedBy ?? '',
-    id: followId
+    profileId: followId
   })
 
   useEffect(() => {
-    if (error) toast.error(error?.message)
+    if (error) toast.error(error)
   }, [error])
 
   return (
@@ -31,11 +32,13 @@ const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
       icon={isLoading ? <Spinner size="sm" /> : icon}
       onClick={() => {
         if (!currentUser) return
-        if (following) {
-          unfollowUser(currentUser.ownedBy, followId)
-        } else {
-          followUser(currentUser.ownedBy, followId)
-        }
+        checkAuth(currentUser.ownedBy).then(() => {
+          if (following) {
+            unfollowUser(currentUser.ownedBy, followId)
+          } else {
+            followUser(currentUser.ownedBy, followId)
+          }
+        })
       }}
       size={size ? size : 'sm'}
       className={className}

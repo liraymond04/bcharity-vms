@@ -5,14 +5,34 @@ import checkAuth from './checkAuth'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
-interface Props {
+export interface UseFollowParams {
+  /**
+   * The ethereum address of the profile to follow
+   */
+  profileId: string
+  /**
+   * The ethereum address of the profile that is doing the following
+   */
   followerAddress: string
-  id: string
 }
 
-const useFollow = (params: Props) => {
+//  * @returns `following` - whether or not the `followerAddress` follows the `profileId` \
+//  *          `error` - the error message if an error occured when fetching the follow data, or attempting to (un)follow a user \
+//  *    `     `isLoading` - whether or not the follow data is being fetched or if the hook is attempting to (un)follow a user \
+//  *          `followUser`- a function to follow a user \
+//  *          `unfollowUser` - a function to unfollow a user
+
+/**
+ * React hook to handle following-relating fetching and actions. Requires authentication beforehand.
+ *
+ * also see {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#doesFollow | doesFollow}
+ * , {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#createFollowTypedData | createFollowTypedData}
+ * , {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#createUnfollowTypedData | createUnfollowTypedData}
+ * @param params Params for the hook
+ */
+const useFollow = (params: UseFollowParams) => {
   const [following, setFollowing] = useState<boolean>()
-  const [error, setError] = useState<Error>()
+  const [error, setError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const fetch = async (followerAddress: string, id: string) => {
@@ -31,14 +51,14 @@ const useFollow = (params: Props) => {
       }
     } catch (e) {
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
       }
     }
     setIsLoading(false)
   }
 
   useEffect(() => {
-    fetch(params.followerAddress, params.id)
+    fetch(params.followerAddress, params.profileId)
   }, [])
 
   const followUser = async (address: string, profileId: string) => {
@@ -69,7 +89,7 @@ const useFollow = (params: Props) => {
       return broadcastResult
     } catch (e) {
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
       }
     }
     setIsLoading(false)
@@ -100,13 +120,14 @@ const useFollow = (params: Props) => {
       return broadcastResult
     } catch (e) {
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
       }
     }
     setIsLoading(false)
   }
 
   return {
+    // whether or not test
     following,
     error,
     isLoading,

@@ -7,11 +7,11 @@ import getSignature from './getSignature'
 import lensClient from './lensClient'
 import useApply from './useApply'
 import useBookmark from './useBookmark'
-import useCreateComment from './useCreateComment'
-import useCreatePost from './useCreatePost'
+import useCreateComment, { CreateCommentParams } from './useCreateComment'
+import useCreatePost, { CreatePostParams } from './useCreatePost'
 import useEnabledCurrencies from './useEnabledCurrencies'
 import useExplorePublications from './useExplorePublications'
-import useFollow from './useFollow'
+import useFollow, { UseFollowParams } from './useFollow'
 import usePostData from './usePostData'
 import usePublication from './usePublication'
 
@@ -34,7 +34,4 @@ export {
   usePublication
 }
 
-import { CreateCommentParams } from './useCreateComment'
-import { CreatePostParams } from './useCreatePost'
-
-export type { CreateCommentParams, CreatePostParams }
+export type { CreateCommentParams, CreatePostParams, UseFollowParams }
