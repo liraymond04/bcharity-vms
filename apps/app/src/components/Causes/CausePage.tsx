@@ -139,26 +139,6 @@ const CausePage: NextPage = () => {
     return e('generic')
   }
 
-  const getDisplayed = () => {
-    if (loading) {
-      return (
-        <center className="p-20">
-          <Spinner />
-        </center>
-      )
-    } else if (
-      !data ||
-      wrongPostType ||
-      malformedMetadata ||
-      !cause ||
-      !isPost(data)
-    ) {
-      return <ErrorBody message={getErrorMessage()} />
-    } else {
-      return <Body cause={cause} post={data} />
-    }
-  }
-
   const Body = ({
     cause,
     post
@@ -304,6 +284,26 @@ const CausePage: NextPage = () => {
         </div>
       </div>
     )
+  }
+
+  const getDisplayed = () => {
+    if (loading) {
+      return (
+        <center className="p-20">
+          <Spinner />
+        </center>
+      )
+    } else if (
+      !data ||
+      wrongPostType ||
+      malformedMetadata ||
+      !cause ||
+      !isPost(data)
+    ) {
+      return <ErrorBody message={getErrorMessage()} />
+    } else {
+      return <Body cause={cause} post={data} />
+    }
   }
 
   return (
