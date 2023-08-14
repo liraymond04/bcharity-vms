@@ -15,6 +15,7 @@
     "incorrect-publication-type": "Incorrect publication type!",
     "incorrect-collect-module": "Incorrect collect module!",
     "metadata-malformed": "Metadata of post is malformed",
+    "metadata-upload-fail": "Metadata upload failed!",
     "user-null": "Current user is null!",
     "profile-null": "Provided profile is null!",
     "already-bookmarked": "Publication has already been bookmarked!",
@@ -166,17 +167,6 @@
         "submit": "Submit",
         "cancel": "Cancel"
       },
-      "donate-button": {
-        "donate-to": "Donate to",
-        "raised-of": "raised of",
-        "invalid-amount": "Invalid amount",
-        "set": "Set",
-        "check-balance": "Check Balance",
-        "error-occurred": "An error occurred",
-        "try-again": "Please try again",
-        "donate": "Donate",
-        "cancel": "Cancel"
-      },
       "navbar": {
         "name": "BCharity",
         "projects": "PROJECTS",
@@ -218,6 +208,47 @@
           "switch": "Switch",
           "login": "Login"
         }
+      },
+      "apply-button": {
+        "button-label": "Log hours",
+        "create": "Create VHR request",
+        "num-hours": "Number of hours to verify",
+        "invalid-hours": "Hours should be a positive number with at most one decimal place",
+        "comment": "Comments & Proof Links",
+        "placeholder": "If you have any comments or links to provide as proof, enter them here",
+        "error-occurred": "An error occurred: ",
+        "try-again": ". Please try again.",
+        "submit": "Submit",
+        "cancel": "Cancel"
+      },
+      "donate-button": {
+        "donate-to": "Donate to",
+        "raised-of": "raised of",
+        "invalid-amount": "Invalid amount",
+        "set": "Set",
+        "check-balance": "Check Balance",
+        "error-occurred": "An error occurred",
+        "try-again": "Please try again",
+        "donate": "Donate",
+        "cancel": "Cancel"
+      },
+      "choose-file": {
+        "select": "Select file(s)"
+      },
+      "clear-filters": {
+        "label": "Clear Filters"
+      },
+      "follow-button": {
+        "unfollow": "Unfollow",
+        "follow": "Follow"
+      },
+      "switch-network": {
+        "label": "Switch network",
+        "toast": "Change wallet"
+      },
+      "uniswap": {
+        "not-enough": "You don't have enough",
+        "swap": "Swap in Uniswap"
       }
     }
   },

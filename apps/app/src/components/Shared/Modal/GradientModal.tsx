@@ -26,7 +26,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
   children
 }) => {
   const { t } = useTranslation('common', {
-    keyPrefix: 'components.shared.footer'
+    keyPrefix: 'components.shared.gradient-modal'
   })
 
   return (

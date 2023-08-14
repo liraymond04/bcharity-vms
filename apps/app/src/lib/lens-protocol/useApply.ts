@@ -24,7 +24,13 @@ interface Props {
   organizationId: string
 }
 
+import { useTranslation } from 'react-i18next'
+
 const useApply = (params: Props) => {
+  const { t: e } = useTranslation('common', {
+    keyPrefix: 'errors'
+  })
+
   const { mutateAsync: upload } = useStorageUpload()
   const sdk = useSDK()
 
@@ -40,11 +46,11 @@ const useApply = (params: Props) => {
     setIsLoading(true)
     try {
       if (profile === null) {
-        throw Error('Provided profile is null!')
+        throw Error(e('profile-null'))
       }
 
       if (!sdk) {
-        throw Error('Metadata upload failed')
+        throw Error(e('metadata-upload-fail'))
       }
 
       const data: LogVhrRequestMetadataRecord = {

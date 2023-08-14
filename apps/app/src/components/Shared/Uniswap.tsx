@@ -1,5 +1,6 @@
 import { FeeCollectModuleSettingsFragment } from '@lens-protocol/client'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import getUniswapURL from '@/lib/getUniswapURL'
 
@@ -8,10 +9,13 @@ interface Props {
 }
 
 const Uniswap: FC<Props> = ({ module }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.uniswap'
+  })
   return (
     <div className="space-y-1">
-      <div className="text-sm">
-        You don't have enough <b>{module?.amount?.asset?.symbol}</b>
+      <div className="text-sm" suppressHydrationWarning>
+        {t('not-enough')} <b>{module?.amount?.asset?.symbol}</b>
       </div>
       <a
         href={getUniswapURL(
@@ -28,8 +32,9 @@ const Uniswap: FC<Props> = ({ module }) => {
           height={20}
           width={20}
           alt="Uniswap"
+          suppressHydrationWarning
         />
-        <div>Swap in Uniswap</div>
+        <div>{t('swap')}</div>
       </a>
     </div>
   )
