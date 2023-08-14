@@ -11,9 +11,10 @@ interface Props {
   followId: string
   icon?: ReactNode
   className?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-const FollowButton: FC<Props> = ({ followId, icon, className }) => {
+const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
   const { currentUser } = useAppPersistStore()
   const { following, isLoading, error, followUser, unfollowUser } = useFollow({
     followerAddress: currentUser?.ownedBy ?? '',
@@ -36,7 +37,7 @@ const FollowButton: FC<Props> = ({ followId, icon, className }) => {
           followUser(currentUser.ownedBy, followId)
         }
       }}
-      size="lg"
+      size={size ? size : 'sm'}
       className={className}
     >
       {following ? 'Unfollow' : 'Follow'}

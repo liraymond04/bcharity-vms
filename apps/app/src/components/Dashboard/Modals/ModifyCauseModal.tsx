@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import FormDropdown from '@/components/Shared/FormDropdown'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
+import { FileInput } from '@/components/UI/FileInput'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
@@ -78,6 +79,8 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onCancel = () => {
     clearErrors()
     reset(defaultValues)
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -92,65 +95,63 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image
-      ? (await upload({ data: [image] }))[0]
-      : defaultValues.imageUrl
+    try {
+      const imageUrl = image
+        ? (await upload({ data: [image] }))[0]
+        : defaultValues.imageUrl
 
-    const metadata = buildMetadata<CauseMetadataRecord>(
-      publisher,
-      [PostTags.OrgPublish.Cause],
-      {
-        version: MetadataVersion.CauseMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Cause,
-        id,
-        name: formData.name,
-        category: formData.category,
-        currency: formData.currency,
-        contribution: formData.contribution,
-        goal: formData.goal,
-        recipient: formData.recipient,
-        description: formData.description,
-        location: `${formData.country}-${formData.province}-${formData.city}`,
-        imageUrl
-      }
-    )
-
-    const collectModuleParams = {
-      feeCollectModule: {
-        amount: {
-          currency,
-          value: formData.contribution
-        },
-        recipient: formData.recipient,
-        referralFee: 0,
-        followerOnly: false
-      }
-    }
-
-    checkAuth(publisher.ownedBy)
-      .then(() =>
-        createPost(publisher, metadata, collectModuleParams, {
-          followerOnlyReferenceModule: false
-        })
-      )
-      .then((res) => {
-        if (res.isFailure()) {
-          setError(true)
-          setErrorMessage(res.error.message)
-          throw res.error.message
+      const metadata = buildMetadata<CauseMetadataRecord>(
+        publisher,
+        [PostTags.OrgPublish.Cause],
+        {
+          version: MetadataVersion.CauseMetadataVersion['1.0.1'],
+          type: PostTags.OrgPublish.Cause,
+          id,
+          name: formData.name,
+          category: formData.category,
+          currency: formData.currency,
+          contribution: formData.contribution,
+          goal: formData.goal,
+          recipient: formData.recipient,
+          description: formData.description,
+          location: `${formData.country}-${formData.province}-${formData.city}`,
+          imageUrl
         }
-      })
-      .then(() => {
-        reset(formData)
-        onClose(true)
-      })
-      .catch((e) => {
-        setErrorMessage(e.message)
+      )
+
+      const collectModuleParams = {
+        feeCollectModule: {
+          amount: {
+            currency,
+            value: formData.contribution
+          },
+          recipient: formData.recipient,
+          referralFee: 0,
+          followerOnly: false
+        }
+      }
+
+      await checkAuth(publisher.ownedBy)
+      const createPostResult = await createPost(
+        publisher,
+        metadata,
+        collectModuleParams,
+        { followerOnlyReferenceModule: false }
+      )
+
+      if (createPostResult.isFailure()) {
         setError(true)
-      })
-      .finally(() => {
-        setIsPending(false)
-      })
+        setErrorMessage(createPostResult.error.message)
+        throw createPostResult.error.message
+      }
+
+      reset(formData)
+      onClose(true)
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setError(true)
+    }
+    setIsPending(false)
   }
 
   return (
@@ -256,9 +257,10 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
-            <Input
+            <FileInput
+              defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label="Image (optional): "
-              type="file"
+              accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>

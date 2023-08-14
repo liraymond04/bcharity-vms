@@ -16,7 +16,7 @@ import { ErrorMessage } from '../UI/ErrorMessage'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
-const Organization: NextPage = () => {
+const Volunteer: NextPage = () => {
   const [error, setError] = useState<Error>()
   const [profile, setProfile] = useState<ProfileFragment>()
 
@@ -31,8 +31,7 @@ const Organization: NextPage = () => {
         if (!username) throw Error('Invalid profile username!')
         const result = await getProfile({ handle: username.toString() })
         if (!result) throw Error('Profile not fetched!')
-        if (!isVerified(result.id))
-          throw Error('Profile is not an organization!')
+        if (isVerified(result.id)) throw Error('Profile is not an volunteer!')
         setProfile(result)
       } catch (e) {
         if (e instanceof Error) {
@@ -58,7 +57,7 @@ const Organization: NextPage = () => {
 
   return (
     <>
-      <SEO title={`${profile?.handle} - Organization • BCharity VMS`} />
+      <SEO title={`${profile?.handle} - Volunteer • BCharity VMS`} />
       <GridLayout>
         <GridItemTwelve>
           <Card>
@@ -206,4 +205,4 @@ const Organization: NextPage = () => {
   )
 }
 
-export default Organization
+export default Volunteer

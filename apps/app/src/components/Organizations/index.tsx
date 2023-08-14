@@ -13,6 +13,7 @@ import { isPost, PostTags } from '@/lib/metadata'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
+import ClearFilters from '../Shared/ClearFilters'
 import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
 import OrganizationCard from './OrganizationCard'
@@ -96,14 +97,7 @@ const Organizations: NextPage = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
-              onClick={() => {
-                setSelectedCategory('')
-              }}
-            >
-              Clear Filters
-            </button>
+            <ClearFilters onClick={() => setSelectedCategory('')} />
           </div>
         </div>
         <Divider className="mt-5" />

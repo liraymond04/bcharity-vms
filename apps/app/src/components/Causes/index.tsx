@@ -9,9 +9,11 @@ import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
+import testSearch from '@/lib/search'
 
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
+import ClearFilters from '../Shared/ClearFilters'
 import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
@@ -81,15 +83,7 @@ const Causes: NextPage = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-indigo-400 dark:bg-indigo-200 dark:border-purple-800 dark:hover:bg-indigo-300"
-              onClick={() => {
-                setSelectedCategory('')
-              }}
-              suppressHydrationWarning
-            >
-              {t('clear-filters')}
-            </button>
+            <ClearFilters onClick={() => setSelectedCategory('')} />
           </div>
         </div>
         <Divider className="mt-5" />
@@ -106,7 +100,8 @@ const Causes: NextPage = () => {
           {posts
             .filter(
               (post) =>
-                selectedCategory === '' || post.category === selectedCategory
+                testSearch(post.name, searchValue) &&
+                (selectedCategory === '' || post.category === selectedCategory)
             )
             .map((post) => (
               <GridItemFour key={post.id}>

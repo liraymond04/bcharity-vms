@@ -139,7 +139,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
     let result = new Set<string>()
     data.map((value) => result.add(value.opportunity.category))
     setCategories(Array.from(result))
-  })
+  }, [data])
 
   return (
     <div className="mx-4 my-8 flex flex-col max-h-screen">

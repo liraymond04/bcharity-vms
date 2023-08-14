@@ -2,6 +2,7 @@ import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
+import { FileInput } from '@/components/UI/FileInput'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
@@ -41,6 +42,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   }, [id, postData])
 
   const onCancel = () => {
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -93,36 +95,43 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
           <>
             <Input
               label="Volunteer opportunity name"
-              defaultValue={values.name}
+              value={values.name}
               disabled
             />
+
             <Input
               label="Start Date"
               type="date"
-              defaultValue={values.startDate}
+              value={values.startDate}
               disabled
             />
             <Input
               label="End Date"
-              type="date"
-              defaultValue={values.endDate}
+              type="endDate"
+              value={values.endDate}
               disabled
             />
             <Input
               label="Expected number of hours"
-              defaultValue={values.hoursPerWeek}
+              value={values.hoursPerWeek}
               disabled
             />
-            <Input label="Category" defaultValue={values.category} disabled />
+            <Input label="Category" value={values.category} disabled />
             <Input
               label="Website (leave empty if not linking to external opportunity)"
-              defaultValue={values.website}
+              value={values.website}
               disabled
             />
             <TextArea
               label="Activity Description"
-              defaultValue={values.description}
+              value={values.description}
               disabled
+            />
+            <FileInput
+              defaultImageIPFS={values.imageUrl ?? ''}
+              disabled
+              label="Image (optional): "
+              accept="image/*"
             />
           </>
         ) : (

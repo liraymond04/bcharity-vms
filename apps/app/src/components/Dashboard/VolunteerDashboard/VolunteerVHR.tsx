@@ -9,6 +9,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import ClearFilters from '@/components/Shared/ClearFilters'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
@@ -91,17 +92,19 @@ const VolunteerVHRTab: React.FC = () => {
     setPosts(_posts)
   }, [postData])
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
-      profileId: profile!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [profile])
   return (
     <GridLayout>
@@ -117,6 +120,7 @@ const VolunteerVHRTab: React.FC = () => {
                     VHR Amount:
                   </div>
                   <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
+                    {balanceData?.formatted}
                     {postdata[0] && isPost(postdata[0])
                       ? postdata[0].metadata.attributes[0]?.value
                       : ' '}
@@ -166,14 +170,11 @@ const VolunteerVHRTab: React.FC = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <button
-              className="ml-3 min-w-[110px] h-fit text-red-500 dark:text-indigo-400 bg-[#ffc2d4] dark:bg-indigo-200 border-red-500 dark:border-purple-800 border-2 rounded-md px-2 hover:bg-red-500 dark:hover:bg-indigo-300 hover:text-white hover:cursor-pointer"
+            <ClearFilters
               onClick={() => {
                 setSelectedCategory('')
               }}
-            >
-              Clear Filters
-            </button>
+            />
           </div>
 
           {postDataError && (

@@ -37,13 +37,15 @@ import Uniswap from './Uniswap'
 interface Props {
   post: PostFragment
   cause: CauseMetadata
+  size?: 'lg' | 'sm' | 'md'
+  className?: string
 }
 
 export interface IDonateFormProps {
   contribution: string
 }
 
-const DonateButton: FC<Props> = ({ post, cause }) => {
+const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.donate-button'
   })
@@ -460,7 +462,7 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
             />
           )}
         </div>
-        <div className="py-4 divider"></div>
+        <div className="py-4 custom-divider"></div>
         <div className="flex px-4 py-3 justify-between">
           <Button
             onClick={onDonate}
@@ -493,6 +495,8 @@ const DonateButton: FC<Props> = ({ post, cause }) => {
         onClick={() => {
           setShowModal(true)
         }}
+        size={size}
+        className={className}
         suppressHydrationWarning
       >
         {t('donate')}

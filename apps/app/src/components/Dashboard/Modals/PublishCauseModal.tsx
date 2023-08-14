@@ -8,6 +8,7 @@ import { v4 } from 'uuid'
 
 import FormDropdown from '@/components/Shared/FormDropdown'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
+import { FileInput } from '@/components/UI/FileInput'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import LocationFormComponent from '@/components/UI/LocationDropdowns'
@@ -105,6 +106,8 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   const onCancel = () => {
     clearErrors()
     reset()
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -119,46 +122,53 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       return
     }
 
-    const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
-
-    const metadata = buildMetadata<CauseMetadataRecord>(
-      publisher,
-      [PostTags.OrgPublish.Cause],
-      {
-        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Cause,
-        id: v4(),
-        name: formData.name,
-        category: formData.category,
-        currency: formData.currency,
-        contribution: formData.contribution,
-        goal: formData.goal,
-        recipient: formData.recipient,
-        description: formData.description,
-        location: `${formData.country}-${formData.province}-${formData.city}`,
-        imageUrl
-      }
-    )
-
-    const collectModuleParams = {
-      feeCollectModule: {
-        amount: {
-          currency,
-          value: formData.contribution
-        },
-        recipient: formData.recipient,
-        referralFee: 0,
-        followerOnly: false
-      }
-    }
-
-    setIsPending(true)
     try {
-      await checkAuth(publisher.ownedBy)
+      const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
-      await createPost(publisher, metadata, collectModuleParams, {
-        followerOnlyReferenceModule: false
-      })
+      const metadata = buildMetadata<CauseMetadataRecord>(
+        publisher,
+        [PostTags.OrgPublish.Cause],
+        {
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
+          type: PostTags.OrgPublish.Cause,
+          id: v4(),
+          name: formData.name,
+          category: formData.category,
+          currency: formData.currency,
+          contribution: formData.contribution,
+          goal: formData.goal,
+          recipient: formData.recipient,
+          description: formData.description,
+          location: `${formData.country}-${formData.province}-${formData.city}`,
+          imageUrl
+        }
+      )
+
+      const collectModuleParams = {
+        feeCollectModule: {
+          amount: {
+            currency,
+            value: formData.contribution
+          },
+          recipient: formData.recipient,
+          referralFee: 0,
+          followerOnly: false
+        }
+      }
+
+      await checkAuth(publisher.ownedBy)
+      const createPostResult = await createPost(
+        publisher,
+        metadata,
+        collectModuleParams,
+        { followerOnlyReferenceModule: false }
+      )
+
+      if (createPostResult.isFailure()) {
+        setError(true)
+        setErrorMessage(createPostResult.error.message)
+        throw createPostResult.error.message
+      }
 
       reset()
       onClose(true)
@@ -269,9 +279,9 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
-            <Input
+            <FileInput
               label="Image (optional): "
-              type="file"
+              accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>
