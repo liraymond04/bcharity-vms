@@ -8,8 +8,8 @@ import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
+import { formatLocation } from '@/lib/formatLocation'
 import getAvatar from '@/lib/getAvatar'
-import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
