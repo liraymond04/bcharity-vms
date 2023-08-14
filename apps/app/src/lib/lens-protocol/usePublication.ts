@@ -19,7 +19,7 @@ const usePublication = () => {
         if (data) setData(data)
       })
       .catch((error) => {
-        setError(error)
+        setError(error.message)
       })
       .finally(() => {
         setLoading(false)
