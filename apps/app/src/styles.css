@@ -10,32 +10,42 @@ html {
 
 body {
   font-family: 'BCharity', Helvetica, Arial, sans-serif;
-  @apply bg-gray-50;
-  @apply dark:bg-black;
+  @apply bg-base-100;
+  @apply text-black dark:text-white;
 }
 
 table {
-  @apply bg-white;
-  @apply dark:bg-gray-900;
+  @apply bg-base-100;
 }
 
 @layer components {
   .gradient {
     background-color: rgba(242, 241, 241);
-    background-image: radial-gradient(ellipse at 89% 27%, rgba(206, 187, 248, 1) 5%, rgba(206, 187, 248, 0.16) 33%),
-                      radial-gradient(ellipse at 12% 57%, rgba(229, 214, 238, 1) 9%, rgba(206, 187, 248, 0.16) 33%),
-                      radial-gradient(ellipse at 46% 96%, rgba(223, 230, 254, 0.72) 5%, rgba(206, 187, 248, 0.16) 33%);
+    background-image: radial-gradient(
+        ellipse at 89% 27%,
+        rgba(206, 187, 248, 1) 5%,
+        rgba(206, 187, 248, 0.16) 33%
+      ),
+      radial-gradient(
+        ellipse at 12% 57%,
+        rgba(229, 214, 238, 1) 9%,
+        rgba(206, 187, 248, 0.16) 33%
+      ),
+      radial-gradient(
+        ellipse at 46% 96%,
+        rgba(223, 230, 254, 0.72) 5%,
+        rgba(206, 187, 248, 0.16) 33%
+      );
   }
   .darkgradient {
-    background-color: #2D2D4D; /* Monotone dark blue color */
-    background-image: none
+    background-color: #2d2d4d; /* Monotone dark blue color */
+    background-image: none;
   }
 }
 
 .shimmer {
   @apply animate-pulse;
-  @apply bg-gray-300;
-  @apply dark:bg-gray-600;
+  @apply bg-base-300;
 }
 
 .menu-item {
@@ -58,7 +68,7 @@ table {
 
 ::-webkit-file-upload-button {
   @apply px-3 py-2 mr-2 border-0 cursor-pointer rounded-l-xl;
-  @apply bg-gray-200 dark:bg-gray-900;
+  @apply bg-base-content;
 }
 
 .bg-hero {
@@ -98,7 +108,7 @@ table {
 }
 
 .react-autosuggest__input {
-  @apply rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full;
+  @apply rounded-xl bg-base-100 border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full;
 }
 
 .react-autosuggest__input--focused {
@@ -115,7 +125,7 @@ table {
 }
 
 .react-autosuggest__suggestions-container--open {
-  @apply bg-white dark:bg-black border-solid border block font-light text-base overflow-y-auto absolute;
+  @apply bg-base-100 border-solid border block font-light text-base overflow-y-auto absolute;
   top: 51px;
   width: 280px;
   border-color: rgba(170, 170, 170, 1);
@@ -137,14 +147,14 @@ table {
 }
 
 .react-autosuggest__suggestion--highlighted {
-  @apply bg-gray-300 dark:bg-gray-800;
+  @apply bg-base-200;
 }
 
 .dropdown-active {
-  @apply bg-gray-100 dark:bg-gray-800;
+  @apply bg-base-100;
 }
 
-.divider {
+.custom-divider {
   @apply border-b dark:border-gray-700/80;
 }
 
@@ -170,4 +180,48 @@ table {
 
 .leading-md {
   @apply !leading-6 sm:!leading-7;
+}
+
+.ag-theme-alpine-dark {
+  .ag-center-cols-viewport {
+    background-color: #120946;
+  }
+
+  .ag-header-cell {
+    background-color: #120946;
+  }
+
+  .ag-header-row-column {
+    background-color: #1e1457;
+  }
+
+  .ag-cell {
+    background-color: #270e54;
+  }
+
+  .ag-paging-panel {
+    background-color: #120946;
+  }
+}
+
+.ag-theme-alpine {
+  .ag-center-cols-viewport {
+    background-color: #eceaf8;
+  }
+
+  .ag-header-cell {
+    background-color: #eee6ff;
+  }
+
+  .ag-header-row-column {
+    background-color: #eceaf8;
+  }
+
+  .ag-cell {
+    background-color: #e5d8ff;
+  }
+
+  .ag-paging-panel {
+    background-color: #eceaf8;
+  }
 }

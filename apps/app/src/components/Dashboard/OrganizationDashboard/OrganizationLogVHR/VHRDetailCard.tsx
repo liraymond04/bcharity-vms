@@ -12,7 +12,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
   return (
     <div className="flex h-72 bg-brand-200 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-8">
       <div className="flex flex-col grow shrink-0">
-        <Link href="">
+        <Link href={`/p/volunteer/${value.from.handle}`} target="_blank">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
             <p className="text-black dark:text-teal-100 font-semibold text-lg">
@@ -21,7 +21,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
           </div>
           <p className="ml-10 text-fuchsia-700">{value.from.id}</p>
         </Link>
-        <Link href="">
+        <Link href={`/volunteer/${value.opportunity.post_id}`} target="_blank">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
             <p className="text-black dark:text-teal-100 font-semibold text-lg">

@@ -1,6 +1,5 @@
 import { PlusSmIcon } from '@heroicons/react/outline'
 import {
-  PublicationFragment,
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
@@ -17,7 +16,7 @@ import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
 import usePostData from '@/lib/lens-protocol/usePostData'
-import { CauseMetadata } from '@/lib/metadata'
+import { CauseMetadata, isPost } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
@@ -53,7 +52,6 @@ const OrganizationCauses: React.FC = () => {
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
-  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
@@ -110,17 +108,25 @@ const OrganizationCauses: React.FC = () => {
     )
   }, [resolvedTheme])
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
-      profileId: profile!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setVhrGoal(
+            parseFloat(
+              data.items[0] && isPost(data.items[0])
+                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                : '0'
+            )
+          )
+        })
+    }
   }, [profile])
 
   const { currentUser } = useAppPersistStore()
@@ -138,7 +144,7 @@ const OrganizationCauses: React.FC = () => {
     }
   }, [currencyError])
 
-  const [vhrGoal] = useState(600) // use hardcoded goal for now
+  const [vhrGoal, setVhrGoal] = useState(0)
 
   const getFormDefaults = (id: string): IPublishCauseFormProps => {
     const d = postMetadata.find((val) => val?.id === id)
@@ -176,10 +182,7 @@ const OrganizationCauses: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised out of{' '}
-                    {postdata[0]?.__typename === 'Post'
-                      ? postdata[0]?.metadata.attributes[0]?.value
-                      : ' '}
+                    VHR raised out of {vhrGoal}
                   </div>
                 </div>
                 <Link
@@ -340,6 +343,7 @@ const OrganizationCauses: React.FC = () => {
               id={currentDeleteId}
               postData={data}
               values={getFormDefaults(currentDeleteId)}
+              currencyData={currencyData}
             />
             <ModifyCauseModal
               open={modifyModalOpen}

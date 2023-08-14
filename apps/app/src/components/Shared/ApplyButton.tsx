@@ -104,7 +104,7 @@ const ApplyButton: FC<Props> = ({
             />
           )}
         </div>
-        <div className="py-4 divider"></div>
+        <div className="py-4 custom-divider"></div>
         <div className="flex px-4 py-3 justify-between">
           <Button
             onClick={handleSubmit((data) => onSubmit(data))}

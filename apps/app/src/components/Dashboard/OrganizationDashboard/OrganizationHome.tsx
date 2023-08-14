@@ -16,7 +16,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const OrganizationHome: React.FC = () => {
-  const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
+  const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
   const [postdata, setpostdata] = useState<PublicationFragment[]>([])
@@ -41,16 +41,18 @@ const OrganizationHome: React.FC = () => {
   }, [currentUser, isAuthenticated])
 
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      profileId: currentUser!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (currentUser) {
+      const param: PublicationsQueryRequest = {
+        profileId: currentUser.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setpostdata(data.items)
+        })
+    }
   }, [currentUser])
 
   const [searchAddress, setSearchAddress] = useState<string>('')
@@ -63,10 +65,10 @@ const OrganizationHome: React.FC = () => {
     }
   }, [currentUser, isAuthenticated])
 
-  const getSlug = () => {
+  const getSlug = (key: string) => {
     const item =
       profile?.attributes &&
-      profile.attributes.filter((item) => item.key === 'location').at(0)
+      profile.attributes.filter((item) => item.key === key).at(0)
     if (item) {
       return item.value
     }
@@ -154,11 +156,11 @@ const OrganizationHome: React.FC = () => {
                       <p className=" text-3xl text-white-600 flex items-left mt-10 ">
                         {currentUser?.handle}
                       </p>
-                      {getSlug() !== '' && (
+                      {getSlug('location') !== '' && (
                         <div className="flex flex-row space-x-2">
                           <LocationMarkerIcon className="h-6 w-6" />
                           <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-xl sm:text-xl">
-                            {getSlug()}
+                            {getSlug('location')}
                           </span>
                         </div>
                       )}

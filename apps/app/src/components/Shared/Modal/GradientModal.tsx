@@ -31,7 +31,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-20 overflow-scroll"
+        className="fixed inset-0 z-50 overflow-scroll"
         onClose={onCancel}
       >
         <div className="flex justify-center items-center mx-16 min-h-screen sm:block sm:p-0">
@@ -68,7 +68,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
               transform transition-all sm:my-8 sm:align-middle w-full rounded-xl 
               font-sans"
             >
-              <div className="flex justify-between items-center py-3.5 px-5 divider">
+              <div className="flex justify-between items-center py-3.5 px-5 custom-divider">
                 <div className="flex items-center space-x-2 text-lg">
                   <div>{title}</div>
                 </div>
@@ -80,7 +80,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
                   <XIcon className="w-5 h-5" />
                 </button>
               </div>
-              <div className="py-4 divider">{children}</div>
+              <div className="py-4 custom-divider">{children}</div>
               <div className="flex px-4 py-3 justify-between">
                 <Button
                   onClick={onSubmit}

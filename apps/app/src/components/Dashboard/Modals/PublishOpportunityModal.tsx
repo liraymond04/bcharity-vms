@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
+import { FileInput } from '@/components/UI/FileInput'
 import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
@@ -67,6 +68,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     reset,
     resetField,
     register,
+    clearErrors,
     formState: { errors }
   } = form
 
@@ -80,7 +82,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   }
 
   const onCancel = () => {
+    clearErrors()
     reset()
+    setError(false)
+    setErrorMessage('')
     onClose(false)
   }
 
@@ -95,23 +100,29 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return
     }
 
-    const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
-
-    const metadata = buildMetadata<OpportunityMetadataRecord>(
-      publisher,
-      [PostTags.OrgPublish.Opportunity],
-      {
-        version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-        type: PostTags.OrgPublish.Opportunity,
-        id: v4(),
-        ...formData,
-        imageUrl
-      }
-    )
-
     try {
+      const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
+
+      const metadata = buildMetadata<OpportunityMetadataRecord>(
+        publisher,
+        [PostTags.OrgPublish.Opportunity],
+        {
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
+          type: PostTags.OrgPublish.Opportunity,
+          id: v4(),
+          ...formData,
+          imageUrl
+        }
+      )
+
       await checkAuth(publisher.ownedBy)
-      await createPost(publisher, metadata)
+      const createPostResult = await createPost(publisher, metadata)
+
+      if (createPostResult.isFailure()) {
+        setError(true)
+        setErrorMessage(createPostResult.error.message)
+        throw createPostResult.error.message
+      }
 
       reset()
       onClose(true)
@@ -156,11 +167,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
             <Input
               label="End Date"
-              type="date"
+              type="endDate"
               placeholder="yyyy-mm-dd"
               disabled={!endDateDisabled}
+              error={!!errors.endDate?.type}
               {...register('endDate', {})}
-              name="hasTick"
               onChange={(e) => {
                 if (e.target.value === 'on') {
                   resetField('endDate')
@@ -210,9 +221,9 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
-            <Input
+            <FileInput
               label="Image (optional): "
-              type="file"
+              accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
           </Form>

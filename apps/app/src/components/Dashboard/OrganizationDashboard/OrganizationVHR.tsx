@@ -3,7 +3,6 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
 import {
-  PublicationFragment,
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
@@ -54,7 +53,6 @@ const OrganizationVHRTab: React.FC = () => {
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
   const [currentModifyId, setCurrentModifyId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
-  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
@@ -108,17 +106,25 @@ const OrganizationVHRTab: React.FC = () => {
     )
   }, [resolvedTheme])
   useEffect(() => {
-    const param: PublicationsQueryRequest = {
-      metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
-      profileId: profile!.id,
-      publicationTypes: [PublicationTypes.Post]
-    }
+    if (profile) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
 
-    lensClient()
-      .publication.fetchAll(param)
-      .then((data) => {
-        setpostdata(data.items)
-      })
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setVhrGoal(
+            parseFloat(
+              data.items[0] && isPost(data.items[0])
+                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                : '0'
+            )
+          )
+        })
+    }
   }, [profile])
   useEffect(() => {
     setPostMetadata(getOpportunityMetadata(data))
@@ -142,7 +148,7 @@ const OrganizationVHRTab: React.FC = () => {
   }
 
   const { currentUser } = useAppPersistStore()
-  const [vhrGoal] = useState(600) // use hardcoded goal for now
+  const [vhrGoal, setVhrGoal] = useState(0)
 
   const { isLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
@@ -161,10 +167,7 @@ const OrganizationVHRTab: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised out of{' '}
-                    {postdata[0] && isPost(postdata[0])
-                      ? postdata[0].metadata.attributes[0]?.value
-                      : ' '}
+                    VHR raised out of {vhrGoal}
                   </div>
                 </div>
                 <Link

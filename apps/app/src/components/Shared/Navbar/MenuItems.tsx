@@ -13,6 +13,7 @@ import { ProfileFragment as Profile } from '@lens-protocol/client'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GIT_COMMIT_SHA } from 'src/constants'
@@ -20,6 +21,7 @@ import { useAppPersistStore, useAppStore } from 'src/store/app'
 import { useDisconnect } from 'wagmi'
 
 import getAvatar from '@/lib/getAvatar'
+import isVerified from '@/lib/isVerified'
 
 import Slug from '../Slug'
 import Login from './Login'
@@ -31,6 +33,7 @@ export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
 )
 
 const MenuItems: FC = () => {
+  const router = useRouter()
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false)
 
   const { disconnect } = useDisconnect()
@@ -90,10 +93,12 @@ const MenuItems: FC = () => {
                   />
                 </div>
               </Menu.Item>
-              <div className="divider" />
+              <div className="custom-divider" />
               <Menu.Item
                 as={NextLink}
-                href="/settings"
+                href={`/p/${
+                  isVerified(currentUser?.id) ? 'organization' : 'volunteer'
+                }/${currentUser?.handle}`}
                 className={({ active }: { active: boolean }) =>
                   clsx({ 'dropdown-active': active }, 'menu-item')
                 }
@@ -121,6 +126,13 @@ const MenuItems: FC = () => {
                 as={NextLink}
                 href="/"
                 onClick={() => {
+                  if (
+                    router.pathname === '/dashboard' ||
+                    router.pathname === '/settings'
+                  ) {
+                    router.push('/')
+                  }
+                  setShowLoginModal(false)
                   setCurrentUser(null)
                   Cookies.remove('accessToken')
                   Cookies.remove('refreshToken')
@@ -138,7 +150,7 @@ const MenuItems: FC = () => {
               </Menu.Item>
               {profiles?.length > 1 && (
                 <>
-                  <div className="divider" />
+                  <div className="custom-divider" />
                   <div className="overflow-auto m-2 max-h-36 no-scrollbar">
                     <div className="flex items-center px-4 pt-1 pb-2 space-x-1.5 text-sm font-bold text-gray-500">
                       <SwitchHorizontalIcon className="w-4 h-4" />
@@ -176,7 +188,7 @@ const MenuItems: FC = () => {
 
               {currentUser && GIT_COMMIT_SHA && (
                 <>
-                  <div className="divider" />
+                  <div className="custom-divider" />
                   <div className="py-3 px-6 text-xs flex items-center space-x-2">
                     <Link
                       href={`https://gitlab.com/bcharity/bcharity/-/commit/${GIT_COMMIT_SHA}`}
