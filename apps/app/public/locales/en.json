@@ -12,9 +12,11 @@
   "errors": {
     "incorrect-publication-type": "Incorrect publication type!",
     "incorrect-collect-module": "Incorrect collect module!",
+    "metadata-malformed": "Metadata of post is malformed",
     "user-null": "Current user is null!",
     "profile-null": "Provided profile is null!",
-    "already-bookmarked": "Publication has already been bookmarked!"
+    "already-bookmarked": "Publication has already been bookmarked!",
+    "generic": "An unknown error occured. Please try again."
   },
   "components": {
     "causes": {
