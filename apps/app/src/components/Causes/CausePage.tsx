@@ -154,6 +154,8 @@ const CausePage: NextPage = () => {
       toast.success('Copied url to clipboard')
     }
 
+    if (!cause || !data || !isPost(data)) return <Spinner />
+
     return (
       <div className="p-6">
         <div className="flex justify-between items-center">
