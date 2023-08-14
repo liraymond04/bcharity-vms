@@ -18,7 +18,8 @@
     "user-null": "Current user is null!",
     "profile-null": "Provided profile is null!",
     "already-bookmarked": "Publication has already been bookmarked!",
-    "generic": "An unknown error occured. Please try again."
+    "generic": "An unknown error occured. Please try again.",
+    "profiles": "Could not get profiles!"
   },
   "components": {
     "causes": {
@@ -149,6 +150,22 @@
       "decline": "Decline cookies"
     },
     "shared": {
+      "footer": {
+        "about": "About",
+        "mission": "Our Mission",
+        "who": "Who We Are",
+        "privacy": "Privacy Policy",
+        "cookies": "Cookies",
+        "information": "Information",
+        "tos": "Terms of Service",
+        "partner": "Partner With Us",
+        "work": "Work With Us",
+        "bcharity": "Bcharity is a website developed by Ecssen, a registered charity."
+      },
+      "gradient-modal": {
+        "submit": "Submit",
+        "cancel": "Cancel"
+      },
       "donate-button": {
         "donate-to": "Donate to",
         "raised-of": "raised of",
@@ -166,7 +183,41 @@
         "volunteers": "VOLUNTEERS",
         "organizations": "ORGANIZATIONS",
         "vhrs": "VHRs",
-        "dashboard": "DASHBOARD"
+        "dashboard": "DASHBOARD",
+        "login": {
+          "sign": "Please sign the message.",
+          "verify": "BCharity uses this signature to verify that you're the owner of this address.",
+          "connect": "Connect your wallet.",
+          "providers": "Connect with one of our available wallet providers or create a new one.",
+          "claim": "Claim your Lens profile 🌿",
+          "visit": "Visit",
+          "claiming-site": "claiming site",
+          "finish-claim": "to claim your profile now 🏃‍♂️",
+          "return": "Make sure to check back here when done!",
+          "create": {
+            "min": "Handle should be at least 2 characters",
+            "max": "Handle should be less than 32 characters",
+            "regex": "Handle should only contain alphanumeric characters",
+            "error": "Create profile failed!",
+            "success": "Profile creation successful!",
+            "close": "You can close the modal and try signing in again to use your new profile",
+            "signup": "Signup Bcharity",
+            "handle": "Handle",
+            "button-signup": "Signup"
+          },
+          "wallet-selector": {
+            "sign-in": "Sign-In with Lens",
+            "browser": "Browser Wallet"
+          }
+        },
+        "menuitems": {
+          "logged-in": "Logged in as",
+          "profile": "Your Profile",
+          "settings": "Settings",
+          "logout": "Logout",
+          "switch": "Switch",
+          "login": "Login"
+        }
       }
     }
   },
