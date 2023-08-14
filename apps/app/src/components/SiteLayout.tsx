@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { FC, ReactNode, Suspense, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 
 import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
@@ -22,6 +23,10 @@ interface Props {
 }
 
 const SiteLayout: FC<Props> = ({ children }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.site-layout'
+  })
+
   const { resolvedTheme } = useTheme()
   const { setProfiles } = useAppStore()
   const { address } = useAccount()
@@ -85,16 +90,23 @@ const SiteLayout: FC<Props> = ({ children }) => {
           src="Cookie.jpg"
           alt="image description"
         ></img>
-        <div className="mt-8 mx-16 flex justify-center text-xl text-red-600">
-          Warning: Some functionality may not work without cookies
+        <div
+          className="mt-8 mx-16 flex justify-center text-xl text-red-600"
+          suppressHydrationWarning
+        >
+          {t('warning')}
         </div>
-        <div className="mt-4 mb-16 mx-16 justify-center">
-          We use cookies to improve your browsing experience, save your
-          preferences and collect information on how you use our website. You
-          can decline these cookies for a less personalized experience. For more
-          information about cookies, please see our{' '}
-          <Link className="text-blue-400" href="/cookies">
-            Cookie Policy.
+        <div
+          className="mt-4 mb-16 mx-16 justify-center flex space-x-1"
+          suppressHydrationWarning
+        >
+          {t('warning')}
+          <Link
+            className="text-blue-400"
+            href="/cookies"
+            suppressHydrationWarning
+          >
+            {t('policy')}
           </Link>
         </div>
         <div className="flex justify-center items-center">
@@ -103,16 +115,18 @@ const SiteLayout: FC<Props> = ({ children }) => {
             onClick={() => {
               setHasCookies(true)
             }}
+            suppressHydrationWarning
           >
-            Accept cookies
+            {t('accept')}
           </Button>
           <Button
             className="mb-8 ml-16 bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:bg-gradient-to-br border-red-600"
             onClick={() => {
               setShowCookiesPopup(false)
             }}
+            suppressHydrationWarning
           >
-            Decline cookies
+            {t('decline')}
           </Button>
         </div>
       </Modal>

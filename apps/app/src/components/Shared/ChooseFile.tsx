@@ -7,14 +7,17 @@ interface Props {
 }
 
 const ChooseFile: FC<Props> = ({ id, onChange }) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.choose-file'
+  })
   return (
     <>
       <label
         htmlFor={id}
         className="modal-close px-4 bg-violet-500 p-2 rounded-lg text-white hover:bg-violet-600"
+        suppressHydrationWarning
       >
-        {t('Select file(s)')}
+        {t('select')}
       </label>
       <input
         id={id}

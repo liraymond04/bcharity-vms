@@ -27,6 +27,7 @@ export interface UseLogHoursParams {
   organizationId: string
 }
 
+import { useTranslation } from 'react-i18next'
 /**
  * A react hook to handle making VHR log requests
  *
@@ -35,6 +36,11 @@ export interface UseLogHoursParams {
  */
 const useLogHours = (params: UseLogHoursParams) => {
   const [error, setError] = useState<string>()
+
+  const { t: e } = useTranslation('common', {
+    keyPrefix: 'errors'
+  })
+
   const [isLoading, setIsLoading] = useState<boolean>()
 
   const { createComment } = useCreateComment()
@@ -49,7 +55,7 @@ const useLogHours = (params: UseLogHoursParams) => {
     setError('')
     try {
       if (profile === null) {
-        throw Error('Provided profile is null!')
+        throw Error(e('profile-null'))
       }
 
       const data: LogVhrRequestMetadataRecord = {

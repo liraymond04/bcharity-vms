@@ -55,6 +55,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
                 float: 'right',
                 marginRight: '-400px'
               }}
+              suppressHydrationWarning
             >
               {label}
             </label>

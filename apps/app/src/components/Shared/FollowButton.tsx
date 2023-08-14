@@ -1,5 +1,6 @@
 import { FC, ReactNode, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 import { checkAuth } from '@/lib/lens-protocol'
 import useFollow from '@/lib/lens-protocol/useFollow'
@@ -16,6 +17,10 @@ interface Props {
 }
 
 const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.follow-button'
+  })
+
   const { currentUser } = useAppPersistStore()
   const { following, isLoading, error, followUser, unfollowUser } = useFollow({
     followerAddress: currentUser?.ownedBy ?? '',
@@ -43,7 +48,7 @@ const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
       size={size ? size : 'sm'}
       className={className}
     >
-      {following ? 'Unfollow' : 'Follow'}
+      {following ? t('unfollow') : t('follow')}
     </Button>
   )
 }

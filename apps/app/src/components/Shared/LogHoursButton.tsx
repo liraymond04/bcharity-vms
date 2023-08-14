@@ -1,6 +1,7 @@
 import Error from '@components/Dashboard/Modals/Error'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { useLogHours } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
@@ -28,6 +29,10 @@ const LogHoursButton: FC<Props> = ({
   publicationId,
   organizationId
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.apply-button'
+  })
+
   const { currentUser } = useAppPersistStore()
 
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -61,7 +66,7 @@ const LogHoursButton: FC<Props> = ({
 
   return (
     <div>
-      <Modal title="Create VHR request" show={showModal} onClose={onCancel}>
+      <Modal title={t('create')} show={showModal} onClose={onCancel}>
         <div className="mx-12 mt-5">
           {!isLoading ? (
             <Form
@@ -69,7 +74,7 @@ const LogHoursButton: FC<Props> = ({
               onSubmit={() => handleSubmit((data) => onSubmit(data))}
             >
               <Input
-                label="Number of hours to verify"
+                label={t('num-hours')}
                 type="number"
                 placeholder="5.5"
                 step="0.1"
@@ -80,14 +85,14 @@ const LogHoursButton: FC<Props> = ({
                   required: true,
                   pattern: {
                     value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
-                    message:
-                      'Hours should be a positive number with at most one decimal place'
+                    message: t('invalid-hours')
                   }
                 })}
               />
               <TextArea
-                label="Comments & Proof Links"
-                placeholder="If you have any comments or links to provide as proof, enter them here"
+                suppressHydrationWarning
+                label={t('comment')}
+                placeholder={t('placeholder')}
                 error={!!errors.comments?.type}
                 {...register('comments', { required: false, maxLength: 1000 })}
               />
@@ -97,7 +102,9 @@ const LogHoursButton: FC<Props> = ({
           )}
 
           {error && (
-            <Error message={`An error occured: ${error}. Please try again.`} />
+            <Error
+              message={`${t('error-occurred')}${error}${t('try-again')}`}
+            />
           )}
         </div>
         <div className="py-4 custom-divider"></div>
@@ -109,14 +116,14 @@ const LogHoursButton: FC<Props> = ({
             } px-6 py-2 font-medium`}
             disabled={isLoading}
           >
-            Submit
+            {t('submit')}
           </Button>
           <Button
             onClick={onCancel}
             variant="secondary"
             className="px-6 py-2 font-medium"
           >
-            Cancel
+            {t('cancel')}
           </Button>
         </div>
       </Modal>
@@ -125,7 +132,7 @@ const LogHoursButton: FC<Props> = ({
           setShowModal(true)
         }}
       >
-        Log hours
+        {t('button-label')}
       </Button>
     </div>
   )

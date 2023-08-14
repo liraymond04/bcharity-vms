@@ -5,6 +5,7 @@ import {
 } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
+import { useTranslation } from 'react-i18next'
 
 import getSignature from './getSignature'
 import lensClient from './lensClient'
@@ -32,6 +33,10 @@ export interface CreateCommentParams {
  */
 
 const useCreateComment = () => {
+  const { t: e } = useTranslation('common', {
+    keyPrefix: 'errors'
+  })
+
   const { mutateAsync: upload } = useStorageUpload()
   const sdk = useSDK()
 
@@ -42,11 +47,12 @@ const useCreateComment = () => {
     collectModule = { freeCollectModule: { followerOnly: false } },
     referenceModule = { followerOnlyReferenceModule: false }
   }: CreateCommentParams) => {
-    const contentURI = sdk?.storage.resolveScheme(
+    if (!sdk) throw new Error(e('metadata-upload-fail'))
+    const contentURI = sdk.storage.resolveScheme(
       (await upload({ data: [metadata] }))[0]
     )
 
-    if (!contentURI) throw new Error('Metadata upload failed')
+    if (!contentURI) throw new Error(e('metadata-upload-fail'))
 
     console.log(contentURI)
 

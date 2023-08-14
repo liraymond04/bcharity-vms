@@ -11,7 +11,9 @@ interface Props {
 }
 
 const SwitchNetwork: FC<Props> = ({ className = '' }) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.switch-network'
+  })
   const { switchNetwork } = useSwitchNetwork()
 
   return (
@@ -24,11 +26,11 @@ const SwitchNetwork: FC<Props> = ({ className = '' }) => {
         if (switchNetwork) {
           switchNetwork(CHAIN_ID)
         } else {
-          toast.error(t('Change wallet'))
+          toast.error(t('toast'))
         }
       }}
     >
-      {t('Switch network')}
+      {t('label')}
     </Button>
   )
 }

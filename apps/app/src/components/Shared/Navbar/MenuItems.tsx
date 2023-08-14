@@ -43,7 +43,9 @@ const MenuItems: FC = () => {
 
   const [auth, setAuth] = useState<boolean>(false)
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar.menuitems'
+  })
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
@@ -84,7 +86,7 @@ const MenuItems: FC = () => {
                   clsx({ 'dropdown-active': active }, 'menu-item')
                 }
               >
-                <div>{t('Logged in as')}</div>
+                <div suppressHydrationWarning>{t('logged-in')}</div>
                 <div className="truncate">
                   <Slug
                     className="font-bold"
@@ -105,7 +107,7 @@ const MenuItems: FC = () => {
               >
                 <div className="flex items-center space-x-1.5">
                   <UserIcon className="w-4 h-4" />
-                  <div>{t('Your Profile')}</div>
+                  <div suppressHydrationWarning>{t('profile')}</div>
                 </div>
               </Menu.Item>
 
@@ -118,7 +120,7 @@ const MenuItems: FC = () => {
               >
                 <div className="flex items-center space-x-1.5">
                   <CogIcon className="w-4 h-4" />
-                  <div>{t('Settings')}</div>
+                  <div suppressHydrationWarning>{t('settings')}</div>
                 </div>
               </Menu.Item>
 
@@ -145,7 +147,7 @@ const MenuItems: FC = () => {
               >
                 <div className="flex items-center space-x-1.5">
                   <LogoutIcon className="w-4 h-4" />
-                  <div>{t('Logout')}</div>
+                  <div suppressHydrationWarning>{t('logout')}</div>
                 </div>
               </Menu.Item>
               {profiles?.length > 1 && (
@@ -154,7 +156,7 @@ const MenuItems: FC = () => {
                   <div className="overflow-auto m-2 max-h-36 no-scrollbar">
                     <div className="flex items-center px-4 pt-1 pb-2 space-x-1.5 text-sm font-bold text-gray-500">
                       <SwitchHorizontalIcon className="w-4 h-4" />
-                      <div>{t('Switch')}</div>
+                      <div suppressHydrationWarning>{t('switch')}</div>
                     </div>
                     {profiles.map((profile: Profile, index: number) => (
                       <div
@@ -208,7 +210,7 @@ const MenuItems: FC = () => {
   ) : (
     <>
       <Modal
-        title="Login"
+        title={t('login')}
         icon={<ArrowCircleRightIcon className="w-5 h-5 text-brand" />}
         show={showLoginModal}
         onClose={() => setShowLoginModal(false)}
@@ -229,7 +231,7 @@ const MenuItems: FC = () => {
           setShowLoginModal(!showLoginModal)
         }}
       >
-        {t('Login')}
+        {t('login')}
       </Button>
     </>
   )
