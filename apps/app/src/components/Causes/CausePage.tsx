@@ -183,7 +183,7 @@ const CausePage: NextPage = () => {
               <div>
                 <MediaRenderer
                   key="attachment"
-                  className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                  className="object-cover h-50 rounded-lg"
                   src={cause.imageUrl}
                   alt={'image attachment'}
                 />
