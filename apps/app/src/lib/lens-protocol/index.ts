@@ -13,7 +13,7 @@ import useEnabledCurrencies from './useEnabledCurrencies'
 import useExplorePublications from './useExplorePublications'
 import useFollow, { UseFollowParams } from './useFollow'
 import usePostData from './usePostData'
-import usePublication from './usePublication'
+import usePublication, { UsePublicationParams } from './usePublication'
 
 export {
   checkAuth,
@@ -34,4 +34,9 @@ export {
   usePublication
 }
 
-export type { CreateCommentParams, CreatePostParams, UseFollowParams }
+export type {
+  CreateCommentParams,
+  CreatePostParams,
+  UseFollowParams,
+  UsePublicationParams
+}

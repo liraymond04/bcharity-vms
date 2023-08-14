@@ -3,7 +3,7 @@ import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import usePublication from '@/lib/lens-protocol/usePublication'
@@ -28,11 +28,13 @@ import SEO from '../utils/SEO'
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common')
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { data, loading, fetch, error } = usePublication()
   const {
-    query: { id },
-    isReady
+    query: { id }
   } = useRouter()
+
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
 
   const [wrongPostType, setWrongPostType] = useState(false)
   const [malformedMetadata, setMalformedMetadata] = useState(false)
@@ -52,12 +54,6 @@ const VolunteerPage: NextPage = () => {
       }
     }
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
 
   const getDateString = (o: OpportunityMetadata) => {
     const ongoing = !o.endDate

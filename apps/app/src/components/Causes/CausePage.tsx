@@ -35,12 +35,14 @@ import SEO from '../utils/SEO'
 const CausePage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { data, loading, fetch, error } = usePublication()
   const {
     query: { id },
-    isReady,
     asPath
   } = useRouter()
+
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
 
   const [wrongPostType, setWrongPostType] = useState(false)
   const [malformedMetadata, setMalformedMetadata] = useState(false)
@@ -60,12 +62,6 @@ const CausePage: NextPage = () => {
       }
     }
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
 
   const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
     useState<boolean>(false)
