@@ -132,12 +132,12 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       }
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost(
-        publisher,
+
+      const createPostResult = await createPost({
+        profileId: publisher.ownedBy,
         metadata,
-        collectModuleParams,
-        { followerOnlyReferenceModule: false }
-      )
+        collectModule: collectModuleParams
+      })
 
       if (createPostResult.isFailure()) {
         setError(true)
