@@ -6,7 +6,7 @@ import lensClient from './lensClient'
  * A function to check authentication usually used before continuing with another
  * lens client query that requires authentication.
  *
- * See {@link https://docs.lens.xyz/docs/authentication#using-lensclient-sdk} for lens-related documentation.
+ * See {@link https://docs.lens.xyz/docs/authentication#using-lensclient-sdk} and {@link https://lens-protocol.github.io/lens-sdk/interfaces/_lens_protocol_client.IAuthentication.html} for lens-related documentation.
  *
  * @param address the Ethereum address of the profile that is requesting authentication
  * (usually obtained from ProfileFragment.ownedBy)
