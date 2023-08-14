@@ -16,8 +16,11 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
   let imageExtentions = ['.jpeg', '.jpg', '.png', '.gif', '.svg']
   const validImage = (url: string) => {
     let ok = false
-    imageExtentions.map((value) => {
-      if (url.substring(url.length - value.length, url.length) == value)
+    imageExtentions.forEach((value) => {
+      if (
+        url.substring(url.length - value.length, url.length).toLowerCase() ==
+        value
+      )
         ok = true
     })
     return ok
