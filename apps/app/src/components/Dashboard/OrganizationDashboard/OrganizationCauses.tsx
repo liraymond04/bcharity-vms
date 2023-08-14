@@ -173,7 +173,7 @@ const OrganizationCauses: React.FC = () => {
       <GridItemTwelve>
         <Card>
           <div className="p-10 m-10">
-            {loading ? (
+            {loading || isBalanceLoading ? (
               <Spinner />
             ) : (
               <>
@@ -182,7 +182,7 @@ const OrganizationCauses: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised out of {vhrGoal}
+                    VHR raised {vhrGoal !== 0 && `out of ${vhrGoal}`}
                   </div>
                 </div>
                 <Link
@@ -193,13 +193,15 @@ const OrganizationCauses: React.FC = () => {
                   Set a goal
                 </Link>
 
-                <Progress
-                  progress={Number(balanceData?.value)}
-                  total={vhrGoal}
-                  className="mt-10 mb-10"
-                />
+                {vhrGoal !== 0 && (
+                  <Progress
+                    progress={Number(balanceData?.value)}
+                    total={vhrGoal}
+                    className="mt-10"
+                  />
+                )}
 
-                <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
+                <div className="text-2xl mt-10 font-bold text-black dark:text-white sm:text-4xl">
                   Our Cause
                 </div>
                 <div className=" w-full lg:flex mt-5">
@@ -243,62 +245,6 @@ const OrganizationCauses: React.FC = () => {
               </>
             )}
           </div>
-          {isBalanceLoading && (
-            <div className="p-12">
-              <div className="flex items-center">
-                <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
-                  ${Number(balanceData?.value)}
-                </div>
-                <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl bottom-0 mt-8">
-                  raised out of ${vhrGoal}
-                </div>
-              </div>
-              <Progress
-                progress={Number(balanceData?.value)}
-                total={vhrGoal}
-                className="mt-10 mb-10"
-              />
-              <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
-                Our Cause
-              </div>
-              <div className=" w-full lg:flex mt-5">
-                <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-x-stone-600 bg-white dark:bg-slate-500 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent dapibus, neque in auctor tincidunt, Lorem ipsum dolor
-                  sit amet, consectetur adipiscing elit. Praesent dapibus, neque
-                  in auctor tincidunt, tellus libero elementum nisl, vitae
-                  tristique eros lorem in odio. Nullam et eros sem. Duis
-                  molestie libero vel consequat suscipit. Sed maximus lacus
-                  vitae sem euismod ornare. In lacinia tempor lacus, vitae porta
-                  lectus luctus ac. Cras ultrices nulla eu enim ullamcorper
-                  iaculis. Nam gravida nibh sed sem interdum hendrerit. Nunc
-                  posuere purus id massa malesuada pellentesque. Etiam ipsum
-                  metus, laoreet eu libero a, suscipit sagittis ante. Nulla at
-                  purus consequat libero imperdiet efficitur quis quis orci.
-                  Aliquam felis orci, pretium sit amet volutpat ac, bibendum eu
-                  velit. Vivamus mollis, neque in aliquam malesuada, elit mi
-                  euismod velit, ac sagittis metus enim aliquet elit. Quisque
-                  fringilla sapien nec magna porta varius. Mauris bibendum, dui
-                  in dapibus bibendum, ex sapien ultricies lacus, a eleifend
-                  mauris erat sit amet purus.tellus libero elementum nisl, vitae
-                  tristique eros lorem in odio. Nullam et eros sem. Duis
-                  molestie libero vel consequat suscipit. Sed maximus lacus
-                  vitae sem euismod ornare. In lacinia tempor lacus, vitae porta
-                  lectus luctus ac. Cras ultrices nulla eu enim ullamcorper
-                  iaculis. Nam gravida nibh sed sem interdum hendrerit. Nunc
-                  posuere purus id massa malesuada pellentesque. Etiam ipsum
-                  metus, laoreet eu libero a, suscipit sagittis ante. Nulla at
-                  purus consequat libero imperdiet efficitur quis quis orci.
-                  Aliquam felis orci, pretium sit amet volutpat ac, bibendum eu
-                  velit. Vivamus mollis, neque in aliquam malesuada, elit mi
-                  euismod velit, ac sagittis metus enim aliquet elit. Quisque
-                  fringilla sapien nec magna porta varius. Mauris bibendum, dui
-                  in dapibus bibendum, ex sapien ultricies lacus, a eleifend
-                  mauris erat sit amet purus.
-                </div>
-              </div>
-            </div>
-          )}
 
           <div className="p-5">
             <button

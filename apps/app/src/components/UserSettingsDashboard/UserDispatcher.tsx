@@ -70,7 +70,7 @@ const UserDispatcher: React.FC = () => {
         </h1>
         <div className="flex flex-col items-center justify-center">
           <button
-            className="px-10 mt-8 py-2 bg-[#9969FF] text-gray-50
+            className="px-10 mt-8 py-2 bg-primary text-white
             font-normal rounded-md text-lg flex flex-row w-2/5 justify-center
              items-center outline outline-[#8153E4]"
             onClick={handleDispatch}

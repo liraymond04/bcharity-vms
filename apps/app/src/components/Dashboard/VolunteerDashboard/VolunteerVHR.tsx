@@ -1,6 +1,5 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import {
-  PublicationFragment,
   PublicationSortCriteria,
   PublicationsQueryRequest,
   PublicationTypes
@@ -35,7 +34,7 @@ const VolunteerVHRTab: React.FC = () => {
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [vhrGoal, setVhrGoal] = useState(600) // use hardcoded goal for now
+  const [vhrGoal, setVhrGoal] = useState(0)
   const [searchValue, setSearchValue] = useState('')
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
   const { data, error, refetch } = usePostData({
@@ -44,7 +43,6 @@ const VolunteerVHRTab: React.FC = () => {
       tags: { all: [PostTags.OrgPublish.Opportunity] }
     }
   })
-  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
 
   const onPublishClose = (shouldRefetch: boolean) => {
     if (shouldRefetch) {
@@ -102,7 +100,13 @@ const VolunteerVHRTab: React.FC = () => {
       lensClient()
         .publication.fetchAll(param)
         .then((data) => {
-          setpostdata(data.items)
+          setVhrGoal(
+            parseFloat(
+              data.items[0] && isPost(data.items[0])
+                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                : '0'
+            )
+          )
         })
     }
   }, [profile])
@@ -116,15 +120,11 @@ const VolunteerVHRTab: React.FC = () => {
             ) : (
               <>
                 <div className="flex items-center">
-                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
-                    VHR Amount:
+                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
+                    {Number(balanceData?.value)}
                   </div>
-                  <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-10">
-                    {balanceData?.formatted}
-                    {postdata[0] && isPost(postdata[0])
-                      ? postdata[0].metadata.attributes[0]?.value
-                      : ' '}
-                    / {vhrGoal}
+                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
+                    VHR raised {vhrGoal !== 0 && `out of ${vhrGoal}`}
                   </div>
                 </div>
                 <Link
@@ -134,11 +134,13 @@ const VolunteerVHRTab: React.FC = () => {
                 >
                   Set a goal
                 </Link>
-                <Progress
-                  progress={Number(balanceData?.value)}
-                  total={vhrGoal}
-                  className="mt-10 mb-10"
-                />
+                {vhrGoal !== 0 && (
+                  <Progress
+                    progress={Number(balanceData?.value)}
+                    total={vhrGoal}
+                    className="mt-10 mb-10"
+                  />
+                )}
               </>
             )}
           </div>
