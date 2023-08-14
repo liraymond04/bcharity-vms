@@ -26,7 +26,13 @@ const Volunteers: NextPage = () => {
   const [selectedOrg, setSelectedOrg] = useState<string>('')
   const [searchValue, setSearchValue] = useState('')
 
-  const { data, error, loading, pageInfo, fetchMore } = useExplorePublications(
+  const {
+    data,
+    error: exploreError,
+    loading,
+    pageInfo,
+    fetchMore
+  } = useExplorePublications(
     {
       sortCriteria: PublicationSortCriteria.Latest,
       metadata: {
@@ -141,7 +147,7 @@ const Volunteers: NextPage = () => {
           )}
         </GridLayout>
       )}
-      {error && (
+      {exploreError && (
         <div className="text-sm text-red-700 dark:text-red-200">
           Something went wrong
         </div>

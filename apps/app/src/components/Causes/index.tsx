@@ -111,8 +111,8 @@ const Causes: NextPage = () => {
         </GridLayout>
       )}
       {exploreError && (
-        <div className="text-sm text-center" suppressHydrationWarning>
-          {t('something-wrong')}
+        <div className="text-sm text-red-700 dark:text-red-200">
+          Something went wrong
         </div>
       )}
     </>
