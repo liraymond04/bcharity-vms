@@ -73,36 +73,34 @@ const VolunteerHome: React.FC = () => {
               <Spinner />
             ) : (
               <div className="flex flex-row">
-                <div className="align-middle  ">
-                  <div>
+                <div className="align-middle w-3/12 ml-8">
+                  <div className="align-middle">
                     <img
-                      className=" w-50 h-50 ml-12 mt-10 rounded-full"
+                      className=" w-50 h-50 mt-10 rounded-full"
                       src={getAvatar(currentUser)}
                       alt="Rounded avatar"
                     />
-
-                    <div className="bottom-0 m-5 ml-20 text-lg truncate text-violet-500">
-                      <p>
-                        ID:
-                        {currentUser.id}
-                      </p>
-                    </div>
                   </div>
-
-                  <div className="inset-0 flex justify-left items-center ml-20 mt-20">
+                  <div className="flex items-center justify-center bottom-0 m-5 text-lg truncate align-middle  text-violet-500">
+                    <p>
+                      ID:
+                      {currentUser.id}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center inset-0 justify-left  align-middle mt-20">
                     <h1>Followers: </h1>
                     <div className="ml-1">
                       {currentUser.stats.totalFollowers}
                     </div>
                   </div>
-                  <div className="relative inset-0 flex justify-left items-center ml-20 mt-10">
+                  <div className="flex items-center justify-center relative inset-0  justify-left align-middle mt-10 content-center">
                     <h1>Following: </h1>
                     <div className="ml-1">
                       {currentUser.stats.totalFollowing}
                     </div>
                   </div>
 
-                  <div className="ml-12 flex flex-row">
+                  <div className="flex-row flex items-center justify-center">
                     {getSlug('discord') !== '' && (
                       <Link
                         href={`https://discord.gg/${getSlug('discord')}`}
