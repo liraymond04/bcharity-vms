@@ -4,38 +4,32 @@ import { useEffect, useState } from 'react'
 import checkAuth from './checkAuth'
 import lensClient from './lensClient'
 
+/**
+ * React hook to fetch enabled currencies of a profile
+ *
+ * @param address The ethereum address of the user
+ * @returns data: the enabled currency data \
+ *          error: an error message if the request failed
+ */
 const useEnabledCurrencies = (address: string | undefined) => {
-  const [data, setData] = useState<Erc20Fragment[]>()
-  const [error, setError] = useState<Error>()
+  const [data, setData] = useState<Erc20Fragment[]>([])
+  const [error, setError] = useState<string>('')
 
-  const fetch = async () => {
+  useEffect(() => {
     if (!address) return
 
-    await checkAuth(address)
-
-    const result = await lensClient().modules.fetchEnabledCurrencies()
-
-    return result
-  }
-
-  let run = true
-  useEffect(() => {
-    const getEnabledCurrencies = async () => {
-      try {
-        await fetch().then((result) => {
-          if (result) setData(result.unwrap())
-        })
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e)
+    checkAuth(address)
+      .then(() => lensClient().modules.fetchEnabledCurrencies())
+      .then((currenciesResult) => {
+        if (currenciesResult.isSuccess()) {
+          setData(currenciesResult.value)
+        } else {
+          setError(currenciesResult.error.message)
         }
-      }
-    }
-
-    if (address && run) {
-      getEnabledCurrencies()
-      run = false
-    }
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }, [address])
 
   return { data, error }

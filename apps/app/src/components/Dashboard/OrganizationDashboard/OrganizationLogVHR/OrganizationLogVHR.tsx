@@ -96,7 +96,11 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
           appId: APP_NAME
         }
 
-        return createComment(id, profile, metadata)
+        return createComment({
+          profileId: profile.id,
+          publicationId: id,
+          metadata
+        })
       })
       .then((res) => {
         if (res.isFailure()) {

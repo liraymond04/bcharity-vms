@@ -3,7 +3,7 @@ import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import usePublication from '@/lib/lens-protocol/usePublication'
@@ -16,9 +16,9 @@ import {
 import { PostTags } from '@/lib/metadata'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
-import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
+import LogHoursButton from '../Shared/LogHoursButton'
 import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import Slug from '../Shared/Slug'
 import { Card } from '../UI/Card'
@@ -28,11 +28,13 @@ import SEO from '../utils/SEO'
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common')
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { data, loading, fetch, error } = usePublication()
   const {
-    query: { id },
-    isReady
+    query: { id }
   } = useRouter()
+
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
 
   const [wrongPostType, setWrongPostType] = useState(false)
   const [malformedMetadata, setMalformedMetadata] = useState(false)
@@ -52,12 +54,6 @@ const VolunteerPage: NextPage = () => {
       }
     }
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
 
   const getDateString = (o: OpportunityMetadata) => {
     const ongoing = !o.endDate
@@ -128,7 +124,7 @@ const VolunteerPage: NextPage = () => {
               </div>
             </Link>
           )}
-          <ApplyButton
+          <LogHoursButton
             hoursDefault={opportunity.hoursPerWeek}
             publicationId={opportunity.post_id}
             organizationId={opportunity.from.id}

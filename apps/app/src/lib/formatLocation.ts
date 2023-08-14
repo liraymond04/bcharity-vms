@@ -1,7 +1,7 @@
 import { Country, State } from 'country-state-city'
 
 /**
- * @brief Helper function to format metadata location strings
+ * Helper function to format metadata location strings
  * @param locationString string in the format country-province-city
  *
  */
