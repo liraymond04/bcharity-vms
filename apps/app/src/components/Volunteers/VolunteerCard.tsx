@@ -5,6 +5,7 @@ import React from 'react'
 
 import { STATIC_ASSETS } from '@/constants'
 import { OpportunityMetadata } from '@/lib/metadata'
+import validImageExtension from '@/lib/validImageExtension'
 
 import { Card } from '../UI/Card'
 
@@ -13,20 +14,8 @@ interface IVolunteerCardProps {
 }
 
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
-  let imageExtentions = ['.jpeg', '.jpg', '.png', '.gif', '.svg']
-  const validImage = (url: string) => {
-    let ok = false
-    imageExtentions.forEach((value) => {
-      if (
-        url.substring(url.length - value.length, url.length).toLowerCase() ==
-        value
-      )
-        ok = true
-    })
-    return ok
-  }
   const getDisplayedImage = () => {
-    if (!post.imageUrl || !validImage(post.imageUrl)) {
+    if (!post.imageUrl || !validImageExtension(post.imageUrl)) {
       return (
         <div
           className="border-b dark:border-b-gray-700/80 h-full rounded-l-xl"
