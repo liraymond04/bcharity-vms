@@ -69,7 +69,7 @@ const useCreatePost = () => {
     })
 
     if (typedDataResult.isFailure()) {
-      throw typedDataResult.error
+      console.log('not authed')
     }
 
     const signature = await signTypedData(

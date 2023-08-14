@@ -37,3 +37,8 @@ export {
   usePostData,
   usePublication
 }
+
+import { CreateCommentParams } from './useCreateComment'
+import { CreatePostParams } from './useCreatePost'
+
+export type { CreateCommentParams, CreatePostParams }
