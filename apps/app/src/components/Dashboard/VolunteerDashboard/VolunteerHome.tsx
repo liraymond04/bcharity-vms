@@ -173,7 +173,7 @@ const VolunteerHome: React.FC = () => {
                     </div>
 
                     <div className="h-[60vh]">
-                      <div className="overflow-y-scroll w-full mt-20 h-full border border-sky-200 dark:border-black rounded-md bg-teal-50 dark:bg-Within dark:opacity-10">
+                      <div className="overflow-y-scroll w-full mt-20 h-full border border-sky-200 dark:bg-Within dark:opacity-10 dark:border-black rounded-md bg-teal-50">
                         <div className="w-full">
                           {postdata.map((post, index) => {
                             if (isPost(post))
@@ -183,7 +183,7 @@ const VolunteerHome: React.FC = () => {
                                     className={`p-5 ${
                                       index !== postdata.length - 1 &&
                                       'border-b'
-                                    } dark:border-black border-gray-400 lg:border-gray-400 bg-white dark:bg-slate-600 flex flex-col justify-between leading-normal w-full`}
+                                    } dark:border-black border-gray-400 lg:border-gray-400 bg-white dark:bg-slate-600 dark:bg-Within dark:bg-opacity-10 flex flex-col justify-between leading-normal w-full`}
                                   >
                                     <div className="mb-8">
                                       <div className="text-gray-900 dark:text-white font-bold text-xl mb-2">
@@ -213,7 +213,7 @@ const VolunteerHome: React.FC = () => {
                                           </div>
                                         </div>
                                       </div>
-                                      <p className="text-gray-700 text-sm mt-10  dark:text-gray-50">
+                                      <p className="text-gray-700 text-sm mt-10  dark:text-white">
                                         {post.metadata.content}
                                       </p>
                                     </div>
