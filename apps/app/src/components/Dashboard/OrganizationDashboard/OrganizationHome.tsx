@@ -85,15 +85,14 @@ const OrganizationHome: React.FC = () => {
               <Spinner />
             ) : (
               <div className="flex flex-row">
-                <div className="ml-8 align-middle w-3/12 ">
-                  <div>
+                <div className="flex flex-col items-center space-y-5 align-middle w-3/12 ml-8 mt-10 ">
+                  <div className="flex flex-col items-center space-y-2">
                     <img
-                      className=" w-50 h-50 ml-2 mt-10 rounded-full flex items-center justify-center"
+                      className="rounded-full"
                       src={getAvatar(currentUser)}
                       alt="Rounded avatar"
                     />
-
-                    <div className="bottom-0 m-5 text-lg truncate text-violet-500 flex items-center justify-center">
+                    <div className="flex text-lg truncate text-violet-500">
                       <p>
                         ID:
                         {currentUser.id}
@@ -101,27 +100,25 @@ const OrganizationHome: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="inset-0 flex justify-center items-center ml-0 mt-20 ">
+                  <div className="flex flex-col items-center">
                     <h1>CREATED ON </h1>
-                  </div>
-                  <div className="inset-0 flex justify-center items-center ml-0 mt-2">
-                    12/20/2020
+                    <div className="flex">12/20/2020</div>
                   </div>
 
-                  <div className="inset-0 flex justify-left items-center  mt-20 justify-center">
+                  <div className="flex">
                     <h1>Followers: </h1>
                     <div className="ml-1">
                       {currentUser.stats.totalFollowers}
                     </div>
                   </div>
-                  <div className="relative flex justify-left items-center mt-10 justify-center">
+                  <div className="flex">
                     <h1>Following: </h1>
                     <div className="ml-1">
                       {currentUser.stats.totalFollowing}
                     </div>
                   </div>
 
-                  <div className="flex-row flex items-center justify-center">
+                  <div className="flex items-center">
                     {getSlug('discord') !== '' && (
                       <Link
                         href={`https://discord.gg/${getSlug('discord')}`}
