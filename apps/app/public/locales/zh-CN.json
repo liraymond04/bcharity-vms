@@ -136,5 +136,10 @@
   "components.privacy-policy.p16": "特别是，如果您不接受修改后的政策，请立即停止使用 BCharity。",
   "components.privacy-policy.p17": "您继续使用我们的服务即表示您接受我们修订后的隐私政策。如果您不同意我们修订后的隐私政策，您必须停止使用我们的服务。我们建议您经常访问此页面以检查更改。",
   "components.privacy-policy.p18": "联系我们",
-  "components.privacy-policy.p19": "如果您对我们的隐私政策有任何疑问，请随时通过 admin@bcharity.net 与我们联系。"
+  "components.privacy-policy.p19": "如果您对我们的隐私政策有任何疑问，请随时通过 admin@bcharity.net 与我们联系。",
+  "components.site-layout.warning": "警告：如果没有 cookie，某些功能可能无法运行",
+  "components.site-layout.body": "我们使用 cookie 来改善您的浏览体验、保存您的偏好并收集有关您如何使用我们网站的信息。您可以拒绝这些 cookie，以获得不太个性化的体验。有关 cookie 的更多信息，请参阅我们的",
+  "components.site-layout.policy": "Cookie 政策",
+  "components.site-layout.accept": "接受cookies",
+  "components.site-layout.decline": "拒绝cookies"
 }
