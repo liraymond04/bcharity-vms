@@ -1,5 +1,9 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import { PostFragment, PublicationSortCriteria } from '@lens-protocol/client'
+import {
+  PublicationsQueryRequest,
+  PublicationTypes
+} from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -8,14 +12,16 @@ import ClearFilters from '@/components/Shared/ClearFilters'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
+import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { CauseMetadata } from '@/lib/metadata'
+import { CauseMetadata, isPost } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import GoalModal from '../Modals/GoalModal'
 import BrowseCauseCard from './BrowseCauseCard'
 import DashboardDropDown from './DashboardDropDown'
 
@@ -28,7 +34,9 @@ const VolunteerCauses: React.FC = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [searchAddress, setSearchAddress] = useState<string>('')
-  const [donationGoal, setDonationsGoal] = useState(500) // use hardcoded goal for now
+  const [donationGoal, setDonationsGoal] = useState(0)
+
+  const [GoalModalOpen, setGoalModalOpen] = useState(false)
 
   const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
 
@@ -46,6 +54,28 @@ const VolunteerCauses: React.FC = () => {
     },
     true
   )
+
+  useEffect(() => {
+    if (currentUser) {
+      const param: PublicationsQueryRequest = {
+        metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
+        profileId: currentUser.id,
+        publicationTypes: [PublicationTypes.Post]
+      }
+
+      lensClient()
+        .publication.fetchAll(param)
+        .then((data) => {
+          setDonationsGoal(
+            parseFloat(
+              data.items[0] && isPost(data.items[0])
+                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                : '0'
+            )
+          )
+        })
+    }
+  }, [currentUser])
 
   useEffect(() => {
     let _categories: Set<string> = new Set()
@@ -67,6 +97,14 @@ const VolunteerCauses: React.FC = () => {
     }
   }, [currentUser, isAuthenticated])
 
+  const onGoalClose = () => {
+    setGoalModalOpen(false)
+  }
+
+  const onGoalOpen = () => {
+    setGoalModalOpen(true)
+  }
+
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -77,27 +115,27 @@ const VolunteerCauses: React.FC = () => {
             ) : (
               <>
                 <div className="flex items-center">
-                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
-                    Total donations:
+                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
+                    {Number(data?.value)}
                   </div>
-                  <div className="text-2xl font-extrabold text-black dark:text-white sm:text-7xl pl-5">
-                    ${Number(data?.value)}
+                  <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
+                    VHR raised {donationGoal !== 0 && `out of ${donationGoal}`}
                   </div>
                 </div>
                 <Link
                   href=""
                   className="text-brand-500 hover:text-brand-600"
-                  onClick={() => {
-                    console.log('Set a goal')
-                  }}
+                  onClick={onGoalOpen}
                 >
                   Set a goal
                 </Link>
-                <Progress
-                  progress={Number(data?.value)}
-                  total={donationGoal}
-                  className="mt-10 mb-10"
-                />
+                {donationGoal !== 0 && (
+                  <Progress
+                    progress={Number(data?.value)}
+                    total={donationGoal}
+                    className="mt-10 mb-10"
+                  />
+                )}
                 {Number(data?.value) < donationGoal ? (
                   <div className="text-2xl  font-semibold text-black dark:text-white sm:text-2x l">
                     {donationGoal - Number(data?.value)} away from goal!
@@ -164,6 +202,12 @@ const VolunteerCauses: React.FC = () => {
           )}
         </div>
       </GridItemTwelve>
+
+      <GoalModal
+        open={GoalModalOpen}
+        onClose={onGoalClose}
+        publisher={currentUser}
+      />
     </GridLayout>
   )
 }

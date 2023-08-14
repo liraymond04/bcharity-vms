@@ -24,6 +24,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   setUserSigNonce: (userSigNonce) => set(() => ({ userSigNonce }))
 }))
 
+const resetters: (() => any)[] = []
+
 interface AppPersistState {
   isConnected: boolean
   setIsConnected: (isConnected: boolean) => void
@@ -46,12 +48,21 @@ export const useAppPersistStore = create(
       },
       currentUser: null,
       setCurrentUser: (currentUser) => {
+        resetters.push(() => {
+          set(() => ({ currentUser: null }))
+        })
         if (getHasCookies()) set(() => ({ currentUser }))
       }
     }),
     { name: 'bcharity.store' }
   )
 )
+
+export const resetCurrentUser = () => {
+  for (const resetter of resetters) {
+    resetter()
+  }
+}
 
 interface CookieState {
   hasCookies: boolean

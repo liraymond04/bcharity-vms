@@ -167,7 +167,7 @@ const OrganizationVHRTab: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised out of {vhrGoal}
+                    VHR raised out of {vhrGoal !== 0 && `out of ${vhrGoal}`}
                   </div>
                 </div>
                 <Link
@@ -177,11 +177,13 @@ const OrganizationVHRTab: React.FC = () => {
                 >
                   Set a goal
                 </Link>
-                <Progress
-                  progress={Number(balanceData?.value)}
-                  total={vhrGoal}
-                  className="mt-10 mb-10"
-                />
+                {vhrGoal !== 0 && (
+                  <Progress
+                    progress={Number(balanceData?.value)}
+                    total={vhrGoal}
+                    className="mt-10 mb-10"
+                  />
+                )}
                 <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
                   Our Cause
                 </div>
