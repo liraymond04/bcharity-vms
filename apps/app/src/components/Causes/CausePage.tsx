@@ -1,8 +1,6 @@
-import { HomeIcon } from '@heroicons/react/outline'
 import { PostFragment } from '@lens-protocol/client'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { useMemo } from 'react'
@@ -28,6 +26,7 @@ import BookmarkButton from '../Shared/BookmarkButton'
 import DonateButton from '../Shared/DonateButton'
 import FollowButton from '../Shared/FollowButton'
 import Progress from '../Shared/Progress'
+import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
@@ -126,28 +125,6 @@ const CausePage: NextPage = () => {
       getTotalDonated()
     }
   }, [totalDonated, cause, getTotalDonated])
-
-  const ErrorBody = ({ message }: { message: string }) => {
-    return (
-      <div className="py-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold" suppressHydrationWarning>
-          {t('incorrect-url')}
-        </h1>
-        <div className="mb-4" suppressHydrationWarning>
-          {message}
-        </div>
-        <Link href="/">
-          <Button
-            className="flex mx-auto item-center"
-            size="lg"
-            icon={<HomeIcon className="w-4 h-4" />}
-          >
-            <div suppressHydrationWarning>{t('go-home')}</div>
-          </Button>
-        </Link>
-      </div>
-    )
-  }
 
   const getErrorMessage = () => {
     if (!!error || !data) {
