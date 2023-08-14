@@ -16,9 +16,9 @@ import {
 import { PostTags } from '@/lib/metadata'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
-import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
+import LogHoursButton from '../Shared/LogHoursButton'
 import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import Slug from '../Shared/Slug'
 import { Card } from '../UI/Card'
@@ -124,7 +124,7 @@ const VolunteerPage: NextPage = () => {
               </div>
             </Link>
           )}
-          <ApplyButton
+          <LogHoursButton
             hoursDefault={opportunity.hoursPerWeek}
             publicationId={opportunity.post_id}
             organizationId={opportunity.from.id}

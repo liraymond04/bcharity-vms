@@ -2,7 +2,7 @@ import Error from '@components/Dashboard/Modals/Error'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import useApply from '@/lib/lens-protocol/useApply'
+import { useLogHours } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
@@ -23,7 +23,7 @@ export interface IVhrVerificationFormProps {
   comments: string
 }
 
-const ApplyButton: FC<Props> = ({
+const LogHoursButton: FC<Props> = ({
   hoursDefault,
   publicationId,
   organizationId
@@ -31,7 +31,7 @@ const ApplyButton: FC<Props> = ({
   const { currentUser } = useAppPersistStore()
 
   const [showModal, setShowModal] = useState<boolean>(false)
-  const { error, setError, isLoading, apply } = useApply({
+  const { error, isLoading, logHours } = useLogHours({
     publicationId,
     organizationId
   })
@@ -47,13 +47,11 @@ const ApplyButton: FC<Props> = ({
 
   const onCancel = () => {
     reset()
-    setError(undefined)
     setShowModal(false)
   }
 
   const onSubmit = async (formData: IVhrVerificationFormProps) => {
-    setError(undefined)
-    await apply(
+    await logHours(
       currentUser,
       formData.hoursToVerify,
       formData.comments,
@@ -99,9 +97,7 @@ const ApplyButton: FC<Props> = ({
           )}
 
           {error && (
-            <Error
-              message={`An error occured: ${error.message}. Please try again.`}
-            />
+            <Error message={`An error occured: ${error}. Please try again.`} />
           )}
         </div>
         <div className="py-4 custom-divider"></div>
@@ -135,4 +131,4 @@ const ApplyButton: FC<Props> = ({
   )
 }
 
-export default ApplyButton
+export default LogHoursButton
