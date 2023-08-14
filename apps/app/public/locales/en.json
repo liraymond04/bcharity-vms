@@ -10,21 +10,22 @@
     "go-home": "Go Home"
   },
   "errors": {
+    "something-wrong": "Something went wrong.",
+    "go-home": "Go Home",
     "incorrect-publication-type": "Incorrect publication type!",
     "incorrect-collect-module": "Incorrect collect module!",
+    "metadata-malformed": "Metadata of post is malformed",
     "user-null": "Current user is null!",
     "profile-null": "Provided profile is null!",
-    "already-bookmarked": "Publication has already been bookmarked!"
+    "already-bookmarked": "Publication has already been bookmarked!",
+    "generic": "An unknown error occured. Please try again."
   },
   "components": {
     "causes": {
       "filter": "Filter",
       "clear-filters": "Clear Filters",
       "browse-projects": "Browse Projects",
-      "something-wrong": "Something went wrong.",
-      "raised": "raised out of",
-      "incorrect-url": "This publication cannot be accessed. Please check that your URL is correct.",
-      "go-home": "Go Home"
+      "raised": "raised out of"
     },
     "contact": {
       "title": "Contact us if you have any questions, feedback, or issues",
