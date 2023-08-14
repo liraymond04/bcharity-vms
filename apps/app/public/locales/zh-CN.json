@@ -199,5 +199,11 @@
   "components.shared.switch-network.label": "交换网络",
   "components.shared.switch-network.toast": "换钱包",
   "components.shared.uniswap.not-enough": "你还不够",
-  "components.shared.uniswap.swap": "在 Uniswap 中交换"
+  "components.shared.uniswap.swap": "在 Uniswap 中交换",
+  "components.causes.status": "状态：接受捐赠",
+  "components.causes.organizing": "正在组织这次筹款活动",
+  "components.causes.about": "关于项目：",
+  "components.causes.share": "分享",
+  "components.causes.organizer": "组织者",
+  "components.causes.contact": "接触"
 }

@@ -27,7 +27,13 @@
       "filter": "Filter",
       "clear-filters": "Clear Filters",
       "browse-projects": "Browse Projects",
-      "raised": "raised out of"
+      "raised": "raised out of",
+      "status": "Status: Accepting Donations",
+      "organizing": "is organizing this fundraiser",
+      "about": "About project:",
+      "share": "Share",
+      "organizer": "Organizer",
+      "contact": "Contact"
     },
     "contact": {
       "title": "Contact us if you have any questions, feedback, or issues",
