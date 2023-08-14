@@ -140,7 +140,7 @@ const OrganizationCauses: React.FC = () => {
 
   useEffect(() => {
     if (currencyError) {
-      toast.error(currencyError.message)
+      toast.error(currencyError)
     }
   }, [currencyError])
 
