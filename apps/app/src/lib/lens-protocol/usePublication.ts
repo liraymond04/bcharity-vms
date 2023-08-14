@@ -14,6 +14,8 @@ export interface UsePublicationParams {
 /**
  * React hook to fetch publication data by id
  *
+ * Also see {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#fetch}
+ *
  * @param params The params for the hook
  * @returns `data` - The publication data as a PublicationFragment \
  *          `loading` - Whether or not the data is ready \
