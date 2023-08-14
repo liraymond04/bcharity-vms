@@ -13,8 +13,17 @@ interface IVolunteerCardProps {
 }
 
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
+  let imageExtentions = ['.jpeg', '.jpg', '.png', '.gif', '.svg']
+  const validImage = (url: string) => {
+    let ok = false
+    imageExtentions.map((value) => {
+      if (url.substring(url.length - value.length, url.length) == value)
+        ok = true
+    })
+    return ok
+  }
   const getDisplayedImage = () => {
-    if (!post.imageUrl) {
+    if (!post.imageUrl || !validImage(post.imageUrl)) {
       return (
         <div
           className="border-b dark:border-b-gray-700/80 h-full rounded-l-xl"
@@ -23,7 +32,8 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
             backgroundColor: '#8b5cf6',
             backgroundSize: '80%',
             backgroundPosition: 'center center',
-            backgroundRepeat: 'repeat'
+            backgroundRepeat: 'repeat',
+            objectFit: 'cover'
           }}
         />
       )
@@ -46,7 +56,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
         <div className="flex">
-          <div className="flex-shrink-0 h-36 w-36 rounded-l-xl">
+          <div className="flex-shrink-0 h-36 w-36 overflow-hidden rounded-l-xl">
             {getDisplayedImage()}
           </div>
           <div className="relative mx-5 mt-3 mb-1 max-w-[15vw]">
