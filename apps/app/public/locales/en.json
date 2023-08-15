@@ -389,6 +389,18 @@
         "drag-and-drop": "or drag and drop",
         "description": "Description",
         "submit": "Submit"
+      },
+      "title": "Browse Volunteer Opportunities",
+      "search": "Search",
+      "category": "Category:",
+      "organization": "Organization:",
+      "card": {
+        "external-url": "External URL"
+      },
+      "page": {
+        "ongoing": "Ongoing",
+        "valid-from": "Valid from:",
+        "external-url": "External URL"
       }
     },
     "site-layout": {

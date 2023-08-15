@@ -373,5 +373,19 @@
   "components.profile.volunteer.about": "关于：",
   "components.vhrs.top-holders": "顶级 VHR 持有者",
   "components.vhrs.volunteers": "志愿者",
-  "components.vhrs.organizations": "组织机构"
+  "components.vhrs.organizations": "组织机构",
+  "components.volunteers.apply-to-opportunity-modal.title": "申请机会",
+  "components.volunteers.apply-to-opportunity-modal.upload": "上传简历",
+  "components.volunteers.apply-to-opportunity-modal.click-to-upload": "点击上传",
+  "components.volunteers.apply-to-opportunity-modal.drag-and-drop": "或拖放",
+  "components.volunteers.apply-to-opportunity-modal.description": "描述",
+  "components.volunteers.apply-to-opportunity-modal.submit": "提交",
+  "components.volunteers.title": "浏览志愿者机会",
+  "components.volunteers.search": "搜索",
+  "components.volunteers.category": "类别：",
+  "components.volunteers.organization": "组织：",
+  "components.volunteers.card.external-url": "外部网址",
+  "components.volunteers.page.ongoing": "进行中",
+  "components.volunteers.page.valid-from": "有效期自：",
+  "components.volunteers.page.external-url": "外部网址"
 }

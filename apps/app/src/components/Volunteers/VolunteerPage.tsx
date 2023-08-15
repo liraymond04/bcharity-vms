@@ -27,7 +27,9 @@ import SEO from '../utils/SEO'
 import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
 const VolunteerPage: NextPage = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.volunteers.page'
+  })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const {
     query: { id }
@@ -62,7 +64,7 @@ const VolunteerPage: NextPage = () => {
     if (!ongoing) {
       return `${o.startDate} to ${o.endDate}`
     } else {
-      return `${o.startDate} - Ongoing`
+      return `${o.startDate} - ${t('ongoing')}`
     }
   }
 
@@ -100,8 +102,8 @@ const VolunteerPage: NextPage = () => {
                 {opportunity.category}
               </div>
             </div>
-            <div className="font-semibold">
-              Valid from: {getDateString(opportunity)}
+            <div className="font-semibold" suppressHydrationWarning>
+              {t('valid-from')} {getDateString(opportunity)}
             </div>
           </div>
           <div className="flex space-x-3 items-center">
@@ -123,7 +125,12 @@ const VolunteerPage: NextPage = () => {
             {opportunity.website !== '' && (
               <Link href={opportunity.website} target="_blank" className="flex">
                 <div className="flex items-center text-brand-600">
-                  <div className="mr-1 whitespace-nowrap">External url</div>
+                  <div
+                    className="mr-1 whitespace-nowrap"
+                    suppressHydrationWarning
+                  >
+                    {t('external-url')}
+                  </div>
                   <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
                 </div>
               </Link>

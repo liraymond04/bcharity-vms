@@ -5,6 +5,7 @@ import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-cool-inview'
+import { useTranslation } from 'react-i18next'
 
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { OpportunityMetadata } from '@/lib/metadata'
@@ -20,6 +21,9 @@ import { Spinner } from '../UI/Spinner'
 import VolunteerCard from './VolunteerCard'
 
 const Volunteers: NextPage = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'components.volunteers' })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [org, setOrg] = useState<Set<string>>(new Set())
@@ -81,10 +85,11 @@ const Volunteers: NextPage = () => {
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="Search"
+              placeholder={t('search')}
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
+              suppressHydrationWarning
             />
             <div className="h-5 w-5 mr-5">
               <SearchIcon />
@@ -95,7 +100,7 @@ const Volunteers: NextPage = () => {
             <div className="flex flex-row flex-wrap w-full items-center">
               <div className="h-[50px] my-2 z-20">
                 <DashboardDropDown
-                  label="Category:"
+                  label={t('category')}
                   options={Array.from(categories)}
                   onClick={(c) => setSelectedCategory(c)}
                   selected={selectedCategory}
@@ -103,7 +108,7 @@ const Volunteers: NextPage = () => {
               </div>
               <div className="h-[50px] my-2 z-10">
                 <DashboardDropDown
-                  label="Organization:"
+                  label={t('organization')}
                   options={Array.from(org)}
                   onClick={(c) => setSelectedOrg(c)}
                   selected={selectedOrg}
@@ -119,7 +124,9 @@ const Volunteers: NextPage = () => {
           </div>
         </div>
         <Divider className="mt-5" />
-        <p className="font-bold text-2xl">Browse volunteer opportunities</p>
+        <p className="font-bold text-2xl" suppressHydrationWarning>
+          {t('title')}
+        </p>
       </div>
       {loading ? (
         <div className="flex justify-center m-5">
@@ -150,7 +157,7 @@ const Volunteers: NextPage = () => {
       )}
       {exploreError && (
         <Error
-          message={`An error occured: ${exploreError}. Please try again.`}
+          message={`${e('generic-front')}${exploreError}${e('generic-back')}`}
         />
       )}
     </>
