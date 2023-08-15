@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "doc": "typedoc -out docs ./src/lib/metadata"
+    "doc": "typedoc -out docs ./src/lib"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",

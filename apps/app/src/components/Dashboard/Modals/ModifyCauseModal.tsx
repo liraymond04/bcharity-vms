@@ -132,12 +132,12 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
       }
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost(
-        publisher,
+
+      const createPostResult = await createPost({
+        profileId: publisher.ownedBy,
         metadata,
-        collectModuleParams,
-        { followerOnlyReferenceModule: false }
-      )
+        collectModule: collectModuleParams
+      })
 
       if (createPostResult.isFailure()) {
         setError(true)
@@ -215,6 +215,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               placeholder="5"
               {...register('contribution', {
                 required: true,
+                maxLength: 12,
                 min: {
                   value: 1,
                   message: 'Invalid amount'
@@ -237,7 +238,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 />
               }
               placeholder="400"
-              {...register('goal', { required: true })}
+              {...register('goal', { required: true, maxLength: 12 })}
             />
             <Input
               label={t('Recipient')}

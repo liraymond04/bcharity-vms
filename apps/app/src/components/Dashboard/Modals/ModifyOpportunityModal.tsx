@@ -91,13 +91,17 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
           type: PostTags.OrgPublish.Opportunity,
           id,
+          applicationRequired: 'false', // set in formData in VM-178
           ...formData,
           imageUrl
         }
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost(publisher, metadata)
+      const createPostResult = await createPost({
+        profileId: publisher.ownedBy,
+        metadata
+      })
 
       if (createPostResult.isFailure()) {
         setError(true)
