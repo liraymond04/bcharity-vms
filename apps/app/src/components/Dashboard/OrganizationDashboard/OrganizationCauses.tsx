@@ -11,8 +11,8 @@ import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
-import GridRefreshButton from '@/components/Shared/RefreshButton'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
@@ -287,7 +287,7 @@ const OrganizationCauses: React.FC = () => {
                 />
               )}
             </div>
-            {error && <Error message="An error occured. Please try again." />}
+            {error && <Error message={e('generic')} />}
             <PublishCauseModal
               open={publishModalOpen}
               onClose={onPublishClose}

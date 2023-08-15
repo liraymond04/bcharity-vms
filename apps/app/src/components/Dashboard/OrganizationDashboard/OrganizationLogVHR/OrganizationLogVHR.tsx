@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
-import GridRefreshButton from '@/components/Shared/RefreshButton'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { APP_NAME } from '@/constants'

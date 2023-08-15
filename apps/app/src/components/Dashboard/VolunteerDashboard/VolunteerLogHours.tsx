@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import ClearFilters from '@/components/Shared/ClearFilters'
-import GridRefreshButton from '@/components/Shared/RefreshButton'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import { Spinner } from '@/components/UI/Spinner'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import {
