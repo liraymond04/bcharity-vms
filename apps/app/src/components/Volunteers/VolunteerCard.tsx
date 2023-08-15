@@ -8,6 +8,7 @@ import { OpportunityMetadata } from '@/lib/metadata'
 import validImageExtension from '@/lib/validImageExtension'
 
 import { Card } from '../UI/Card'
+import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
@@ -47,6 +48,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
+        <ApplyToOpportunityModal></ApplyToOpportunityModal>
         <div className="flex">
           <div className="flex-shrink-0 h-36 w-36 overflow-hidden rounded-l-xl">
             {getDisplayedImage()}

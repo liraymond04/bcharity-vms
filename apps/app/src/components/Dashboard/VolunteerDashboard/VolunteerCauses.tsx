@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import ClearFilters from '@/components/Shared/ClearFilters'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
@@ -50,7 +51,8 @@ const VolunteerCauses: React.FC = () => {
   const {
     data: postData,
     error: postDataError,
-    loading
+    loading,
+    refetch
   } = useExplorePublications(
     {
       sortCriteria: PublicationSortCriteria.Latest,
@@ -194,6 +196,7 @@ const VolunteerCauses: React.FC = () => {
             </div>
             <ClearFilters onClick={() => setSelectedCategory('')} />
           </div>
+          <GridRefreshButton onClick={refetch} />
 
           {postDataError && <Error message={e('generic')} />}
         </div>
