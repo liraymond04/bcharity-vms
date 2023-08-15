@@ -1,8 +1,9 @@
 import Error from '@components/Dashboard/Modals/Error'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
-import useApply from '@/lib/lens-protocol/useApply'
+import { useLogHours } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
@@ -23,15 +24,19 @@ export interface IVhrVerificationFormProps {
   comments: string
 }
 
-const ApplyButton: FC<Props> = ({
+const LogHoursButton: FC<Props> = ({
   hoursDefault,
   publicationId,
   organizationId
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.apply-button'
+  })
+
   const { currentUser } = useAppPersistStore()
 
   const [showModal, setShowModal] = useState<boolean>(false)
-  const { error, setError, isLoading, apply } = useApply({
+  const { error, isLoading, logHours } = useLogHours({
     publicationId,
     organizationId
   })
@@ -47,13 +52,11 @@ const ApplyButton: FC<Props> = ({
 
   const onCancel = () => {
     reset()
-    setError(undefined)
     setShowModal(false)
   }
 
   const onSubmit = async (formData: IVhrVerificationFormProps) => {
-    setError(undefined)
-    await apply(
+    await logHours(
       currentUser,
       formData.hoursToVerify,
       formData.comments,
@@ -63,7 +66,7 @@ const ApplyButton: FC<Props> = ({
 
   return (
     <div>
-      <Modal title="Create VHR request" show={showModal} onClose={onCancel}>
+      <Modal title={t('create')} show={showModal} onClose={onCancel}>
         <div className="mx-12 mt-5">
           {!isLoading ? (
             <Form
@@ -71,7 +74,7 @@ const ApplyButton: FC<Props> = ({
               onSubmit={() => handleSubmit((data) => onSubmit(data))}
             >
               <Input
-                label="Number of hours to verify"
+                label={t('num-hours')}
                 type="number"
                 placeholder="5.5"
                 step="0.1"
@@ -82,14 +85,14 @@ const ApplyButton: FC<Props> = ({
                   required: true,
                   pattern: {
                     value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
-                    message:
-                      'Hours should be a positive number with at most one decimal place'
+                    message: t('invalid-hours')
                   }
                 })}
               />
               <TextArea
-                label="Comments & Proof Links"
-                placeholder="If you have any comments or links to provide as proof, enter them here"
+                suppressHydrationWarning
+                label={t('comment')}
+                placeholder={t('placeholder')}
                 error={!!errors.comments?.type}
                 {...register('comments', { required: false, maxLength: 1000 })}
               />
@@ -100,7 +103,7 @@ const ApplyButton: FC<Props> = ({
 
           {error && (
             <Error
-              message={`An error occured: ${error.message}. Please try again.`}
+              message={`${t('error-occurred')}${error}${t('try-again')}`}
             />
           )}
         </div>
@@ -113,14 +116,14 @@ const ApplyButton: FC<Props> = ({
             } px-6 py-2 font-medium`}
             disabled={isLoading}
           >
-            Submit
+            {t('submit')}
           </Button>
           <Button
             onClick={onCancel}
             variant="secondary"
             className="px-6 py-2 font-medium"
           >
-            Cancel
+            {t('cancel')}
           </Button>
         </div>
       </Modal>
@@ -129,10 +132,10 @@ const ApplyButton: FC<Props> = ({
           setShowModal(true)
         }}
       >
-        Log hours
+        {t('button-label')}
       </Button>
     </div>
   )
 }
 
-export default ApplyButton
+export default LogHoursButton

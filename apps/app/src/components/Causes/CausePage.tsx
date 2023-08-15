@@ -1,31 +1,32 @@
-import { HomeIcon } from '@heroicons/react/outline'
+import { PostFragment } from '@lens-protocol/client'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
+import { formatLocation } from '@/lib/formatLocation'
 import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
+  CauseMetadata,
   CauseMetadataBuilder,
   InvalidMetadataException,
   isComment,
   isPost,
   PostTags
 } from '@/lib/metadata'
-import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import BookmarkButton from '../Shared/BookmarkButton'
 import DonateButton from '../Shared/DonateButton'
 import FollowButton from '../Shared/FollowButton'
 import Progress from '../Shared/Progress'
+import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
@@ -34,14 +35,17 @@ import SEO from '../utils/SEO'
 const CausePage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { data, loading, fetch, error } = usePublication()
   const {
     query: { id },
-    isReady,
     asPath
   } = useRouter()
 
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
+
   const [wrongPostType, setWrongPostType] = useState(false)
+  const [malformedMetadata, setMalformedMetadata] = useState(false)
 
   const cause = useMemo(() => {
     if (!data) return
@@ -54,23 +58,16 @@ const CausePage: NextPage = () => {
       return new CauseMetadataBuilder(data).build()
     } catch (e) {
       if (e instanceof InvalidMetadataException) {
-        setWrongPostType(true)
+        setMalformedMetadata(true)
       }
     }
-    return ''
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
 
   const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
     useState<boolean>(false)
   const [totalDonated, setTotalDonated] = useState<number>(0)
 
-  const getTotalDonated = async () => {
+  const getTotalDonated = useCallback(async () => {
     setTotalDonatedIsLoading(true)
     try {
       let total = 0
@@ -117,35 +114,34 @@ const CausePage: NextPage = () => {
     } finally {
       setTotalDonatedIsLoading(false)
     }
-  }
+  }, [cause, e])
 
   useEffect(() => {
-    getTotalDonated()
-  }, [totalDonated, cause])
+    if (cause) {
+      getTotalDonated()
+    }
+  }, [totalDonated, cause, getTotalDonated])
 
-  const WrongPost = () => {
-    return (
-      <div className="py-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold" suppressHydrationWarning>
-          {e('Incorrect publication type')}
-        </h1>
-        <div className="mb-4" suppressHydrationWarning>
-          {t('incorrect-url')}
-        </div>
-        <Link href="/">
-          <Button
-            className="flex mx-auto item-center"
-            size="lg"
-            icon={<HomeIcon className="w-4 h-4" />}
-          >
-            <div suppressHydrationWarning>{t('go-home')}</div>
-          </Button>
-        </Link>
-      </div>
-    )
+  const getErrorMessage = () => {
+    if (!!error || !data) {
+      return error
+    }
+    if (wrongPostType) {
+      return e('incorrect-publication-type')
+    } else if (malformedMetadata) {
+      return e('metadata-malformed')
+    }
+
+    return e('generic')
   }
 
-  const Body = () => {
+  const Body = ({
+    cause,
+    post
+  }: {
+    cause: CauseMetadata
+    post: PostFragment
+  }) => {
     const copyToClipboard = () => {
       const host = window.location.host
       const baseUrl = host.split(':').at(0) === 'localhost' ? 'http' : 'https'
@@ -156,9 +152,7 @@ const CausePage: NextPage = () => {
 
     if (!cause || !data || !isPost(data)) return <Spinner />
 
-    return wrongPostType ? (
-      <WrongPost></WrongPost>
-    ) : (
+    return (
       <div className="p-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-6">
@@ -166,7 +160,7 @@ const CausePage: NextPage = () => {
               publicationId={cause.post_id}
               postTag={PostTags.Bookmark.Cause}
             />
-            <div className="text-5xl font-bold text-black dark:text-white p-2 bg-purple-300 dark:bg-indigo-950 rounded-lg">
+            <div className="text-5xl font-bold p-2 bg-purple-300 dark:bg-info-content rounded-lg">
               {cause.name}
             </div>
             <div className="text-3xl text-gray-400 font-bold pl-5">
@@ -179,8 +173,8 @@ const CausePage: NextPage = () => {
             <div className="flex space-x-3 items-center mt-8">
               <div className="flex flex-row">
                 <FollowButton followId={cause.from.id} size="lg" />
-                <div className="ml-5 mt-1 text-xl">
-                  Status: Accepting Donations
+                <div className="ml-5 mt-1 text-xl" suppressHydrationWarning>
+                  {t('status')}
                 </div>
               </div>
             </div>
@@ -189,7 +183,7 @@ const CausePage: NextPage = () => {
               <div>
                 <MediaRenderer
                   key="attachment"
-                  className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                  className="object-cover h-50 rounded-lg"
                   src={cause.imageUrl}
                   alt={'image attachment'}
                 />
@@ -201,44 +195,52 @@ const CausePage: NextPage = () => {
                 src={getAvatar(cause.from)}
                 alt="Rounded avatar"
               />
-              <div className="text-xl font-semibold text-gray-600 dark:text-white">
-                {cause.from.handle} is organizing this fundraiser
+              <div
+                className="text-xl font-semibold text-gray-600 dark:text-white"
+                suppressHydrationWarning
+              >
+                {cause.from.handle} {t('organizing')}
               </div>
             </div>
-            <div className="mt-10 text-3xl font-bold ">About Organization:</div>
+            <div className="mt-10 text-3xl font-bold " suppressHydrationWarning>
+              {t('about')}
+            </div>
 
-            <div className="pt-6 pb-4 mr-10 text-xl font-semibold text-gray-600 dark:text-white">
-              dolor sit amet, consectetur adipiscing elit. Donec purus tellus,
-              condimentum sit amet quam at, placerat cursus nulla. Etiam ex
-              nibh, maximus ut egestas quis, gravida sit amet orci. Maecenas
-              interdum est eget blandit venenatis. Aenean vulputate semper. quam
-              at, placerat cursus nulla. Etiam ex nibh, maximus ut egestas quis,
-              gravida sit amet orci. quam at, placerat cursus nulla. Etiam ex
-              nibh, maximus ut egestas quis, gravida sit amet orci.
+            <div
+              className="pt-6 pb-4 mr-10 text-xl font-semibold text-gray-600 dark:text-white"
+              suppressHydrationWarning
+            >
+              {cause.description}
             </div>
 
             <DonateButton
               size="lg"
               className="mr-10"
-              post={data}
+              post={post}
               cause={cause}
             />
             <Button size="lg" className="mr-10 ml-56" onClick={copyToClipboard}>
-              Share
+              {t('share')}
             </Button>
 
-            <div className="text-3xl font-semibold text-gray-800 dark:text-white mt-10">
-              Organizer
+            <div
+              className="text-3xl font-semibold text-gray-800 dark:text-white mt-10"
+              suppressHydrationWarning
+            >
+              {t('organizer')}
             </div>
             <div className="flex flex-row">
               <div className="text-2xl font-semibold text-gray-600 dark:text-white">
                 {cause.from.handle}
-                <div className="text-xl">Calgary, AB</div>
+                <div className="text-xl">{formatLocation(cause.location)}</div>
               </div>
             </div>
-            <button className="  mt-6 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 dark:text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-              <span className="relative w-32 px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                Contact
+            <button className="  mt-6 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 dark:text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+              <span
+                className="relative w-32 px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                suppressHydrationWarning
+              >
+                {t('contact')}
               </span>
             </button>
           </div>
@@ -254,11 +256,10 @@ const CausePage: NextPage = () => {
                     {totalDonated}
                   </div>
                   <div className="text-xl font-bold text-black dark:text-white sm:text-xl mt-8">
-                    {
+                    {`${
                       CURRENCIES[cause.currency as keyof typeof CURRENCIES]
                         .symbol
-                    }{' '}
-                    raised out of {cause.goal}
+                    } raised out of ${cause.goal}`}
                   </div>
                 </div>
 
@@ -274,7 +275,7 @@ const CausePage: NextPage = () => {
               <DonateButton
                 size="lg"
                 className="relative h-12 w-5/6 mr-10 ml-8"
-                post={data}
+                post={post}
                 cause={cause}
               />
               <Button
@@ -282,7 +283,7 @@ const CausePage: NextPage = () => {
                 className="mr-10 mt-5 h-12 w-5/6 ml-8"
                 onClick={copyToClipboard}
               >
-                Share
+                {t('share')}
               </Button>
             </div>
           </div>
@@ -291,22 +292,32 @@ const CausePage: NextPage = () => {
     )
   }
 
+  const getDisplayed = () => {
+    if (loading) {
+      return (
+        <center className="p-20">
+          <Spinner />
+        </center>
+      )
+    } else if (
+      !data ||
+      wrongPostType ||
+      malformedMetadata ||
+      !cause ||
+      !isPost(data)
+    ) {
+      return <ErrorBody message={getErrorMessage()} />
+    } else {
+      return <Body cause={cause} post={data} />
+    }
+  }
+
   return (
     <>
       <SEO title="Project • BCharity VMS" />
       <GridLayout>
         <GridItemTwelve>
-          <Card>
-            {loading ? (
-              <center className="p-20">
-                <Spinner />
-              </center>
-            ) : error || data === undefined ? (
-              <Custom404 />
-            ) : (
-              <Body />
-            )}
-          </Card>
+          <Card>{getDisplayed()}</Card>
         </GridItemTwelve>
       </GridLayout>
     </>

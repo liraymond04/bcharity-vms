@@ -1,9 +1,9 @@
-import { ExternalLinkIcon, HomeIcon } from '@heroicons/react/outline'
+import { ExternalLinkIcon } from '@heroicons/react/outline'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import usePublication from '@/lib/lens-protocol/usePublication'
@@ -14,29 +14,30 @@ import {
   OpportunityMetadataBuilder
 } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
-import Custom404 from '@/pages/404'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
-import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
+import LogHoursButton from '../Shared/LogHoursButton'
+import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import Slug from '../Shared/Slug'
-import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common')
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const {
-    query: { id },
-    isReady
+    query: { id }
   } = useRouter()
 
-  const { data, loading, fetch, error } = usePublication()
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
 
-  const [opoprtunityError, setOpportunityError] = useState(false)
   const [wrongPostType, setWrongPostType] = useState(false)
+  const [malformedMetadata, setMalformedMetadata] = useState(false)
 
   const opportunity = useMemo(() => {
     if (!data) return
@@ -49,40 +50,10 @@ const VolunteerPage: NextPage = () => {
       return new OpportunityMetadataBuilder(data).build()
     } catch (e) {
       if (e instanceof InvalidMetadataException) {
-        setOpportunityError(true)
+        setMalformedMetadata(true)
       }
     }
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
-
-  const WrongPost = () => {
-    return (
-      <div className="py-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold">
-          {t('Incorrect publication type')}
-        </h1>
-        <div className="mb-4">
-          {t(
-            'This publication is not a volunteer opportunity, please check that your URL is correct.'
-          )}
-        </div>
-        <Link href="/">
-          <Button
-            className="flex mx-auto item-center"
-            size="lg"
-            icon={<HomeIcon className="w-4 h-4" />}
-          >
-            <div>{t('Go Home')}</div>
-          </Button>
-        </Link>
-      </div>
-    )
-  }
 
   const getDateString = (o: OpportunityMetadata) => {
     const ongoing = !o.endDate
@@ -94,12 +65,21 @@ const VolunteerPage: NextPage = () => {
     }
   }
 
-  const Body = () => {
-    if (!opportunity) return <Spinner />
+  const getErrorMessage = () => {
+    if (!!error || !data) {
+      return error
+    }
+    if (wrongPostType) {
+      return e('incorrect-publication-type')
+    } else if (malformedMetadata) {
+      return e('metadata-malformed')
+    }
 
-    return wrongPostType || opoprtunityError ? (
-      <WrongPost />
-    ) : (
+    return e('generic')
+  }
+
+  const Body = ({ opportunity }: { opportunity: OpportunityMetadata }) => {
+    return (
       <div className="p-6">
         <div className="grid md:grid-cols-[auto_100px] sm:grid-cols-[auto_100px] gap-x-4 w-full">
           <div className="flex space-x-2 items-center overflow-hidden">
@@ -144,7 +124,7 @@ const VolunteerPage: NextPage = () => {
               </div>
             </Link>
           )}
-          <ApplyButton
+          <LogHoursButton
             hoursDefault={opportunity.hoursPerWeek}
             publicationId={opportunity.post_id}
             organizationId={opportunity.from.id}
@@ -154,22 +134,32 @@ const VolunteerPage: NextPage = () => {
     )
   }
 
+  const getDisplayed = () => {
+    if (loading) {
+      return (
+        <center className="p-20">
+          <Spinner />
+        </center>
+      )
+    } else if (
+      !data ||
+      wrongPostType ||
+      // malformedMetadata ||
+      !opportunity ||
+      !isPost(data)
+    ) {
+      return <ErrorBody message={getErrorMessage()} />
+    } else {
+      return <Body opportunity={opportunity} />
+    }
+  }
+
   return (
     <>
       <SEO title="Volunteer Opportunity • BCharity VMS" />
       <GridLayout>
         <GridItemTwelve>
-          <Card>
-            {loading ? (
-              <center className="p-20">
-                <Spinner />
-              </center>
-            ) : error || data === undefined ? (
-              <Custom404 />
-            ) : (
-              <Body />
-            )}
-          </Card>
+          <Card>{getDisplayed()}</Card>
         </GridItemTwelve>
       </GridLayout>
     </>

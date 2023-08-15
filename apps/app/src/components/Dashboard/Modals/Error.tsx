@@ -7,7 +7,9 @@ interface IErrorProps {
 const Error: React.FC<IErrorProps> = ({ message }) => {
   return (
     <div className="text-red-500 border-2 border-red-500 rounded-md mt-6">
-      <p className="my-2 mx-4">{message}</p>
+      <p className="my-2 mx-4" suppressHydrationWarning>
+        {message}
+      </p>
     </div>
   )
 }

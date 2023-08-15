@@ -1,8 +1,8 @@
 import { City, Country, State } from 'country-state-city'
 import { useFormContext } from 'react-hook-form'
 
-import useLazyGeolocation from '@/lib/lens-protocol/useLazyGeolocation'
 import { IFormLocation } from '@/lib/types'
+import useLazyGeolocation from '@/lib/useLazyGeolocation'
 
 import Error from '../Dashboard/Modals/Error'
 import FormDropdown from '../Shared/FormDropdown'

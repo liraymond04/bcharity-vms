@@ -116,7 +116,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost(publisher, metadata)
+      const createPostResult = await createPost({
+        profileId: publisher.ownedBy,
+        metadata
+      })
 
       if (createPostResult.isFailure()) {
         setError(true)
@@ -132,6 +135,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     }
     setIsPending(false)
   }
+
+  const [minDate, setMinDate] = useState<string>(
+    new Date().toLocaleDateString()
+  )
 
   return (
     <GradientModal
@@ -160,16 +167,27 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label="Start Date"
               type="date"
               placeholder="yyyy-mm-dd"
+              min={new Date().toLocaleDateString()}
               error={!!errors.startDate?.type}
               {...register('startDate', {
                 required: true
               })}
+              onChange={(e) => {
+                if (
+                  Date.parse(form.getValues('endDate')) <
+                  Date.parse(e.target.value)
+                ) {
+                  resetField('endDate')
+                }
+                setMinDate(e.target.value)
+              }}
             />
             <Input
               label="End Date"
               type="endDate"
               placeholder="yyyy-mm-dd"
               disabled={!endDateDisabled}
+              min={minDate}
               error={!!errors.endDate?.type}
               {...register('endDate', {})}
               onChange={(e) => {

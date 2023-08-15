@@ -16,7 +16,9 @@ interface Props {
 }
 
 const Create: FC<Props> = ({ isModal = false }) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar.login.create'
+  })
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -24,10 +26,10 @@ const Create: FC<Props> = ({ isModal = false }) => {
 
   const newUserSchema = object({
     handle: string()
-      .min(2, { message: 'Handle should be atleast 2 characters' })
-      .max(31, { message: 'Handle should be less than 32 characters' })
+      .min(2, { message: t('min') })
+      .max(31, { message: t('max') })
       .regex(/^[a-z0-9]+$/, {
-        message: 'Handle should only contain alphanumeric characters'
+        message: t('regex')
       })
   })
 
@@ -58,9 +60,9 @@ const Create: FC<Props> = ({ isModal = false }) => {
       {error && (
         <ErrorMessage
           className="mb-3"
-          title="Create profile failed!"
+          title={t('error')}
           error={{
-            name: 'Create profile failed!',
+            name: t('error'),
             message: errorMessage
           }}
         />
@@ -69,12 +71,17 @@ const Create: FC<Props> = ({ isModal = false }) => {
         <div
           className={`bg-green-50 dark:bg-green=-900 dark:bg-opacity-10 border-2 border-green-500 border-opacity-50 p-4 space-y-1 rounded-xl`}
         >
-          <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
-            Profile creation successful!
+          <h3
+            className="text-sm font-medium text-green-800 dark:text-green-200"
+            suppressHydrationWarning
+          >
+            {t('success')}
           </h3>
-          <div className="text-sm text-green-700 dark:text-green-200">
-            You can close the modal and try signing in again to use your new
-            profile
+          <div
+            className="text-sm text-green-700 dark:text-green-200"
+            suppressHydrationWarning
+          >
+            {t('close')}
           </div>
         </div>
       )}
@@ -87,11 +94,13 @@ const Create: FC<Props> = ({ isModal = false }) => {
             src="/logo.svg"
             alt="Logo"
           />
-          <div className="text-xl font-bold">{t('Signup Bcharity')}</div>
+          <div className="text-xl font-bold" suppressHydrationWarning>
+            {t('signup')}
+          </div>
         </div>
       )}
       <Input
-        label={t('Handle')}
+        label={t('handle')}
         type="text"
         placeholder="gavin"
         {...form.register('handle')}
@@ -104,7 +113,7 @@ const Create: FC<Props> = ({ isModal = false }) => {
           isPending ? <Spinner size="xs" /> : <PlusIcon className="w-4 h-4" />
         }
       >
-        {t('Signup')}
+        {t('button-signup')}
       </Button>
     </Form>
   )

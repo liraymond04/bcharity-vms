@@ -1,8 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
-import { useTheme } from 'next-themes'
 import React from 'react'
 import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/UI/Button'
 
@@ -25,7 +25,9 @@ const GradientModal: React.FC<IGradientModalProps> = ({
   submitDisabled = false,
   children
 }) => {
-  const { theme } = useTheme()
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.gradient-modal'
+  })
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -70,7 +72,7 @@ const GradientModal: React.FC<IGradientModalProps> = ({
             >
               <div className="flex justify-between items-center py-3.5 px-5 custom-divider">
                 <div className="flex items-center space-x-2 text-lg">
-                  <div>{title}</div>
+                  <div suppressHydrationWarning>{title}</div>
                 </div>
                 <button
                   className="p-1 text-gray-800 rounded-full dark:text-gray-100 
@@ -90,15 +92,17 @@ const GradientModal: React.FC<IGradientModalProps> = ({
                       : ''
                   } px-6 py-2 font-medium`}
                   disabled={submitDisabled}
+                  suppressHydrationWarning
                 >
-                  Submit
+                  {t('submit')}
                 </Button>
                 <Button
                   onClick={onCancel}
                   variant="secondary"
                   className="px-6 py-2 font-medium"
+                  suppressHydrationWarning
                 >
-                  Cancel
+                  {t('cancel')}
                 </Button>
               </div>
             </div>

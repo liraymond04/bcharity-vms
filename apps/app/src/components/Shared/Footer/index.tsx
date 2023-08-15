@@ -2,71 +2,92 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const Footer: FC = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.footer'
+  })
 
   return (
-    <footer className="overflow-auto bg-white text-center text-neutral-600 dark:bg-indigo-950 dark:text-neutral-200 lg:text-center">
+    <footer className="overflow-auto bg-accent-content dark:bg-info-content text-center text-neutral-600 dark:text-neutral-200 lg:text-center">
       <div className="mx-6 py-2 text-center md:text-left">
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="">
-            <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start  ">
-              About
+            <h6
+              className="mb-4 flex justify-center font-semibold uppercase md:justify-start"
+              suppressHydrationWarning
+            >
+              {t('about')}
             </h6>
             <p className="mb-4">
               <a
                 href="https://polygive.gitbook.io/bcharity/"
                 target="_blank"
                 className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
               >
-                Our Mission
+                {t('mission')}
               </a>
             </p>
             <p className="mb-4">
-              <a href="#/" className="text-neutral-600 dark:text-neutral-200">
-                Who We Are
+              <a
+                href="#/"
+                className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
+              >
+                {t('who')}
               </a>
             </p>
             <p className="mb-4 mr-10 justify-center  md:justify-start">
               <a
                 href="/privacypolicy"
                 className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
               >
-                Privacy Policy
+                {t('privacy')}
               </a>
             </p>{' '}
             <p className="mb-4">
               <a
                 href="/cookies"
                 className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
               >
-                Cookies
+                {t('cookies')}
               </a>
             </p>
           </div>
 
           <div className=" text-center md:text-left">
-            <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-              Information
+            <h6
+              className="mb-4 flex justify-center font-semibold uppercase md:justify-start"
+              suppressHydrationWarning
+            >
+              {t('information')}
             </h6>
             <p className="mb-4">
-              <a href="/tos" className="text-neutral-600 dark:text-neutral-200">
-                Terms of Service
+              <a
+                href="/tos"
+                className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
+              >
+                {t('tos')}
               </a>
             </p>
             <p className="mb-4">
               <a
                 href="/organizations"
                 className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
               >
-                Partner With Us
+                {t('partner')}
               </a>
             </p>
             <p className="mb-4">
               <a
                 href="/volunteers"
                 className="text-neutral-600 dark:text-neutral-200"
+                suppressHydrationWarning
               >
-                Work With Us
+                {t('work')}
               </a>
             </p>
           </div>
@@ -120,12 +141,11 @@ const Footer: FC = () => {
           </div>
         </div>
       </div>
-      <hr className="h-px my-0 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+      <hr className="h-px my-0 bg-secondary-content border-0 dark:bg-base-200"></hr>
       <div className="overflow-y-auto h-20 flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
         <div className="mr-12 hidden lg:block">
-          <a href="https://ecssen.ca" target="_blank">
-            Bcharity is a website developed by Ecssen, a registered charity.
-            #8034586058609{' '}
+          <a href="https://ecssen.ca" target="_blank" suppressHydrationWarning>
+            {t('bcharity')} #8034586058609
           </a>
         </div>
       </div>

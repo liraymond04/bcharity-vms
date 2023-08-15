@@ -77,7 +77,9 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
       {...rest}
     >
       <div className="pointer-events-none">{icon}</div>
-      <div className="pointer-events-none">{children}</div>
+      <div className="pointer-events-none" suppressHydrationWarning>
+        {children}
+      </div>
     </button>
   )
 })
