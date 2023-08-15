@@ -3,6 +3,7 @@ import { CommentFragment, PostFragment } from '@lens-protocol/client'
 import { PublicationMetadataFieldNames } from '@/lib/metadata/PublicationMetadata'
 
 import { OpportunityMetadataVersion } from '../types'
+import { InvalidMetadataException } from './InvalidMetadataException'
 import {
   UpdateableMetadata,
   UpdateableMetadataBuilder
@@ -35,6 +36,7 @@ export class OpportunityMetadata extends UpdateableMetadata {
     this.website = builder.website
     this.description = builder.description
     this.imageUrl = builder.imageUrl
+    this.applicationRequired = builder.applicationRequired
   }
 
   /**
@@ -69,6 +71,10 @@ export class OpportunityMetadata extends UpdateableMetadata {
    * An optional URL to image uploaded to IPFS. Empty string if no image
    */
   imageUrl: string
+  /**
+   * Whether or not applications are required for this volunteer opportunity
+   */
+  applicationRequired: boolean
 }
 
 /**
@@ -98,6 +104,22 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
       this.description = this.getAttribute('description')
       this.imageUrl = this.getAttribute('imageUrl')
     }
+
+    if (this.version < '1.0.2') {
+      this.applicationRequired = true
+    } else {
+      const applicationRequiredString = this.getAttribute('applicationRequired')
+
+      if (applicationRequiredString === 'true') {
+        this.applicationRequired = true
+      } else if (applicationRequiredString === 'false') {
+        this.applicationRequired = false
+      } else {
+        throw new InvalidMetadataException(
+          `Value ${applicationRequiredString} is not a valid value for the boolean applicationRequired`
+        )
+      }
+    }
   }
 
   buildObject(): OpportunityMetadata {
@@ -116,4 +138,5 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
   readonly website: string = ''
   readonly description: string = ''
   readonly imageUrl: string = ''
+  readonly applicationRequired: boolean = false
 }
