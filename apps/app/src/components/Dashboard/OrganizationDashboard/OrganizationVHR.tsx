@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
@@ -338,9 +339,10 @@ const OrganizationVHRTab: React.FC = () => {
                   </p>
                 )
               })}
+              <GridRefreshButton onClick={refetch} className="ml-auto" />
               <button
                 onClick={onNew}
-                className="ml-auto flex items-center text-brand-400"
+                className="flex items-center text-brand-400 mx-4"
               >
                 <span className="mr-2 mt-1 font-bold">{t('create-new')}</span>
                 <PlusCircleIcon className="w-8 text-brand-400" />
