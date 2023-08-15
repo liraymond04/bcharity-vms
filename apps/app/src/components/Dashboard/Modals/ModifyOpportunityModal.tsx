@@ -91,6 +91,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
           version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
           type: PostTags.OrgPublish.Opportunity,
           id,
+          applicationRequired: 'false', // set in formData in VM-178
           ...formData,
           imageUrl
         }
