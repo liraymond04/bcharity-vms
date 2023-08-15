@@ -58,6 +58,7 @@ const BrowseCard: React.FC<IBrowseCardProps> = ({
         rel="noopener noreferrer"
         target="_blank"
         href={buttonHref} // external link or /volunteer/[post-id] here
+        suppressHydrationWarning
       >
         {buttonText}
       </Link>

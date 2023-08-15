@@ -12,6 +12,7 @@ import { PostTags } from '@/lib/metadata'
 import { getOpportunityMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 
+import Error from '../Dashboard/Modals/Error'
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import ClearFilters from '../Shared/ClearFilters'
 import Divider from '../Shared/Divider'
@@ -26,7 +27,13 @@ const Volunteers: NextPage = () => {
   const [selectedOrg, setSelectedOrg] = useState<string>('')
   const [searchValue, setSearchValue] = useState('')
 
-  const { data, error, loading, pageInfo, fetchMore } = useExplorePublications(
+  const {
+    data,
+    error: exploreError,
+    loading,
+    pageInfo,
+    fetchMore
+  } = useExplorePublications(
     {
       sortCriteria: PublicationSortCriteria.Latest,
       metadata: {
@@ -141,10 +148,10 @@ const Volunteers: NextPage = () => {
           )}
         </GridLayout>
       )}
-      {error && (
-        <div className="text-sm text-red-700 dark:text-red-200">
-          Something went wrong
-        </div>
+      {exploreError && (
+        <Error
+          message={`An error occured: ${exploreError}. Please try again.`}
+        />
       )}
     </>
   )

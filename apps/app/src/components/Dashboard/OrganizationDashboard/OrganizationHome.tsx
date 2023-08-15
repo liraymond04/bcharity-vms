@@ -6,17 +6,19 @@ import {
 } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
-import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import getProfile from '@/lib/lens-protocol/getProfile'
 import lensClient from '@/lib/lens-protocol/lensClient'
-import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 const OrganizationHome: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.home'
+  })
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
@@ -58,8 +60,6 @@ const OrganizationHome: React.FC = () => {
 
   const [searchAddress, setSearchAddress] = useState<string>('')
 
-  const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
-
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       setSearchAddress(currentUser.ownedBy)
@@ -81,9 +81,7 @@ const OrganizationHome: React.FC = () => {
       <GridItemTwelve>
         <Card>
           <div className="p-1">
-            {isLoading ? (
-              <Spinner />
-            ) : (
+            {
               <div className="flex flex-row">
                 <div className="flex flex-col items-center space-y-5 align-middle w-3/12 ml-8 mt-10 ">
                   <div className="flex flex-col items-center space-y-2">
@@ -93,26 +91,21 @@ const OrganizationHome: React.FC = () => {
                       alt="Rounded avatar"
                     />
                     <div className="flex text-lg truncate text-violet-500">
-                      <p>
-                        ID:
+                      <p suppressHydrationWarning>
+                        {t('id')}
                         {currentUser.id}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-center">
-                    <h1>CREATED ON </h1>
-                    <div className="flex">12/20/2020</div>
-                  </div>
-
                   <div className="flex">
-                    <h1>Followers: </h1>
+                    <h1 suppressHydrationWarning>{t('followers')}</h1>
                     <div className="ml-1">
                       {currentUser.stats.totalFollowers}
                     </div>
                   </div>
                   <div className="flex">
-                    <h1>Following: </h1>
+                    <h1 suppressHydrationWarning>{t('following')}</h1>
                     <div className="ml-1">
                       {currentUser.stats.totalFollowing}
                     </div>
@@ -186,28 +179,20 @@ const OrganizationHome: React.FC = () => {
                     </div>
 
                     <div className="h-[60vh]">
-                      <div className="mt-20 font-semibold text-lg">About:</div>
-                      <div className=" bg-teal-50  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
+                      <div
+                        className="mt-20 font-semibold text-lg"
+                        suppressHydrationWarning
+                      >
+                        {t('about')}
+                      </div>
+                      <div className=" bg-accent-content  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
                         {currentUser.bio}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Sed ac elementum tellus. Aenean tristique est et nisi
-                        sollicitudin, nec efficitur odio efficitur. Mauris nec
-                        venenatis nulla. Nulla consequat, metus convallis
-                        dapibus ullamcorper, mauris ligula ullamcorper nisi, nec
-                        aliquet quam erat at enim. Nullam et eros vulputate,
-                        interdum dui non, ullamcorper felis. Vivamus et ante
-                        est. Pellentesque cursus sit amet felis ac malesuada.
-                        Sed lacus ipsum, tincidunt quis volutpat quis, interdum
-                        vel sem. Ut eget rhoncus dolor. Aenean vitae auctor sem.
-                        Vivamus pellentesque tortor metus. Proin non metus
-                        condimentum, rutrum sem quis, placerat tellus. Curabitur
-                        et feugiat lectus.
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            }
           </div>
         </Card>
       </GridItemTwelve>

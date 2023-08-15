@@ -4,8 +4,11 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
+import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
@@ -25,6 +28,11 @@ import VHRVerifyCard from './VHRVerifyCard'
 interface IOrganizationLogVHRProps {}
 
 const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.log-vhr'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { createComment } = useCreateComment()
 
   const { currentUser: profile } = useAppPersistStore()
@@ -150,10 +158,11 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
       <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
         <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 dark:border-indigo-900 border-2 ml-10 mr-10 dark:bg-Input">
           <input
+            suppressHydrationWarning
             className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
             type="text"
             value={searchValue}
-            placeholder="Search"
+            placeholder={t('search')}
             onChange={(e) => {
               setSearchValue(e.target.value)
             }}
@@ -166,7 +175,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
           <div className="h-[50px] z-10 ">
             <DashboardDropDown
-              label="Filter:"
+              label={t('filter')}
               options={Array.from(categories)}
               onClick={(c) => {
                 if (c == selectedCategory) setSelectedCategory('')
@@ -178,55 +187,63 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         </div>
       </div>
 
-      <button onClick={() => refetch()}>Refresh</button>
-      {!loading ? (
-        <>
-          <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-10">
-            {data
-              .filter((value) => {
-                return (
-                  (selectedCategory == '' ||
-                    selectedCategory == value.opportunity.category) &&
-                  testSearch(
-                    value.opportunity.category +
-                      ' ' +
-                      value.opportunity.startDate +
-                      ' ' +
-                      value.opportunity.endDate +
-                      ' ' +
-                      value.from.handle +
-                      ' ' +
-                      value.opportunity.name,
-                    searchValue
-                  )
-                )
-              })
-              .map((value) => {
-                const selected = value.post_id === selectedId
+      <Card className="px-4 py-3 mt-10">
+        <div className="flex flex-col">
+          <GridRefreshButton onClick={refetch} className="ml-auto mb-1" />
+          {!loading ? (
+            <>
+              <div className="flex flex-col min-h-96 overflow-auto">
+                {data
+                  .filter((value) => {
+                    return (
+                      (selectedCategory == '' ||
+                        selectedCategory == value.opportunity.category) &&
+                      testSearch(
+                        value.opportunity.category +
+                          ' ' +
+                          value.opportunity.startDate +
+                          ' ' +
+                          value.opportunity.endDate +
+                          ' ' +
+                          value.from.handle +
+                          ' ' +
+                          value.opportunity.name,
+                        searchValue
+                      )
+                    )
+                  })
+                  .map((value) => {
+                    const selected = value.post_id === selectedId
 
-                return (
-                  <VHRVerifyCard
-                    pending={!!pendingIds[value.post_id]}
-                    selected={selected}
-                    key={value.post_id}
-                    value={value}
-                    onClick={() => setSelectedId(selected ? '' : value.post_id)}
-                    onAcceptClick={() => onAcceptClick(value.post_id)}
-                    onRejectClick={() => onRejectClick(value.post_id)}
-                  />
-                )
-              })}
-          </div>
-          {selectedValue && <VHRDetailCard value={selectedValue} />}
-        </>
-      ) : (
-        <Spinner />
-      )}
-      {shouldShowError() && (
-        <Error
-          message={`An error occured: ${getErrorMessage()}. Please try again`}
-        ></Error>
-      )}
+                    return (
+                      <VHRVerifyCard
+                        pending={!!pendingIds[value.post_id]}
+                        selected={selected}
+                        key={value.post_id}
+                        value={value}
+                        onClick={() =>
+                          setSelectedId(selected ? '' : value.post_id)
+                        }
+                        onAcceptClick={() => onAcceptClick(value.post_id)}
+                        onRejectClick={() => onRejectClick(value.post_id)}
+                      />
+                    )
+                  })}
+              </div>
+              {selectedValue && <VHRDetailCard value={selectedValue} />}
+            </>
+          ) : (
+            <Spinner />
+          )}
+          {shouldShowError() && (
+            <Error
+              message={`${e('generic-front')}${getErrorMessage()}${e(
+                'generic-back'
+              )}`}
+            ></Error>
+          )}
+        </div>
+      </Card>
     </div>
   )
 }

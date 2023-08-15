@@ -11,6 +11,7 @@ import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 
+import Error from '../Dashboard/Modals/Error'
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
 import ClearFilters from '../Shared/ClearFilters'
@@ -20,6 +21,7 @@ import CauseCard from './CauseCard'
 
 const Causes: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
@@ -59,7 +61,7 @@ const Causes: NextPage = () => {
       <SEO title="Projects • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5">
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
+          <div className="flex justify-between w-[300px] h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
@@ -111,9 +113,9 @@ const Causes: NextPage = () => {
         </GridLayout>
       )}
       {exploreError && (
-        <div className="text-sm text-center" suppressHydrationWarning>
-          {t('something-wrong')}
-        </div>
+        <Error
+          message={`${e('generic-front')}${exploreError}${e('generic-back')}`}
+        />
       )}
     </>
   )

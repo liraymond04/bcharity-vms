@@ -9,8 +9,10 @@ import { PostFragment, PublicationTypes } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import ClearFilters from '@/components/Shared/ClearFilters'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import { Spinner } from '@/components/UI/Spinner'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import {
@@ -32,6 +34,9 @@ const inter500 = Inter({
 })
 
 const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.volunteer.log-hours'
+  })
   const { currentUser: profile } = useAppPersistStore()
 
   const { loading, data, error, refetch } = usePostData({
@@ -65,7 +70,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
   }
 
   const [selectedSortBy, setSelectedSortBy] = useState<string>('')
-  const sortByOptions = ['Start Date', 'End Date', 'Total Hours']
+  const sortByOptions = [t('start-date'), t('end-date'), t('total-hours')]
 
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [displayIndex, setDisplayIndex] = useState(-1)
@@ -92,19 +97,19 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
   }
 
   return (
-    <div className="mt-10 ml-20">
+    <div className="p-5">
       <div className="flex py-5 items-center">
         <div className="mr-5 h-[50px] z-10">
           <DashboardDropDown
-            label="Sort By:"
+            label={t('sort-by')}
             selected={selectedSortBy}
             options={Array.from(sortByOptions)}
             onClick={(c) => {
-              if (c == 'Start Date') {
+              if (c == t('start-date')) {
                 sortByStartDate()
-              } else if (c == 'End Date') {
+              } else if (c == t('end-date')) {
                 sortByEndDate()
-              } else if (c == 'Total Hours') {
+              } else if (c == t('total-hours')) {
                 sortByHours()
               }
               setSelectedSortBy(c)
@@ -113,7 +118,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
         </div>
         <div className="mx-5 h-[50px] z-10">
           <DashboardDropDown
-            label="Filters:"
+            label={t('filters')}
             selected={selectedCategory}
             options={Array.from(categories)}
             onClick={(c) => setSelectedCategory(c)}
@@ -124,6 +129,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
             setSelectedCategory('')
           }}
         />
+        <GridRefreshButton onClick={refetch} />
       </div>
 
       <div
@@ -194,7 +200,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
               <CalendarIcon className="w-5 h-5 mr-2" />
               {metaData[displayIndex].startDate} -{' '}
               {metaData[displayIndex].endDate.toString() == ''
-                ? 'Present'
+                ? t('present')
                 : metaData[displayIndex].endDate}
             </div>
             <div className="flex items-center mx-5 mt-2 whitespace-nowrap">
@@ -202,7 +208,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
               <div className="text-ellipsis overflow-hidden w-fit max-w-[200px]">
                 {metaData[displayIndex].hoursPerWeek}
               </div>
-              <div className="ml-2">hours in total</div>
+              <div className="ml-2">{t('hours-in-total')}</div>
             </div>
             <div className="flex items-center ml-5 mt-2">
               <ViewListIcon className="w-5 h-5 mr-2" />{' '}

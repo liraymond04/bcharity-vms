@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
 import Sidebar from '@/components/Sidebar/Sidebar'
@@ -18,11 +19,14 @@ import OrganizationLogVHRTab from './OrganizationLogVHR/OrganizationLogVHR'
 import OrganizationVHRTab from './OrganizationVHR'
 
 const OrganizationDashboard: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.tabs'
+  })
   const [selectedTab, setSelectedTab] = useState(0)
 
   const tabs: IDashboardTab[] = [
     {
-      label: 'Home',
+      label: t('home'),
       icon: <HomeIcon className="w-4 inline" />,
       component: <OrganizationHomeTab />
     },
@@ -32,17 +36,17 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationVHRTab />
     },
     {
-      label: 'Projects',
+      label: t('projects'),
       icon: <GlobeIcon className="w-4 inline" />,
       component: <OrganizationCausesTab />
     },
     {
-      label: 'Verify VHR',
+      label: t('verify'),
       icon: <LockClosedIcon className="w-4 inline" />,
       component: <OrganizationLogVHRTab />
     },
     {
-      label: 'User Settings',
+      label: t('settings'),
       icon: <CogIcon className="w-4 inline" />,
       component: <div />,
       redirect: '/settings'

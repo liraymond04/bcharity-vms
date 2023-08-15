@@ -4,6 +4,7 @@ import {
   StarIcon
 } from '@heroicons/react/outline'
 import { ProfileFragment } from '@lens-protocol/client'
+import { useTranslation } from 'react-i18next'
 
 import getAvatar from '@/lib/getAvatar'
 
@@ -20,6 +21,9 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
   profile,
   postings
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.organizations.card'
+  })
   return (
     <Card
       className="transition duration-100 hover:scale-105 hover:cursor-pointer"
@@ -31,7 +35,8 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
         <img
           className="w-[100px] h-[100px] fill-current mr-3"
           src={getAvatar(profile)}
-          alt={`${profile.handle}'s profile picture`}
+          alt={`${profile.handle}${t('pfp')}`}
+          suppressHydrationWarning
         />
         <div className="flex flex-col w-full">
           <div className="flex justify-between">
@@ -44,12 +49,16 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
                 <Spinner size="xs" className="mr-2" />
               </div>
             )}
-            <p className="inline">{`${postings ?? ''} postings`}</p>
+            <p className="inline" suppressHydrationWarning>{`${
+              postings ?? ''
+            } ${t('postings')}`}</p>
           </div>
           <div className="flex justify-between grow">
             <div>
               <LocationMarkerIcon className="w-4 inline" />
-              <p className="inline">LOCATION</p>
+              <p className="inline" suppressHydrationWarning>
+                {t('location')}
+              </p>
             </div>
             <FollowButton
               icon={<StarIcon className="w-4 align-end text-white" />}

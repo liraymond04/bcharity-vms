@@ -6,16 +6,17 @@ import {
 } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import ClearFilters from '@/components/Shared/ClearFilters'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import usePostData from '@/lib/lens-protocol/usePostData'
 import { isPost, OpportunityMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getOpportunityMetadata } from '@/lib/metadata'
@@ -29,6 +30,11 @@ import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.volunteer.vhr'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { currentUser: profile } = useAppPersistStore()
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
@@ -37,25 +43,9 @@ const VolunteerVHRTab: React.FC = () => {
   const [vhrGoal, setVhrGoal] = useState(0)
   const [searchValue, setSearchValue] = useState('')
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
-  const { data, error, refetch } = usePostData({
-    profileId: profile?.id,
-    metadata: {
-      tags: { all: [PostTags.OrgPublish.Opportunity] }
-    }
-  })
-
-  const onPublishClose = (shouldRefetch: boolean) => {
-    if (shouldRefetch) {
-      refetch()
-    }
-  }
 
   const onGoalClose = (shouldRefetch: boolean) => {
     setGoalModalOpen(false)
-
-    if (shouldRefetch) {
-      refetch()
-    }
   }
   const onGoalOpen = () => {
     setGoalModalOpen(true)
@@ -63,7 +53,8 @@ const VolunteerVHRTab: React.FC = () => {
   const {
     data: postData,
     error: postDataError,
-    loading
+    loading,
+    refetch
   } = useExplorePublications(
     {
       sortCriteria: PublicationSortCriteria.Latest,
@@ -131,8 +122,9 @@ const VolunteerVHRTab: React.FC = () => {
                   href=""
                   className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
                   onClick={onGoalOpen}
+                  suppressHydrationWarning
                 >
-                  Set a goal
+                  {t('set-goal')}
                 </Link>
                 {vhrGoal !== 0 && (
                   <Progress
@@ -148,12 +140,12 @@ const VolunteerVHRTab: React.FC = () => {
       </GridItemTwelve>
       <GridItemTwelve>
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
+          <div className="flex justify-between w-[300px] h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="Search"
+              placeholder={t('search')}
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -166,7 +158,7 @@ const VolunteerVHRTab: React.FC = () => {
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
-                label="Filter:"
+                label={t('filter')}
                 options={Array.from(categories)}
                 onClick={(c) => setSelectedCategory(c)}
                 selected={selectedCategory}
@@ -178,10 +170,13 @@ const VolunteerVHRTab: React.FC = () => {
               }}
             />
           </div>
+          <GridRefreshButton onClick={refetch} />
 
           {postDataError && (
             <Error
-              message={`An error occured: ${postDataError}. Please try again`}
+              message={`${e('generic-front')}${postDataError}${e(
+                'generic-back'
+              )}`}
             />
           )}
         </div>
@@ -199,7 +194,7 @@ const VolunteerVHRTab: React.FC = () => {
                   imageSrc={op.imageUrl}
                   avatarSrc={getAvatar(op.from)}
                   name={op.name}
-                  buttonText="APPLY"
+                  buttonText={t('apply')}
                   buttonHref={op.website ?? '.'}
                 />
               ))
