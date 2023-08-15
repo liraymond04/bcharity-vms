@@ -220,7 +220,13 @@
         "vhr": {
           "set-goal": "Set a goal",
           "our-cause": "Our Cause",
-          "create-new": "Create new opportunity"
+          "create-new": "Create Post",
+          "active-posting": "Active Postings",
+          "active-inactive": "You do not have any active posts.",
+          "drafts": "Drafts",
+          "drafts-inactive": "You do not have any drafts.",
+          "inactive": "Inactive",
+          "inactive-inactive": "You do not have any inactive posts."
         }
       },
       "volunteer": {

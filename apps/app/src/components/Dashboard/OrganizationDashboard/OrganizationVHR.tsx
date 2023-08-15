@@ -16,6 +16,7 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
+import i18n from '@/i18n'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { isPost, OpportunityMetadata } from '@/lib/metadata'
@@ -40,10 +41,15 @@ interface OrgGridTab {
   filter: (data: OpportunityMetadata) => boolean
 }
 
+const keyPrefix = 'components.dashboard.organization.vhr'
+const getTranslation = (key: string) => {
+  return i18n.t(`common:${keyPrefix}.${key}`)
+}
+
 const organizationGridTabs: OrgGridTab[] = [
   {
-    name: 'Active Postings',
-    inactiveString: 'You do not have any active posts.',
+    name: getTranslation('active-posting'),
+    inactiveString: getTranslation('active-inactive'),
     filter: (p) => {
       const d = new Date()
       return (
@@ -54,13 +60,13 @@ const organizationGridTabs: OrgGridTab[] = [
     }
   },
   {
-    name: 'Drafts',
-    inactiveString: 'You do not have any drafts.',
+    name: getTranslation('drafts'),
+    inactiveString: getTranslation('drafts-inactive'),
     filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
   },
   {
-    name: 'Inactive',
-    inactiveString: 'You do not have any inactive posts.',
+    name: getTranslation('inactive'),
+    inactiveString: getTranslation('inactive-inactive'),
     filter: (p) => {
       const d = new Date()
       return (
@@ -336,7 +342,7 @@ const OrganizationVHRTab: React.FC = () => {
                 onClick={onNew}
                 className="ml-auto flex items-center text-brand-400"
               >
-                <span className="mr-2 mt-1 font-bold">Create Post</span>
+                <span className="mr-2 mt-1 font-bold">{t('create-new')}</span>
                 <PlusCircleIcon className="w-8 text-brand-400" />
               </button>
             </div>
