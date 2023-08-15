@@ -7,6 +7,7 @@ import {
 } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import lensClient from '@/lib/lens-protocol/lensClient'
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
@@ -20,6 +21,7 @@ import { Spinner } from '../UI/Spinner'
 import VolunteerCard from '../Volunteers/VolunteerCard'
 
 const Home: NextPage = () => {
+  const { t } = useTranslation('common')
   const {
     data,
     error: exploreError,
@@ -99,7 +101,9 @@ const Home: NextPage = () => {
           ) : (
             <div className="flex flex-wrap items-stretch justify-between">
               <div className="mx-auto">
-                <h1 className="text-2xl font-bold">Browse Organizations</h1>
+                <h1 className="text-2xl font-bold" suppressHydrationWarning>
+                  {t('components.organizations.title')}
+                </h1>
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {profiles.map((profile, index) => (
@@ -113,7 +117,9 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="mx-auto">
-                <h1 className=" text-2xl font-bold">Browse Opportunities</h1>
+                <h1 className=" text-2xl font-bold" suppressHydrationWarning>
+                  {t('components.volunteers.title')}
+                </h1>
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {posts.map((post) => (
