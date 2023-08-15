@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import ClearFilters from '@/components/Shared/ClearFilters'
 import Progress from '@/components/Shared/Progress'
+import GridRefreshButton from '@/components/Shared/RefreshButton'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
@@ -43,7 +44,8 @@ const VolunteerCauses: React.FC = () => {
   const {
     data: postData,
     error: postDataError,
-    loading
+    loading,
+    refetch
   } = useExplorePublications(
     {
       sortCriteria: PublicationSortCriteria.Latest,
@@ -179,6 +181,7 @@ const VolunteerCauses: React.FC = () => {
             </div>
             <ClearFilters onClick={() => setSelectedCategory('')} />
           </div>
+          <GridRefreshButton onClick={refetch} />
 
           {postDataError && <h1>error</h1>}
         </div>

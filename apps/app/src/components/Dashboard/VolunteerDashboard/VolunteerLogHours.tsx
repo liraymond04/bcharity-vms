@@ -11,6 +11,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import ClearFilters from '@/components/Shared/ClearFilters'
+import GridRefreshButton from '@/components/Shared/RefreshButton'
 import { Spinner } from '@/components/UI/Spinner'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import {
@@ -92,7 +93,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
   }
 
   return (
-    <div className="mt-10 ml-20">
+    <div className="p-5">
       <div className="flex py-5 items-center">
         <div className="mr-5 h-[50px] z-10">
           <DashboardDropDown
@@ -124,6 +125,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
             setSelectedCategory('')
           }}
         />
+        <GridRefreshButton onClick={refetch} />
       </div>
 
       <div
