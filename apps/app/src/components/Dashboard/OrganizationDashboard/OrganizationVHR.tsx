@@ -1,7 +1,7 @@
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
-import { PlusSmIcon } from '@heroicons/react/solid'
+import { PlusCircleIcon } from '@heroicons/react/outline'
 import {
   PublicationsQueryRequest,
   PublicationTypes
@@ -33,14 +33,16 @@ import PublishOpportunityModal, {
 import VHRGoalModal from '../Modals/VHRGoalModal'
 import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
-interface ITab {
+interface OrgGridTab {
   name: string
+  inactiveString: string
   filter: (data: OpportunityMetadata) => boolean
 }
 
-const tabs: ITab[] = [
+const organizationGridTabs: OrgGridTab[] = [
   {
     name: 'Active Postings',
+    inactiveString: 'You do not have any active posts.',
     filter: (p) => {
       const d = new Date()
       return (
@@ -52,10 +54,12 @@ const tabs: ITab[] = [
   },
   {
     name: 'Drafts',
+    inactiveString: 'You do not have any drafts.',
     filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
   },
   {
     name: 'Inactive',
+    inactiveString: 'You do not have any inactive posts.',
     filter: (p) => {
       const d = new Date()
       return (
@@ -189,6 +193,46 @@ const OrganizationVHRTab: React.FC = () => {
   const { isLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
+
+  const getHeight = () => {
+    const data = postMetadata.filter(
+      organizationGridTabs[selectedTabIndex].filter
+    )
+
+    if (data.length === 0) return '200px'
+    else return '800px'
+  }
+
+  const getDisplayedGrid = () => {
+    if (loading) return <Spinner />
+
+    const data = postMetadata.filter(
+      organizationGridTabs[selectedTabIndex].filter
+    )
+
+    if (data.length === 0)
+      return (
+        <div className="h-full w-full flex items-center justify-center">
+          <p className="font-semibold text-center text-xl px-4 py-3 bg-zinc-200 dark:bg-purple-900 text-brand-500 dark:text-brand-200 shadow-sm shadow-zinc-400 dark:shadow-none">
+            {organizationGridTabs[selectedTabIndex].inactiveString}
+          </p>
+        </div>
+      )
+
+    return (
+      <AgGridReact
+        defaultColDef={defaultColumnDef}
+        rowData={data}
+        columnDefs={makeOrgVHRColumnDefs({
+          onEditClick: onEdit,
+          onDeleteClick: onDelete
+        })}
+        pagination
+        paginationPageSize={20}
+      />
+    )
+  }
+
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -267,12 +311,12 @@ const OrganizationVHRTab: React.FC = () => {
 
           <div className="px-5">
             <div className="flex items-center">
-              {tabs.map((v, i) => {
+              {organizationGridTabs.map((v, i) => {
                 return (
                   <p
                     key={i}
                     onClick={() => setSelectedTabIndex(i)}
-                    className="px-3 cursor-pointer bg-white border border-zinc-400"
+                    className="px-3 cursor-pointer bg-white border border-zinc-400 dark:bg-brand-400"
                   >
                     {v.name}
                   </p>
@@ -280,32 +324,17 @@ const OrganizationVHRTab: React.FC = () => {
               })}
               <button
                 onClick={onNew}
-                className="ml-auto flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
+                className="ml-auto flex items-center text-brand-400"
               >
-                <PlusSmIcon className="w-8 text-white" />
-                <div className="text-white mr-3 mt-1 font-bold">
-                  Create new opportunity
-                </div>
+                <span className="mr-2 mt-1 font-bold">Create Post</span>
+                <PlusCircleIcon className="w-8 text-brand-400" />
               </button>
             </div>
             <div
               className={gridTheme}
-              style={{ height: '800px', width: '90%' }}
+              style={{ height: getHeight(), width: '100%' }}
             >
-              {loading ? (
-                <Spinner />
-              ) : (
-                <AgGridReact
-                  defaultColDef={defaultColumnDef}
-                  rowData={postMetadata.filter(tabs[selectedTabIndex].filter)}
-                  columnDefs={makeOrgVHRColumnDefs({
-                    onEditClick: onEdit,
-                    onDeleteClick: onDelete
-                  })}
-                  pagination
-                  paginationPageSize={20}
-                />
-              )}
+              {getDisplayedGrid()}
             </div>
             {error && <Error message="An error occured. Please try again." />}
           </div>
