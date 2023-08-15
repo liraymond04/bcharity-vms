@@ -1,4 +1,4 @@
-import { PlusSmIcon } from '@heroicons/react/outline'
+import { PlusCircleIcon } from '@heroicons/react/outline'
 import {
   PublicationsQueryRequest,
   PublicationTypes
@@ -11,6 +11,7 @@ import { toast } from 'react-hot-toast'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
+import GridRefreshButton from '@/components/Shared/RefreshButton'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import lensClient from '@/lib/lens-protocol/lensClient'
@@ -247,18 +248,19 @@ const OrganizationCauses: React.FC = () => {
           </div>
 
           <div className="p-5">
-            <button
-              onClick={onNew}
-              className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
-            >
-              <PlusSmIcon className="w-8 text-white" />
-              <div className="text-white mr-3 mt-1 font-bold">
-                Create new project
-              </div>
-            </button>
+            <div className="flex items-center">
+              <GridRefreshButton onClick={refetch} className="ml-auto" />
+              <button
+                onClick={onNew}
+                className="flex items-center text-brand-400 mx-4"
+              >
+                <span className="mr-2 font-bold">Create New Project</span>
+                <PlusCircleIcon className="w-8 text-brand-400" />
+              </button>
+            </div>
             <div
               className={gridTheme}
-              style={{ height: '800px', width: '90%' }}
+              style={{ height: '800px', width: '100%' }}
             >
               {loading ? (
                 <Spinner />
@@ -276,35 +278,35 @@ const OrganizationCauses: React.FC = () => {
               )}
             </div>
             {error && <Error message="An error occured. Please try again." />}
-            <PublishCauseModal
-              open={publishModalOpen}
-              onClose={onPublishClose}
-              publisher={profile}
-              currencyData={currencyData}
-            />
-            <DeleteCauseModal
-              open={deleteModalOpen}
-              onClose={onDeleteClose}
-              publisher={profile}
-              id={currentDeleteId}
-              postData={data}
-              values={getFormDefaults(currentDeleteId)}
-              currencyData={currencyData}
-            />
-            <ModifyCauseModal
-              open={modifyModalOpen}
-              onClose={onModifyClose}
-              publisher={profile}
-              id={currentModifyId}
-              currencyData={currencyData}
-              defaultValues={getFormDefaults(currentModifyId)}
-            />
-            <GoalModal
-              open={GoalModalOpen}
-              onClose={onGoalClose}
-              publisher={profile}
-            />
           </div>
+          <PublishCauseModal
+            open={publishModalOpen}
+            onClose={onPublishClose}
+            publisher={profile}
+            currencyData={currencyData}
+          />
+          <DeleteCauseModal
+            open={deleteModalOpen}
+            onClose={onDeleteClose}
+            publisher={profile}
+            id={currentDeleteId}
+            postData={data}
+            values={getFormDefaults(currentDeleteId)}
+            currencyData={currencyData}
+          />
+          <ModifyCauseModal
+            open={modifyModalOpen}
+            onClose={onModifyClose}
+            publisher={profile}
+            id={currentModifyId}
+            currencyData={currencyData}
+            defaultValues={getFormDefaults(currentModifyId)}
+          />
+          <GoalModal
+            open={GoalModalOpen}
+            onClose={onGoalClose}
+            publisher={profile}
+          />
         </Card>
       </GridItemTwelve>
     </GridLayout>

@@ -6,6 +6,8 @@ import {
 import React, { useEffect, useMemo, useState } from 'react'
 import { v4 } from 'uuid'
 
+import GridRefreshButton from '@/components/Shared/RefreshButton'
+import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
@@ -178,55 +180,61 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         </div>
       </div>
 
-      <button onClick={() => refetch()}>Refresh</button>
-      {!loading ? (
-        <>
-          <div className="flex flex-col min-h-96 overflow-auto bg-zinc-50 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-10">
-            {data
-              .filter((value) => {
-                return (
-                  (selectedCategory == '' ||
-                    selectedCategory == value.opportunity.category) &&
-                  testSearch(
-                    value.opportunity.category +
-                      ' ' +
-                      value.opportunity.startDate +
-                      ' ' +
-                      value.opportunity.endDate +
-                      ' ' +
-                      value.from.handle +
-                      ' ' +
-                      value.opportunity.name,
-                    searchValue
-                  )
-                )
-              })
-              .map((value) => {
-                const selected = value.post_id === selectedId
+      <Card className="px-4 py-3 mt-10">
+        <div className="flex flex-col">
+          <GridRefreshButton onClick={refetch} className="ml-auto mb-1" />
+          {!loading ? (
+            <>
+              <div className="flex flex-col min-h-96 overflow-auto">
+                {data
+                  .filter((value) => {
+                    return (
+                      (selectedCategory == '' ||
+                        selectedCategory == value.opportunity.category) &&
+                      testSearch(
+                        value.opportunity.category +
+                          ' ' +
+                          value.opportunity.startDate +
+                          ' ' +
+                          value.opportunity.endDate +
+                          ' ' +
+                          value.from.handle +
+                          ' ' +
+                          value.opportunity.name,
+                        searchValue
+                      )
+                    )
+                  })
+                  .map((value) => {
+                    const selected = value.post_id === selectedId
 
-                return (
-                  <VHRVerifyCard
-                    pending={!!pendingIds[value.post_id]}
-                    selected={selected}
-                    key={value.post_id}
-                    value={value}
-                    onClick={() => setSelectedId(selected ? '' : value.post_id)}
-                    onAcceptClick={() => onAcceptClick(value.post_id)}
-                    onRejectClick={() => onRejectClick(value.post_id)}
-                  />
-                )
-              })}
-          </div>
-          {selectedValue && <VHRDetailCard value={selectedValue} />}
-        </>
-      ) : (
-        <Spinner />
-      )}
-      {shouldShowError() && (
-        <Error
-          message={`An error occured: ${getErrorMessage()}. Please try again`}
-        ></Error>
-      )}
+                    return (
+                      <VHRVerifyCard
+                        pending={!!pendingIds[value.post_id]}
+                        selected={selected}
+                        key={value.post_id}
+                        value={value}
+                        onClick={() =>
+                          setSelectedId(selected ? '' : value.post_id)
+                        }
+                        onAcceptClick={() => onAcceptClick(value.post_id)}
+                        onRejectClick={() => onRejectClick(value.post_id)}
+                      />
+                    )
+                  })}
+              </div>
+              {selectedValue && <VHRDetailCard value={selectedValue} />}
+            </>
+          ) : (
+            <Spinner />
+          )}
+          {shouldShowError() && (
+            <Error
+              message={`An error occured: ${getErrorMessage()}. Please try again`}
+            ></Error>
+          )}
+        </div>
+      </Card>
     </div>
   )
 }
