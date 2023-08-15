@@ -16,11 +16,34 @@ import checkAuth from './checkAuth'
 import lensClient from './lensClient'
 import useCreateComment from './useCreateComment'
 
-interface Props {
+export interface UseBookmarkParams {
+  /**
+   * The post tag for the type of bookmark
+   */
   postTag: string
+  /**
+   * The profile of the user, or null
+   */
+  profile: ProfileFragment | null
+  /**
+   * The id of the publication to manage
+   */
+  publicationId: string
 }
 
-const useBookmark = (params: Props) => {
+/**
+ * A hook to handle bookmark-related functionality
+ *
+ * @param params the params for the hook
+ *
+ * @returns bookmarked - whether or not the post is bookmarked. Always false if currentUser is null \
+ * isLoading - whether or not the data fetch or the add/remove bookmark is pending \
+ * error - the error message if there was an error fetching bookmark data or add/removing a bookmark \
+ * refetch - a way to refetch the bookmark data \
+ * addBookmark - function to call to book mark the post. Throws errors if the post is already bookmarked or the currentUser is null \
+ * removeBookmark - a way to refetch the bookmark data. Throws error if the currentUser is null
+ */
+const useBookmark = (params: UseBookmarkParams) => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const { createComment } = useCreateComment()
 
@@ -28,9 +51,12 @@ const useBookmark = (params: Props) => {
   const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState<boolean>()
 
-  const getComments = async (profile: ProfileFragment, id: string) => {
+  const getComments = async (
+    profile: ProfileFragment,
+    publicationId: string
+  ) => {
     const result = await lensClient().publication.fetchAll({
-      commentsOf: id,
+      commentsOf: publicationId,
       metadata: {
         tags: {
           oneOf: [params.postTag]
@@ -48,20 +74,17 @@ const useBookmark = (params: Props) => {
     return comments
   }
 
-  const fetch = async (profile: ProfileFragment | null, id: string) => {
+  const refetch = async () => {
+    if (params.profile === null) {
+      setBookmarked(false)
+      return
+    }
+
     setIsLoading(true)
     try {
-      if (profile === null) {
-        throw Error(e('profile-null'))
-      }
+      const comments = await getComments(params.profile, params.publicationId)
 
-      const comments = await getComments(profile, id)
-
-      if (comments.length > 0) {
-        setBookmarked(true)
-      } else {
-        setBookmarked(false)
-      }
+      setBookmarked(comments.length > 0)
     } catch (e) {
       if (e instanceof Error) {
         setError(e)
@@ -71,10 +94,10 @@ const useBookmark = (params: Props) => {
     }
   }
 
-  const addBookmark = async (profile: ProfileFragment | null, id: string) => {
+  const addBookmark = async () => {
     setIsLoading(true)
     try {
-      if (profile === null) {
+      if (params.profile === null) {
         throw Error(e('profile-null'))
       }
 
@@ -86,21 +109,21 @@ const useBookmark = (params: Props) => {
         locale: getUserLocale(),
         tags: [params.postTag],
         mainContentFocus: PublicationMainFocus.TextOnly,
-        name: `${params.postTag} by ${profile.handle} for publication ${id}`,
+        name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
         attributes,
         appId: APP_NAME
       }
 
-      await checkAuth(profile.ownedBy)
+      await checkAuth(params.profile.ownedBy)
 
-      const comments = await getComments(profile, id)
+      const comments = await getComments(params.profile, params.publicationId)
       if (comments.length > 0) {
         throw Error(e('already-bookmarked'))
       }
 
       const result = await createComment({
-        publicationId: id,
-        profileId: profile.ownedBy,
+        publicationId: params.publicationId,
+        profileId: params.profile.id,
         metadata
       })
 
@@ -116,31 +139,22 @@ const useBookmark = (params: Props) => {
     }
   }
 
-  const removeBookmark = async (
-    profile: ProfileFragment | null,
-    id: string
-  ) => {
+  const removeBookmark = async () => {
     setIsLoading(true)
     try {
-      if (profile === null) {
+      if (params.profile === null) {
         throw Error(e('profile-null'))
       }
 
-      await checkAuth(profile.ownedBy)
+      await checkAuth(params.profile.ownedBy)
 
-      const result = await getComments(profile, id)
-      const comments = result.filter(
-        (comment) =>
-          !comment.hidden && comment.profile.ownedBy === profile.ownedBy
+      const comments = await getComments(params.profile, params.publicationId)
+
+      await Promise.all(
+        comments.map((c) =>
+          lensClient().publication.hide({ publicationId: c.id })
+        )
       )
-
-      if (comments.length > 0) {
-        comments.forEach(async (item) => {
-          await lensClient().publication.hide({
-            publicationId: item.id
-          })
-        })
-      }
       setBookmarked(false)
     } catch (e) {
       if (e instanceof Error) {
@@ -152,11 +166,11 @@ const useBookmark = (params: Props) => {
   }
 
   useEffect(() => {
-    // fetch(params.profile, params.id) // triggers infinite loop
-  })
+    refetch()
+  }, [params.profile, params.publicationId])
 
   return {
-    fetch,
+    refetch,
     bookmarked,
     error,
     isLoading,

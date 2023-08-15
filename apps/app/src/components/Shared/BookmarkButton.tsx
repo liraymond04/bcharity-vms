@@ -15,9 +15,11 @@ interface Props {
 
 const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
   const { currentUser } = useAppPersistStore()
-  const { fetch, bookmarked, error, isLoading, addBookmark, removeBookmark } =
+  const { bookmarked, error, isLoading, addBookmark, removeBookmark } =
     useBookmark({
-      postTag
+      postTag,
+      profile: currentUser,
+      publicationId
     })
 
   // custom hook
@@ -33,18 +35,14 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
     if (error) toast.error(error?.message)
   }, [error])
 
-  useEffect(() => {
-    fetch(currentUser, publicationId)
-  }, [])
-
   return (
     <button
       disabled={isLoading}
       onClick={() => {
         if (bookmarked) {
-          removeBookmark(currentUser, publicationId)
+          removeBookmark()
         } else {
-          addBookmark(currentUser, publicationId).then((result) => {
+          addBookmark().then((result) => {
             if (result?.isFailure()) {
               console.log(result.error)
             }
