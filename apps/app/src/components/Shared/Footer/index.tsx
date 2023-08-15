@@ -7,7 +7,7 @@ const Footer: FC = () => {
   })
 
   return (
-    <footer className="overflow-auto bg-white text-center text-neutral-600 dark:bg-indigo-950 dark:text-neutral-200 lg:text-center">
+    <footer className="overflow-auto bg-accent-content dark:bg-info-content text-center text-neutral-600 dark:text-neutral-200 lg:text-center">
       <div className="mx-6 py-2 text-center md:text-left">
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="">
@@ -141,7 +141,7 @@ const Footer: FC = () => {
           </div>
         </div>
       </div>
-      <hr className="h-px my-0 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+      <hr className="h-px my-0 bg-secondary-content border-0 dark:bg-base-200"></hr>
       <div className="overflow-y-auto h-20 flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
         <div className="mr-12 hidden lg:block">
           <a href="https://ecssen.ca" target="_blank" suppressHydrationWarning>

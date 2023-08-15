@@ -214,13 +214,13 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
         followerOnlyReferenceModule: false
       }
 
-      const result = await createComment(
-        post.id,
-        currentUser,
+      const result = await createComment({
+        publicationId: post.id,
+        profileId: currentUser.ownedBy,
         metadata,
         collectModule,
         referenceModule
-      )
+      })
 
       const res: RelayerResultFragment | RelayErrorFragment = result.unwrap()
 

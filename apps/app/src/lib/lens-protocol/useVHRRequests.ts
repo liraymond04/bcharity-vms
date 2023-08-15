@@ -59,16 +59,25 @@ const getVHRRequestComments = (params: getVHRRequestCommentsParams) => {
   })
 }
 
-interface useVHRRequestsParams {
+interface UseVHRRequestsParams {
   profile: ProfileFragment | null
 }
 
-const useVHRRequests = (params: useVHRRequestsParams) => {
+/**
+ *
+ * @param params Params for the request
+ * @returns `loading`: whether or not the data is loading, \
+ *          `data`: the {@link LogVhrRequestMetadata} of VHR requests that have not been handled yet \
+ *          `error`: error message (if request fails), \
+ *          `refetch`: function that triggers the data to refetch
+ */
+const useVHRRequests = (params: UseVHRRequestsParams) => {
   const [requests, setRequests] = useState<LogVhrRequestMetadata[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const refetch = () => {
+    if (!params.profile) return
     let opportunities: OpportunityMetadata[] = []
 
     setLoading(true)

@@ -5,9 +5,6 @@ import {
   PublicationMetadataDisplayTypes,
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
-import { useStorageUpload } from '@thirdweb-dev/react'
-import { useSDK } from '@thirdweb-dev/react'
-import { signTypedData } from '@wagmi/core'
 import { useState } from 'react'
 import { v4 } from 'uuid'
 
@@ -17,40 +14,48 @@ import { LogVhrRequestMetadataRecord, PostTags } from '@/lib/metadata'
 import getUserLocale from '../getUserLocale'
 import { MetadataVersion } from '../types'
 import checkAuth from './checkAuth'
-import getSignature from './getSignature'
-import lensClient from './lensClient'
-interface Props {
+import useCreateComment from './useCreateComment'
+
+export interface UseLogHoursParams {
+  /**
+   * The id of the publication that created the request
+   */
   publicationId: string
+  /**
+   * The organization that published this opportunity
+   */
   organizationId: string
 }
 
 import { useTranslation } from 'react-i18next'
+/**
+ * A react hook to handle making VHR log requests
+ *
+ * @param params The params for the requests
+ * @returns
+ */
+const useLogHours = (params: UseLogHoursParams) => {
+  const [error, setError] = useState<string>()
 
-const useApply = (params: Props) => {
   const { t: e } = useTranslation('common', {
     keyPrefix: 'errors'
   })
 
-  const { mutateAsync: upload } = useStorageUpload()
-  const sdk = useSDK()
-
-  const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState<boolean>()
 
-  const apply = async (
+  const { createComment } = useCreateComment()
+
+  const logHours = async (
     profile: ProfileFragment | null,
     hoursToVerify: string,
     comments: string,
-    close?: Function
+    onSuccess?: VoidFunction
   ) => {
     setIsLoading(true)
+    setError('')
     try {
       if (profile === null) {
         throw Error(e('profile-null'))
-      }
-
-      if (!sdk) {
-        throw Error(e('metadata-upload-fail'))
       }
 
       const data: LogVhrRequestMetadataRecord = {
@@ -84,38 +89,18 @@ const useApply = (params: Props) => {
 
       await checkAuth(profile.ownedBy)
 
-      const contentURI = sdk?.storage.resolveScheme(
-        (await upload({ data: [metadata] }))[0]
-      )
-
-      const typedDataResult =
-        await lensClient().publication.createCommentTypedData({
-          profileId: profile.id,
-          publicationId: params.publicationId,
-          contentURI,
-          collectModule: {
-            freeCollectModule: {
-              followerOnly: false
-            }
-          },
-          referenceModule: { followerOnlyReferenceModule: false }
-        })
-
-      const signature = await signTypedData(
-        getSignature(typedDataResult.unwrap().typedData)
-      )
-
-      const broadcastResult = await lensClient().transaction.broadcast({
-        id: typedDataResult.unwrap().id,
-        signature: signature
+      const broadcastResult = await createComment({
+        profileId: profile.id,
+        publicationId: params.publicationId,
+        metadata
       })
 
-      if (close) close()
+      if (onSuccess) onSuccess()
 
       return broadcastResult
     } catch (e) {
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
       }
     } finally {
       setIsLoading(false)
@@ -124,10 +109,9 @@ const useApply = (params: Props) => {
 
   return {
     error,
-    setError,
     isLoading,
-    apply
+    logHours
   }
 }
 
-export default useApply
+export default useLogHours

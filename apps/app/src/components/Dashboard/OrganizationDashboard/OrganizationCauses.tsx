@@ -146,7 +146,7 @@ const OrganizationCauses: React.FC = () => {
 
   useEffect(() => {
     if (currencyError) {
-      toast.error(currencyError.message)
+      toast.error(currencyError)
     }
   }, [currencyError])
 
@@ -215,7 +215,7 @@ const OrganizationCauses: React.FC = () => {
                   {t('our-cause')}
                 </div>
                 <div className=" w-full lg:flex mt-5">
-                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-teal-50 dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
+                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
                     dolor sit amet, consectetur adipiscing elit. Praesent

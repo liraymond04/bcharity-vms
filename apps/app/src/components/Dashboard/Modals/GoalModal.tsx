@@ -82,7 +82,7 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
     try {
       await checkAuth(publisher.ownedBy)
 
-      await createPost(publisher, metadata)
+      await createPost({ profileId: publisher.id, metadata })
 
       reset()
       onClose(true)

@@ -85,17 +85,7 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
 
     try {
       await checkAuth(publisher.ownedBy)
-
-      await createPost(
-        publisher,
-        metadata,
-        {
-          freeCollectModule: {
-            followerOnly: false
-          }
-        },
-        { followerOnlyReferenceModule: false }
-      )
+      await createPost({ profileId: publisher.id, metadata })
 
       reset()
       onClose(true)

@@ -1,7 +1,7 @@
 import { City, Country, State } from 'country-state-city'
 import { useState } from 'react'
 
-import { ILocationData } from '../types'
+import { ILocationData } from './types'
 
 /**
  * @brief utility to get the city, province, and country location of a user

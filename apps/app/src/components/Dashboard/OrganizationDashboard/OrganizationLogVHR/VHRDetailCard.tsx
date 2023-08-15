@@ -16,7 +16,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
 
   return (
     <div className="flex h-72 bg-brand-200 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-8">
-      <div className="flex flex-col grow shrink-0">
+      <div className="flex flex-col flex-grow w-0">
         <Link href={`/p/volunteer/${value.from.handle}`} target="_blank">
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4" />
@@ -45,7 +45,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
           {t('request-made')} {value.createdAt}
         </p>
       </div>
-      <p className="ml-10 overflow-scroll">{value.comments}</p>
+      <p className="ml-10 overflow-scroll flex-grow w-0">{value.comments}</p>
     </div>
   )
 }

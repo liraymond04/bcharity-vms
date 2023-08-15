@@ -8,8 +8,8 @@ import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
+import { formatLocation } from '@/lib/formatLocation'
 import getAvatar from '@/lib/getAvatar'
-import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
@@ -35,12 +35,14 @@ import SEO from '../utils/SEO'
 const CausePage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { data, loading, fetch, error } = usePublication()
   const {
     query: { id },
-    isReady,
     asPath
   } = useRouter()
+
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
 
   const [wrongPostType, setWrongPostType] = useState(false)
   const [malformedMetadata, setMalformedMetadata] = useState(false)
@@ -60,12 +62,6 @@ const CausePage: NextPage = () => {
       }
     }
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
 
   const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
     useState<boolean>(false)
@@ -164,7 +160,7 @@ const CausePage: NextPage = () => {
               publicationId={cause.post_id}
               postTag={PostTags.Bookmark.Cause}
             />
-            <div className="text-5xl font-bold text-black dark:text-white p-2 bg-purple-300 dark:bg-indigo-950 rounded-lg">
+            <div className="text-5xl font-bold p-2 bg-purple-300 dark:bg-info-content rounded-lg">
               {cause.name}
             </div>
             <div className="text-3xl text-gray-400 font-bold pl-5">
@@ -187,7 +183,7 @@ const CausePage: NextPage = () => {
               <div>
                 <MediaRenderer
                   key="attachment"
-                  className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                  className="object-cover h-50 rounded-lg"
                   src={cause.imageUrl}
                   alt={'image attachment'}
                 />

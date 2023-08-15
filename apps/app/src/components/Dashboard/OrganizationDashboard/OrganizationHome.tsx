@@ -185,7 +185,7 @@ const OrganizationHome: React.FC = () => {
                       >
                         {t('about')}
                       </div>
-                      <div className=" bg-teal-50  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
+                      <div className=" bg-accent-content  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
                         {currentUser.bio}
                       </div>
                     </div>

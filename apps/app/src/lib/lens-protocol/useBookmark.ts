@@ -98,7 +98,11 @@ const useBookmark = (params: Props) => {
         throw Error(e('already-bookmarked'))
       }
 
-      const result = await createComment(id, profile, metadata)
+      const result = await createComment({
+        publicationId: id,
+        profileId: profile.ownedBy,
+        metadata
+      })
 
       setBookmarked(true)
       return result
