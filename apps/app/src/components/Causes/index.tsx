@@ -11,6 +11,7 @@ import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 
+import Error from '../Dashboard/Modals/Error'
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
 import ClearFilters from '../Shared/ClearFilters'
@@ -111,9 +112,9 @@ const Causes: NextPage = () => {
         </GridLayout>
       )}
       {exploreError && (
-        <div className="text-sm text-center" suppressHydrationWarning>
-          {t('something-wrong')}
-        </div>
+        <Error
+          message={`An error occured: ${exploreError}. Please try again.`}
+        />
       )}
     </>
   )

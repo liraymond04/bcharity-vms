@@ -55,7 +55,10 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   const { mutateAsync: upload } = useStorageUpload()
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.modify-cause'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
 
   const [isPending, setIsPending] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
@@ -89,7 +92,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
     setIsPending(true)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setError(true)
       setIsPending(false)
       return
@@ -156,7 +159,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   return (
     <GradientModal
-      title={'Modify Project'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -169,8 +172,9 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Project name"
-              placeholder="Medical internship"
+              suppressHydrationWarning
+              label={t('name')}
+              placeholder={t('name-placeholder')}
               error={!!errors.name?.type}
               {...register('name', {
                 required: true,
@@ -178,8 +182,9 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               })}
             />
             <Input
-              label="Category"
-              placeholder="Healthcare"
+              suppressHydrationWarning
+              label={t('category')}
+              placeholder={t('category-placeholder')}
               error={!!errors.category?.type}
               {...register('category', {
                 required: true,
@@ -187,7 +192,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               })}
             />
             <FormDropdown
-              label={t('Select currency')}
+              label={t('selected-currency')}
               options={currencyData?.map((c) => c.address) ?? []}
               displayedOptions={currencyData?.map((c) => c.name) ?? []}
               {...register('currency')}
@@ -198,7 +203,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               defaultCity={defaultValues.city}
             />
             <Input
-              label={t('Contribution')}
+              label={t('contribution')}
               type="number"
               step="0.0001"
               min="0"
@@ -218,12 +223,12 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
                 maxLength: 12,
                 min: {
                   value: 1,
-                  message: 'Invalid amount'
+                  message: t('contribution-invalid')
                 }
               })}
             />
             <Input
-              label={t('Funding goal')}
+              label={t('goal')}
               type="number"
               step="0.0001"
               min="0"
@@ -241,26 +246,27 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
               {...register('goal', { required: true, maxLength: 12 })}
             />
             <Input
-              label={t('Recipient')}
+              label={t('recipient')}
               type="text"
               placeholder="0x3A5bd...5e3"
               {...register('recipient', {
                 required: true,
                 pattern: {
                   value: /^0x[a-fA-F0-9]{40}$/,
-                  message: 'Invalid Ethereum address'
+                  message: t('recipient-invalid')
                 }
               })}
             />
             <TextArea
-              label="Description"
-              placeholder="Tell us more about this project"
+              suppressHydrationWarning
+              label={t('description')}
+              placeholder={t('description-placeholder')}
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 1000 })}
             />
             <FileInput
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
-              label="Image (optional): "
+              label={t('image')}
               accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
@@ -271,7 +277,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
         {error && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>

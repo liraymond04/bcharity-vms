@@ -10,12 +10,14 @@ import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
 import GridRefreshButton from '@/components/Shared/RefreshButton'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
+import i18n from '@/i18n'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePostData from '@/lib/lens-protocol/usePostData'
 import { isPost, OpportunityMetadata } from '@/lib/metadata'
@@ -40,10 +42,15 @@ interface OrgGridTab {
   filter: (data: OpportunityMetadata) => boolean
 }
 
+const keyPrefix = 'components.dashboard.organization.vhr'
+const getTranslation = (key: string) => {
+  return i18n.t(`common:${keyPrefix}.${key}`)
+}
+
 const organizationGridTabs: OrgGridTab[] = [
   {
-    name: 'Active Postings',
-    inactiveString: 'You do not have any active posts.',
+    name: getTranslation('active-posting'),
+    inactiveString: getTranslation('active-inactive'),
     filter: (p) => {
       const d = new Date()
       return (
@@ -54,13 +61,13 @@ const organizationGridTabs: OrgGridTab[] = [
     }
   },
   {
-    name: 'Drafts',
-    inactiveString: 'You do not have any drafts.',
+    name: getTranslation('drafts'),
+    inactiveString: getTranslation('drafts-inactive'),
     filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
   },
   {
-    name: 'Inactive',
-    inactiveString: 'You do not have any inactive posts.',
+    name: getTranslation('inactive'),
+    inactiveString: getTranslation('inactive-inactive'),
     filter: (p) => {
       const d = new Date()
       return (
@@ -73,6 +80,11 @@ const organizationGridTabs: OrgGridTab[] = [
 ]
 
 const OrganizationVHRTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.vhr'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
@@ -248,15 +260,16 @@ const OrganizationVHRTab: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised out of {vhrGoal !== 0 && `out of ${vhrGoal}`}
+                    VHR raised {vhrGoal !== 0 && `out of ${vhrGoal}`}
                   </div>
                 </div>
                 <Link
                   href=""
                   className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
                   onClick={onGoalOpen}
+                  suppressHydrationWarning
                 >
-                  Set a goal
+                  {t('set-goal')}
                 </Link>
                 {vhrGoal !== 0 && (
                   <Progress
@@ -265,8 +278,11 @@ const OrganizationVHRTab: React.FC = () => {
                     className="mt-10 mb-10"
                   />
                 )}
-                <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
-                  Our Cause
+                <div
+                  className="text-2xl font-bold text-black dark:text-white sm:text-4xl"
+                  suppressHydrationWarning
+                >
+                  {t('our-cause')}
                 </div>
                 <div className=" w-full lg:flex mt-5">
                   <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
@@ -328,7 +344,7 @@ const OrganizationVHRTab: React.FC = () => {
                 onClick={onNew}
                 className="flex items-center text-brand-400 mx-4"
               >
-                <span className="mr-2 font-bold">Create Post</span>
+                <span className="mr-2 mt-1 font-bold">{t('create-new')}</span>
                 <PlusCircleIcon className="w-8 text-brand-400" />
               </button>
             </div>
@@ -338,7 +354,7 @@ const OrganizationVHRTab: React.FC = () => {
             >
               {getDisplayedGrid()}
             </div>
-            {error && <Error message="An error occured. Please try again." />}
+            {error && <Error message={e('generic')} />}
           </div>
           <PublishOpportunityModal
             open={publishModalOpen}

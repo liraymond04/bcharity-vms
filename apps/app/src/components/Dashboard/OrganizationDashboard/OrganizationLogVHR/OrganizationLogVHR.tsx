@@ -4,6 +4,7 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import GridRefreshButton from '@/components/Shared/RefreshButton'
@@ -27,6 +28,11 @@ import VHRVerifyCard from './VHRVerifyCard'
 interface IOrganizationLogVHRProps {}
 
 const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.log-vhr'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { createComment } = useCreateComment()
 
   const { currentUser: profile } = useAppPersistStore()
@@ -152,10 +158,11 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
       <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
         <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 dark:border-indigo-900 border-2 ml-10 mr-10 dark:bg-Input">
           <input
+            suppressHydrationWarning
             className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
             type="text"
             value={searchValue}
-            placeholder="Search"
+            placeholder={t('search')}
             onChange={(e) => {
               setSearchValue(e.target.value)
             }}
@@ -168,7 +175,7 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
         <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
           <div className="h-[50px] z-10 ">
             <DashboardDropDown
-              label="Filter:"
+              label={t('filter')}
               options={Array.from(categories)}
               onClick={(c) => {
                 if (c == selectedCategory) setSelectedCategory('')
@@ -230,7 +237,9 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
           )}
           {shouldShowError() && (
             <Error
-              message={`An error occured: ${getErrorMessage()}. Please try again`}
+              message={`${e('generic-front')}${getErrorMessage()}${e(
+                'generic-back'
+              )}`}
             ></Error>
           )}
         </div>

@@ -2,6 +2,7 @@ import { ProfileFragment as Profile } from '@lens-protocol/client'
 import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
@@ -51,6 +52,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   publisher
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.publish-opportunity'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { createPost } = useCreatePost()
 
   const { mutateAsync: upload } = useStorageUpload()
@@ -94,7 +100,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     setIsPending(true)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setError(true)
       setIsPending(false)
       return
@@ -143,7 +149,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
   return (
     <GradientModal
-      title={'Publish New Volunteer Opportunity'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -156,16 +162,18 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Volunteer opportunity name"
-              placeholder="Medical internship"
+              suppressHydrationWarning
+              label={t('name')}
+              placeholder={t('name-placeholder')}
               error={!!errors.name?.type}
               {...register('name', {
                 required: true,
                 maxLength: 100
               })}
             />
+
             <Input
-              label="Start Date"
+              label={t('start-date')}
               type="date"
               placeholder="yyyy-mm-dd"
               min={new Date().toLocaleDateString()}
@@ -184,7 +192,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               }}
             />
             <Input
-              label="End Date"
+              label={t('end-date')}
               type="endDate"
               placeholder="yyyy-mm-dd"
               disabled={!endDateDisabled}
@@ -199,49 +207,42 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               }}
             />
             <Input
-              label="Expected number of hours"
-              type="number"
+              label={t('hours')}
               placeholder="5.5"
-              step="0.1"
-              min="0.1"
               error={!!errors.hoursPerWeek?.type}
               {...register('hoursPerWeek', {
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
-                  message:
-                    'Hours should be a positive number with at most one decimal place'
+                  message: t('hours-invalid')
                 }
               })}
             />
             <Input
-              label="Category"
-              placeholder="Healthcare"
+              suppressHydrationWarning
+              label={t('category')}
+              placeholder={t('category-placeholder')}
               error={!!errors.category?.type}
               {...register('category', { required: true, maxLength: 40 })}
             />
             <Input
-              label="Website (leave empty if not linking to external opportunity)"
+              label={t('website')}
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
               {...register('website', {
                 validate: (url) => {
-                  return (
-                    url == '' ||
-                    validUrl(url) ||
-                    'You must enter a valid website'
-                  )
+                  return url == '' || validUrl(url) || t('website-invalid')
                 }
               })}
             />
             <TextArea
-              label="Activity Description"
-              placeholder="Tell us more about this volunteer opportunity"
+              label={t('description')}
+              placeholder={t('description-placeholder')}
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
             <FileInput
-              label="Image (optional): "
+              label={t('image')}
               accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
@@ -252,7 +253,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
         {error && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>

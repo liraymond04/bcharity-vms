@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
 import Sidebar, { ITabProps } from '@/components/Sidebar/Sidebar'
@@ -21,11 +22,14 @@ export interface IDashboardTab extends ITabProps {
 }
 
 const VolunteerDashboard: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.volunteer.tabs'
+  })
   const [selectedTab, setSelectedTab] = useState(0)
 
   const tabs: IDashboardTab[] = [
     {
-      label: 'Home',
+      label: t('home'),
       icon: <HomeIcon className="inline" />,
       component: <VolunteerHomeTab />
     },
@@ -35,17 +39,17 @@ const VolunteerDashboard: React.FC = () => {
       component: <VolunteerVHRTab />
     },
     {
-      label: 'Projects',
+      label: t('projects'),
       icon: <GlobeIcon className="inline" />,
       component: <VolunteerCausesTab />
     },
     {
-      label: 'Log VHR',
+      label: t('log-vhr'),
       icon: <ClockIcon className="inline" />,
       component: <VolunteerLogHoursTab />
     },
     {
-      label: 'User Settings',
+      label: t('settings'),
       icon: <CogIcon className="inline" />,
       component: <div />,
       redirect: '/settings'

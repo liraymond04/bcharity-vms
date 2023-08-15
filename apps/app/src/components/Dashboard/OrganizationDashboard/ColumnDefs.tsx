@@ -7,6 +7,8 @@ import {
   ITextFilterParams
 } from 'ag-grid-community'
 
+import i18n from '@/i18n'
+
 import CurrencyCell from './CurrencyCell'
 
 export const defaultColumnDef = {
@@ -19,6 +21,11 @@ interface IColumnDefParams {
 }
 
 export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
+  const keyPrefix = 'components.dashboard.organization.column-defs.opportunity'
+  const getTranslation = (key: string) => {
+    return i18n.t(`common:${keyPrefix}.${key}`)
+  }
+
   return [
     {
       field: 'edit',
@@ -46,6 +53,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'name',
+      headerName: getTranslation('name'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -79,6 +87,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     // },
     {
       field: 'startDate',
+      headerName: getTranslation('start-date'),
       filter: 'agDateColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -86,6 +95,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'endDate',
+      headerName: getTranslation('end-date'),
       filter: 'agDateColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -93,6 +103,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'hoursPerWeek',
+      headerName: getTranslation('hours'),
       filter: 'agNumberColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -100,6 +111,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'category',
+      headerName: getTranslation('category'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -107,6 +119,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'website',
+      headerName: getTranslation('website'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -114,6 +127,7 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'description',
+      headerName: getTranslation('description'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -123,6 +137,11 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
 }
 
 export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
+  const keyPrefix = 'components.dashboard.organization.column-defs.cause'
+  const getTranslation = (key: string) => {
+    return i18n.t(`common:${keyPrefix}.${key}`)
+  }
+
   return [
     {
       field: 'edit',
@@ -150,6 +169,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'name',
+      headerName: getTranslation('name'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -157,6 +177,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'category',
+      headerName: getTranslation('category'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -164,6 +185,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'currency',
+      headerName: getTranslation('currency'),
       filter: 'agTextColumnFilter',
       cellRenderer: CurrencyCell,
       filterParams: {
@@ -172,6 +194,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'contribution',
+      headerName: getTranslation('contribution'),
       filter: 'agNumberColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -179,6 +202,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'goal',
+      headerName: getTranslation('goal'),
       filter: 'agNumberColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -186,6 +210,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'recipient',
+      headerName: getTranslation('recipient'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -193,6 +218,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'description',
+      headerName: getTranslation('description'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']
@@ -200,6 +226,7 @@ export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
     },
     {
       field: 'location',
+      headerName: getTranslation('location'),
       filter: 'agTextColumnFilter',
       filterParams: {
         buttons: ['reset', 'apply']

@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
@@ -34,6 +35,11 @@ import PublishCauseModal, {
 import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
 
 const OrganizationCauses: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.causes'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
@@ -190,8 +196,9 @@ const OrganizationCauses: React.FC = () => {
                   href=""
                   className="text-brand-500 hover:text-brand-600 mt-6"
                   onClick={onGoalOpen}
+                  suppressHydrationWarning
                 >
-                  Set a goal
+                  {t('set-goal')}
                 </Link>
 
                 {vhrGoal !== 0 && (
@@ -202,8 +209,11 @@ const OrganizationCauses: React.FC = () => {
                   />
                 )}
 
-                <div className="text-2xl mt-10 font-bold text-black dark:text-white sm:text-4xl">
-                  Our Cause
+                <div
+                  className="text-2xl mt-10 font-bold text-black dark:text-white sm:text-4xl"
+                  suppressHydrationWarning
+                >
+                  {t('our-cause')}
                 </div>
                 <div className=" w-full lg:flex mt-5">
                   <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
@@ -278,35 +288,35 @@ const OrganizationCauses: React.FC = () => {
               )}
             </div>
             {error && <Error message="An error occured. Please try again." />}
+            <PublishCauseModal
+              open={publishModalOpen}
+              onClose={onPublishClose}
+              publisher={profile}
+              currencyData={currencyData}
+            />
+            <DeleteCauseModal
+              open={deleteModalOpen}
+              onClose={onDeleteClose}
+              publisher={profile}
+              id={currentDeleteId}
+              postData={data}
+              values={getFormDefaults(currentDeleteId)}
+              currencyData={currencyData}
+            />
+            <ModifyCauseModal
+              open={modifyModalOpen}
+              onClose={onModifyClose}
+              publisher={profile}
+              id={currentModifyId}
+              currencyData={currencyData}
+              defaultValues={getFormDefaults(currentModifyId)}
+            />
+            <GoalModal
+              open={GoalModalOpen}
+              onClose={onGoalClose}
+              publisher={profile}
+            />
           </div>
-          <PublishCauseModal
-            open={publishModalOpen}
-            onClose={onPublishClose}
-            publisher={profile}
-            currencyData={currencyData}
-          />
-          <DeleteCauseModal
-            open={deleteModalOpen}
-            onClose={onDeleteClose}
-            publisher={profile}
-            id={currentDeleteId}
-            postData={data}
-            values={getFormDefaults(currentDeleteId)}
-            currencyData={currencyData}
-          />
-          <ModifyCauseModal
-            open={modifyModalOpen}
-            onClose={onModifyClose}
-            publisher={profile}
-            id={currentModifyId}
-            currencyData={currencyData}
-            defaultValues={getFormDefaults(currentModifyId)}
-          />
-          <GoalModal
-            open={GoalModalOpen}
-            onClose={onGoalClose}
-            publisher={profile}
-          />
         </Card>
       </GridItemTwelve>
     </GridLayout>

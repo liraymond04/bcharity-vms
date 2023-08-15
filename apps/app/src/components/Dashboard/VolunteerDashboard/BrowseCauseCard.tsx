@@ -33,7 +33,7 @@ const BrowseCauseCard: React.FC<IBrowseCardProps> = ({ cause, post }) => {
         <MediaRenderer
           src={cause.imageUrl}
           className="!object-cover !h-[200px]"
-          alt="Volunteer opportunity related picture"
+          alt="Cause related picture"
         />
       )
     }

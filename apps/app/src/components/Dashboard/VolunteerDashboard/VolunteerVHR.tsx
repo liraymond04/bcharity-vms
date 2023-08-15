@@ -6,6 +6,7 @@ import {
 } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import ClearFilters from '@/components/Shared/ClearFilters'
@@ -29,6 +30,11 @@ import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerVHRTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.volunteer.vhr'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { currentUser: profile } = useAppPersistStore()
   const { currentUser } = useAppPersistStore()
   const [posts, setPosts] = useState<OpportunityMetadata[]>([])
@@ -116,8 +122,9 @@ const VolunteerVHRTab: React.FC = () => {
                   href=""
                   className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
                   onClick={onGoalOpen}
+                  suppressHydrationWarning
                 >
-                  Set a goal
+                  {t('set-goal')}
                 </Link>
                 {vhrGoal !== 0 && (
                   <Progress
@@ -138,7 +145,7 @@ const VolunteerVHRTab: React.FC = () => {
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="Search"
+              placeholder={t('search')}
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -151,7 +158,7 @@ const VolunteerVHRTab: React.FC = () => {
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
-                label="Filter:"
+                label={t('filter')}
                 options={Array.from(categories)}
                 onClick={(c) => setSelectedCategory(c)}
                 selected={selectedCategory}
@@ -167,7 +174,9 @@ const VolunteerVHRTab: React.FC = () => {
 
           {postDataError && (
             <Error
-              message={`An error occured: ${postDataError}. Please try again`}
+              message={`${e('generic-front')}${postDataError}${e(
+                'generic-back'
+              )}`}
             />
           )}
         </div>
@@ -185,7 +194,7 @@ const VolunteerVHRTab: React.FC = () => {
                   imageSrc={op.imageUrl}
                   avatarSrc={getAvatar(op.from)}
                   name={op.name}
-                  buttonText="APPLY"
+                  buttonText={t('apply')}
                   buttonHref={op.website ?? '.'}
                 />
               ))

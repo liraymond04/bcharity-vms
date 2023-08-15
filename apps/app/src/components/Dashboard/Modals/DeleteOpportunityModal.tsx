@@ -1,5 +1,6 @@
 import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { FileInput } from '@/components/UI/FileInput'
@@ -30,6 +31,10 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   values,
   postData
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.delete-opportunity'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [publicationIds, setPublicationIds] = useState<string[]>([])
 
   const [pending, setPending] = useState(false)
@@ -51,7 +56,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
     setPending(false)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setPending(false)
       return
     }
@@ -84,7 +89,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
 
   return (
     <GradientModal
-      title={'Delete Volunteer Opportunity'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
       onSubmit={onSubmit}
@@ -93,44 +98,32 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
       <div className="mx-12">
         {!pending ? (
           <>
-            <Input
-              label="Volunteer opportunity name"
-              value={values.name}
-              disabled
-            />
+            <Input label={t('name')} value={values.name} disabled />
 
             <Input
-              label="Start Date"
+              label={t('start-date')}
               type="date"
               value={values.startDate}
               disabled
             />
             <Input
-              label="End Date"
+              label={t('end-date')}
               type="endDate"
               value={values.endDate}
               disabled
             />
-            <Input
-              label="Expected number of hours"
-              value={values.hoursPerWeek}
-              disabled
-            />
-            <Input label="Category" value={values.category} disabled />
-            <Input
-              label="Website (leave empty if not linking to external opportunity)"
-              value={values.website}
-              disabled
-            />
+            <Input label={t('hours')} value={values.hoursPerWeek} disabled />
+            <Input label={t('category')} value={values.category} disabled />
+            <Input label={t('website')} value={values.website} disabled />
             <TextArea
-              label="Activity Description"
+              label={t('description')}
               value={values.description}
               disabled
             />
             <FileInput
               defaultImageIPFS={values.imageUrl ?? ''}
               disabled
-              label="Image (optional): "
+              label={t('image')}
               accept="image/*"
             />
           </>
@@ -140,7 +133,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
 
         {!!errorMessage && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>
