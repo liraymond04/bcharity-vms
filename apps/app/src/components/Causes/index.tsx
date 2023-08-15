@@ -11,6 +11,7 @@ import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 
+import Error from '../Dashboard/Modals/Error'
 import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
 import ClearFilters from '../Shared/ClearFilters'
@@ -20,6 +21,7 @@ import CauseCard from './CauseCard'
 
 const Causes: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
@@ -111,9 +113,9 @@ const Causes: NextPage = () => {
         </GridLayout>
       )}
       {exploreError && (
-        <div className="text-sm text-center" suppressHydrationWarning>
-          {t('something-wrong')}
-        </div>
+        <Error
+          message={`${e('generic-front')}${exploreError}${e('generic-back')}`}
+        />
       )}
     </>
   )

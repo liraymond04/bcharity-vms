@@ -32,10 +32,7 @@ export interface CreatePostParams {
  */
 
 const useCreatePost = () => {
-  const { t: e } = useTranslation('common', {
-    keyPrefix: 'errors'
-  })
-
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const sdk = useSDK()
   const { mutateAsync: upload } = useStorageUpload()
 
