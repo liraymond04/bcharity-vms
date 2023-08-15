@@ -34,7 +34,7 @@ const ApplyToOpportunityModal: FC = () => {
         <div className="flex items-center justify-left w-full mt-8 ">
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-left w-2/3 h-26 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="flex flex-col items-center justify-left w-2/3 h-26 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-accent-content dark:hover:bg-bray-800 dark:bg-base-100 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg

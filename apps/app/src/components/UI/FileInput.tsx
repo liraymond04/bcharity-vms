@@ -101,9 +101,9 @@ export const FileInput = forwardRef<HTMLInputElement, Props>(function Input(
         className={`${clsx(
           { '!border-red-500 placeholder-red-500': error },
           {
-            'opacity-60 bg-gray-500 bg-opacity-20': props.disabled
+            'opacity-60 bg-base-100 bg-opacity-20': props.disabled
           },
-          'rounded-xl bg-white dark:bg-front border border-gray-300 dark:border-gray-700/80',
+          'rounded-xl bg-accent-content dark:bg-front border border-gray-300 dark:border-gray-700/80',
           className
         )} flex min-w-0`}
       >

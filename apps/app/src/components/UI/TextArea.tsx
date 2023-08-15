@@ -43,7 +43,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(function Input(
           id={id}
           className={clsx(
             { '!border-red-500 placeholder-red-500': error },
-            'bg-white dark:bg-front border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
+            'bg-accent-content dark:bg-front border border-gray-300 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400 disabled:opacity-60 disabled:bg-gray-500 disabled:bg-opacity-20 outline-none w-full',
             className
           )}
           ref={ref}

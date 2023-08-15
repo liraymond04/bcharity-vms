@@ -19,7 +19,7 @@ const VolunteerInfo: NextPage = () => {
                 />
 
                 <div className="h-[60vh] ml-10">
-                  <div className=" w-full mt-16 h-36 border bg-white border-gray-400 dark:border-black rounded-md">
+                  <div className=" w-full mt-16 h-36 border bg-accent-content border-gray-400 dark:border-black rounded-md">
                     <div className="w-full font-semibold text-gray-600 text-xl">
                       <div className="inset-0 flex justify-left items-center ml-5 mt-4">
                         <img
@@ -66,7 +66,7 @@ const VolunteerInfo: NextPage = () => {
                       {' '}
                       About:{' '}
                     </div>
-                    <div className=" w-full mt-5 h-36 border bg-white border-gray-400 dark:border-black rounded-md">
+                    <div className=" w-full mt-5 h-36 border bg-accent-content border-gray-400 dark:border-black rounded-md">
                       <div className="w-full font-medium text-gray-600 text-xl p-4">
                         Volunteer description goes here
                       </div>
