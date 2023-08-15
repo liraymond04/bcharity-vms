@@ -118,7 +118,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
       await checkAuth(publisher.ownedBy)
       const createPostResult = await createPost({
-        profileId: publisher.ownedBy,
+        profileId: publisher.id,
         metadata
       })
 
