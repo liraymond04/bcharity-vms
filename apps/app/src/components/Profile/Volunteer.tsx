@@ -90,7 +90,7 @@ const Volunteer: NextPage = () => {
                     </div>
 
                     <div className="min-h-[calc(100vh-800px)] mx-10">
-                      <div className="w-full py-4 pl-4 pr-8 border bg-white dark:darkgradient border-gray-400 dark:border-black rounded-md">
+                      <div className="w-full py-4 pl-4 pr-8 border bg-accent-content dark:darkgradient border-gray-400 dark:border-black rounded-md">
                         <div className="w-full font-semibold text-gray-600 dark:text-white text-xl flex flex-col space-y-2">
                           <div className="flex items-center mx-4 w-full">
                             <UserIcon className="h-6 w-6 mb-1 mr-2" />{' '}
@@ -187,7 +187,7 @@ const Volunteer: NextPage = () => {
                         <div className="mt-10 mb-4 font-semibold text-2xl">
                           About:
                         </div>
-                        <div className="bg-white dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
+                        <div className="bg-accent-content dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
                           <div className="w-full text-gray-600 dark:text-white text-xl p-5">
                             {profile.bio}
                           </div>

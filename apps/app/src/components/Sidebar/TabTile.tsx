@@ -23,7 +23,7 @@ const TabTitle: React.FC<ITabTitleProps> = ({
   return (
     <div>
       <div
-        className={`relative bg-white ${
+        className={`relative bg-accent-content ${
           selected ? 'bg-opacity-30' : 'bg-opacity-0'
         } ${className ? '' : 'hover:bg-opacity-20'} ${
           label != '' && 'hover:cursor-pointer'
