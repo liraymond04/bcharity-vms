@@ -22,15 +22,6 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
       publicationId
     })
 
-  // custom hook
-  // { bookmarked }, value is whether bookmarked or not, set on useEffect of hook
-  //                 get latest comments under publication by currentuser to get bookmark value (custom post type and tag)
-  //                 hide to unbookmark, (so if no publications found from those filters, then bookmarked = false)
-  // { createBookmarkedPublication }, create comment under publication ID
-  //                                  set metadata (doesn't need forms like the others, most is hardcoded)
-  // { hideBookmarkedPublication }, check if has a publication after filters (custom post type and tag)
-  //                                hide the publication if it exists
-
   useEffect(() => {
     if (error) toast.error(error?.message)
   }, [error])

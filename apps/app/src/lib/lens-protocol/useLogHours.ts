@@ -29,10 +29,26 @@ export interface UseLogHoursParams {
 
 import { useTranslation } from 'react-i18next'
 /**
- * A react hook to handle making VHR log requests
+ * A react hook to handle making VHR log requests with a comment
  *
  * @param params The params for the requests
  * @returns
+ * @example A log hours button
+ * // Adapted from LogHoursButton.tsx
+ * ```
+ * const { error, isLoading, logHours } = useLogHours({
+ *   publicationId,
+ *   organizationId
+ * })
+ * // ...
+ * const onSubmit = async (formData: IVhrVerificationFormProps) => {
+ *   await logHours(
+ *     currentUser,
+ *     formData.hoursToVerify,
+ *     formData.comments,
+ *     onCancel
+ *   )
+ * }
  */
 const useLogHours = (params: UseLogHoursParams) => {
   const [error, setError] = useState<string>()

@@ -42,6 +42,46 @@ export interface UseBookmarkParams {
  * refetch - a way to refetch the bookmark data \
  * addBookmark - function to call to book mark the post. Throws errors if the post is already bookmarked or the currentUser is null \
  * removeBookmark - a way to refetch the bookmark data. Throws error if the currentUser is null
+ *
+ * @example Bookmark example
+ * ```
+ * // Adapted from BookmarkButton.tsx
+ * const { bookmarked, error, isLoading, addBookmark, removeBookmark } =
+ *   useBookmark({
+ *     postTag,
+ *     profile: currentUser,
+ *     publicationId
+ *   })
+ *
+ * return (
+ *   <button
+ *     disabled={isLoading}
+ *     onClick={() => {
+ *       if (bookmarked) {
+ *         removeBookmark()
+ *       } else {
+ *         addBookmark().then((result) => {
+ *           if (result?.isFailure()) {
+ *             console.log(result.error)
+ *           }
+ *         })
+ *       }
+ *     }}
+ *   >
+ *     {isLoading ? (
+ *       <Spinner size="sm" />
+ *     ) : (
+ *       <div className="transition duration-100 hover:scale-125">
+ *         {bookmarked ? (
+ *           <BookmarkSolid className="w-6 inline mb-1" />
+ *         ) : (
+ *           <BookmarkIcon className="w-6 inline mb-1" />
+ *         )}
+ *       </div>
+ *     )}
+ *   </button>
+ * )
+ * ```
  */
 const useBookmark = (params: UseBookmarkParams) => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })

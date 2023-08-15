@@ -16,12 +16,6 @@ export interface UseFollowParams {
   followerAddress: string
 }
 
-//  * @returns `following` - whether or not the `followerAddress` follows the `profileId` \
-//  *          `error` - the error message if an error occured when fetching the follow data, or attempting to (un)follow a user \
-//  *    `     `isLoading` - whether or not the follow data is being fetched or if the hook is attempting to (un)follow a user \
-//  *          `followUser`- a function to follow a user \
-//  *          `unfollowUser` - a function to unfollow a user
-
 /**
  * React hook to handle following-relating fetching and actions. Requires authentication beforehand.
  *
@@ -29,6 +23,36 @@ export interface UseFollowParams {
  * , {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#createFollowTypedData | createFollowTypedData}
  * , {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#createUnfollowTypedData | createUnfollowTypedData}
  * @param params Params for the hook
+ * @returns `following` - whether or not the followerAddress follows the profileId \
+ *          `error` - the error message if an error occured when fetching the follow data, or attempting to (un)follow a user \
+ *          `isLoading` - whether or not the follow data is being fetched or if the hook is attempting to (un)follow a user \
+ *          `followUser`- a function to follow a user \
+ *          `unfollowUser` - a function to unfollow a user
+ * @example A follow button
+ *  // Adapted from FollowButton.tsx
+ *  const { following, isLoading, error, followUser, unfollowUser } = useFollow({
+ *    followerAddress: currentUser?.ownedBy ?? '',
+ *    profileId: followId
+ *  })
+ *  ...
+ *  return (
+ *    <Button
+ *      disabled={isLoading}
+ *      onClick={() => {
+ *        if (!currentUser) return
+ *        checkAuth(currentUser.ownedBy).then(() => {
+ *          if (following) {
+ *            unfollowUser(currentUser.ownedBy, followId)
+ *          } else {
+ *            followUser(currentUser.ownedBy, followId)
+ *          }
+ *        })
+ *      }}
+ *    >
+ *      {following ? t('unfollow') : t('follow')}
+ *    </Button>
+ *  )
+ *
  */
 const useFollow = (params: UseFollowParams) => {
   const [following, setFollowing] = useState<boolean>()
