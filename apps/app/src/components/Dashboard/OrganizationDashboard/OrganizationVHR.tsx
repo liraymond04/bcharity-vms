@@ -33,6 +33,40 @@ import PublishOpportunityModal, {
 import VHRGoalModal from '../Modals/VHRGoalModal'
 import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
+interface ITab {
+  name: string
+  filter: (data: OpportunityMetadata) => boolean
+}
+
+const tabs: ITab[] = [
+  {
+    name: 'Active Postings',
+    filter: (p) => {
+      const d = new Date()
+      return (
+        p.type === PostTags.OrgPublish.Opportunity &&
+        (!p.endDate ||
+          p.endDate > `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`)
+      )
+    }
+  },
+  {
+    name: 'Drafts',
+    filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
+  },
+  {
+    name: 'Inactive',
+    filter: (p) => {
+      const d = new Date()
+      return (
+        p.type === PostTags.OrgPublish.Opportunity &&
+        !!p.endDate &&
+        p.endDate < `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+      )
+    }
+  }
+]
+
 const OrganizationVHRTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
@@ -46,6 +80,8 @@ const OrganizationVHRTab: React.FC = () => {
   })
 
   const [postMetadata, setPostMetadata] = useState<OpportunityMetadata[]>([])
+
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
@@ -229,16 +265,29 @@ const OrganizationVHRTab: React.FC = () => {
             )}
           </div>
 
-          <div className="p-5">
-            <button
-              onClick={onNew}
-              className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
-            >
-              <PlusSmIcon className="w-8 text-white" />
-              <div className="text-white mr-3 mt-1 font-bold">
-                Create new opportunity
-              </div>
-            </button>
+          <div className="px-5">
+            <div className="flex items-center">
+              {tabs.map((v, i) => {
+                return (
+                  <p
+                    key={i}
+                    onClick={() => setSelectedTabIndex(i)}
+                    className="px-3 cursor-pointer bg-white border border-zinc-400"
+                  >
+                    {v.name}
+                  </p>
+                )
+              })}
+              <button
+                onClick={onNew}
+                className="ml-auto flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
+              >
+                <PlusSmIcon className="w-8 text-white" />
+                <div className="text-white mr-3 mt-1 font-bold">
+                  Create new opportunity
+                </div>
+              </button>
+            </div>
             <div
               className={gridTheme}
               style={{ height: '800px', width: '90%' }}
@@ -248,7 +297,7 @@ const OrganizationVHRTab: React.FC = () => {
               ) : (
                 <AgGridReact
                   defaultColDef={defaultColumnDef}
-                  rowData={postMetadata}
+                  rowData={postMetadata.filter(tabs[selectedTabIndex].filter)}
                   columnDefs={makeOrgVHRColumnDefs({
                     onEditClick: onEdit,
                     onDeleteClick: onDelete
@@ -259,32 +308,32 @@ const OrganizationVHRTab: React.FC = () => {
               )}
             </div>
             {error && <Error message="An error occured. Please try again." />}
-            <PublishOpportunityModal
-              open={publishModalOpen}
-              onClose={onPublishClose}
-              publisher={profile}
-            />
-            <ModifyOpportunityModal
-              open={modifyModalOpen}
-              onClose={onModifyClose}
-              publisher={profile}
-              id={currentModifyId}
-              defaultValues={getFormDefaults(currentModifyId)}
-            />
-            <DeleteOpportunityModal
-              open={deleteModalOpen}
-              onClose={onDeleteClose}
-              publisher={profile}
-              id={currentDeleteId}
-              postData={data}
-              values={getFormDefaults(currentDeleteId)}
-            />
-            <VHRGoalModal
-              open={GoalModalOpen}
-              onClose={onGoalClose}
-              publisher={profile}
-            />
           </div>
+          <PublishOpportunityModal
+            open={publishModalOpen}
+            onClose={onPublishClose}
+            publisher={profile}
+          />
+          <ModifyOpportunityModal
+            open={modifyModalOpen}
+            onClose={onModifyClose}
+            publisher={profile}
+            id={currentModifyId}
+            defaultValues={getFormDefaults(currentModifyId)}
+          />
+          <DeleteOpportunityModal
+            open={deleteModalOpen}
+            onClose={onDeleteClose}
+            publisher={profile}
+            id={currentDeleteId}
+            postData={data}
+            values={getFormDefaults(currentDeleteId)}
+          />
+          <VHRGoalModal
+            open={GoalModalOpen}
+            onClose={onGoalClose}
+            publisher={profile}
+          />
         </Card>
       </GridItemTwelve>
     </GridLayout>
