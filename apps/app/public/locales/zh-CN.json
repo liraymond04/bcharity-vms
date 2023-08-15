@@ -370,5 +370,8 @@
   "components.profile.volunteer.followers": "关注者：",
   "components.profile.volunteer.posts": "帖子：",
   "components.profile.volunteer.raised": "VHR 筹集了：",
-  "components.profile.volunteer.about": "关于："
+  "components.profile.volunteer.about": "关于：",
+  "components.vhrs.top-holders": "顶级 VHR 持有者",
+  "components.vhrs.volunteers": "志愿者",
+  "components.vhrs.organizations": "组织机构"
 }
