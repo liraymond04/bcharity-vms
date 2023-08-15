@@ -3,8 +3,8 @@ import {
   ProfileFragment,
   PublicationFragment
 } from '@lens-protocol/client'
-import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import FormDropdown from '@/components/Shared/FormDropdown'
 import GradientModal from '@/components/Shared/Modal/GradientModal'
@@ -40,6 +40,10 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   postData,
   currencyData
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.delete-cause'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [publicationIds, setPublicationIds] = useState<string[]>([])
 
   const [pending, setPending] = useState(false)
@@ -64,7 +68,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
     setPending(false)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setPending(false)
       return
     }
@@ -96,7 +100,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   }
   return (
     <GradientModal
-      title={'Delete Volunteer Opportunity'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
       onSubmit={onSubmit}
@@ -105,13 +109,17 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
       <div className="mx-12">
         {!pending ? (
           <>
-            <Input label="Project name" defaultValue={values.name} disabled />
+            <Input label={t('name')} defaultValue={values.name} disabled />
 
-            <Input label="Category" defaultValue={values.category} disabled />
+            <Input
+              label={t('category')}
+              defaultValue={values.category}
+              disabled
+            />
 
             <FormDropdown
               disabled
-              label={t('Selected currency')}
+              label={t('selected-currency')}
               options={currencyData?.map((c) => c.name) ?? []}
               defaultValue={
                 currencyData?.find((c) => c.address === values.currency)
@@ -121,7 +129,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
 
             <Input
               disabled
-              label={t('Contribution')}
+              label={t('contribution')}
               type="number"
               step="0.0001"
               min="0"
@@ -144,7 +152,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
             />
             <Input
               disabled
-              label={t('Funding goal')}
+              label={t('goal')}
               type="number"
               step="0.0001"
               min="0"
@@ -160,15 +168,15 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
               }
               value={values.goal}
             />
-            <Input label={t('Recipient')} value={values.recipient} disabled />
+            <Input label={t('recipient')} value={values.recipient} disabled />
             <TextArea
-              label="Activity Description"
+              label={t('description')}
               value={values.description}
               disabled
             />
             <FileInput
               defaultImageIPFS={values.imageUrl ?? ''}
-              label="Image (optional): "
+              label={t('image')}
               accept="image/*"
               disabled
             />
@@ -179,7 +187,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
 
         {!!errorMessage && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>

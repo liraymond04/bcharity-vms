@@ -2,6 +2,7 @@ import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
@@ -35,6 +36,11 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
   onClose,
   publisher
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.vhr-goal'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { createPost } = useCreatePost()
 
   const [isPending, setIsPending] = useState<boolean>(false)
@@ -50,15 +56,6 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
     formState: { errors }
   } = form
 
-  const validUrl = (url: string) => {
-    try {
-      new URL(url)
-      return true
-    } catch (e) {
-      return false
-    }
-  }
-
   const onCancel = () => {
     reset()
     onClose(false)
@@ -69,7 +66,7 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
     setIsPending(true)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setError(true)
       setIsPending(false)
       return
@@ -88,7 +85,7 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
 
     try {
       await checkAuth(publisher.ownedBy)
-      await createPost({ profileId: publisher.ownedBy, metadata })
+      await createPost({ profileId: publisher.id, metadata })
 
       reset()
       onClose(true)
@@ -101,7 +98,7 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
 
   return (
     <GradientModal
-      title={'Set New Goal'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -114,7 +111,7 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Set a Goal"
+              label={t('goal')}
               type="number"
               placeholder="100"
               step="0.1"
@@ -124,14 +121,13 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
-                  message:
-                    'Goal should be a positive number with zero decimal places'
+                  message: t('goal-error')
                 }
               })}
             />
 
             <Input
-              label="Goal Date"
+              label={t('date')}
               type="date"
               placeholder="yyyy-mm-dd"
               {...register('goalDate', {})}
@@ -143,7 +139,7 @@ const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
 
         {error && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>

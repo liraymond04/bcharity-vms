@@ -6,6 +6,7 @@ import {
 } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import ClearFilters from '@/components/Shared/ClearFilters'
@@ -21,11 +22,17 @@ import testSearch from '@/lib/search'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
+import Error from '../Modals/Error'
 import GoalModal from '../Modals/GoalModal'
 import BrowseCauseCard from './BrowseCauseCard'
 import DashboardDropDown from './DashboardDropDown'
 
 const VolunteerCauses: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.volunteer.causes'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -126,8 +133,9 @@ const VolunteerCauses: React.FC = () => {
                   href=""
                   className="text-brand-500 hover:text-brand-600"
                   onClick={onGoalOpen}
+                  suppressHydrationWarning
                 >
-                  Set a goal
+                  {t('set-goal')}
                 </Link>
                 {donationGoal !== 0 && (
                   <Progress
@@ -136,15 +144,22 @@ const VolunteerCauses: React.FC = () => {
                     className="mt-10 mb-10"
                   />
                 )}
-                {Number(data?.value) < donationGoal ? (
-                  <div className="text-2xl  font-semibold text-black dark:text-white sm:text-2x l">
-                    {donationGoal - Number(data?.value)} away from goal!
-                  </div>
-                ) : (
-                  <div className="text-2xl  font-semibold text-black dark:text-white sm:text-2xl">
-                    Reached goal!
-                  </div>
-                )}
+                {donationGoal !== 0 &&
+                  (Number(data?.value) < donationGoal ? (
+                    <div
+                      className="text-2xl  font-semibold text-black dark:text-white sm:text-2x l"
+                      suppressHydrationWarning
+                    >
+                      {donationGoal - Number(data?.value)} {t('away')}
+                    </div>
+                  ) : (
+                    <div
+                      className="text-2xl  font-semibold text-black dark:text-white sm:text-2xl"
+                      suppressHydrationWarning
+                    >
+                      {t('reached')}
+                    </div>
+                  ))}
               </>
             )}
           </div>
@@ -153,12 +168,12 @@ const VolunteerCauses: React.FC = () => {
 
       <GridItemTwelve>
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
+          <div className="flex justify-between w-[300px] h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="Search"
+              placeholder={t('search')}
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -171,7 +186,7 @@ const VolunteerCauses: React.FC = () => {
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
-                label="Filter:"
+                label={t('filter')}
                 options={Array.from(categories)}
                 onClick={(c) => setSelectedCategory(c)}
                 selected={selectedCategory}
@@ -180,7 +195,7 @@ const VolunteerCauses: React.FC = () => {
             <ClearFilters onClick={() => setSelectedCategory('')} />
           </div>
 
-          {postDataError && <h1>error</h1>}
+          {postDataError && <Error message={e('generic')} />}
         </div>
         <div className="flex flex-wrap justify-around">
           {!loading ? (

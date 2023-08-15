@@ -20,6 +20,8 @@
     "profile-null": "Provided profile is null!",
     "already-bookmarked": "Publication has already been bookmarked!",
     "generic": "An unknown error occured. Please try again.",
+    "generic-front": "An error occurred: ",
+    "generic-back": ". Please try again.",
     "profiles": "Could not get profiles!"
   },
   "components": {
@@ -65,6 +67,203 @@
         "p7": "In order to provide you with a great experience on this site we provide the functionality to set your preferences for how this site runs when you use it. In order to remember your preferences we need to set cookies so that this information can be called whenever you interact with a page is affected by your preferences.",
         "h6": "Contact Us",
         "p8": "If you have any questions about our Cookie Collection Policy, please do not hesitate to contact us at admin@bcharity.net."
+      }
+    },
+    "dashboard": {
+      "modals": {
+        "delete-cause": {
+          "title": "Delete Project",
+          "name": "Project name",
+          "category": "Category",
+          "selected-currency": "Selected currency",
+          "contribution": "Contribution",
+          "goal": "Funding goal",
+          "recipient": "Recipient",
+          "description": "Activity Description",
+          "image": "Image (optional): "
+        },
+        "delete-opportunity": {
+          "title": "Delete Volunteer Opportunity",
+          "name": "Volunteer opportunity name",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "hours": "Expected number of hours",
+          "category": "Category",
+          "website": "Website (leave empty if not linking to external opportunity)",
+          "description": "Activity Description",
+          "image": "Image (optional): "
+        },
+        "goal": {
+          "title": "Set New Goal",
+          "goal": "Set a Goal",
+          "goal-error": "Goal should be a positive number with zero decimal places",
+          "date": "Goal Date"
+        },
+        "modify-cause": {
+          "title": "Modify Project",
+          "name": "Project name",
+          "name-placeholder": "Medical internship",
+          "category": "Category",
+          "category-placeholder": "Healthcare",
+          "selected-currency": "Selected currency",
+          "contribution": "Contribution",
+          "contribution-invalid": "Invalid amount",
+          "goal": "Funding goal",
+          "recipient": "Recipient",
+          "recipient-invalid": "Invalid Ethereum address",
+          "description": "Description",
+          "description-placeholder": "Tell use more about this project",
+          "image": "Image (optional): "
+        },
+        "modify-opportunity": {
+          "title": "Modify Volunteer Opportunity",
+          "name": "Volunteer opportunity name",
+          "name-placeholder": "Medical internship",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "hours": "Expected number of hours",
+          "hours-invalid": "Hours should be a positive number with at most one decimal place",
+          "category": "Category",
+          "category-placeholder": "Healthcare",
+          "website": "Website (leave empty if not linking to external opportunity)",
+          "website-invalid": "You must enter a valid website",
+          "description": "Activity Description",
+          "description-placeholder": "Tell use more about this volunteer oppoortunity",
+          "image": "Image (optional): "
+        },
+        "publish-cause": {
+          "title": "Publish Project",
+          "name": "Project name",
+          "name-placeholder": "Medical internship",
+          "category": "Category",
+          "category-placeholder": "Healthcare",
+          "selected-currency": "Selected currency",
+          "contribution": "Contribution",
+          "contribution-invalid": "Invalid amount",
+          "goal": "Funding goal",
+          "recipient": "Recipient",
+          "recipient-invalid": "Invalid Ethereum address",
+          "description": "Description",
+          "description-placeholder": "Tell use more about this project",
+          "image": "Image (optional): "
+        },
+        "publish-opportunity": {
+          "title": "Publish Volunteer Opportunity",
+          "name": "Volunteer opportunity name",
+          "name-placeholder": "Medical internship",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "hours": "Expected number of hours",
+          "hours-invalid": "Hours should be a positive number with at most one decimal place",
+          "category": "Category",
+          "category-placeholder": "Healthcare",
+          "website": "Website (leave empty if not linking to external opportunity)",
+          "website-invalid": "You must enter a valid website",
+          "description": "Activity Description",
+          "description-placeholder": "Tell use more about this volunteer oppoortunity",
+          "image": "Image (optional): "
+        },
+        "vhr-goal": {
+          "title": "Set New Goal",
+          "goal": "Set a Goal",
+          "goal-error": "Goal should be a positive number with zero decimal places",
+          "date": "Goal Date"
+        }
+      },
+      "organization": {
+        "log-vhr": {
+          "detail-card": {
+            "request-made": "Request made on"
+          },
+          "search": "Search",
+          "filter": "Filter: ",
+          "refresh": "Refresh"
+        },
+        "column-defs": {
+          "opportunity": {
+            "name": "Name",
+            "start-date": "Start Date",
+            "end-date": "End Date",
+            "hours": "Hours Per Week",
+            "category": "Category",
+            "website": "Website",
+            "description": "Description"
+          },
+          "cause": {
+            "name": "Name",
+            "category": "Category",
+            "currency": "Currency",
+            "contribution": "Contribution",
+            "goal": "Funding goal",
+            "recipient": "Recipient",
+            "description": "Description",
+            "location": "Location"
+          }
+        },
+        "causes": {
+          "set-goal": "Set a goal",
+          "our-cause": "Our Cause",
+          "create-new": "Create new project"
+        },
+        "tabs": {
+          "home": "Home",
+          "projects": "Projects",
+          "verify": "Verify VHR",
+          "settings": "User Settings"
+        },
+        "home": {
+          "id": "ID: ",
+          "followers": "Followers: ",
+          "following": "Following: ",
+          "about": "About"
+        },
+        "vhr": {
+          "set-goal": "Set a goal",
+          "our-cause": "Our Cause",
+          "create-new": "Create Post",
+          "active-posting": "Active Postings",
+          "active-inactive": "You do not have any active posts.",
+          "drafts": "Drafts",
+          "drafts-inactive": "You do not have any drafts.",
+          "inactive": "Inactive",
+          "inactive-inactive": "You do not have any inactive posts."
+        }
+      },
+      "volunteer": {
+        "causes": {
+          "set-goal": "Set a goal",
+          "away": "away from goal!",
+          "reached": "Reached goal!",
+          "search": "Search",
+          "filter": "Filter: "
+        },
+        "tabs": {
+          "home": "Home",
+          "projects": "Projects",
+          "log-vhr": "Log VHR",
+          "settings": "User Settings"
+        },
+        "home": {
+          "id": "ID: ",
+          "followers": "Followers: ",
+          "following": "Following: ",
+          "about": "About"
+        },
+        "log-hours": {
+          "sort-by": "Sort By:",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "total-hours": "Total Hours",
+          "filters": "Filters:",
+          "present": "Present",
+          "hours-in-total": "hours in total"
+        },
+        "vhr": {
+          "set-goal": "Set a goal",
+          "search": "Search",
+          "filter": "Filter:",
+          "apply": "APPLY"
+        }
       }
     },
     "privacy-policy": {
@@ -255,6 +454,11 @@
       "uniswap": {
         "not-enough": "You don't have enough",
         "swap": "Swap in Uniswap"
+      },
+      "ui": {
+        "input": {
+          "ongoing": "Ongoing"
+        }
       }
     }
   },

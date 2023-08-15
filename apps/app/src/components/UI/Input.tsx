@@ -31,7 +31,9 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
   ref
 ) {
   const id = useId()
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.ui.input'
+  })
 
   const [checked, setChecked] = useState<boolean>(false)
 
@@ -73,8 +75,12 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
                     props.onChange(e)
                   }}
                 />
-                <label className="ml-2" style={{ position: 'relative' }}>
-                  {t('Ongoing')}
+                <label
+                  className="ml-2"
+                  style={{ position: 'relative' }}
+                  suppressHydrationWarning
+                >
+                  {t('ongoing')}
                 </label>
               </>
             )}
