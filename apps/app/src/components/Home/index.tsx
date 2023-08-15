@@ -99,9 +99,7 @@ const Home: NextPage = () => {
           ) : (
             <div className="flex flex-wrap items-stretch justify-between">
               <div className="mx-auto">
-                <h1 className="dark:text-white text-2xl font-bold">
-                  Browse Organizations
-                </h1>
+                <h1 className="text-2xl font-bold">Browse Organizations</h1>
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {profiles.map((profile, index) => (
@@ -115,9 +113,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="mx-auto">
-                <h1 className="dark:text-white text-2xl font-bold">
-                  Browse Opportunities
-                </h1>
+                <h1 className=" text-2xl font-bold">Browse Opportunities</h1>
                 <Divider className="w-full" />
                 <div className="flex flex-col max-h-screen overflow-auto">
                   {posts.map((post) => (

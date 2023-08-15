@@ -8,8 +8,8 @@ import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
+import { formatLocation } from '@/lib/formatLocation'
 import getAvatar from '@/lib/getAvatar'
-import { formatLocation } from '@/lib/lens-protocol/formatLocation'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import usePublication from '@/lib/lens-protocol/usePublication'
 import {
@@ -35,12 +35,14 @@ import SEO from '../utils/SEO'
 const CausePage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const { data, loading, fetch, error } = usePublication()
   const {
     query: { id },
-    isReady,
     asPath
   } = useRouter()
+
+  const { data, loading, error } = usePublication({
+    publicationId: Array.isArray(id) ? '' : id
+  })
 
   const [wrongPostType, setWrongPostType] = useState(false)
   const [malformedMetadata, setMalformedMetadata] = useState(false)
@@ -60,12 +62,6 @@ const CausePage: NextPage = () => {
       }
     }
   }, [data])
-
-  useEffect(() => {
-    if (isReady && id) {
-      fetch({ publicationId: Array.isArray(id) ? '' : id })
-    }
-  }, [id, isReady])
 
   const [totalDonatedIsLoading, setTotalDonatedIsLoading] =
     useState<boolean>(false)
@@ -154,6 +150,8 @@ const CausePage: NextPage = () => {
       toast.success('Copied url to clipboard')
     }
 
+    if (!cause || !data || !isPost(data)) return <Spinner />
+
     return (
       <div className="p-6">
         <div className="flex justify-between items-center">
@@ -162,7 +160,7 @@ const CausePage: NextPage = () => {
               publicationId={cause.post_id}
               postTag={PostTags.Bookmark.Cause}
             />
-            <div className="text-5xl font-bold text-black dark:text-white p-2 bg-purple-300 dark:bg-indigo-950 rounded-lg">
+            <div className="text-5xl font-bold p-2 bg-purple-300 dark:bg-info-content rounded-lg">
               {cause.name}
             </div>
             <div className="text-3xl text-gray-400 font-bold pl-5">
@@ -175,8 +173,8 @@ const CausePage: NextPage = () => {
             <div className="flex space-x-3 items-center mt-8">
               <div className="flex flex-row">
                 <FollowButton followId={cause.from.id} size="lg" />
-                <div className="ml-5 mt-1 text-xl">
-                  Status: Accepting Donations
+                <div className="ml-5 mt-1 text-xl" suppressHydrationWarning>
+                  {t('status')}
                 </div>
               </div>
             </div>
@@ -185,7 +183,7 @@ const CausePage: NextPage = () => {
               <div>
                 <MediaRenderer
                   key="attachment"
-                  className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                  className="object-cover h-50 rounded-lg"
                   src={cause.imageUrl}
                   alt={'image attachment'}
                 />
@@ -197,20 +195,22 @@ const CausePage: NextPage = () => {
                 src={getAvatar(cause.from)}
                 alt="Rounded avatar"
               />
-              <div className="text-xl font-semibold text-gray-600 dark:text-white">
-                {cause.from.handle} is organizing this fundraiser
+              <div
+                className="text-xl font-semibold text-gray-600 dark:text-white"
+                suppressHydrationWarning
+              >
+                {cause.from.handle} {t('organizing')}
               </div>
             </div>
-            <div className="mt-10 text-3xl font-bold ">About Organization:</div>
+            <div className="mt-10 text-3xl font-bold " suppressHydrationWarning>
+              {t('about')}
+            </div>
 
-            <div className="pt-6 pb-4 mr-10 text-xl font-semibold text-gray-600 dark:text-white">
-              dolor sit amet, consectetur adipiscing elit. Donec purus tellus,
-              condimentum sit amet quam at, placerat cursus nulla. Etiam ex
-              nibh, maximus ut egestas quis, gravida sit amet orci. Maecenas
-              interdum est eget blandit venenatis. Aenean vulputate semper. quam
-              at, placerat cursus nulla. Etiam ex nibh, maximus ut egestas quis,
-              gravida sit amet orci. quam at, placerat cursus nulla. Etiam ex
-              nibh, maximus ut egestas quis, gravida sit amet orci.
+            <div
+              className="pt-6 pb-4 mr-10 text-xl font-semibold text-gray-600 dark:text-white"
+              suppressHydrationWarning
+            >
+              {cause.description}
             </div>
 
             <DonateButton
@@ -220,11 +220,14 @@ const CausePage: NextPage = () => {
               cause={cause}
             />
             <Button size="lg" className="mr-10 ml-56" onClick={copyToClipboard}>
-              Share
+              {t('share')}
             </Button>
 
-            <div className="text-3xl font-semibold text-gray-800 dark:text-white mt-10">
-              Organizer
+            <div
+              className="text-3xl font-semibold text-gray-800 dark:text-white mt-10"
+              suppressHydrationWarning
+            >
+              {t('organizer')}
             </div>
             <div className="flex flex-row">
               <div className="text-2xl font-semibold text-gray-600 dark:text-white">
@@ -233,8 +236,11 @@ const CausePage: NextPage = () => {
               </div>
             </div>
             <button className="  mt-6 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 dark:text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-              <span className="relative w-32 px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                Contact
+              <span
+                className="relative w-32 px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                suppressHydrationWarning
+              >
+                {t('contact')}
               </span>
             </button>
           </div>
@@ -277,7 +283,7 @@ const CausePage: NextPage = () => {
                 className="mr-10 mt-5 h-12 w-5/6 ml-8"
                 onClick={copyToClipboard}
               >
-                Share
+                {t('share')}
               </Button>
             </div>
           </div>

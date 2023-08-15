@@ -3,7 +3,8 @@ import { ICity, ICountry, IState } from 'country-state-city'
 
 export enum OpportunityMetadataVersion {
   '1.0.0' = '1.0.0',
-  '1.0.1' = '1.0.1'
+  '1.0.1' = '1.0.1',
+  '1.0.2' = '1.0.2'
 }
 
 export enum CauseMetadataVersion {

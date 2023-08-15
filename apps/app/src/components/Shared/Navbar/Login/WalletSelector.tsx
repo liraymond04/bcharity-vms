@@ -43,7 +43,10 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
   const [loginErrorMessage, setLoginErrorMessage] = useState<string>('')
   const [profiles, _setProfiles] = useState<Profile[]>()
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar.login.wallet-selector'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
 
   const onConnect = async (connector: Connector) => {
     try {
@@ -81,7 +84,7 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
           const profiles = await getProfilesOwnedBy(address)
           _setProfiles(profiles)
         } else {
-          setLoginErrorMessage('Could not get profiles')
+          setLoginErrorMessage(e('profiles'))
           setLoginError(true)
         }
       } catch (e: any) {
@@ -121,7 +124,7 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
           }
           onClick={() => onLoginClick(activeConnector)}
         >
-          {t('Sign-In with Lens')}
+          {t('sign-in')}
         </Button>
       ) : (
         <SwitchNetwork />
@@ -154,10 +157,13 @@ const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
                 : false
             }
           >
-            <span className="flex justify-between items-center w-full">
+            <span
+              className="flex justify-between items-center w-full"
+              suppressHydrationWarning
+            >
               {mounted
                 ? connector.id === 'injected'
-                  ? t('Browser Wallet')
+                  ? t('browser')
                   : connector.name
                 : connector.name}
               {mounted ? !connector.ready && ' (unsupported)' : ''}

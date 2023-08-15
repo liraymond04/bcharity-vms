@@ -9,7 +9,9 @@ import Create from './Create'
 const Login: FC = () => {
   const [hasConnected, setHasConnected] = useState<boolean>(false)
   const [hasProfile, setHasProfile] = useState<boolean>(true)
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.shared.navbar.login'
+  })
 
   return (
     <div className="p-5">
@@ -17,24 +19,20 @@ const Login: FC = () => {
         <div className="space-y-5">
           {hasConnected ? (
             <div className="space-y-1">
-              <div className="text-xl font-bold">
-                {t('Please sign the message.')}
+              <div className="text-xl font-bold" suppressHydrationWarning>
+                {t('sign')}
               </div>
-              <div className="text-sm text-gray-500">
-                {t(
-                  "BCharity uses this signature to verify that you're the owner of this address."
-                )}
+              <div className="text-sm text-gray-500" suppressHydrationWarning>
+                {t('verify')}
               </div>
             </div>
           ) : (
             <div className="space-y-1">
-              <div className="text-xl font-bold">
-                {t('Connect your wallet.')}
+              <div className="text-xl font-bold" suppressHydrationWarning>
+                {t('connect')}
               </div>
-              <div className="text-sm text-gray-500">
-                {t(
-                  'Connect with one of our available wallet providers or create a new one.'
-                )}
+              <div className="text-sm text-gray-500" suppressHydrationWarning>
+                {t('providers')}
               </div>
             </div>
           )}
@@ -53,22 +51,25 @@ const Login: FC = () => {
               src={`${STATIC_ASSETS}/brands/lens.png`}
               alt="Logo"
             />
-            <div className="text-xl font-bold">Claim your Lens profile 🌿</div>
+            <div className="text-xl font-bold" suppressHydrationWarning>
+              {t('claim')}
+            </div>
             <div className="space-y-1">
-              <div className="linkify">
-                Visit{' '}
+              <div className="linkify" suppressHydrationWarning>
+                {t('visit')}{' '}
                 <Link
                   className="font-bold"
                   href="http://claim.lens.xyz"
                   target="_blank"
                   rel="noreferrer noopener"
+                  suppressHydrationWarning
                 >
-                  claiming site
+                  {t('claiming-site')}
                 </Link>{' '}
-                to claim your profile now 🏃‍♂️
+                {t('finish-claim')}
               </div>
-              <div className="text-sm text-gray-500">
-                Make sure to check back here when done!
+              <div className="text-sm text-gray-500" suppressHydrationWarning>
+                {t('return')}
               </div>
             </div>
           </div>

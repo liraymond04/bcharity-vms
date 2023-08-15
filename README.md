@@ -4,6 +4,10 @@
 
 BCharity is a community-driven, decentralized, and permissionless public good Web3.0 built on blockchains.
 
+## Contributing translations
+
+If you would like to contribute translations, sign up for a Github account and visit the [inlang web editor](https://inlang.com/editor/github.com/liraymond04/bcharity-vms) for this repository.
+
 ## Project
 
 The frontend is using [Next.js](https://nextjs.org/) to provide tooling and configuration for React.

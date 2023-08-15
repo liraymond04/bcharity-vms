@@ -29,6 +29,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(function Input(
           <div className="font-medium text-gray-800 dark:text-gray-200">
             <label
               style={{ width: '500px', float: 'right', marginRight: '-400px' }}
+              suppressHydrationWarning
             >
               {label}
             </label>

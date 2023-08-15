@@ -127,7 +127,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
       </div>
 
       <div
-        className={` w-fit overflow-scroll ${
+        className={` w-fit text-ellipsis overflow-hidden ${
           displayIndex == -1 ? 'max-h-[470px]' : 'max-h-[250px]'
         } `}
       >
@@ -154,7 +154,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
                   }}
                 >
                   <div className="flex justify-between items-center ml-10">
-                    <p className="mx-5 w-[200px] h-[30px] overflow-scroll whitespace-nowrap">
+                    <p className="mx-5 w-[200px] h-[30px] text-ellipsis overflow-hidden whitespace-nowrap">
                       {metaData[op].name}
                     </p>
                     <p className="mx-5 w-[100px]">{metaData[op].startDate}</p>
@@ -199,7 +199,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
             </div>
             <div className="flex items-center mx-5 mt-2 whitespace-nowrap">
               <ClockIcon className="w-4 h-4 mr-2" />{' '}
-              <div className="overflow-x-scroll w-fit max-w-[200px]">
+              <div className="text-ellipsis overflow-hidden w-fit max-w-[200px]">
                 {metaData[displayIndex].hoursPerWeek}
               </div>
               <div className="ml-2">hours in total</div>
@@ -211,7 +211,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
           </div>
           <div className="h-[250px] self-center w-[2px] bg-[#D8C0EC]"></div>
           <div className="flex justify-around w-[400px]">
-            <div className="w-[350px] mt-5 mb-5 overflow-scroll">
+            <div className="w-[350px] mt-5 mb-5 text-ellipsis overflow-hidden">
               {metaData[displayIndex].description}
             </div>
           </div>
