@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { FC, useState } from 'react'
 import React from 'react'
 
+import { TextArea } from '../UI/TextArea'
+
 export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
   <Link href={href} {...rest}>
     {children}
@@ -24,14 +26,14 @@ const ApplyToOpportunityModal: FC = () => {
       size="lg"
       onClose={() => setShowModal(false)}
     >
-      <div className="pl-10">
+      <div className="px-10 py-4 flex flex-col space-y-4">
         <div className="flex flex-row ">
           <div className="text-purple-500 text-5xl font-bold">
             Apply to Opportunity
           </div>
         </div>
-        <div className="text-3xl font-semibold mt-10">Upload Resume</div>
-        <div className="flex items-center justify-left w-full mt-8 ">
+        <div className="text-3xl font-semibold">Upload Resume</div>
+        <div className="flex items-center justify-left w-full">
           <label
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-left w-2/3 h-26 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -61,19 +63,19 @@ const ApplyToOpportunityModal: FC = () => {
             <input id="dropzone-file" type="file" className="hidden" />
           </label>
         </div>
-        <div className="mb-6">
+        <div className="">
           <label
             htmlFor="large-input"
-            className="block mb-2 text-3xl font-semibold mt-8 text-gray-900 dark:text-white"
+            className="block mb-2 text-3xl font-semibold"
           >
             Description
           </label>
-          <textarea className="resize-y w-11/12 rounded-md dark:text-black"></textarea>
+          <TextArea placeholder={'Add a description here'} />
         </div>
       </div>
       <div className="flex items-center justify-center">
         {' '}
-        <Button className=" shrink-0 text-2xl  mt-8 mb-12 w-52 h-16  align-middle">
+        <Button className=" shrink-0 text-2xl my-5 w-52 h-16 align-middle">
           Submit
         </Button>
       </div>
