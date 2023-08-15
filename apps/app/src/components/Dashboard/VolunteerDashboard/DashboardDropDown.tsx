@@ -24,7 +24,7 @@ const DashboardDropDown: React.FC<Props> = ({
       <div className={`${open && 'shadow-2xl'}`}>
         <div
           onClick={() => setOpen(!open)}
-          className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-white dark:bg-Input border-[1px]  ${
+          className={`flex w-[200px] h-[50px] justify-between items-center hover:cursor-pointer bg-accent-content dark:bg-Input border-[1px]  ${
             open
               ? 'rounded-t-md border-violet-300 border-b-gray-300'
               : 'rounded-md'
@@ -42,7 +42,7 @@ const DashboardDropDown: React.FC<Props> = ({
         {open &&
           options.map((value, index) => (
             <div
-              className={`flex items-center w-[200px] h-[35px] justify-around bg-white dark:bg-Input border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 hover:border-l-[5px] hover:border-l-purple-800 dark:hover:border-l-purple-300 cursor-pointer  ${
+              className={`flex items-center w-[200px] h-[35px] justify-around bg-accent-content dark:bg-Input border-b-[1px] border-l-[1px] border-r-[1px] border-violet-300 border-b-gray-300 hover:bg-gray-200 hover:border-l-[5px] hover:border-l-purple-800 dark:hover:border-l-purple-300 cursor-pointer  ${
                 index == options.length - 1
                   ? 'rounded-b-md border-b-violet-300'
                   : ''

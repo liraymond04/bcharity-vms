@@ -24,7 +24,7 @@ const Contact: NextPage = () => {
         <div className="container mx-auto px-40 py-8">
           <form
             className="rounded-lg shadow-l flex flex-col px-8 py-8 
-          bg-white dark:bg-black outline outline-1 outline-gray-200 outline-offset-2"
+            bg-accent-content dark:bg-base-300 outline outline-1 outline-gray-200 outline-offset-2"
           >
             <h1
               className="text-2xl font-bold dark:text-gray-50 text-center"

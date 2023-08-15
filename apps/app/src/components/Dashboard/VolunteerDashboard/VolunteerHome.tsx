@@ -183,7 +183,7 @@ const VolunteerHome: React.FC = () => {
                                     className={`p-5 ${
                                       index !== postdata.length - 1 &&
                                       'border-b'
-                                    } dark:border-black border-gray-400 lg:border-gray-400 bg-white dark:bg-slate-600 flex flex-col justify-between leading-normal w-full`}
+                                    } dark:border-black border-gray-400 lg:border-gray-400 bg-accent-content dark:bg-base-100 flex flex-col justify-between leading-normal w-full`}
                                   >
                                     <div className="mb-8">
                                       <div className="text-gray-900 dark:text-white font-bold text-xl mb-2">
