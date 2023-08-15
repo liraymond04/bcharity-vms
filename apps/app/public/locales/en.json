@@ -18,11 +18,15 @@
     "metadata-upload-fail": "Metadata upload failed!",
     "user-null": "Current user is null!",
     "profile-null": "Provided profile is null!",
+    "profile-fetch-fail": "Profile not fetched!",
+    "profile-username-invalid": "Invalid profile username!",
     "already-bookmarked": "Publication has already been bookmarked!",
     "generic": "An unknown error occured. Please try again.",
     "generic-front": "An error occurred: ",
     "generic-back": ". Please try again.",
-    "profiles": "Could not get profiles!"
+    "profiles": "Could not get profiles!",
+    "expected-organization": "Profile is not an organization!",
+    "expected-volunteer": "Profile is not a volunteer!"
   },
   "components": {
     "causes": {
@@ -298,6 +302,20 @@
       "p17": "Your continued use of our Services confirms your acceptance of our Privacy Policy, as amended. If you do not agree to our Privacy Policy, as amended, you must stop using our Services. We recommend that you visit this page frequently to check for changes.",
       "p18": "Contact Us",
       "p19": "If you have any questions about our Privacy Policy, please do nothesitate to contact us at admin@bcharity.net."
+    },
+    "profile": {
+      "organization": {
+        "followers": "Followers: ",
+        "posts": "Posts: ",
+        "raised": "VHR Raised: ",
+        "about": "About: "
+      },
+      "volunteer": {
+        "followers": "Followers: ",
+        "posts": "Posts: ",
+        "raised": "VHR Raised: ",
+        "about": "About: "
+      }
     },
     "tos": {
       "tos": "Terms of Service",

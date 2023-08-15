@@ -358,5 +358,17 @@
   "components.organizations.title": "浏览组织",
   "components.organizations.card.pfp": "的头像",
   "components.organizations.card.postings": "发帖",
-  "components.organizations.card.location": "地点"
+  "components.organizations.card.location": "地点",
+  "errors.profile-fetch-fail": "未获取个人资料！",
+  "errors.profile-username-invalid": "个人资料用户名无效！",
+  "errors.expected-organization": "个人资料不是一个组织！",
+  "errors.expected-volunteer": "简介不是志愿者！",
+  "components.profile.organization.followers": "关注者：",
+  "components.profile.organization.posts": "帖子：",
+  "components.profile.organization.raised": "VHR 筹集了：",
+  "components.profile.organization.about": "关于：",
+  "components.profile.volunteer.followers": "关注者：",
+  "components.profile.volunteer.posts": "帖子：",
+  "components.profile.volunteer.raised": "VHR 筹集了：",
+  "components.profile.volunteer.about": "关于："
 }
