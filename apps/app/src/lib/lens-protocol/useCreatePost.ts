@@ -22,8 +22,8 @@ export interface CreatePostParams {
 
 /**
  * A hook that wraps createPostTypedData {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#createPostTypedData}
- * to simply allow for metadata upload with the thirdweb storage react hooks sdk,
- * to automatically sign and broadcast the result.
+ * to simplify to process of metadata upload with the thirdweb storage react hooks sdk,
+ * signing, and broadcasting the transaction
  *
  * It is necessary to check authentication with {@link checkAuth} before running
  * createPost to prevent authentication errors
