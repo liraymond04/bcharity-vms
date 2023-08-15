@@ -32,7 +32,9 @@ const NFTPicture: FC<Props> = ({ profile }) => {
     formState: { errors }
   } = form
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.home.nft-picture'
+  })
   const [chainId, setChainId] = useState<number>(
     IS_MAINNET ? polygon.id : polygonMumbai.id
   )
@@ -98,12 +100,14 @@ const NFTPicture: FC<Props> = ({ profile }) => {
       {error && (
         <ErrorMessage
           className="mb-3"
-          title="Transaction failed!"
+          title={t('transaction-failed')}
           error={error}
         />
       )}
       <div>
-        <div className="label">{t('Chain')}</div>
+        <div className="label" suppressHydrationWarning>
+          {t('chain')}
+        </div>
         <div>
           <select
             className="w-full bg-white rounded-xl border border-gray-300 outline-none dark:bg-gray-800 disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
@@ -117,7 +121,8 @@ const NFTPicture: FC<Props> = ({ profile }) => {
         </div>
       </div>
       <Input
-        label={t('Contract address')}
+        suppressHydrationWarning
+        label={t('contract-address')}
         type="text"
         placeholder="0x277f5959e22f94d5bd4c2cc0a77c4c71f31da3ac"
         error={!!errors.contractAddress?.type}
@@ -130,12 +135,13 @@ const NFTPicture: FC<Props> = ({ profile }) => {
           required: true,
           pattern: {
             value: /^0x[a-fA-F0-9]{40}$/,
-            message: 'Invalid Ethereum address'
+            message: t('invalid-address')
           }
         })}
       />
       <Input
-        label={t('Token Id')}
+        suppressHydrationWarning
+        label={t('token-id')}
         type="text"
         placeholder="1"
         error={!!errors.tokenId?.type}
@@ -163,7 +169,7 @@ const NFTPicture: FC<Props> = ({ profile }) => {
             )
           }
         >
-          {t('Save')}
+          {t('save')}
         </Button>
       </div>
     </Form>

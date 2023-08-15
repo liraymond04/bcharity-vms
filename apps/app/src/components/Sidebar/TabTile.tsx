@@ -34,7 +34,11 @@ const TabTitle: React.FC<ITabTitleProps> = ({
       >
         <div className={`${open ? 'pr-2 w-6' : 'w-6'}`}>{icon}</div>
 
-        {open && <p className={`text-[20px] font-sans`}>{label}</p>}
+        {open && (
+          <p className={`text-[20px] font-sans`} suppressHydrationWarning>
+            {label}
+          </p>
+        )}
         {open && selected && (
           <span className="absolute h-12 bg-blue-800 -right-1 w-1 z-10" />
         )}

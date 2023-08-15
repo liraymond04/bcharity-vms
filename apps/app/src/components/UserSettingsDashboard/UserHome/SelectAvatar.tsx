@@ -13,7 +13,9 @@ import NFTPicture from './NFTPicture'
 import Picture from './Picture'
 
 const SelectAvatar: FC = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.home.select-avatar'
+  })
   const { currentUser } = useAppPersistStore()
 
   const [profile, _setProfile] = useState<ProfileFragment>()
@@ -52,7 +54,9 @@ const SelectAvatar: FC = () => {
       )}
     >
       {icon}
-      <div className="hidden sm:block">{name}</div>
+      <div className="hidden sm:block" suppressHydrationWarning>
+        {name}
+      </div>
     </button>
   )
 
@@ -65,12 +69,12 @@ const SelectAvatar: FC = () => {
           <TypeButton
             icon={<PhotographIcon className="w-5 h-5" />}
             type="AVATAR"
-            name={t('Upload avatar')}
+            name={t('upload-avatar')}
           />
           <TypeButton
             icon={<PhotographIcon className="w-5 h-5" />}
             type="NFT"
-            name={t('NFT Avatar')}
+            name={t('nft-avatar')}
           />
         </div>
         {settingsType === 'NFT' ? (
