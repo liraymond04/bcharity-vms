@@ -236,6 +236,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
               placeholder="5"
               {...register('contribution', {
                 required: true,
+                maxLength: 12,
                 min: {
                   value: 1,
                   message: 'Invalid amount'
@@ -258,7 +259,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
                 />
               }
               placeholder="420"
-              {...register('goal', { required: true })}
+              {...register('goal', { required: true, maxLength: 12 })}
             />
             <Input
               label={t('Recipient')}
