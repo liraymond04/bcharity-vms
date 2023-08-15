@@ -11,7 +11,7 @@ interface Props {
 
 const Column: FC<Props> = ({ label, data, isLoading }) => {
   return (
-    <div className="flex flex-col shrink w-[450px] mx-2 h-[550px] bg-[#F9F9F9] dark:bg-[#18004A] rounded-lg mt-10">
+    <div className="flex flex-col shrink w-[450px] mx-2 h-[550px] bg-accent-content dark:bg-info-content rounded-lg mt-10">
       <div className="text-2xl text-[#626262] dark:text-[#E2E2E2] my-5 mx-auto w-fit h-fit">
         {label}
       </div>

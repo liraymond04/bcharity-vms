@@ -57,7 +57,7 @@ export const Modal: FC<Props> = ({
                 { 'sm:max-w-5xl': size === 'lg' },
                 { 'sm:max-w-3xl': size === 'md' },
                 { 'sm:max-w-lg': size === 'sm' },
-                'inline-block align-bottom bg-white dark:bg-Card text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full rounded-xl'
+                'inline-block align-bottom bg-accent-content dark:bg-Card text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full rounded-xl'
               )}
             >
               <div className="flex justify-between items-center py-3.5 px-5 custom-divider">
@@ -67,7 +67,7 @@ export const Modal: FC<Props> = ({
                 </div>
                 <button
                   type="button"
-                  className="p-1 text-gray-800 rounded-full dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700"
+                  className="p-1 text-gray-800 rounded-full dark:text-gray-100 hover:bg-accent-content dark:hover:bg-base-100"
                   onClick={onClose}
                 >
                   <XIcon className="w-5 h-5" />
