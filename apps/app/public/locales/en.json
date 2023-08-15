@@ -266,6 +266,16 @@
         }
       }
     },
+    "organizations": {
+      "title": "Browse Organizations",
+      "search": "Search",
+      "filters": "Filters:",
+      "card": {
+        "pfp": "'s profile picture",
+        "postings": "postings",
+        "location": "LOCATION"
+      }
+    },
     "privacy-policy": {
       "title": "Privacy Policy",
       "updated-on": "Updated July 12th, 2023",

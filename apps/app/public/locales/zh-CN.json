@@ -352,5 +352,11 @@
   "components.shared.switch-network.toast": "换钱包",
   "components.shared.uniswap.not-enough": "你还不够",
   "components.shared.uniswap.swap": "在 Uniswap 中交换",
-  "components.shared.ui.input.ongoing": "进行中"
+  "components.shared.ui.input.ongoing": "进行中",
+  "components.organizations.search": "搜索",
+  "components.organizations.filters": "过滤器:",
+  "components.organizations.title": "浏览组织",
+  "components.organizations.card.pfp": "的头像",
+  "components.organizations.card.postings": "发帖",
+  "components.organizations.card.location": "地点"
 }
