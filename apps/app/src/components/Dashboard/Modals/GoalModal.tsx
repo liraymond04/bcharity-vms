@@ -2,6 +2,7 @@ import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { Form } from '@/components/UI/Form'
@@ -35,6 +36,11 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
   onClose,
   publisher
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.goal'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { createPost } = useCreatePost()
 
   const [isPending, setIsPending] = useState<boolean>(false)
@@ -60,7 +66,7 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
     setIsPending(true)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setError(true)
       setIsPending(false)
       return
@@ -89,7 +95,7 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
 
   return (
     <GradientModal
-      title={'Set New Goal'}
+      title={'title'}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -102,7 +108,7 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Set a Goal"
+              label={t('goal')}
               type="number"
               placeholder="100"
               step="0.1"
@@ -112,14 +118,13 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
-                  message:
-                    'Goal should be a positive number with zero decimal places'
+                  message: t('goal-error')
                 }
               })}
             />
 
             <Input
-              label="Goal Date"
+              label={t('date')}
               type="date"
               placeholder="yyyy-mm-dd"
               {...register('goalDate', {})}
@@ -131,7 +136,7 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
 
         {error && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>

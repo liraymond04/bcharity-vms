@@ -6,11 +6,13 @@ import {
 } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
+import { useTranslation } from 'react-i18next'
 
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
 const useCreatePost = () => {
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const sdk = useSDK()
   const { mutateAsync: upload } = useStorageUpload()
 
@@ -28,7 +30,7 @@ const useCreatePost = () => {
       (await upload({ data: [metadata] }))[0]
     )
 
-    if (!contentURI) throw 'Metadata upload failed'
+    if (!contentURI) throw e('metadata-upload-fail')
 
     console.log(contentURI)
     // create a post via dispatcher, you need to have the dispatcher enabled for the profile

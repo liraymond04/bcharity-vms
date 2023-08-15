@@ -2,6 +2,7 @@ import { ProfileFragment } from '@lens-protocol/client'
 import { useStorageUpload } from '@thirdweb-dev/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
 import { FileInput } from '@/components/UI/FileInput'
@@ -36,6 +37,11 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   publisher,
   defaultValues
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.modals.modify-opportunity'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { createPost } = useCreatePost()
 
   const { mutateAsync: upload } = useStorageUpload()
@@ -60,6 +66,15 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     formState: { errors }
   } = form
 
+  const validUrl = (url: string) => {
+    try {
+      new URL(url)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
   const onCancel = () => {
     clearErrors()
     reset(defaultValues)
@@ -73,7 +88,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     setIsPending(true)
 
     if (!publisher) {
-      setErrorMessage('No publisher provided')
+      setErrorMessage(e('profile-null'))
       setError(true)
       setIsPending(false)
       return
@@ -114,9 +129,13 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     setIsPending(false)
   }
 
+  const [minDate, setMinDate] = useState<string>(
+    new Date().toLocaleDateString()
+  )
+
   return (
     <GradientModal
-      title={'Modify Volunteer Opportunity'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
       onSubmit={handleSubmit((data) => onSubmit(data))}
@@ -129,8 +148,9 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             onSubmit={() => handleSubmit((data) => onSubmit(data))}
           >
             <Input
-              label="Volunteer opportunity name"
-              placeholder="Medical internship"
+              suppressHydrationWarning
+              label={t('name')}
+              placeholder={t('name-placeholder')}
               error={!!errors.name?.type}
               {...register('name', {
                 required: true,
@@ -139,19 +159,30 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             />
 
             <Input
-              label="Start Date"
+              label={t('start-date')}
               type="date"
               placeholder="yyyy-mm-dd"
-              error={!!errors.endDate?.type}
+              min={new Date().toLocaleDateString()}
+              error={!!errors.startDate?.type}
               {...register('startDate', {
                 required: true
               })}
+              onChange={(e) => {
+                if (
+                  Date.parse(form.getValues('endDate')) <
+                  Date.parse(e.target.value)
+                ) {
+                  resetField('endDate')
+                }
+                setMinDate(e.target.value)
+              }}
             />
             <Input
-              label="End Date"
+              label={t('end-date')}
               type="endDate"
               placeholder="yyyy-mm-dd"
               disabled={!endDateDisabled}
+              min={minDate}
               error={!!errors.endDate?.type}
               {...register('endDate', {})}
               onChange={(e) => {
@@ -162,39 +193,43 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               }}
             />
             <Input
-              label="Expected number of hours"
+              label={t('hours')}
               placeholder="5.5"
               error={!!errors.hoursPerWeek?.type}
               {...register('hoursPerWeek', {
                 required: true,
                 pattern: {
                   value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
-                  message:
-                    'Hours should be a positive number with at most one decimal place'
+                  message: t('hours-invalid')
                 }
               })}
             />
             <Input
-              label="Category"
-              placeholder="Healthcare"
+              suppressHydrationWarning
+              label={t('category')}
+              placeholder={t('category-placeholder')}
               error={!!errors.category?.type}
               {...register('category', { required: true, maxLength: 40 })}
             />
             <Input
-              label="Website (leave empty if not linking to external opportunity)"
+              label={t('website')}
               placeholder="https://ecssen.ca/opportunity-link"
               error={!!errors.website?.type}
-              {...register('website')}
+              {...register('website', {
+                validate: (url) => {
+                  return url == '' || validUrl(url) || t('website-invalid')
+                }
+              })}
             />
             <TextArea
-              label="Activity Description"
-              placeholder="Tell us more about this volunteer opportunity"
+              label={t('description')}
+              placeholder={t('description-placeholder')}
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
             <FileInput
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
-              label="Image (optional): "
+              label={t('image')}
               accept="image/*"
               onChange={(e) => setImage(e.target.files?.[0] || null)}
             />
@@ -205,7 +240,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
         {error && (
           <Error
-            message={`An error occured: ${errorMessage}. Please try again.`}
+            message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
       </div>
