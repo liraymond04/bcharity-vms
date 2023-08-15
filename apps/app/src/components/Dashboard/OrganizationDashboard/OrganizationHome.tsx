@@ -187,7 +187,7 @@ const OrganizationHome: React.FC = () => {
 
                     <div className="h-[60vh]">
                       <div className="mt-20 font-semibold text-lg">About:</div>
-                      <div className=" bg-teal-50  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
+                      <div className=" bg-accent-content  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
                         {currentUser.bio}
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Sed ac elementum tellus. Aenean tristique est et nisi
