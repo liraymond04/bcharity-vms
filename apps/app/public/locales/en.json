@@ -381,6 +381,16 @@
       "volunteers": "Volunteers",
       "organizations": "Organizations"
     },
+    "volunteers": {
+      "apply-to-opportunity-modal": {
+        "title": "Apply to Opportunity",
+        "upload": "Upload Resume",
+        "click-to-upload": "Click to upload",
+        "drag-and-drop": "or drag and drop",
+        "description": "Description",
+        "submit": "Submit"
+      }
+    },
     "site-layout": {
       "warning": "Warning: Some functionality may not work without cookies",
       "body": "We use cookies to improve your browsing experience, save your preferences and collect information on how you use our website. You can decline these cookies for a less personalized experience. For more information about cookies, please see our ",
