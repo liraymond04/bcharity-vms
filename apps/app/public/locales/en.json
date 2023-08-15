@@ -169,6 +169,95 @@
           "goal-error": "Goal should be a positive number with zero decimal places",
           "date": "Goal Date"
         }
+      },
+      "organization": {
+        "log-vhr": {
+          "detail-card": {
+            "request-made": "Request made on"
+          },
+          "search": "Search",
+          "filter": "Filter: ",
+          "refresh": "Refresh"
+        },
+        "column-defs": {
+          "opportunity": {
+            "name": "Name",
+            "start-date": "Start Date",
+            "end-date": "End Date",
+            "hours": "Hours Per Week",
+            "category": "Category",
+            "website": "Website",
+            "description": "Description"
+          },
+          "cause": {
+            "name": "Name",
+            "category": "Category",
+            "currency": "Currency",
+            "contribution": "Contribution",
+            "goal": "Funding goal",
+            "recipient": "Recipient",
+            "description": "Description",
+            "location": "Location"
+          }
+        },
+        "causes": {
+          "set-goal": "Set a goal",
+          "our-cause": "Our Cause",
+          "create-new": "Create new project"
+        },
+        "tabs": {
+          "home": "Home",
+          "projects": "Projects",
+          "verify": "Verify VHR",
+          "settings": "User Settings"
+        },
+        "home": {
+          "id": "ID: ",
+          "followers": "Followers: ",
+          "following": "Following: ",
+          "about": "About"
+        },
+        "vhr": {
+          "set-goal": "Set a goal",
+          "our-cause": "Our Cause",
+          "create-new": "Create new opportunity"
+        }
+      },
+      "volunteer": {
+        "causes": {
+          "set-goal": "Set a goal",
+          "away": "away from goal!",
+          "reached": "Reached goal!",
+          "search": "Search",
+          "filter": "Filter: "
+        },
+        "tabs": {
+          "home": "Home",
+          "projects": "Projects",
+          "log-vhr": "Log VHR",
+          "settings": "User Settings"
+        },
+        "home": {
+          "id": "ID: ",
+          "followers": "Followers: ",
+          "following": "Following: ",
+          "about": "About"
+        },
+        "log-hours": {
+          "sort-by": "Sort By:",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "total-hours": "Total Hours",
+          "filters": "Filters:",
+          "present": "Present",
+          "hours-in-total": "hours in total"
+        },
+        "vhr": {
+          "set-goal": "Set a goal",
+          "search": "Search",
+          "filter": "Filter:",
+          "apply": "APPLY"
+        }
       }
     },
     "privacy-policy": {

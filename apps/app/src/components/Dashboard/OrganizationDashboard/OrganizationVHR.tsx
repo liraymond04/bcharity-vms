@@ -10,6 +10,7 @@ import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Progress from '@/components/Shared/Progress'
@@ -34,6 +35,11 @@ import VHRGoalModal from '../Modals/VHRGoalModal'
 import { defaultColumnDef, makeOrgVHRColumnDefs } from './ColumnDefs'
 
 const OrganizationVHRTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.vhr'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
@@ -167,15 +173,16 @@ const OrganizationVHRTab: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised out of {vhrGoal !== 0 && `out of ${vhrGoal}`}
+                    VHR raised {vhrGoal !== 0 && `out of ${vhrGoal}`}
                   </div>
                 </div>
                 <Link
                   href=""
                   className="text-brand-500 hover:text-brand-600 mt-6 ml-10"
                   onClick={onGoalOpen}
+                  suppressHydrationWarning
                 >
-                  Set a goal
+                  {t('set-goal')}
                 </Link>
                 {vhrGoal !== 0 && (
                   <Progress
@@ -184,8 +191,11 @@ const OrganizationVHRTab: React.FC = () => {
                     className="mt-10 mb-10"
                   />
                 )}
-                <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl">
-                  Our Cause
+                <div
+                  className="text-2xl font-bold text-black dark:text-white sm:text-4xl"
+                  suppressHydrationWarning
+                >
+                  {t('our-cause')}
                 </div>
                 <div className=" w-full lg:flex mt-5">
                   <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-teal-50 dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
@@ -235,8 +245,11 @@ const OrganizationVHRTab: React.FC = () => {
               className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
             >
               <PlusSmIcon className="w-8 text-white" />
-              <div className="text-white mr-3 mt-1 font-bold">
-                Create new opportunity
+              <div
+                className="text-white mr-3 mt-1 font-bold"
+                suppressHydrationWarning
+              >
+                {t('create-new')}
               </div>
             </button>
             <div
@@ -258,7 +271,7 @@ const OrganizationVHRTab: React.FC = () => {
                 />
               )}
             </div>
-            {error && <Error message="An error occured. Please try again." />}
+            {error && <Error message={e('generic')} />}
             <PublishOpportunityModal
               open={publishModalOpen}
               onClose={onPublishClose}

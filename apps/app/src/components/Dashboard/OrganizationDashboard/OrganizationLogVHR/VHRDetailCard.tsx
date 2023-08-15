@@ -1,6 +1,7 @@
 import { LinkIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { LogVhrRequestMetadata } from '@/lib/metadata'
 
@@ -9,6 +10,10 @@ interface IVHRDetailCardProps {
 }
 
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.log-vhr.detail-card'
+  })
+
   return (
     <div className="flex h-72 bg-brand-200 dark:bg-Card shadow-md shadow-black px-4 py-3 rounded-md mt-8">
       <div className="flex flex-col grow shrink-0">
@@ -36,7 +41,9 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
           </p>
           <p>{value.hoursToVerify} VHR</p>
         </div>
-        <p className="mt-auto">Request made on {value.createdAt}</p>
+        <p className="mt-auto" suppressHydrationWarning>
+          {t('request-made')} {value.createdAt}
+        </p>
       </div>
       <p className="ml-10 overflow-scroll">{value.comments}</p>
     </div>
