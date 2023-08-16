@@ -513,7 +513,7 @@
           "finish-claim": "to claim your profile now 🏃‍♂️",
           "return": "Make sure to check back here when done!",
           "create": {
-            "min": "Handle should be at least 2 characters",
+            "min": "Handle should be at least 5 characters",
             "max": "Handle should be less than 32 characters",
             "regex": "Handle should only contain alphanumeric characters",
             "error": "Create profile failed!",
@@ -534,7 +534,8 @@
           "settings": "Settings",
           "logout": "Logout",
           "switch": "Switch",
-          "login": "Login"
+          "login": "Login",
+          "create-profile": "Create Profile"
         }
       },
       "apply-button": {
