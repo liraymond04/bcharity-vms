@@ -66,6 +66,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [image, setImage] = useState<File | null>(null)
+  const [isChecked, setIsChecked] = useState(false)
 
   const form = useForm<IPublishOpportunityFormProps>()
 
@@ -84,6 +85,16 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       return true
     } catch (e) {
       return false
+    }
+  }
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked)
+
+    if (!isChecked) {
+      console.log('checked')
+    } else {
+      console.log('not checked')
     }
   }
 
@@ -241,6 +252,31 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
+
+            <label
+              style={{
+                display: 'inline-block',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginTop: '15px',
+                marginBottom: '15px'
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                style={{
+                  appearance: 'none',
+                  backgroundColor: 'transparent',
+                  border: '1px solid grey',
+                  width: '25px',
+                  height: '25px'
+                }}
+              />
+              <span style={{ marginLeft: '12px' }}>Publish Now?</span>
+            </label>
+
             <FileInput
               label={t('image')}
               accept="image/*"
