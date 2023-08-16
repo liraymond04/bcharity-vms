@@ -9,7 +9,7 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
 
-import createProfile, { isValidHandle } from '@/lib/lens-protocol/createProfile'
+import { createProfile, isValidHandle } from '@/lib/lens-protocol'
 
 interface Props {
   isModal?: boolean

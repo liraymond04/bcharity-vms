@@ -1,13 +1,10 @@
 import lensClient from './lensClient'
 
-export const isValidHandle = (handle: string) => {
-  const pattern = /^[a-z0-9.]*$/
-  if (!pattern.test(handle)) {
-    return false
-  }
-  return true
-}
-
+/**
+ *
+ * @param handle The lens handle to create
+ * @returns the RelayerResultFragment or RelayerErrorFragment returned when attempting to create the profile
+ */
 const createProfile = async (handle: string) => {
   const profileCreateResult = await lensClient().profile.create({
     handle

@@ -14,6 +14,7 @@ import useFollow, { UseFollowParams } from './useFollow'
 import useLogHours, { UseLogHoursParams } from './useLogHours'
 import usePostData from './usePostData'
 import usePublication, { UsePublicationParams } from './usePublication'
+import isValidHandle from './util/isValidHandle'
 
 export {
   checkAuth,
@@ -22,6 +23,7 @@ export {
   getProfile,
   getProfilesOwnedBy,
   getSignature,
+  isValidHandle,
   lensClient,
   useBookmark,
   useCreateComment,
