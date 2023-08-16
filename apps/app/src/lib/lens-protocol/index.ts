@@ -15,7 +15,10 @@ import useCreatePost, { CreatePostParams } from './useCreatePost'
 import useEnabledCurrencies from './useEnabledCurrencies'
 import useExplorePublications from './useExplorePublications'
 import useFollow, { UseFollowParams } from './useFollow'
-import useLogHours, { UseLogHoursParams } from './useLogHours'
+import useLogHours, {
+  UseLogHoursParams,
+  UseLogHoursReturn
+} from './useLogHours'
 import usePostData from './usePostData'
 import usePublication, { UsePublicationParams } from './usePublication'
 import useVHRRequests from './useVHRRequests'
@@ -50,5 +53,6 @@ export type {
   UseBookmarkReturn,
   UseFollowParams,
   UseLogHoursParams,
+  UseLogHoursReturn,
   UsePublicationParams
 }

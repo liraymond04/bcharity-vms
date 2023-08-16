@@ -4,9 +4,7 @@ import {
   MetadataAttributeInput,
   PostFragment,
   PublicationMainFocus,
-  ReferenceModuleParams,
-  RelayerResultFragment,
-  RelayErrorFragment
+  ReferenceModuleParams
 } from '@lens-protocol/client'
 import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { fetchBalance, signTypedData } from '@wagmi/core'
@@ -224,16 +222,10 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
         referenceModule
       })
 
-      const res: RelayerResultFragment | RelayErrorFragment = result.unwrap()
-
-      if (res.__typename === 'RelayError') {
-        throw Error(res.reason)
-      }
-
-      await lensClient().transaction.waitForIsIndexed(res.txId)
+      await lensClient().transaction.waitForIsIndexed(result.txId)
 
       const publication = await lensClient().publication.fetch({
-        txHash: res.txHash
+        txHash: result.txHash
       })
 
       if (!publication || !isComment(publication))

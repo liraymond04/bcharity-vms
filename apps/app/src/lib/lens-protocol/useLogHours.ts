@@ -6,6 +6,7 @@ import {
   PublicationMetadataV2Input
 } from '@lens-protocol/client'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import { APP_NAME } from '@/constants'
@@ -27,7 +28,31 @@ export interface UseLogHoursParams {
   organizationId: string
 }
 
-import { useTranslation } from 'react-i18next'
+export interface UseLogHoursReturn {
+  /**
+   * Whether or not the request to log hours is pending
+   */
+  isLoading: boolean
+  /**
+   * An error message if the log hours failed
+   */
+  error: string
+  /**
+   *
+   * @param profile The profile of the user trying to log hours
+   * @param hoursToVerify The number of hours to log
+   * @param comments Any comments
+   * @param onSuccess Callback function to be trigged on succes
+   * @returns
+   */
+  logHours: (
+    profile: ProfileFragment | null,
+    hoursToVerify: string,
+    comments: string,
+    onSuccess?: VoidFunction
+  ) => Promise<void>
+}
+
 /**
  * A react hook to handle making VHR log requests with a comment
  *
@@ -50,16 +75,15 @@ import { useTranslation } from 'react-i18next'
  *   )
  * }
  */
-const useLogHours = (params: UseLogHoursParams) => {
-  const [error, setError] = useState<string>()
-
+const useLogHours = (params: UseLogHoursParams): UseLogHoursReturn => {
   const { t: e } = useTranslation('common', {
     keyPrefix: 'errors'
   })
 
-  const [isLoading, setIsLoading] = useState<boolean>()
-
   const { createComment } = useCreateComment()
+
+  const [error, setError] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const logHours = async (
     profile: ProfileFragment | null,
@@ -67,56 +91,58 @@ const useLogHours = (params: UseLogHoursParams) => {
     comments: string,
     onSuccess?: VoidFunction
   ) => {
+    if (profile === null) {
+      setError(e('profile-null'))
+      return
+    }
+
     setIsLoading(true)
     setError('')
-    try {
-      if (profile === null) {
-        throw Error(e('profile-null'))
-      }
 
-      const data: LogVhrRequestMetadataRecord = {
-        type: PostTags.VhrRequest.Opportunity,
-        version: MetadataVersion.LogVhrRequestMetadataVersions['1.0.0'],
-        hoursToVerify,
-        comments
-      }
+    const data: LogVhrRequestMetadataRecord = {
+      type: PostTags.VhrRequest.Opportunity,
+      version: MetadataVersion.LogVhrRequestMetadataVersions['1.0.0'],
+      hoursToVerify,
+      comments
+    }
 
-      const attributes: MetadataAttributeInput[] = Object.entries(data).map(
-        ([k, v]) => {
-          return {
-            traitType: k,
-            value: v,
-            displayType: PublicationMetadataDisplayTypes.String
-          }
+    const attributes: MetadataAttributeInput[] = Object.entries(data).map(
+      ([k, v]) => {
+        return {
+          traitType: k,
+          value: v,
+          displayType: PublicationMetadataDisplayTypes.String
         }
-      )
-
-      const metadata: PublicationMetadataV2Input = {
-        version: '2.0.0',
-        metadata_id: v4(),
-        content: `#${PostTags.VhrRequest.Opportunity} #${params.organizationId}`,
-        locale: getUserLocale(),
-        tags: [PostTags.VhrRequest.Opportunity, params.organizationId],
-        mainContentFocus: PublicationMainFocus.TextOnly,
-        name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
-        attributes,
-        appId: APP_NAME
       }
+    )
 
+    const metadata: PublicationMetadataV2Input = {
+      version: '2.0.0',
+      metadata_id: v4(),
+      content: `#${PostTags.VhrRequest.Opportunity} #${params.organizationId}`,
+      locale: getUserLocale(),
+      tags: [PostTags.VhrRequest.Opportunity, params.organizationId],
+      mainContentFocus: PublicationMainFocus.TextOnly,
+      name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
+      attributes,
+      appId: APP_NAME
+    }
+
+    try {
       await checkAuth(profile.ownedBy)
 
-      const broadcastResult = await createComment({
+      await createComment({
         profileId: profile.id,
         publicationId: params.publicationId,
         metadata
       })
 
       if (onSuccess) onSuccess()
-
-      return broadcastResult
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)
+      } else {
+        console.error(e)
       }
     } finally {
       setIsLoading(false)

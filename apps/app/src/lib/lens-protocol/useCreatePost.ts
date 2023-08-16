@@ -1,5 +1,6 @@
 import {
   CollectModuleParams,
+  isRelayerError,
   PublicationMetadataV2Input,
   ReferenceModuleParams
 } from '@lens-protocol/client'
@@ -43,6 +44,7 @@ const useCreatePost = () => {
     referenceModule = { followerOnlyReferenceModule: false }
   }: CreatePostParams) => {
     if (!sdk) throw new Error(e('metadata-upload-fail'))
+
     const contentURI = sdk?.storage.resolveScheme(
       (await upload({ data: [metadata] }))[0]
     )
@@ -72,19 +74,25 @@ const useCreatePost = () => {
     })
 
     if (typedDataResult.isFailure()) {
-      console.log('not authed')
+      throw new Error(typedDataResult.error.message)
     }
 
     const signature = await signTypedData(
-      getSignature(typedDataResult.unwrap().typedData)
+      getSignature(typedDataResult.value.typedData)
     )
 
     const broadcastResult = await lensClient().transaction.broadcast({
-      id: typedDataResult.unwrap().id,
-      signature: signature
+      id: typedDataResult.value.id,
+      signature
     })
 
-    return broadcastResult
+    if (broadcastResult.isFailure()) {
+      throw new Error(broadcastResult.error.message)
+    } else if (isRelayerError(broadcastResult.value)) {
+      throw new Error(broadcastResult.value.reason)
+    } else {
+      return broadcastResult.value
+    }
   }
 
   return { createPost }

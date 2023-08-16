@@ -122,16 +122,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata
       })
-
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
 
       reset()
       onClose(true)

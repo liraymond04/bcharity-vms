@@ -1,5 +1,4 @@
 import {
-  isRelayerError,
   MetadataAttributeInput,
   ProfileFragment,
   PublicationMainFocus,
@@ -185,19 +184,13 @@ const useBookmark = (params: UseBookmarkParams): UseBookmarkReturn => {
         return
       }
 
-      const result = await createComment({
+      await createComment({
         publicationId: params.publicationId,
         profileId: params.profile.id,
         metadata
       })
 
-      if (result.isFailure()) {
-        setError(result.error.message)
-      } else if (isRelayerError(result.value)) {
-        setError(result.value.reason)
-      } else {
-        setBookmarked(true)
-      }
+      setBookmarked(true)
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)

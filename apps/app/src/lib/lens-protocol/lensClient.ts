@@ -3,11 +3,10 @@ import { development, LensClient } from '@lens-protocol/client'
 let globalTemporal = global as unknown as { client: LensClient }
 
 /**
- * A function that initializes the lens client if it has not been initialized and
- * returns a reference to the global lens client
+ * A function that initializes the {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.LensClient.html | LensClient} if it has not been initialized and
+ * returns a reference to it
  *
- * @returns A reference to the global lens client
- * Also see {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.LensClient.html}
+ * @returns A reference to the global {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.LensClient.html | LensClient}
  */
 const lensClient = () => {
   if (globalTemporal.client) {

@@ -21,7 +21,7 @@ import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
 
-import Error from './Error'
+import ErrorComponent from './Error'
 
 export interface IPublishCauseFormProps {
   currency: string
@@ -159,23 +159,21 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
       }
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata,
         collectModule: collectModuleParams
       })
 
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
-
       reset()
       onClose(true)
-    } catch (e: any) {
-      setErrorMessage(e.message)
+    } catch (e) {
       setError(true)
+      if (e instanceof Error) {
+        setErrorMessage(e.message)
+      } else {
+        console.error(e)
+      }
     }
     setIsPending(false)
   }
@@ -295,7 +293,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
         )}
 
         {error && (
-          <Error
+          <ErrorComponent
             message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}

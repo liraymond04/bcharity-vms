@@ -64,68 +64,50 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
     setPendingIds({ ...pendingIds, [id]: false })
   }
 
-  const onAcceptClick = (id: string) => {
+  const onAcceptClick = async (id: string) => {
     if (profile === null) return
 
     setIdPending(id)
 
-    checkAuth(profile.ownedBy)
-      .then(() => createCollect(id))
-      .then((res) => {
-        if (res.isFailure()) {
-          throw res.error.message
-        } else {
-          refetch()
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-        setVerifyOrRejectError(err?.message ?? err)
-      })
-      .finally(() => {
-        removeIdPending(id)
-      })
+    try {
+      await checkAuth(profile.ownedBy)
+      await createCollect(id)
+    } catch (e: any) {
+      setVerifyOrRejectError(e?.message ?? e)
+    }
+
+    removeIdPending(id)
   }
 
-  const onRejectClick = (id: string) => {
+  const onRejectClick = async (id: string) => {
     if (profile === null) return
 
     setIdPending(id)
 
-    checkAuth(profile.ownedBy)
-      .then(() => {
-        const metadata: PublicationMetadataV2Input = {
-          version: '2.0.0',
-          metadata_id: v4(),
-          content: `#${PostTags.VhrRequest.Reject}`,
-          locale: getUserLocale(),
-          tags: [PostTags.VhrRequest.Reject],
-          mainContentFocus: PublicationMainFocus.TextOnly,
-          name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
-          attributes: [],
-          appId: APP_NAME
-        }
+    try {
+      await checkAuth(profile.ownedBy)
+      const metadata: PublicationMetadataV2Input = {
+        version: '2.0.0',
+        metadata_id: v4(),
+        content: `#${PostTags.VhrRequest.Reject}`,
+        locale: getUserLocale(),
+        tags: [PostTags.VhrRequest.Reject],
+        mainContentFocus: PublicationMainFocus.TextOnly,
+        name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
+        attributes: [],
+        appId: APP_NAME
+      }
 
-        return createComment({
-          profileId: profile.id,
-          publicationId: id,
-          metadata
-        })
+      await createComment({
+        profileId: profile.id,
+        publicationId: id,
+        metadata
       })
-      .then((res) => {
-        if (res.isFailure()) {
-          throw res.error.message
-        } else {
-          refetch()
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-        setVerifyOrRejectError(err?.message ?? err)
-      })
-      .finally(() => {
-        removeIdPending(id)
-      })
+    } catch (e: any) {
+      setVerifyOrRejectError(e.message ?? e)
+    }
+
+    removeIdPending(id)
   }
 
   const shouldShowError = () => {

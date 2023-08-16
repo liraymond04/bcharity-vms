@@ -18,7 +18,7 @@ import {
 } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
 
-import Error from './Error'
+import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
@@ -112,22 +112,20 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata
       })
 
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
-
       reset()
       onClose(true)
     } catch (e: any) {
-      setErrorMessage(e.message)
       setError(true)
+      if (e instanceof Error) {
+        setErrorMessage(e.message)
+      } else {
+        console.error(e)
+      }
     }
     setIsPending(false)
   }
@@ -242,7 +240,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         )}
 
         {error && (
-          <Error
+          <ErrorComponent
             message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}

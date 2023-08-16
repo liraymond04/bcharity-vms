@@ -1,3 +1,4 @@
+import { isRelayerError } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 
 import getSignature from './getSignature'
@@ -27,7 +28,13 @@ const createCollect = async (publicationId: string) => {
     signature: signature
   })
 
-  return broadcastResult
+  if (broadcastResult.isFailure()) {
+    throw new Error(broadcastResult.error.message)
+  } else if (isRelayerError(broadcastResult.value)) {
+    throw new Error(broadcastResult.value.reason)
+  } else {
+    return broadcastResult.value
+  }
 }
 
 export default createCollect
