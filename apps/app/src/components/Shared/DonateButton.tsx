@@ -499,6 +499,7 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
         size={size}
         className={className}
         suppressHydrationWarning
+        disabled={totalDonated >= parseFloat(cause.goal)}
       >
         {t('donate')}
       </Button>

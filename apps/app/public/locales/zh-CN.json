@@ -23,7 +23,6 @@
   "components.causes.clear-filters": "清除过滤器",
   "components.causes.browse-projects": "浏览项目",
   "components.causes.raised": "中筹集了",
-  "components.causes.status": "状态：接受捐赠",
   "components.causes.organizing": "正在组织这次筹款活动",
   "components.causes.about": "关于项目：",
   "components.causes.share": "分享",
@@ -436,5 +435,7 @@
   "components.settings.dispatcher.disable": "禁用",
   "components.settings.dispatcher.enable": "使能够",
   "components.settings.dispatcher.dispatcher": "调度员",
-  "components.shared.navbar.menuitems.create-profile": "创建个人资料"
+  "components.shared.navbar.menuitems.create-profile": "创建个人资料",
+  "components.causes.status-accepting": "状态：接受捐赠",
+  "components.causes.status-not-accepting": "状态：不接受捐赠"
 }
