@@ -1,9 +1,24 @@
 import React from 'react'
 
-interface IGradientWrapperProps {
+/**
+ * Properties of GradientWrapper component
+ */
+export interface IGradientWrapperProps {
   children: React.ReactNode
   className?: string
 }
+
+/**
+ * A component that wraps its children in a gradient background
+ *
+ * @example Add a gradient background to main body content in {@link SiteLayout}
+ * ```ts
+ * <GradientWrapper className="grow">
+ *   ...
+ *   {children}
+ * </GradientWrapper>
+ * ```
+ */
 
 // rgba(242, 241, 241, 1) base
 // rgba(206, 187, 248, 0.16) top right
