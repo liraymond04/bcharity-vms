@@ -22,11 +22,18 @@ import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
 import lensClient from '@/lib/lens-protocol/lensClient'
 import Logger from '@/lib/logger'
 
+/**
+ * Properties of WalletSelector component
+ */
 interface Props {
   setHasConnected: Dispatch<boolean>
   setHasProfile: Dispatch<boolean>
 }
 
+/**
+ * A component to connect wallet addresses through services such as
+ * {@link https://metamask.io/ | Metamask} and {@link https://walletconnect.com/ | WalletConnect}
+ */
 const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
   const { setProfiles } = useAppStore()
   const { setIsAuthenticated, setCurrentUser } = useAppPersistStore()

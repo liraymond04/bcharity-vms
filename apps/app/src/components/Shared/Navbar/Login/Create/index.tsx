@@ -13,10 +13,31 @@ import { checkAuth } from '@/lib/lens-protocol'
 import createProfile, { isValidHandle } from '@/lib/lens-protocol/createProfile'
 import { useAppPersistStore } from '@/store/app'
 
-interface Props {
+/**
+ * Properties of Create component
+ */
+export interface Props {
   isModal?: boolean
 }
 
+/**
+ * A component to create new Lens profile
+ *
+ * @example Create component used in a {@link Modal} in {@link MenuItems}
+ * ```ts
+ * <Modal
+ *   title={t('create-profile')}
+ *   show={showCreate}
+ *   onClose={() => {
+ *     setShowCreate(false)
+ *   }}
+ * >
+ *   <div className="p-5">
+ *     <Create isModal />
+ *   </div>
+ * </Modal>
+ * ```
+ */
 const Create: FC<Props> = ({ isModal = false }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.navbar.login.create'

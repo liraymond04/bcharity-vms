@@ -50,6 +50,13 @@ const useScreenSize = () => {
   return screenSize
 }
 
+/**
+ * A component that displays a Navbar
+ *
+ * Handles routing to multiple pages, login and profile management
+ *
+ * Page items shrink to hamburger menu on smaller screens
+ */
 const Navbar: FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.navbar'
