@@ -21,7 +21,7 @@ const ThemeButton: FC = () => {
       onClick={toggleTheme}
     >
       {resolvedTheme === 'dark' ? (
-        <MoonIcon className="w-5 h-5" />
+        <MoonIcon className="w-5 h-5 stroke-slate-50" />
       ) : (
         <SunIcon className="w-5 h-5" />
       )}
