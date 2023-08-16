@@ -20,7 +20,7 @@ import useCreatePost, {
 } from './useCreatePost'
 import useEnabledCurrencies from './useEnabledCurrencies'
 import useExplorePublications from './useExplorePublications'
-import useFollow, { UseFollowParams } from './useFollow'
+import useFollow, { UseFollowParams, UseFollowReturn } from './useFollow'
 import useLogHours, {
   UseLogHoursParams,
   UseLogHoursReturn
@@ -63,6 +63,7 @@ export type {
   UseBookmarkParams,
   UseBookmarkReturn,
   UseFollowParams,
+  UseFollowReturn,
   UseLogHoursParams,
   UseLogHoursReturn,
   UsePublicationParams,

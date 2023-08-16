@@ -15,7 +15,12 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
+const FollowButton: FC<Props> = ({
+  followId,
+  icon,
+  className,
+  size = 'sm'
+}) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.follow-button'
   })
@@ -38,13 +43,13 @@ const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
         if (!currentUser) return
         checkAuth(currentUser.ownedBy).then(() => {
           if (following) {
-            unfollowUser(currentUser.ownedBy, followId)
+            unfollowUser()
           } else {
-            followUser(currentUser.ownedBy, followId)
+            followUser()
           }
         })
       }}
-      size={size ? size : 'sm'}
+      size={size}
       className={className}
     >
       {following ? t('unfollow') : t('follow')}
