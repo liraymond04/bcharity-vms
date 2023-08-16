@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-import { checkAuth, useFollow } from '@/lib/lens-protocol'
+import { useFollow } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
@@ -32,7 +32,9 @@ const FollowButton: FC<Props> = ({
   })
 
   useEffect(() => {
-    if (error) toast.error(error)
+    if (error) {
+      toast.error(error)
+    }
   }, [error])
 
   return (
@@ -40,14 +42,11 @@ const FollowButton: FC<Props> = ({
       disabled={isLoading}
       icon={isLoading ? <Spinner size="sm" /> : icon}
       onClick={() => {
-        if (!currentUser) return
-        checkAuth(currentUser.ownedBy).then(() => {
-          if (following) {
-            unfollowUser()
-          } else {
-            followUser()
-          }
-        })
+        if (following) {
+          unfollowUser()
+        } else {
+          followUser()
+        }
       }}
       size={size}
       className={className}

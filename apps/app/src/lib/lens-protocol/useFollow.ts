@@ -1,6 +1,7 @@
 import { isRelayerError, RelayerResultFragment } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
@@ -32,12 +33,10 @@ export interface UseFollowReturn {
   isLoading: boolean
   /**
    * The function to execute to follow a user
-   * @returns
    */
   followUser: () => Promise<RelayerResultFragment | undefined>
   /**
    * The function to execute to follow a user
-   * @returns
    */
   unfollowUser: () => Promise<RelayerResultFragment | undefined>
 }
@@ -76,6 +75,7 @@ export interface UseFollowReturn {
  *
  */
 const useFollow = (params: UseFollowParams): UseFollowReturn => {
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [following, setFollowing] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -106,9 +106,17 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
 
   useEffect(() => {
     fetch(params.followerAddress, params.profileId)
-  }, [])
+  }, [params.followerAddress, params.profileId])
 
   const followUser = async () => {
+    if (!params.followerAddress) {
+      setError(e('profile-null'))
+      return
+    }
+    if (!params.profileId) {
+      setError(e('generic'))
+      return
+    }
     setIsLoading(true)
     try {
       await checkAuth(params.followerAddress)
@@ -140,12 +148,22 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
       } else {
         console.error(e)
       }
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   const unfollowUser = async () => {
+    if (!params.followerAddress) {
+      setError(e('profile-null'))
+      return
+    }
+    if (!params.profileId) {
+      setError(e('generic'))
+      return
+    }
     setIsLoading(true)
+    setError('')
     try {
       await checkAuth(params.followerAddress)
 
@@ -168,7 +186,7 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
       } else if (isRelayerError(broadcastResult.value)) {
         setError(broadcastResult.value.reason)
       } else {
-        setFollowing(true)
+        setFollowing(false)
         return broadcastResult.value
       }
     } catch (e) {
@@ -177,12 +195,12 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
       } else {
         console.error(e)
       }
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return {
-    // whether or not test
     following,
     error,
     isLoading,
