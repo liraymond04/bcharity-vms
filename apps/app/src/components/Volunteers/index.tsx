@@ -31,7 +31,7 @@ const Volunteers: NextPage = () => {
     data,
     error: exploreError,
     loading,
-    pageInfo,
+    hasMore,
     fetchMore
   } = useExplorePublications(
     {
@@ -55,7 +55,6 @@ const Volunteers: NextPage = () => {
       _posts.push(post)
       if (post.category) _categories.add(post.category)
       if (post.from.handle) _Orgs.add(post.from.handle)
-      console.log('post', post)
     })
     setPosts(_posts)
     setCategories(_categories)
@@ -64,9 +63,18 @@ const Volunteers: NextPage = () => {
 
   const { observe } = useInView({
     onChange: async ({ unobserve, inView }) => {
-      if (pageInfo?.next && inView) {
-        unobserve()
-        fetchMore(pageInfo?.next)
+      console.log(
+        'on change: in view? %s | has more? %s | loading? %s',
+        inView,
+        hasMore,
+        loading
+      )
+      if (inView) {
+        if (hasMore) {
+          fetchMore()
+        } else {
+          unobserve()
+        }
       }
     }
   })
@@ -121,33 +129,28 @@ const Volunteers: NextPage = () => {
         <Divider className="mt-5" />
         <p className="font-bold text-2xl">Browse volunteer opportunities</p>
       </div>
-      {loading ? (
-        <div className="flex justify-center m-5">
-          <Spinner />
-        </div>
-      ) : (
-        <GridLayout>
-          {posts
-            .filter(
-              (post) =>
-                testSearch(post.name, searchValue) &&
-                (selectedCategory === '' ||
-                  post.category === selectedCategory) &&
-                (selectedOrg === '' || post.from.handle === selectedOrg)
-            )
-            .map((post) => (
-              <GridItemFour key={post.id}>
-                <VolunteerCard post={post} />
-              </GridItemFour>
-            ))}
+      <GridLayout>
+        {posts
+          .filter(
+            (post) =>
+              testSearch(post.name, searchValue) &&
+              (selectedCategory === '' || post.category === selectedCategory) &&
+              (selectedOrg === '' || post.from.handle === selectedOrg)
+          )
+          .map((post) => (
+            <GridItemFour key={post.id}>
+              <VolunteerCard post={post} />
+            </GridItemFour>
+          ))}
 
-          {pageInfo?.next && (
-            <span className="flex justify-center p-5">
-              <Spinner size="md" />
-            </span>
-          )}
-        </GridLayout>
-      )}
+        <span
+          className="flex justify-center p-5"
+          ref={observe}
+          hidden={!loading}
+        >
+          {loading && <Spinner size="md" />}
+        </span>
+      </GridLayout>
       {exploreError && (
         <Error
           message={`An error occured: ${exploreError}. Please try again.`}
