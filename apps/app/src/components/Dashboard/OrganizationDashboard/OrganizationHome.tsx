@@ -10,8 +10,7 @@ import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
-import getAvatar from '@/lib/getAvatar'
-import { getProfile, lensClient } from '@/lib/lens-protocol'
+import { getAvatar, getProfile, lensClient } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 const OrganizationHome: React.FC = () => {

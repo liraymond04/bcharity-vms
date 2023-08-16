@@ -14,8 +14,11 @@ import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getAvatar from '@/lib/getAvatar'
-import { lensClient, useExplorePublications } from '@/lib/lens-protocol'
+import {
+  getAvatar,
+  lensClient,
+  useExplorePublications
+} from '@/lib/lens-protocol'
 import {
   getOpportunityMetadata,
   isPost,

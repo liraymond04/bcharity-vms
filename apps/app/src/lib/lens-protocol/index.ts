@@ -1,6 +1,7 @@
 import checkAuth from './checkAuth'
 import createCollect from './createCollect'
 import createProfile from './createProfile'
+import getAvatar from './getAvatar'
 import getProfile from './getProfile'
 import getProfilesOwnedBy from './getProfilesOwnedBy'
 import getSignature from './getSignature'
@@ -21,6 +22,7 @@ export {
   checkAuth,
   createCollect,
   createProfile,
+  getAvatar,
   getProfile,
   getProfilesOwnedBy,
   getSignature,

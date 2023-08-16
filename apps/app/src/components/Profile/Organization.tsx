@@ -6,9 +6,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
-import { getProfile } from '@/lib/lens-protocol'
+import { getAvatar, getProfile } from '@/lib/lens-protocol'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import { Card } from '../UI/Card'
