@@ -308,7 +308,7 @@
   "components.shared.navbar.login.claiming-site": "声称站点",
   "components.shared.navbar.login.finish-claim": "立即领取您的个人资料🏃‍♂️",
   "components.shared.navbar.login.return": "完成后请务必返回此处查看！",
-  "components.shared.navbar.login.create.min": "句柄应至少包含 2 个字符",
+  "components.shared.navbar.login.create.min": "句柄应至少包含 5 个字符",
   "components.shared.navbar.login.create.max": "句柄应少于 32 个字符",
   "components.shared.navbar.login.create.regex": "句柄只能包含字母数字字符",
   "components.shared.navbar.login.create.error": "创建个人资料失败！",
@@ -435,5 +435,6 @@
   "components.settings.dispatcher.description": "我们建议启用调度程序，这样您在 BCharity 中的交易就不需要签名。",
   "components.settings.dispatcher.disable": "禁用",
   "components.settings.dispatcher.enable": "使能够",
-  "components.settings.dispatcher.dispatcher": "调度员"
+  "components.settings.dispatcher.dispatcher": "调度员",
+  "components.shared.navbar.menuitems.create-profile": "创建个人资料"
 }
