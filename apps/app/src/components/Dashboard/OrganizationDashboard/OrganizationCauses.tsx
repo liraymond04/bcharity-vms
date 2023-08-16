@@ -216,40 +216,7 @@ const OrganizationCauses: React.FC = () => {
                 </div>
                 <div className=" w-full lg:flex mt-5">
                   <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
-                    dolor sit amet, consectetur adipiscing elit. Praesent
-                    dapibus, neque in auctor tincidunt, tellus libero elementum
-                    nisl, vitae tristique eros lorem in odio. Nullam et eros
-                    sem. Duis molestie libero vel consequat suscipit. Sed
-                    maximus lacus vitae sem euismod ornare. In lacinia tempor
-                    lacus, vitae porta lectus luctus ac. Cras ultrices nulla eu
-                    enim ullamcorper iaculis. Nam gravida nibh sed sem interdum
-                    hendrerit. Nunc posuere purus id massa malesuada
-                    pellentesque. Etiam ipsum metus, laoreet eu libero a,
-                    suscipit sagittis ante. Nulla at purus consequat libero
-                    imperdiet efficitur quis quis orci. Aliquam felis orci,
-                    pretium sit amet volutpat ac, bibendum eu velit. Vivamus
-                    mollis, neque in aliquam malesuada, elit mi euismod velit,
-                    ac sagittis metus enim aliquet elit. Quisque fringilla
-                    sapien nec magna porta varius. Mauris bibendum, dui in
-                    dapibus bibendum, ex sapien ultricies lacus, a eleifend
-                    mauris erat sit amet purus.tellus libero elementum nisl,
-                    vitae tristique eros lorem in odio. Nullam et eros sem. Duis
-                    molestie libero vel consequat suscipit. Sed maximus lacus
-                    vitae sem euismod ornare. In lacinia tempor lacus, vitae
-                    porta lectus luctus ac. Cras ultrices nulla eu enim
-                    ullamcorper iaculis. Nam gravida nibh sed sem interdum
-                    hendrerit. Nunc posuere purus id massa malesuada
-                    pellentesque. Etiam ipsum metus, laoreet eu libero a,
-                    suscipit sagittis ante. Nulla at purus consequat libero
-                    imperdiet efficitur quis quis orci. Aliquam felis orci,
-                    pretium sit amet volutpat ac, bibendum eu velit. Vivamus
-                    mollis, neque in aliquam malesuada, elit mi euismod velit,
-                    ac sagittis metus enim aliquet elit. Quisque fringilla
-                    sapien nec magna porta varius. Mauris bibendum, dui in
-                    dapibus bibendum, ex sapien ultricies lacus, a eleifend
-                    mauris erat sit amet purus.
+                    {currentUser?.causeDescription}
                   </div>
                 </div>
               </>
