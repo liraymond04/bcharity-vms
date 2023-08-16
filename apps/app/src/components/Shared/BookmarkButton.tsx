@@ -23,7 +23,7 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
     })
 
   useEffect(() => {
-    if (error) toast.error(error?.message)
+    if (error) toast.error(error)
   }, [error])
 
   return (
@@ -33,11 +33,7 @@ const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
         if (bookmarked) {
           removeBookmark()
         } else {
-          addBookmark().then((result) => {
-            if (result?.isFailure()) {
-              console.log(result.error)
-            }
-          })
+          addBookmark()
         }
       }}
     >

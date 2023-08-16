@@ -1,4 +1,5 @@
 import {
+  isRelayerError,
   MetadataAttributeInput,
   ProfileFragment,
   PublicationMainFocus,
@@ -31,17 +32,37 @@ export interface UseBookmarkParams {
   publicationId: string
 }
 
+export interface UseBookmarkReturn {
+  /**
+   * A way to refetch the bookmark data. THe promise is resolved when the data is done loading.
+   */
+  refetch: () => Promise<void>
+  /**
+   * Whether or not the post is bookmarked. Always false if `currentUser` is null
+   */
+  bookmarked: boolean
+  /**
+   * The error message if there was an error fetching bookmark data or add/removing a bookmark
+   */
+  error: string
+  /**
+   * Whether or not the data fetch or the add/remove bookmark result is pending
+   */
+  isLoading: boolean
+  /**
+   * Function to call to book mark the post. Sets errors if the post is already bookmarked or the currentUser is null
+   */
+  addBookmark: () => Promise<void>
+  /**
+   * A way to refetch the bookmark data. Sets errors if the currentUser is null
+   */
+  removeBookmark: () => Promise<void>
+}
+
 /**
  * A hook to handle bookmark-related functionality
  *
  * @param params the params for the hook
- *
- * @returns bookmarked - whether or not the post is bookmarked. Always false if currentUser is null \
- * isLoading - whether or not the data fetch or the add/remove bookmark is pending \
- * error - the error message if there was an error fetching bookmark data or add/removing a bookmark \
- * refetch - a way to refetch the bookmark data \
- * addBookmark - function to call to book mark the post. Throws errors if the post is already bookmarked or the currentUser is null \
- * removeBookmark - a way to refetch the bookmark data. Throws error if the currentUser is null
  *
  * @example Bookmark example
  * ```
@@ -60,11 +81,7 @@ export interface UseBookmarkParams {
  *       if (bookmarked) {
  *         removeBookmark()
  *       } else {
- *         addBookmark().then((result) => {
- *           if (result?.isFailure()) {
- *             console.log(result.error)
- *           }
- *         })
+ *         addBookmark()
  *       }
  *     }}
  *   >
@@ -83,13 +100,13 @@ export interface UseBookmarkParams {
  * )
  * ```
  */
-const useBookmark = (params: UseBookmarkParams) => {
+const useBookmark = (params: UseBookmarkParams): UseBookmarkReturn => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const { createComment } = useCreateComment()
 
   const [bookmarked, setBookmarked] = useState<boolean>(false)
-  const [error, setError] = useState<Error>()
-  const [isLoading, setIsLoading] = useState<boolean>()
+  const [error, setError] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const getComments = async (
     profile: ProfileFragment,
@@ -120,14 +137,17 @@ const useBookmark = (params: UseBookmarkParams) => {
       return
     }
 
+    setError('')
     setIsLoading(true)
+
     try {
       const comments = await getComments(params.profile, params.publicationId)
-
       setBookmarked(comments.length > 0)
     } catch (e) {
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
+      } else {
+        console.error(e)
       }
     } finally {
       setIsLoading(false)
@@ -135,30 +155,34 @@ const useBookmark = (params: UseBookmarkParams) => {
   }
 
   const addBookmark = async () => {
+    if (params.profile === null) {
+      setError(e('profile-null'))
+      return
+    }
+
     setIsLoading(true)
+    setError('')
+
+    const attributes: MetadataAttributeInput[] = []
+    const metadata: PublicationMetadataV2Input = {
+      version: '2.0.0',
+      metadata_id: v4(),
+      content: `#${params.postTag}`,
+      locale: getUserLocale(),
+      tags: [params.postTag],
+      mainContentFocus: PublicationMainFocus.TextOnly,
+      name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
+      attributes,
+      appId: APP_NAME
+    }
+
     try {
-      if (params.profile === null) {
-        throw Error(e('profile-null'))
-      }
-
-      const attributes: MetadataAttributeInput[] = []
-      const metadata: PublicationMetadataV2Input = {
-        version: '2.0.0',
-        metadata_id: v4(),
-        content: `#${params.postTag}`,
-        locale: getUserLocale(),
-        tags: [params.postTag],
-        mainContentFocus: PublicationMainFocus.TextOnly,
-        name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
-        attributes,
-        appId: APP_NAME
-      }
-
       await checkAuth(params.profile.ownedBy)
 
       const comments = await getComments(params.profile, params.publicationId)
       if (comments.length > 0) {
-        throw Error(e('already-bookmarked'))
+        setError(e('already-bookmarked'))
+        return
       }
 
       const result = await createComment({
@@ -167,12 +191,18 @@ const useBookmark = (params: UseBookmarkParams) => {
         metadata
       })
 
-      setBookmarked(true)
-      return result
+      if (result.isFailure()) {
+        setError(result.error.message)
+      } else if (isRelayerError(result.value)) {
+        setError(result.value.reason)
+      } else {
+        setBookmarked(true)
+      }
     } catch (e) {
-      console.log(e)
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
+      } else {
+        console.error(e)
       }
     } finally {
       setIsLoading(false)
@@ -180,25 +210,42 @@ const useBookmark = (params: UseBookmarkParams) => {
   }
 
   const removeBookmark = async () => {
-    setIsLoading(true)
-    try {
-      if (params.profile === null) {
-        throw Error(e('profile-null'))
-      }
+    if (params.profile === null) {
+      setError(e('profile-null'))
+      return
+    }
 
+    setIsLoading(true)
+    setError('')
+
+    try {
       await checkAuth(params.profile.ownedBy)
 
       const comments = await getComments(params.profile, params.publicationId)
 
-      await Promise.all(
+      const results = await Promise.all(
         comments.map((c) =>
           lensClient().publication.hide({ publicationId: c.id })
         )
       )
-      setBookmarked(false)
+
+      let success = true
+
+      results.forEach((res) => {
+        if (res.isFailure() && success) {
+          setError(res.error.message)
+          success = false
+        }
+      })
+
+      if (success) {
+        setBookmarked(false)
+      }
     } catch (e) {
       if (e instanceof Error) {
-        setError(e)
+        setError(e.message)
+      } else {
+        console.log(e)
       }
     } finally {
       setIsLoading(false)

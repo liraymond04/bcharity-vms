@@ -6,7 +6,10 @@ import getProfile from './getProfile'
 import getProfilesOwnedBy from './getProfilesOwnedBy'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
-import useBookmark, { UseBookmarkParams } from './useBookmark'
+import useBookmark, {
+  UseBookmarkParams,
+  UseBookmarkReturn
+} from './useBookmark'
 import useCreateComment, { CreateCommentParams } from './useCreateComment'
 import useCreatePost, { CreatePostParams } from './useCreatePost'
 import useEnabledCurrencies from './useEnabledCurrencies'
@@ -44,6 +47,7 @@ export type {
   CreateCommentParams,
   CreatePostParams,
   UseBookmarkParams,
+  UseBookmarkReturn,
   UseFollowParams,
   UseLogHoursParams,
   UsePublicationParams
