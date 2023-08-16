@@ -6,9 +6,7 @@ import { v4 } from 'uuid'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Input } from '@/components/UI/Input'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { checkAuth, getSignature, lensClient } from '@/lib/lens-protocol'
 import {
   AttributeData,
   MetadataDisplayType,

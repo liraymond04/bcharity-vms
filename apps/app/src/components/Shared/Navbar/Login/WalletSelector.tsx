@@ -18,8 +18,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { CHAIN_ID } from '@/constants'
 import getWalletLogo from '@/lib/getWalletLogo'
-import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { getProfilesOwnedBy, lensClient } from '@/lib/lens-protocol'
 import Logger from '@/lib/logger'
 
 interface Props {

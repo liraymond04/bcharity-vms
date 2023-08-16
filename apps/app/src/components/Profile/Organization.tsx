@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
-import getProfile from '@/lib/lens-protocol/getProfile'
+import { getProfile } from '@/lib/lens-protocol'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import { Card } from '../UI/Card'

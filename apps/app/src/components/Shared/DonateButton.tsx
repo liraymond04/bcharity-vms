@@ -19,10 +19,12 @@ import Progress from '@/components/Shared/Progress'
 import { APP_NAME, CURRENCIES } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useCreateComment from '@/lib/lens-protocol/useCreateComment'
+import {
+  checkAuth,
+  getSignature,
+  lensClient,
+  useCreateComment
+} from '@/lib/lens-protocol'
 import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 

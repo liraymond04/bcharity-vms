@@ -3,7 +3,7 @@ import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/solid'
 import { FC, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import useBookmark from '@/lib/lens-protocol/useBookmark'
+import { useBookmark } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Spinner } from '../UI/Spinner'

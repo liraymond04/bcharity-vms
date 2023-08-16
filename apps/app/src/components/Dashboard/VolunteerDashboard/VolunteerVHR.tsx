@@ -15,11 +15,13 @@ import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import getAvatar from '@/lib/getAvatar'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { isPost, OpportunityMetadata } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { lensClient, useExplorePublications } from '@/lib/lens-protocol'
+import {
+  getOpportunityMetadata,
+  isPost,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
 import testSearch from '@/lib/search'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'

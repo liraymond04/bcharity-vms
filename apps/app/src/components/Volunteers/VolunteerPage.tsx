@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import usePublication from '@/lib/lens-protocol/usePublication'
+import { usePublication } from '@/lib/lens-protocol'
 import {
   InvalidMetadataException,
   isPost,

@@ -5,7 +5,7 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import { useExplorePublications } from '@/lib/lens-protocol'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'

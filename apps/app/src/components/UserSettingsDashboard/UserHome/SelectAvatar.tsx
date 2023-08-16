@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Card, CardBody } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import getProfile from '@/lib/lens-protocol/getProfile'
+import { getProfile } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import NFTPicture from './NFTPicture'

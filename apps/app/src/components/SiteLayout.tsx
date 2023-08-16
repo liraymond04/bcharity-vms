@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 
-import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
+import { getProfilesOwnedBy } from '@/lib/lens-protocol'
 import { useAppStore, useCookies } from '@/store/app'
 
 import GradientWrapper from './Shared/Gradient/GradientWrapper'

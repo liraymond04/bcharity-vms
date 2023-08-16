@@ -8,10 +8,8 @@ import {
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { PostTags } from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { lensClient, useExplorePublications } from '@/lib/lens-protocol'
+import { getOpportunityMetadata, PostTags } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'
 import OrganizationCard from '../Organizations/OrganizationCard'

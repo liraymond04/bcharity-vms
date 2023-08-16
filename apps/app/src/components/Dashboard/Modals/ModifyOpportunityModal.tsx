@@ -10,8 +10,7 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import useCreatePost from '@/lib/lens-protocol/useCreatePost'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
 import {
   buildMetadata,
   OpportunityMetadataRecord,

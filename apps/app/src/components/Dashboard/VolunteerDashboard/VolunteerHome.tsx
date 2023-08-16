@@ -11,7 +11,7 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import Slug from '@/components/Shared/Slug'
 import { Card } from '@/components/UI/Card'
 import getAvatar from '@/lib/getAvatar'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { lensClient } from '@/lib/lens-protocol'
 import { isPost } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 

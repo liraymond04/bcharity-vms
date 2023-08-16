@@ -6,7 +6,7 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { CORS_PROXY, VHR_TOP_HOLDERS_URL } from '@/constants'
 import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
-import getProfilesOwnedBy from '@/lib/lens-protocol/getProfilesOwnedBy'
+import { getProfilesOwnedBy } from '@/lib/lens-protocol'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import SEO from '../utils/SEO'

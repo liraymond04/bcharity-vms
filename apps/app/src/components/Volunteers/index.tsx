@@ -6,10 +6,12 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-cool-inview'
 
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { OpportunityMetadata } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { useExplorePublications } from '@/lib/lens-protocol'
+import {
+  getOpportunityMetadata,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
 import testSearch from '@/lib/search'
 
 import Error from '../Dashboard/Modals/Error'

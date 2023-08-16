@@ -2,8 +2,7 @@ import { FC, ReactNode, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-import { checkAuth } from '@/lib/lens-protocol'
-import useFollow from '@/lib/lens-protocol/useFollow'
+import { checkAuth, useFollow } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'

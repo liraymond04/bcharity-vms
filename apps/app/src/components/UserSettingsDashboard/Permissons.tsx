@@ -12,8 +12,7 @@ import { useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { checkAuth, lensClient } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'

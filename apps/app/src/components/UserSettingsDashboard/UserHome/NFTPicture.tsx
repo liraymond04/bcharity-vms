@@ -12,8 +12,7 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { IS_MAINNET } from '@/constants'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { getSignature, lensClient } from '@/lib/lens-protocol'
 
 interface FormProps {
   contractAddress: string

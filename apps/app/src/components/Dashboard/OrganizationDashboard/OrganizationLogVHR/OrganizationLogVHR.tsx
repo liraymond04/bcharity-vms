@@ -12,10 +12,12 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { APP_NAME } from '@/constants'
 import getUserLocale from '@/lib/getUserLocale'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import createCollect from '@/lib/lens-protocol/createCollect'
-import useCreateComment from '@/lib/lens-protocol/useCreateComment'
-import useVHRRequests from '@/lib/lens-protocol/useVHRRequests'
+import {
+  checkAuth,
+  createCollect,
+  useCreateComment,
+  useVHRRequests
+} from '@/lib/lens-protocol'
 import { PostTags } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 import { useAppPersistStore } from '@/store/app'
