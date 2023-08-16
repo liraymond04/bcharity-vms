@@ -2,7 +2,8 @@ import {
   CollectModuleParams,
   isRelayerError,
   PublicationMetadataV2Input,
-  ReferenceModuleParams
+  ReferenceModuleParams,
+  RelayerResultFragment
 } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
@@ -12,14 +13,47 @@ import getSignature from './getSignature'
 import lensClient from './lensClient'
 
 /**
- * Params for createComment returned by useCreateComment
+ * Params for `createComment` returned by {@link useCreateComment}
  */
 export interface CreateCommentParams {
+  /**
+   * The publication id of the publication to create the comment under
+   */
   publicationId: string
+  /**
+   * The profile id of the profile creating the comment
+   */
   profileId: string
+  /**
+   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.PublicationMetadataV2Input.html | PublicationMetadataV2Input} for the comment
+   */
   metadata: PublicationMetadataV2Input
+  /**
+   * {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.CollectModuleParams.html | CollectModuleParams} for the comment
+   *
+   * Defaults to
+   * { freeCollectModule: { followerOnly: false } },
+   */
   collectModule?: CollectModuleParams
+  /**
+   * {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.ReferenceModuleParams.html | ReferenceModuleParams } for the comment
+   *
+   * Defaults to
+   * { followerOnlyReferenceModule: false }
+   */
   referenceModule?: ReferenceModuleParams
+}
+
+/**
+ * Returned by the {@link useCreateComment} hook
+ */
+export interface CreateCommentReturn {
+  /**
+   *
+   * @param params The {@link CreateCommentParams} for the request
+   * @returns
+   */
+  createComment: (params: CreateCommentParams) => Promise<RelayerResultFragment>
 }
 
 /**
@@ -30,10 +64,10 @@ export interface CreateCommentParams {
  * It is necessary to check authentication with {@link checkAuth} before running
  * createPost to prevent authentication errors
  *
- * @returns the result from broadcasting the transaction
+ * @returns CreateCommentReturn
  */
 
-const useCreateComment = () => {
+const useCreateComment = (): CreateCommentReturn => {
   const { t: e } = useTranslation('common', {
     keyPrefix: 'errors'
   })

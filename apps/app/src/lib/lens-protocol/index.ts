@@ -10,8 +10,14 @@ import useBookmark, {
   UseBookmarkParams,
   UseBookmarkReturn
 } from './useBookmark'
-import useCreateComment, { CreateCommentParams } from './useCreateComment'
-import useCreatePost, { CreatePostParams } from './useCreatePost'
+import useCreateComment, {
+  CreateCommentParams,
+  CreateCommentReturn
+} from './useCreateComment'
+import useCreatePost, {
+  CreatePostParams,
+  CreatePostReturn
+} from './useCreatePost'
 import useEnabledCurrencies from './useEnabledCurrencies'
 import useExplorePublications from './useExplorePublications'
 import useFollow, { UseFollowParams } from './useFollow'
@@ -48,7 +54,9 @@ export {
 
 export type {
   CreateCommentParams,
+  CreateCommentReturn,
   CreatePostParams,
+  CreatePostReturn,
   UseBookmarkParams,
   UseBookmarkReturn,
   UseFollowParams,

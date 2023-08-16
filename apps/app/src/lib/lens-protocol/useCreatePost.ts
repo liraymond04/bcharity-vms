@@ -2,7 +2,8 @@ import {
   CollectModuleParams,
   isRelayerError,
   PublicationMetadataV2Input,
-  ReferenceModuleParams
+  ReferenceModuleParams,
+  RelayerResultFragment
 } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
@@ -12,15 +13,44 @@ import getSignature from './getSignature'
 import lensClient from './lensClient'
 
 /**
- * Params for createPost returned by useCreatePost
+ * Params for `createPost` returned by {@link useCreatePost}
  */
 export interface CreatePostParams {
+  /**
+   * The profile id of the profile creating the comment
+   */
   profileId: string
+  /**
+   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.PublicationMetadataV2Input.html | PublicationMetadataV2Input} for the comment
+   */
   metadata: PublicationMetadataV2Input
+  /**
+   * {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.CollectModuleParams.html | CollectModuleParams} for the comment
+   *
+   * Defaults to
+   * { freeCollectModule: { followerOnly: false } },
+   */
   collectModule?: CollectModuleParams
+  /**
+   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.ReferenceModuleParams.html | ReferenceModuleParams } for the comment
+   *
+   * Defaults to
+   * { followerOnlyReferenceModule: false }
+   */
   referenceModule?: ReferenceModuleParams
 }
 
+/**
+ * Returned by the {@link useCreatePost} hook
+ */
+export interface CreatePostReturn {
+  /**
+   *
+   * @param params The {@link CreatePostParams} for the request
+   * @returns
+   */
+  createPost: (params: CreatePostParams) => Promise<RelayerResultFragment>
+}
 /**
  * A hook that wraps createPostTypedData {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#createPostTypedData}
  * to simplify to process of metadata upload with the thirdweb storage react hooks sdk,
@@ -32,7 +62,7 @@ export interface CreatePostParams {
  * @returns the result from broadcasting the transaction
  */
 
-const useCreatePost = () => {
+const useCreatePost = (): CreatePostReturn => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const sdk = useSDK()
   const { mutateAsync: upload } = useStorageUpload()
