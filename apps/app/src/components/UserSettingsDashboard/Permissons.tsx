@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import React, { FC, useEffect } from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
@@ -58,6 +59,9 @@ const AllowanceButton: FC<Props> = ({
   followModule,
   initValue
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.permissions'
+  })
   const [isCollectActive, setIsCollectActive] = useState(initValue !== '0x00')
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -107,12 +111,16 @@ const AllowanceButton: FC<Props> = ({
         setIsLoading(false)
       }}
     >
-      {isLoading ? <Spinner /> : !isCollectActive ? '+ Allow' : '- Revoke'}
+      {isLoading ? <Spinner /> : !isCollectActive ? t('allow') : t('revoke')}
     </Button>
   )
 }
 
 const Permissons: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.permissions'
+  })
+
   const { currentUser, isAuthenticated } = useAppPersistStore()
 
   const [Option, setOptions] = useState(
@@ -141,15 +149,18 @@ const Permissons: React.FC = () => {
         <Card>
           <div className="p-3">
             <div className=" rounded-xl border-amber-950 border-width:3">
-              <div className="text-s font-bold sm:text-s p-2">
-                Allow/Remove modules
+              <div
+                className="text-s font-bold sm:text-s p-2"
+                suppressHydrationWarning
+              >
+                {t('title')}
               </div>
-              <div className="text-m font-normal p-2">
-                In order to use the collect feature you need to allow the
-                corresponding modules. You can allow and revoke permissions for
-                modules at any time.
+              <div className="text-m font-normal p-2" suppressHydrationWarning>
+                {t('description')}
               </div>
-              <div className="text-m font-normal p-2">Select Currency:</div>
+              <div className="text-m font-normal p-2" suppressHydrationWarning>
+                {t('select-currency')}
+              </div>
               <select
                 className="ml-2 bg-accent-content dark:bg-info-content rounded-xl border border-gray-300 outline-none disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
                 onChange={async (e) => {

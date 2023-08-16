@@ -7,6 +7,7 @@ import {
 } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
 import { isPost, PostTags } from '@/lib/metadata'
@@ -20,6 +21,10 @@ import { Spinner } from '../UI/Spinner'
 import OrganizationCard from './OrganizationCard'
 
 const Organizations: NextPage = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.organizations'
+  })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [searchValue, setSearchValue] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
@@ -74,12 +79,12 @@ const Organizations: NextPage = () => {
       <SEO title="Organizations • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5">
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
-          <div className="flex justify-between w-[300px] h-[50px] bg-white items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
+          <div className="flex justify-between w-[300px] h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="Search"
+              placeholder={t('search')}
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -92,7 +97,7 @@ const Organizations: NextPage = () => {
           <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
-                label="Filter:"
+                label={t('filters')}
                 options={['Option 1', 'Option 2', 'Option 3']}
                 onClick={(c) => setSelectedCategory(c)}
                 selected={selectedCategory}
@@ -102,7 +107,9 @@ const Organizations: NextPage = () => {
           </div>
         </div>
         <Divider className="mt-5" />
-        <p className="font-bold text-2xl">Browse Organizations</p>
+        <p className="font-bold text-2xl" suppressHydrationWarning>
+          {t('title')}
+        </p>
       </div>
       {loading ? (
         <div className="flex justify-center p-5">
@@ -122,7 +129,7 @@ const Organizations: NextPage = () => {
       )}
       {exploreError && (
         <Error
-          message={`An error occured: ${exploreError}. Please try again.`}
+          message={`${e('generic-front')}${exploreError}${e('generic-back')}`}
         />
       )}
     </>

@@ -21,6 +21,7 @@ import CauseCard from './CauseCard'
 
 const Causes: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
 
@@ -113,7 +114,7 @@ const Causes: NextPage = () => {
       )}
       {exploreError && (
         <Error
-          message={`An error occured: ${exploreError}. Please try again.`}
+          message={`${e('generic-front')}${exploreError}${e('generic-back')}`}
         />
       )}
     </>

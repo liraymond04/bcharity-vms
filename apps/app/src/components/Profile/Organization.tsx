@@ -5,6 +5,7 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
@@ -17,6 +18,12 @@ import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
 const Organization: NextPage = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.profile.organization'
+  })
+  const { t: e } = useTranslation('common', {
+    keyPrefix: 'errors'
+  })
   const [error, setError] = useState<Error>()
   const [profile, setProfile] = useState<ProfileFragment>()
 
@@ -28,11 +35,10 @@ const Organization: NextPage = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        if (!username) throw Error('Invalid profile username!')
+        if (!username) throw Error(e('profile-username-invalid'))
         const result = await getProfile({ handle: username.toString() })
-        if (!result) throw Error('Profile not fetched!')
-        if (!isVerified(result.id))
-          throw Error('Profile is not an organization!')
+        if (!result) throw Error(e('profile-fetch-fail'))
+        if (!isVerified(result.id)) throw Error(e('expected-organization'))
         setProfile(result)
       } catch (e) {
         if (e instanceof Error) {
@@ -91,19 +97,27 @@ const Organization: NextPage = () => {
                     </div>
 
                     <div className="min-h-[calc(100vh-800px)] mx-10">
-                      <div className="w-full py-4 pl-4 pr-8 border bg-white dark:darkgradient border-gray-400 dark:border-black rounded-md">
+                      <div className="w-full py-4 pl-4 pr-8 border bg-accent-content dark:darkgradient border-gray-400 dark:border-black rounded-md">
                         <div className="w-full font-semibold text-gray-600 dark:text-white text-xl flex flex-col space-y-2">
-                          <div className="flex items-center mx-4 w-full">
+                          <div
+                            className="flex items-center mx-4 w-full"
+                            suppressHydrationWarning
+                          >
                             <UserIcon className="h-6 w-6 mb-1 mr-2" />{' '}
-                            Followers: {profile.stats.totalFollowers}
+                            {t('followers')}
+                            {profile.stats.totalFollowers}
                           </div>
-                          <div className="flex items-center mx-4 w-full">
+                          <div
+                            className="flex items-center mx-4 w-full"
+                            suppressHydrationWarning
+                          >
                             <PencilAltIcon className="h-6 w-6 mb-1 mr-2" />{' '}
-                            Posts: {profile.stats.totalPosts}
+                            {t('posts')}
+                            {profile.stats.totalPosts}
                           </div>
                           <div className="flex items-center mx-4 w-full">
                             <HeartIcon className="h-6 w-6 mb-1 mr-2" />
-                            <h1>VHR Raised: </h1>
+                            <h1 suppressHydrationWarning>{t('raised')}</h1>
                             {/* <div className="ml-1">{8}</div> */}
                           </div>
                         </div>
@@ -185,10 +199,13 @@ const Organization: NextPage = () => {
                         )}
                       </div>
                       <div className="mr-4">
-                        <div className="mt-10 mb-4 font-semibold text-2xl">
-                          About:
+                        <div
+                          className="mt-10 mb-4 font-semibold text-2xl"
+                          suppressHydrationWarning
+                        >
+                          {t('about')}
                         </div>
-                        <div className="bg-white dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
+                        <div className="bg-accent-content dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
                           <div className="w-full text-gray-600 dark:text-white text-xl p-5">
                             {profile.bio}
                           </div>

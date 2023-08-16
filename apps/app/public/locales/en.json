@@ -18,11 +18,15 @@
     "metadata-upload-fail": "Metadata upload failed!",
     "user-null": "Current user is null!",
     "profile-null": "Provided profile is null!",
+    "profile-fetch-fail": "Profile not fetched!",
+    "profile-username-invalid": "Invalid profile username!",
     "already-bookmarked": "Publication has already been bookmarked!",
     "generic": "An unknown error occured. Please try again.",
     "generic-front": "An error occurred: ",
     "generic-back": ". Please try again.",
-    "profiles": "Could not get profiles!"
+    "profiles": "Could not get profiles!",
+    "expected-organization": "Profile is not an organization!",
+    "expected-volunteer": "Profile is not a volunteer!"
   },
   "components": {
     "causes": {
@@ -30,7 +34,8 @@
       "clear-filters": "Clear Filters",
       "browse-projects": "Browse Projects",
       "raised": "raised out of",
-      "status": "Status: Accepting Donations",
+      "status-accepting": "Status: Accepting Donations",
+      "status-not-accepting": "Status: Not Accepting Donations",
       "organizing": "is organizing this fundraiser",
       "about": "About project:",
       "share": "Share",
@@ -266,6 +271,16 @@
         }
       }
     },
+    "organizations": {
+      "title": "Browse Organizations",
+      "search": "Search",
+      "filters": "Filters:",
+      "card": {
+        "pfp": "'s profile picture",
+        "postings": "postings",
+        "location": "LOCATION"
+      }
+    },
     "privacy-policy": {
       "title": "Privacy Policy",
       "updated-on": "Updated July 12th, 2023",
@@ -288,6 +303,20 @@
       "p17": "Your continued use of our Services confirms your acceptance of our Privacy Policy, as amended. If you do not agree to our Privacy Policy, as amended, you must stop using our Services. We recommend that you visit this page frequently to check for changes.",
       "p18": "Contact Us",
       "p19": "If you have any questions about our Privacy Policy, please do nothesitate to contact us at admin@bcharity.net."
+    },
+    "profile": {
+      "organization": {
+        "followers": "Followers: ",
+        "posts": "Posts: ",
+        "raised": "VHR Raised: ",
+        "about": "About: "
+      },
+      "volunteer": {
+        "followers": "Followers: ",
+        "posts": "Posts: ",
+        "raised": "VHR Raised: ",
+        "about": "About: "
+      }
     },
     "tos": {
       "tos": "Terms of Service",
@@ -348,6 +377,101 @@
       "p25": "These Legal Terms and any policies or operating rules posted by us  on the Services or in respect to the Services constitute the  entire agreement and understanding between you and us. Our failure  to exercise or enforce any right or provision of these Legal Terms  shall not operate as a waiver of such right or provision. These  Legal Terms operate to the fullest extent permissible by law. We  may assign any or all of our rights and obligations to others at  any time. We shall not be responsible or liable for any loss,  damage, delay, or failure to act caused by any cause beyond our  reasonable control. If any provision or part of a provision of  these Legal Terms is determined to be unlawful, void, or  unenforceable, that provision or part of the provision is deemed  severable from these Legal Terms and does not affect the validity  and enforceability of any remaining provisions. There is no joint  venture, partnership, employment or agency relationship created  between you and us as a result of these Legal Terms or use of the  Services. You agree that these Legal Terms will not be construed  against us by virtue of having drafted them. You hereby waive any  and all defences you may have based on the electronic form of  these Legal Terms and the lack of signing by the parties hereto to  execute these Legal Terms. ",
       "p26": "In order to resolve a complaint regarding the Services or to  receive further information regarding use of the Services, please contact us at: "
     },
+    "settings": {
+      "home": {
+        "nft-picture": {
+          "transaction-failed": "Transaction failed!",
+          "chain": "Chain",
+          "contract-address": "Contract address",
+          "invalid-address": "Invalid Ethereum address",
+          "token-id": "Token Id",
+          "save": "Save"
+        },
+        "picture": {
+          "avatar-empty": "Avatar can't be empty!",
+          "transaction-failed": "Transaction failed!",
+          "save": "Save"
+        },
+        "select-avatar": {
+          "upload-avatar": "Upload avatar",
+          "nft-avatar": "NFT avatar"
+        },
+        "errors": {
+          "discord": "Length of Discord invite input is too long!",
+          "twitter": "Length of Twitter profile input is too long!",
+          "linkedin": "Length of LinkedIn profile input is too long!"
+        },
+        "profile-id": "Profile ID:",
+        "profile-handle": "Profile Handle:",
+        "name": "Name: ",
+        "location": "Location: ",
+        "bio": "Bio: ",
+        "bio-placeholder": "Tell us something about you!",
+        "website": "Website: ",
+        "discord": "Discord: ",
+        "twitter": "Twitter: ",
+        "linkedin": "LinkedIn: ",
+        "cover": "Cover: ",
+        "save": "Save"
+      },
+      "permissions": {
+        "allow": "+ Allow",
+        "revoke": "- Revoke",
+        "title": "Allow/Remove modules",
+        "description": "In order to use the collect feature you need to allow the corresponding modules. You can allow and revoke permissions for modules at any time.",
+        "select-currency": "Select Currency:"
+      },
+      "tabs": {
+        "profile": "Profile",
+        "dispatcher": "Dispatcher",
+        "permissions": "Permissions",
+        "delete-account": "Delete Account",
+        "back": "Back"
+      },
+      "delete": {
+        "warning": "WARNING: This will permanently delete your account.",
+        "permanent": "Deleting your account is permanent. Your data will be wiped and will not be recoverable.",
+        "upon-delete": "Upon deletion:",
+        "not-recoverable": "Your account will no longer be recoverable",
+        "handle-released": "Your @handle will be immediately released",
+        "info-available": "Some of your account information may still be available through search engines",
+        "delete": "Delete your account"
+      },
+      "dispatcher": {
+        "title": "Enable dispatcher?",
+        "description": "We suggest enabling dispatcher so that your transactions in BCharity don't need to be signed.",
+        "disable": "Disable",
+        "enable": "Enable",
+        "dispatcher": "dispatcher"
+      }
+    },
+    "vhrs": {
+      "top-holders": "Top VHR Holders",
+      "volunteers": "Volunteers",
+      "organizations": "Organizations"
+    },
+    "volunteers": {
+      "apply-to-opportunity-modal": {
+        "title": "Apply to Opportunity",
+        "upload": "Upload Resume",
+        "click-to-upload": "Click to upload",
+        "drag-and-drop": "or drag and drop",
+        "description": "Description",
+        "submit": "Submit"
+      },
+      "title": "Browse Volunteer Opportunities",
+      "search": "Search",
+      "category": "Category:",
+      "organization": "Organization:",
+      "card": {
+        "external-url": "External URL"
+      },
+      "page": {
+        "ongoing": "Ongoing",
+        "valid-from": "Valid from:",
+        "external-url": "External URL"
+      }
+    },
     "site-layout": {
       "warning": "Warning: Some functionality may not work without cookies",
       "body": "We use cookies to improve your browsing experience, save your preferences and collect information on how you use our website. You can decline these cookies for a less personalized experience. For more information about cookies, please see our ",
@@ -390,7 +514,7 @@
           "finish-claim": "to claim your profile now 🏃‍♂️",
           "return": "Make sure to check back here when done!",
           "create": {
-            "min": "Handle should be at least 2 characters",
+            "min": "Handle should be at least 5 characters",
             "max": "Handle should be less than 32 characters",
             "regex": "Handle should only contain alphanumeric characters",
             "error": "Create profile failed!",
@@ -411,7 +535,8 @@
           "settings": "Settings",
           "logout": "Logout",
           "switch": "Switch",
-          "login": "Login"
+          "login": "Login",
+          "create-profile": "Create Profile"
         }
       },
       "apply-button": {

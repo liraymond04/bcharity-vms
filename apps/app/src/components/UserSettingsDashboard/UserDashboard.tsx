@@ -7,6 +7,7 @@ import {
 import { UserIcon } from '@heroicons/react/outline'
 import React from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
 import SideBar2 from '@/components/Sidebar/SideBar2'
@@ -21,31 +22,34 @@ export interface IDashboardTab extends ITabProps {
 }
 
 const UserDashboard: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.tabs'
+  })
   const [selectedTab, setSelectedTab] = useState(0)
 
   const tabs: IDashboardTab[] = [
     {
-      label: 'Profile',
+      label: t('profile'),
       icon: <UserIcon className="inline" />,
       component: <UserHome />
     },
     {
-      label: 'Dispatcher',
+      label: t('dispatcher'),
       icon: <GlobeIcon className="inline" />,
       component: <UserDispatcher />
     },
     {
-      label: 'Permissions',
+      label: t('permissions'),
       icon: <LockClosedIcon className="inline" />,
       component: <Permissons />
     },
     {
-      label: 'Delete Account',
+      label: t('delete-account'),
       icon: <TrashIcon className="inline" />,
       component: <UserDelete />
     },
     {
-      label: 'Back',
+      label: t('back'),
       icon: <ArrowLeftIcon className="inline" />,
       component: <div></div>
     }

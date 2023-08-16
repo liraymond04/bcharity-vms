@@ -1,4 +1,4 @@
-import { PlusSmIcon } from '@heroicons/react/outline'
+import { PlusCircleIcon } from '@heroicons/react/outline'
 import {
   PublicationsQueryRequest,
   PublicationTypes
@@ -11,6 +11,7 @@ import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
@@ -224,21 +225,19 @@ const OrganizationCauses: React.FC = () => {
           </div>
 
           <div className="p-5">
-            <button
-              onClick={onNew}
-              className="flex h-8 mb-2 items-center bg-purple-500 rounded-lg shadow-md border-black dark:border-white"
-            >
-              <PlusSmIcon className="w-8 text-white" />
-              <div
-                className="text-white mr-3 mt-1 font-bold"
-                suppressHydrationWarning
+            <div className="flex items-center">
+              <GridRefreshButton onClick={refetch} className="ml-auto" />
+              <button
+                onClick={onNew}
+                className="flex items-center text-brand-400 mx-4"
               >
-                {t('create-new')}
-              </div>
-            </button>
+                <span className="mr-2 font-bold">Create New Project</span>
+                <PlusCircleIcon className="w-8 text-brand-400" />
+              </button>
+            </div>
             <div
               className={gridTheme}
-              style={{ height: '800px', width: '90%' }}
+              style={{ height: '800px', width: '100%' }}
             >
               {loading ? (
                 <Spinner />
