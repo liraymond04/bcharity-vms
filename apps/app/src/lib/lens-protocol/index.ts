@@ -26,7 +26,10 @@ import useLogHours, {
   UseLogHoursReturn
 } from './useLogHours'
 import usePostData from './usePostData'
-import usePublication, { UsePublicationParams } from './usePublication'
+import usePublication, {
+  UsePublicationParams,
+  UsePublicationReturn
+} from './usePublication'
 import useVHRRequests from './useVHRRequests'
 import isValidHandle from './util/isValidHandle'
 
@@ -62,5 +65,6 @@ export type {
   UseFollowParams,
   UseLogHoursParams,
   UseLogHoursReturn,
-  UsePublicationParams
+  UsePublicationParams,
+  UsePublicationReturn
 }
