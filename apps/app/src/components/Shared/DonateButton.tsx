@@ -381,6 +381,7 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
                     {totalDonated} {selectedCurrencySymbol}
                   </div>
                   {t('raised-of')} {cause.goal}!
+                  {/* Will need to change sentence structure for 简体中文 locale */}
                 </div>
               </div>
             )}
@@ -492,6 +493,7 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
         size={size}
         className={className}
         suppressHydrationWarning
+        disabled={totalDonated >= parseFloat(cause.goal)}
       >
         {t('donate')}
       </Button>

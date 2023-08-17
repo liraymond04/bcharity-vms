@@ -23,7 +23,7 @@ const TabTitle: React.FC<ITabTitleProps> = ({
   return (
     <div>
       <div
-        className={`relative bg-white ${
+        className={`relative bg-accent-content ${
           selected ? 'bg-opacity-30' : 'bg-opacity-0'
         } ${className ? '' : 'hover:bg-opacity-20'} ${
           label != '' && 'hover:cursor-pointer'
@@ -34,7 +34,11 @@ const TabTitle: React.FC<ITabTitleProps> = ({
       >
         <div className={`${open ? 'pr-2 w-6' : 'w-6'}`}>{icon}</div>
 
-        {open && <p className={`text-[20px] font-sans`}>{label}</p>}
+        {open && (
+          <p className={`text-[20px] font-sans`} suppressHydrationWarning>
+            {label}
+          </p>
+        )}
         {open && selected && (
           <span className="absolute h-12 bg-blue-800 -right-1 w-1 z-10" />
         )}

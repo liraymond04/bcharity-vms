@@ -1,6 +1,7 @@
 import { SetDispatcherRequest } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   checkAuth,
@@ -13,6 +14,9 @@ import { useAppPersistStore } from '@/store/app'
 import { Spinner } from '../UI/Spinner'
 
 const UserDispatcher: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.dispatcher'
+  })
   const { currentUser } = useAppPersistStore()
   const [isEnabled, setIsEnabled] = useState(currentUser?.dispatcher !== null)
   const [isLoading, setIsLoading] = useState(true)
@@ -65,10 +69,11 @@ const UserDispatcher: React.FC = () => {
         className="rounded-lg shadow-l flex flex-col px-9 py-8 
           bg-[#D7BFFF] dark:bg-Card outline outline-1 outline-gray-200 outline-offset-2"
       >
-        <h1 className="text-2xl font-bold">Enable dispatcher?</h1>
-        <h1 className="text-lg font-medium">
-          We suggest enabling dispatcher so that your transactions in BCharity
-          don't need to be signed.
+        <h1 className="text-2xl font-bold" suppressHydrationWarning>
+          {t('title')}
+        </h1>
+        <h1 className="text-lg font-medium" suppressHydrationWarning>
+          {t('description')}
         </h1>
         <div className="flex flex-col items-center justify-center">
           <button
@@ -91,7 +96,9 @@ const UserDispatcher: React.FC = () => {
             {isLoading ? (
               <Spinner />
             ) : (
-              <div>{isEnabled ? 'Disable' : 'Enable'} dispatcher</div>
+              <div suppressHydrationWarning>
+                {isEnabled ? t('disable') : t('enable')} {t('dispatcher')}
+              </div>
             )}
           </button>
         </div>

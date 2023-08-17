@@ -24,9 +24,12 @@ import Slug from '../Shared/Slug'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
+import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
 const VolunteerPage: NextPage = () => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.volunteers.page'
+  })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const {
     query: { id }
@@ -61,7 +64,7 @@ const VolunteerPage: NextPage = () => {
     if (!ongoing) {
       return `${o.startDate} to ${o.endDate}`
     } else {
-      return `${o.startDate} - Ongoing`
+      return `${o.startDate} - ${t('ongoing')}`
     }
   }
 
@@ -80,57 +83,66 @@ const VolunteerPage: NextPage = () => {
 
   const Body = ({ opportunity }: { opportunity: OpportunityMetadata }) => {
     return (
-      <div className="p-6">
-        <div className="grid md:grid-cols-[auto_100px] sm:grid-cols-[auto_100px] gap-x-4 w-full">
-          <div className="flex space-x-2 items-center overflow-hidden">
-            <div className="col-span-1">
-              <BookmarkButton
-                publicationId={opportunity.post_id}
-                postTag={PostTags.Bookmark.Opportunity}
+      <>
+        {' '}
+        <ApplyToOpportunityModal></ApplyToOpportunityModal>
+        <div className="p-6">
+          <div className="grid md:grid-cols-[auto_100px] sm:grid-cols-[auto_100px] gap-x-4 w-full">
+            <div className="flex space-x-2 items-center overflow-hidden">
+              <div className="col-span-1">
+                <BookmarkButton
+                  publicationId={opportunity.post_id}
+                  postTag={PostTags.Bookmark.Opportunity}
+                />
+              </div>
+              <div className="text-2xl font-bold text-brand-600 truncate col-span-1">
+                {opportunity.name}
+              </div>
+              <div className="text-xl text-gray-400 font-bold truncate col-span-1">
+                {opportunity.category}
+              </div>
+            </div>
+            <div className="font-semibold" suppressHydrationWarning>
+              {t('valid-from')} {getDateString(opportunity)}
+            </div>
+          </div>
+          <div className="flex space-x-3 items-center">
+            <Slug prefix="@" slug={opportunity.from.handle} />
+            <FollowButton followId={opportunity.from.id} />
+          </div>
+          <div className="pt-6 pb-4">{opportunity.description}</div>
+          {opportunity.imageUrl && (
+            <div>
+              <MediaRenderer
+                key="attachment"
+                className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
+                src={opportunity.imageUrl}
+                alt={'image attachment'}
               />
             </div>
-            <div className="text-2xl font-bold text-brand-600 truncate col-span-1">
-              {opportunity.name}
-            </div>
-            <div className="text-xl text-gray-400 font-bold truncate col-span-1">
-              {opportunity.category}
-            </div>
-          </div>
-          <div className="font-semibold">
-            Valid from: {getDateString(opportunity)}
-          </div>
-        </div>
-        <div className="flex space-x-3 items-center">
-          <Slug prefix="@" slug={opportunity.from.handle} />
-          <FollowButton followId={opportunity.from.id} />
-        </div>
-        <div className="pt-6 pb-4">{opportunity.description}</div>
-        {opportunity.imageUrl && (
-          <div>
-            <MediaRenderer
-              key="attachment"
-              className="object-cover h-50 rounded-lg border-[3px] border-black margin mb-[20px]"
-              src={opportunity.imageUrl}
-              alt={'image attachment'}
+          )}
+          <div className="flex justify-end space-x-3">
+            {opportunity.website !== '' && (
+              <Link href={opportunity.website} target="_blank" className="flex">
+                <div className="flex items-center text-brand-600">
+                  <div
+                    className="mr-1 whitespace-nowrap"
+                    suppressHydrationWarning
+                  >
+                    {t('external-url')}
+                  </div>
+                  <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
+                </div>
+              </Link>
+            )}
+            <LogHoursButton
+              hoursDefault={opportunity.hoursPerWeek}
+              publicationId={opportunity.post_id}
+              organizationId={opportunity.from.id}
             />
           </div>
-        )}
-        <div className="flex justify-end space-x-3">
-          {opportunity.website !== '' && (
-            <Link href={opportunity.website} target="_blank" className="flex">
-              <div className="flex items-center text-brand-600">
-                <div className="mr-1 whitespace-nowrap">External url</div>
-                <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
-              </div>
-            </Link>
-          )}
-          <LogHoursButton
-            hoursDefault={opportunity.hoursPerWeek}
-            publicationId={opportunity.post_id}
-            organizationId={opportunity.from.id}
-          />
         </div>
-      </div>
+      </>
     )
   }
 

@@ -2,6 +2,7 @@ import { Inter } from '@next/font/google'
 import JSSoup from 'jssoup'
 import { NextPage } from 'next'
 import { SetStateAction, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CORS_PROXY, VHR_TOP_HOLDERS_URL } from '@/constants'
 import isVerified from '@/lib/isVerified'
@@ -26,6 +27,8 @@ const inter500 = Inter({
 })
 
 const VHRs: NextPage = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'components.vhrs' })
+
   const [volunteerData, setVolunteerData] = useState<Item[]>()
   const [volunteersIsLoading, setVolunteersIsLoading] = useState<boolean>(false)
 
@@ -107,18 +110,21 @@ const VHRs: NextPage = () => {
         <GridItemTwelve>
           <div className={`${inter500.className}`}>
             <div className="flex justify-around items-center">
-              <div className="text-3xl text-[#343434] mt-10 dark:text-[#E2E2E2]">
-                Top VHR Holders
+              <div
+                className="text-3xl text-[#343434] mt-10 dark:text-[#E2E2E2]"
+                suppressHydrationWarning
+              >
+                {t('top-holders')}
               </div>
             </div>
             <div className="flex justify-around mb-20 flex-wrap">
               <Column
-                label="Volunteers"
+                label={t('volunteers')}
                 data={volunteerData}
                 isLoading={volunteersIsLoading}
               />
               <Column
-                label="Organizations"
+                label={t('organizations')}
                 data={organizationData}
                 isLoading={organizationsIsLoading}
               />

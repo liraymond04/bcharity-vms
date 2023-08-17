@@ -172,7 +172,9 @@ const CausePage: NextPage = () => {
               <div className="flex flex-row">
                 <FollowButton followId={cause.from.id} size="lg" />
                 <div className="ml-5 mt-1 text-xl" suppressHydrationWarning>
-                  {t('status')}
+                  {totalDonated < parseFloat(cause.goal)
+                    ? t('status-accepting')
+                    : t('status-not-accepting')}
                 </div>
               </div>
             </div>

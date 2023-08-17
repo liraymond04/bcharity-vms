@@ -1,6 +1,7 @@
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
@@ -22,6 +23,16 @@ import { Spinner } from '../UI/Spinner'
 import SelectAvatar from './UserHome/SelectAvatar'
 
 const VolunteerHomeTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.home'
+  })
+  const { t: he } = useTranslation('common', {
+    keyPrefix: 'components.settings.home.errors'
+  })
+  const { t: e } = useTranslation('common', {
+    keyPrefix: 'errors'
+  })
+
   const { mutateAsync: upload } = useStorageUpload()
   const sdk = useSDK()
 
@@ -98,12 +109,9 @@ const VolunteerHomeTab: React.FC = () => {
       if (currentUser) {
         await checkAuth(currentUser?.ownedBy)
 
-        if (discord.length > 100)
-          throw Error('Length of Discord invite input is too long!')
-        if (twitter.length > 100)
-          throw Error('Length of Twitter profile input is too long!')
-        if (linkedin.length > 100)
-          throw Error('Length of LinkedIn profile input is too long!')
+        if (discord.length > 100) throw Error(he('discord'))
+        if (twitter.length > 100) throw Error(he('twitter'))
+        if (linkedin.length > 100) throw Error(he('linkedin'))
 
         const attributes: AttributeData[] = [
           {
@@ -153,7 +161,7 @@ const VolunteerHomeTab: React.FC = () => {
           (await upload({ data: [metadata] }))[0]
         )
 
-        if (!metadataUrl) throw Error('Metadata upload failed')
+        if (!metadataUrl) throw Error(e('metadata-upload-fail'))
 
         const typedDataResult =
           await lensClient().profile.createSetProfileMetadataTypedData({
@@ -193,17 +201,18 @@ const VolunteerHomeTab: React.FC = () => {
           >
             <div className="flex space-x-10">
               <div className="flex space-x-1 items-baseline">
-                <div>Profile ID:</div>{' '}
+                <div suppressHydrationWarning>{t('profile-id')}</div>{' '}
                 <div className="font-bold text-lg">{userId}</div>
               </div>
               <div className="flex space-x-1 items-baseline">
-                <div>Profile Handle:</div>{' '}
+                <div suppressHydrationWarning>{t('profile-handle')}</div>{' '}
                 <div className="font-bold text-lg">{userHandle}</div>
               </div>
             </div>
             <div>
               <Input
-                label="Name: "
+                suppressHydrationWarning
+                label={t('name')}
                 type="text"
                 id="name"
                 value={name}
@@ -213,7 +222,8 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <Input
-                label="Location: "
+                suppressHydrationWarning
+                label={t('location')}
                 type="text"
                 id="location"
                 value={location}
@@ -223,17 +233,19 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <TextArea
-                label="Bio: "
+                suppressHydrationWarning
+                label={t('bio')}
                 id="bio"
                 value={bio}
-                placeholder="Tell us something about you!"
+                placeholder={t('bio-placeholder')}
                 onChange={(e) => setBio(e.target.value)}
                 rows={5}
               />
             </div>
             <div>
               <Input
-                label="Website: "
+                suppressHydrationWarning
+                label={t('website')}
                 type="text"
                 id="website"
                 value={website}
@@ -243,7 +255,8 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <Input
-                label="Discord: "
+                suppressHydrationWarning
+                label={t('discord')}
                 type="text"
                 id="discord"
                 value={discord}
@@ -254,7 +267,8 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <Input
-                label="Twitter: "
+                suppressHydrationWarning
+                label={t('twitter')}
                 type="text"
                 id="twitter"
                 value={twitter}
@@ -265,7 +279,8 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <Input
-                label="LinkedIn: "
+                suppressHydrationWarning
+                label={t('linkedin')}
                 type="text"
                 id="linkedin"
                 value={linkedin}
@@ -276,7 +291,8 @@ const VolunteerHomeTab: React.FC = () => {
             </div>
             <div>
               <Input
-                label="Cover: "
+                suppressHydrationWarning
+                label={t('cover')}
                 type="file"
                 id="cover"
                 onChange={(e) => setCover(e.target.files?.[0] || null)}
@@ -288,8 +304,9 @@ const VolunteerHomeTab: React.FC = () => {
                 disabled={isLoading}
                 icon={isLoading && <Spinner size="sm" />}
                 type="submit"
+                suppressHydrationWarning
               >
-                Save
+                {t('save')}
               </Button>
             </div>
             {error && <ErrorMessage error={error} />}

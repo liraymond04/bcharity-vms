@@ -2,18 +2,23 @@ import { ExternalLinkIcon } from '@heroicons/react/outline'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import Link from 'next/link'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { STATIC_ASSETS } from '@/constants'
 import { OpportunityMetadata } from '@/lib/metadata'
 import validImageExtension from '@/lib/validImageExtension'
 
 import { Card } from '../UI/Card'
+import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
 interface IVolunteerCardProps {
   post: OpportunityMetadata
 }
 
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.volunteers.card'
+  })
   const getDisplayedImage = () => {
     if (!post.imageUrl || !validImageExtension(post.imageUrl)) {
       return (
@@ -47,6 +52,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
+        <ApplyToOpportunityModal></ApplyToOpportunityModal>
         <div className="flex">
           <div className="flex-shrink-0 h-36 w-36 overflow-hidden rounded-l-xl">
             {getDisplayedImage()}
@@ -63,7 +69,12 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
                 className="absolute bottom-0 flex text-brand-600 text-sm"
               >
                 <div className="flex items-center transition duration-10 hover:bg-brand-200 rounded-sm">
-                  <div className="mr-1 whitespace-nowrap">External url</div>
+                  <div
+                    className="mr-1 whitespace-nowrap"
+                    suppressHydrationWarning
+                  >
+                    {t('external-url')}
+                  </div>
                   <ExternalLinkIcon className="w-4 h-4 inline-flex" />
                 </div>
               </Link>

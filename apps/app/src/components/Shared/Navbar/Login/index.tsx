@@ -6,6 +6,12 @@ import { IS_MAINNET, STATIC_ASSETS } from 'src/constants'
 
 import Create from './Create'
 
+/**
+ * A component that handles Lens login, and prompting profile creation
+ *
+ * Uses {@link WalletSelector} to handle signing wallet addresses, and
+ * {@link Create} to create a Lens profile if an address has none
+ */
 const Login: FC = () => {
   const [hasConnected, setHasConnected] = useState<boolean>(false)
   const [hasProfile, setHasProfile] = useState<boolean>(true)

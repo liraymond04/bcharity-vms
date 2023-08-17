@@ -9,16 +9,40 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
 
-import { createProfile, isValidHandle } from '@/lib/lens-protocol'
+import { checkAuth, createProfile, isValidHandle } from '@/lib/lens-protocol'
+import { useAppPersistStore } from '@/store/app'
 
-interface Props {
+/**
+ * Properties of Create component
+ */
+export interface Props {
   isModal?: boolean
 }
 
+/**
+ * A component to create new Lens profile
+ *
+ * @example Create component used in a {@link Modal} in {@link MenuItems}
+ * ```ts
+ * <Modal
+ *   title={t('create-profile')}
+ *   show={showCreate}
+ *   onClose={() => {
+ *     setShowCreate(false)
+ *   }}
+ * >
+ *   <div className="p-5">
+ *     <Create isModal />
+ *   </div>
+ * </Modal>
+ * ```
+ */
 const Create: FC<Props> = ({ isModal = false }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.navbar.login.create'
   })
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const { currentUser } = useAppPersistStore()
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -26,7 +50,7 @@ const Create: FC<Props> = ({ isModal = false }) => {
 
   const newUserSchema = object({
     handle: string()
-      .min(2, { message: t('min') })
+      .min(5, { message: t('min') })
       .max(31, { message: t('max') })
       .regex(/^[a-z0-9]+$/, {
         message: t('regex')
@@ -46,12 +70,21 @@ const Create: FC<Props> = ({ isModal = false }) => {
         setError(false)
         const username = handle.toLowerCase()
         if (isValidHandle(username)) {
-          const result = await createProfile(username)
-          if (!isRelayerResult(result)) {
-            setErrorMessage(`${result.reason}`)
-            setError(true)
-          } else {
-            setSuccess(true)
+          try {
+            if (!currentUser) throw Error(e('profile-null'))
+            await checkAuth(currentUser.ownedBy)
+            const result = await createProfile(username)
+            if (!isRelayerResult(result)) {
+              setErrorMessage(`${result.reason}`)
+              setError(true)
+            } else {
+              setSuccess(true)
+            }
+          } catch (e) {
+            if (e instanceof Error) {
+              setErrorMessage(e.message)
+              setError(true)
+            }
           }
         }
         setIsPending(false)

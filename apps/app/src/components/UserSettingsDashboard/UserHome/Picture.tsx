@@ -19,7 +19,9 @@ interface Props {
 const Picture: FC<Props> = ({ profile }) => {
   const { mutateAsync: upload } = useStorageUpload()
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.settings.home.picture'
+  })
   const [avatar, setAvatar] = useState<string>()
   const [uploading, setUploading] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -42,7 +44,7 @@ const Picture: FC<Props> = ({ profile }) => {
     setIsLoading(true)
     try {
       await checkAuth(profile?.ownedBy ?? '')
-      if (!avatar) return toast.error("Avatar can't be empty!")
+      if (!avatar) return toast.error(t('avatar-empty'))
 
       const typedDataResult =
         await lensClient().profile.createSetProfileImageURITypedData({
@@ -74,7 +76,7 @@ const Picture: FC<Props> = ({ profile }) => {
         {error && (
           <ErrorMessage
             className="mb-3"
-            title="Transaction failed!"
+            title={t('transaction-failed')}
             error={error}
           />
         )}
@@ -115,7 +117,7 @@ const Picture: FC<Props> = ({ profile }) => {
             )
           }
         >
-          {t('Save')}
+          {t('save')}
         </Button>
       </div>
     </>
