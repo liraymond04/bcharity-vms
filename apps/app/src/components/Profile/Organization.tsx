@@ -1,5 +1,9 @@
-import { LocationMarkerIcon } from '@heroicons/react/outline'
-import { HeartIcon, PencilAltIcon, UserIcon } from '@heroicons/react/solid'
+import {
+  HeartIcon,
+  LocationMarkerIcon,
+  PencilAltIcon,
+  UserIcon
+} from '@heroicons/react/outline'
 import { ProfileFragment } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import Link from 'next/link'
@@ -63,79 +67,74 @@ const Organization: NextPage = () => {
 
   return (
     <>
-      <SEO title={`${profile?.handle} - Organization • BCharity VMS`} />
+      <SEO title={`${profile?.handle ?? ''} - Organization • BCharity VMS`} />
       <GridLayout>
         <GridItemTwelve>
-          <Card>
-            <div className="p-1">
+          <Card className="bg-purple-100 !rounded-none">
+            <div className="p-1m mt-10">
               {error ? (
                 <div className="min-h-[calc(100vh-800px)] p-4">
                   <ErrorMessage error={error} />
                 </div>
               ) : !profile ? (
                 <div className="min-h-[calc(100vh-800px)] p-4">
-                  <div className="flex flex-col justify-center space-y-8 items-center mt-10">
+                  <div className="flex flex-col justify-center space-y-8 items-center">
                     <Spinner />
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-row">
-                  <div className="align-middle">
-                    <div className="flex flex-col justify-center space-y-8 items-center mt-10">
+                <div className="flex">
+                  <div className="w-2/5 grow">
+                    <div className="flex flex-col space-y-8 items-center mb-12">
                       <img
-                        className="m- rounded-full"
+                        className="w-1/2 rounded-full"
                         src={getAvatar(profile)}
                         alt="Rounded avatar"
                       />
-                      <div className="flex justify-center space-x-2 items-center my-3">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-xl sm:text-xl">
-                          @{profile.handle}
-                        </span>
-                        <div>{profile.id}</div>
-                      </div>
                     </div>
 
-                    <div className="min-h-[calc(100vh-800px)] mx-10">
-                      <div className="w-full py-4 pl-4 pr-8 border bg-accent-content dark:darkgradient border-gray-400 dark:border-black rounded-md">
-                        <div className="w-full font-semibold text-gray-600 dark:text-white text-xl flex flex-col space-y-2">
-                          <div
-                            className="flex items-center mx-4 w-full"
-                            suppressHydrationWarning
-                          >
-                            <UserIcon className="h-6 w-6 mb-1 mr-2" />{' '}
-                            {t('followers')}
-                            {profile.stats.totalFollowers}
-                          </div>
-                          <div
-                            className="flex items-center mx-4 w-full"
-                            suppressHydrationWarning
-                          >
-                            <PencilAltIcon className="h-6 w-6 mb-1 mr-2" />{' '}
-                            {t('posts')}
-                            {profile.stats.totalPosts}
-                          </div>
-                          <div className="flex items-center mx-4 w-full">
-                            <HeartIcon className="h-6 w-6 mb-1 mr-2" />
-                            <h1 suppressHydrationWarning>{t('raised')}</h1>
-                            {/* <div className="ml-1">{8}</div> */}
-                          </div>
+                    <div className="flex justify-center">
+                      <div
+                        className="py-4 border bg-accent-content dark:darkgradient 
+                      border-gray-400 dark:border-black rounded-md font-semibold 
+                      text-gray-500 dark:text-white text-sm flex flex-col space-y-2"
+                      >
+                        <div
+                          className="flex items-center mx-4"
+                          suppressHydrationWarning
+                        >
+                          <UserIcon className="h-6 w-6 mb-1 mr-2" />
+                          {`${t('followers').toLocaleUpperCase()} ${
+                            profile.stats.totalFollowers
+                          }`}
+                        </div>
+                        <div
+                          className="flex items-center mx-4"
+                          suppressHydrationWarning
+                        >
+                          <PencilAltIcon className="h-6 w-6 mb-1 mr-2" />
+                          {`${t('posts').toLocaleUpperCase()} ${
+                            profile.stats.totalPosts
+                          }`}
+                        </div>
+                        <div className="flex items-center mx-4">
+                          <HeartIcon className="h-6 w-6 mb-1 mr-2" />
+                          <h1 suppressHydrationWarning>{t('raised')}</h1>
+                          {/* <div className="ml-1">{8}</div> */}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="w-full">
-                    <div className="justify-left w-full ">
-                      <div className="h-10 mb-2">
-                        <p className="sm:text-5xl text-3xl font-bold text-white-600 flex items-left mt-10">
+                  <div className="w-3/5 grow">
+                    <div className="ml-2">
+                      <div className="flex items-center">
+                        <p className="md:text-4xl text-xl font-bold text-white-600 flex items-left">
                           {profile.name ? profile.name : profile.handle}
                         </p>
-
-                        <div>
-                          <Link href="">
-                            <div className="truncate"></div>
-                          </Link>
-                        </div>
+                        <p className="border-2 border-gray-300 ml-4 px-2 py-1 text-gray-400 font-semibold">
+                          ORG
+                        </p>
                       </div>
                       {getSlug('location') !== '' && (
                         <div className="flex flex-row space-x-2">
@@ -197,17 +196,17 @@ const Organization: NextPage = () => {
                           </Link>
                         )}
                       </div>
-                      <div className="mr-4">
-                        <div
-                          className="mt-10 mb-4 font-semibold text-2xl"
-                          suppressHydrationWarning
-                        >
-                          {t('about')}
-                        </div>
-                        <div className="bg-accent-content dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
-                          <div className="w-full text-gray-600 dark:text-white text-xl p-5">
-                            {profile.bio}
-                          </div>
+                    </div>
+                    <div className="mr-4">
+                      <div
+                        className="mt-10 mb-4 font-semibold text-2xl"
+                        suppressHydrationWarning
+                      >
+                        {t('about')}
+                      </div>
+                      <div className="bg-accent-content dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
+                        <div className="w-full text-gray-600 dark:text-white text-xl p-5">
+                          {profile.bio}
                         </div>
                       </div>
                     </div>
