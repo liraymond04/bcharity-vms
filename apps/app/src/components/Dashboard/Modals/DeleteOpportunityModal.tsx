@@ -40,7 +40,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ids = getOpportunityMetadata(postData).map((p) => p.id)
+    const ids = getOpportunityMetadata(postData).map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])
