@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * Properties of GradientWrapper component
+ * Properties of {@link GradientWrapper}
  */
 export interface IGradientWrapperProps {
   children: React.ReactNode

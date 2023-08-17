@@ -9,7 +9,7 @@ import { Button } from '@/components/UI/Button'
 import GradientWrapper from '../Gradient/GradientWrapper'
 
 /**
- * Properties of GradientModal component
+ * Properties of {@link Modal}
  */
 export interface IGradientModalProps {
   title: string

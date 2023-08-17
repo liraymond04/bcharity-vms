@@ -13,7 +13,7 @@ import { checkAuth, createProfile, isValidHandle } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 /**
- * Properties of Create component
+ * Properties of {@link Create}
  */
 export interface Props {
   isModal?: boolean
