@@ -90,12 +90,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked)
-
-    if (!isChecked) {
-      console.log('checked')
-    } else {
-      console.log('not checked')
-    }
   }
 
   const onCancel = () => {
@@ -120,9 +114,13 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     try {
       const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
+      const publishTag = isChecked
+        ? PostTags.OrgPublish.Opportunity
+        : PostTags.OrgPublish.OpportunityDraft
+
       const metadata = buildMetadata<OpportunityMetadataRecord>(
         publisher,
-        [PostTags.OrgPublish.Opportunity],
+        [PostTags.OrgPublish.Opportunity, publishTag],
         {
           version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
           type: PostTags.OrgPublish.Opportunity,
