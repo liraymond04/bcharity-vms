@@ -13,9 +13,21 @@ import { Modal } from '../UI/Modal'
 import { Spinner } from '../UI/Spinner'
 import { TextArea } from '../UI/TextArea'
 
-interface Props {
+/**
+ * Properties of {@link LogHoursButton}
+ */
+export interface LogHoursButtonProps {
+  /**
+   * Default value passed to the log hours form
+   */
   hoursDefault: string
+  /**
+   * ID of the publication the log hours request is made to
+   */
   publicationId: string
+  /**
+   * ID of the organization the log hours request is made to
+   */
   organizationId: string
 }
 
@@ -24,7 +36,14 @@ export interface IVhrVerificationFormProps {
   comments: string
 }
 
-const LogHoursButton: FC<Props> = ({
+/**
+ * Component to display a button that opens a modal with a form to
+ * make a request to log hours/VHR
+ *
+ * The component uses the {@link useLogHours} hook to handle sending
+ * the request to the opportunity post
+ */
+const LogHoursButton: FC<LogHoursButtonProps> = ({
   hoursDefault,
   publicationId,
   organizationId

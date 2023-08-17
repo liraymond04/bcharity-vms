@@ -9,14 +9,32 @@ import { Button } from '@/components/UI/Button'
 import GradientWrapper from '../Gradient/GradientWrapper'
 
 /**
- * Properties of GradientModal component
+ * Properties of {@link GradientModal}
  */
 export interface IGradientModalProps {
+  /**
+   * Title of the modal component
+   */
   title: string
+  /**
+   * Determines if modal should be visible or hidden
+   */
   open: boolean
+  /**
+   * Function that runs when modal is closed
+   */
   onCancel: () => void
+  /**
+   * Function that runs when the submit button is pressed
+   */
   onSubmit: () => void
+  /**
+   * Determines if submit button should be disabled
+   */
   submitDisabled?: boolean
+  /**
+   * React components wrapped by the component
+   */
   children: React.ReactNode
 }
 
@@ -24,7 +42,7 @@ export interface IGradientModalProps {
  * A component that displays a modal window with a gradient background using {@link GradientWrapper}
  *
  * @example Using a gradient modal component for the {@link DeleteCauseModal}
- * ```ts
+ * ```tsx
  * const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
  *   open,
  *   onClose,
