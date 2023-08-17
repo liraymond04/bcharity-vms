@@ -117,8 +117,8 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         publisher,
         [publishTag],
         {
-          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-          type: PostTags.OrgPublish.Opportunity,
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
+          type: publishTag,
           id,
           ...rest,
           applicationRequired: applicationRequired ? 'true' : 'false',

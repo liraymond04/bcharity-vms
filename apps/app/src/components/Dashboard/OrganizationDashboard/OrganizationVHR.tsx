@@ -54,11 +54,12 @@ const organizationGridTabs: OrgGridTab[] = [
     name: getTranslation('active-posting'),
     inactiveString: getTranslation('active-inactive'),
     filter: (p) => {
-      const d = new Date()
+      const [y, m, d] = p.endDate.split('-')
       return (
         p.type === PostTags.OrgPublish.Opportunity &&
         (!p.endDate ||
-          p.endDate > `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`)
+          new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() >
+            new Date().getTime())
       )
     }
   },
@@ -71,11 +72,12 @@ const organizationGridTabs: OrgGridTab[] = [
     name: getTranslation('inactive'),
     inactiveString: getTranslation('inactive-inactive'),
     filter: (p) => {
-      const d = new Date()
+      const [y, m, d] = p.endDate.split('-')
       return (
         p.type === PostTags.OrgPublish.Opportunity &&
-        !!p.endDate &&
-        p.endDate < `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+        p.endDate !== '' &&
+        new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() <
+          new Date().getTime()
       )
     }
   }
