@@ -9,7 +9,7 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import { useExplorePublications } from '@/lib/lens-protocol'
 import { isPost, PostTags } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'

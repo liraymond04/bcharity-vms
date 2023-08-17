@@ -15,12 +15,17 @@ import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
-import usePostData from '@/lib/lens-protocol/usePostData'
-import { CauseMetadata, isPost } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getCauseMetadata } from '@/lib/metadata'
+import {
+  lensClient,
+  useEnabledCurrencies,
+  usePostData
+} from '@/lib/lens-protocol'
+import {
+  CauseMetadata,
+  getCauseMetadata,
+  isPost,
+  PostTags
+} from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 

@@ -18,11 +18,13 @@ import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import i18n from '@/i18n'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import usePostData from '@/lib/lens-protocol/usePostData'
-import { isPost, OpportunityMetadata } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { lensClient, usePostData } from '@/lib/lens-protocol'
+import {
+  getOpportunityMetadata,
+  isPost,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 

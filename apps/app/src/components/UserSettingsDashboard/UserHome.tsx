@@ -7,15 +7,14 @@ import { v4 } from 'uuid'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Input } from '@/components/UI/Input'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { checkAuth, getSignature, lensClient } from '@/lib/lens-protocol'
 import {
   AttributeData,
   MetadataDisplayType,
   MetadataVersion,
   ProfileMetadata
 } from '@/lib/types'
+import validImageExtension from '@/lib/validImageExtension'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
@@ -297,7 +296,16 @@ const VolunteerHomeTab: React.FC = () => {
                 label={t('cover')}
                 type="file"
                 id="cover"
-                onChange={(e) => setCover(e.target.files?.[0] || null)}
+                onChange={(event) => {
+                  const selectedFile = event.target.files?.[0]
+                  setError(undefined)
+
+                  if (selectedFile && validImageExtension(selectedFile.name)) {
+                    setCover(selectedFile)
+                  } else {
+                    setError(Error(e('invalid-file-type')))
+                  }
+                }}
               />
             </div>
             <div className="flex justify-end">

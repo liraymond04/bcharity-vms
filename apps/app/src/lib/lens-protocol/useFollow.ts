@@ -1,5 +1,7 @@
+import { isRelayerError, RelayerResultFragment } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
@@ -16,11 +18,28 @@ export interface UseFollowParams {
   followerAddress: string
 }
 
-//  * @returns `following` - whether or not the `followerAddress` follows the `profileId` \
-//  *          `error` - the error message if an error occured when fetching the follow data, or attempting to (un)follow a user \
-//  *    `     `isLoading` - whether or not the follow data is being fetched or if the hook is attempting to (un)follow a user \
-//  *          `followUser`- a function to follow a user \
-//  *          `unfollowUser` - a function to unfollow a user
+export interface UseFollowReturn {
+  /**
+   * whether or not the followerAddress follows the profileId
+   */
+  following: boolean
+  /**
+   * The error message if an error occured when fetching the follow data, or attempting to (un)follow a user
+   */
+  error: string
+  /**
+   * Whether or not the follow data is being fetched or if the hook is attempting to (un)follow a user
+   */
+  isLoading: boolean
+  /**
+   * The function to execute to follow a user
+   */
+  followUser: () => Promise<RelayerResultFragment | undefined>
+  /**
+   * The function to execute to follow a user
+   */
+  unfollowUser: () => Promise<RelayerResultFragment | undefined>
+}
 
 /**
  * React hook to handle following-relating fetching and actions. Requires authentication beforehand.
@@ -29,9 +48,35 @@ export interface UseFollowParams {
  * , {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#createFollowTypedData | createFollowTypedData}
  * , {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Profile.html#createUnfollowTypedData | createUnfollowTypedData}
  * @param params Params for the hook
+ * @example A follow button
+ *  // Adapted from FollowButton.tsx
+ *  const { following, isLoading, error, followUser, unfollowUser } = useFollow({
+ *    followerAddress: currentUser?.ownedBy ?? '',
+ *    profileId: followId
+ *  })
+ *  ...
+ *  return (
+ *    <Button
+ *      disabled={isLoading}
+ *      onClick={() => {
+ *        if (!currentUser) return
+ *        checkAuth(currentUser.ownedBy).then(() => {
+ *          if (following) {
+ *            unfollowUser(currentUser.ownedBy, followId)
+ *          } else {
+ *            followUser(currentUser.ownedBy, followId)
+ *          }
+ *        })
+ *      }}
+ *    >
+ *      {following ? t('unfollow') : t('follow')}
+ *    </Button>
+ *  )
+ *
  */
-const useFollow = (params: UseFollowParams) => {
-  const [following, setFollowing] = useState<boolean>()
+const useFollow = (params: UseFollowParams): UseFollowReturn => {
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const [following, setFollowing] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -52,6 +97,8 @@ const useFollow = (params: UseFollowParams) => {
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)
+      } else {
+        console.error(e)
       }
     }
     setIsLoading(false)
@@ -59,19 +106,23 @@ const useFollow = (params: UseFollowParams) => {
 
   useEffect(() => {
     fetch(params.followerAddress, params.profileId)
-  }, [])
+  }, [params.followerAddress, params.profileId])
 
-  const followUser = async (address: string, profileId: string) => {
+  const followUser = async () => {
+    if (!params.followerAddress) {
+      setError(e('profile-null'))
+      return
+    }
+    if (!params.profileId) {
+      setError(e('generic'))
+      return
+    }
     setIsLoading(true)
     try {
-      await checkAuth(address)
+      await checkAuth(params.followerAddress)
 
       const typedDataResult = await lensClient().profile.createFollowTypedData({
-        follow: [
-          {
-            profile: profileId
-          }
-        ]
+        follow: [{ profile: params.profileId }]
       })
 
       const signature = await signTypedData(
@@ -83,26 +134,42 @@ const useFollow = (params: UseFollowParams) => {
         signature: signature
       })
 
-      setFollowing(true)
-      setIsLoading(false)
-
-      return broadcastResult
+      if (broadcastResult.isFailure()) {
+        setError(broadcastResult.error.message)
+      } else if (isRelayerError(broadcastResult.value)) {
+        setError(broadcastResult.value.reason)
+      } else {
+        setFollowing(true)
+        return broadcastResult.value
+      }
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)
+      } else {
+        console.error(e)
       }
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
-  const unfollowUser = async (address: string, profileId: string) => {
+  const unfollowUser = async () => {
+    if (!params.followerAddress) {
+      setError(e('profile-null'))
+      return
+    }
+    if (!params.profileId) {
+      setError(e('generic'))
+      return
+    }
     setIsLoading(true)
+    setError('')
     try {
-      await checkAuth(address)
+      await checkAuth(params.followerAddress)
 
       const typedDataResult =
         await lensClient().profile.createUnfollowTypedData({
-          profile: profileId
+          profile: params.profileId
         })
 
       const signature = await signTypedData(
@@ -114,20 +181,26 @@ const useFollow = (params: UseFollowParams) => {
         signature: signature
       })
 
-      setFollowing(false)
-      setIsLoading(false)
-
-      return broadcastResult
+      if (broadcastResult.isFailure()) {
+        setError(broadcastResult.error.message)
+      } else if (isRelayerError(broadcastResult.value)) {
+        setError(broadcastResult.value.reason)
+      } else {
+        setFollowing(false)
+        return broadcastResult.value
+      }
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)
+      } else {
+        console.error(e)
       }
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return {
-    // whether or not test
     following,
     error,
     isLoading,

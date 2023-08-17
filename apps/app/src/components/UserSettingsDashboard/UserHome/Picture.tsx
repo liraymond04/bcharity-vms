@@ -10,9 +10,7 @@ import ChooseFile from '@/components/Shared/ChooseFile'
 import { Button } from '@/components/UI/Button'
 import { ErrorMessage } from '@/components/UI/ErrorMessage'
 import { Spinner } from '@/components/UI/Spinner'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { checkAuth, getSignature, lensClient } from '@/lib/lens-protocol'
 
 interface Props {
   profile: ProfileFragment | undefined

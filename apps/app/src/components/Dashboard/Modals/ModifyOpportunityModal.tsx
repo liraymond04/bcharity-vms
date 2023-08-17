@@ -10,16 +10,16 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import useCreatePost from '@/lib/lens-protocol/useCreatePost'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
 import {
   buildMetadata,
   OpportunityMetadataRecord,
   PostTags
 } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
+import validImageExtension from '@/lib/validImageExtension'
 
-import Error from './Error'
+import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
@@ -113,22 +113,20 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata
       })
 
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
-
       reset()
       onClose(true)
     } catch (e: any) {
-      setErrorMessage(e.message)
       setError(true)
+      if (e instanceof Error) {
+        setErrorMessage(e.message)
+      } else {
+        console.error(e)
+      }
     }
     setIsPending(false)
   }
@@ -235,7 +233,17 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label={t('image')}
               accept="image/*"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0]
+                setError(false)
+
+                if (selectedFile && validImageExtension(selectedFile.name)) {
+                  setImage(selectedFile)
+                } else {
+                  setError(true)
+                  setErrorMessage(e('invalid-file-type'))
+                }
+              }}
             />
           </Form>
         ) : (
@@ -243,7 +251,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         )}
 
         {error && (
-          <Error
+          <ErrorComponent
             message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}

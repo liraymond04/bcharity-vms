@@ -437,5 +437,6 @@
   "components.settings.dispatcher.dispatcher": "调度员",
   "components.shared.navbar.menuitems.create-profile": "创建个人资料",
   "components.causes.status-accepting": "状态：接受捐赠",
-  "components.causes.status-not-accepting": "状态：不接受捐赠"
+  "components.causes.status-not-accepting": "状态：不接受捐赠",
+  "errors.invalid-file-type": "文件格式无效"
 }
