@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { formatLocation } from '@/lib/formatLocation'
 import isVerified from '@/lib/isVerified'
 import { getAvatar, getProfile, usePostData } from '@/lib/lens-protocol'
 import {
@@ -105,9 +106,10 @@ const Organization: NextPage = () => {
             <p className="ml-3 font-semibold">{op.name}</p>
             <p className="ml-3">{op.startDate}</p>
             <p className="ml-3">{op.endDate ? op.endDate : 'ongoing'}</p>
-            <p className="ml-3">LOCATION PLACEHOLDER</p>
+            {/* <p className="ml-3">LOCATION PLACEHOLDER</p> */}
             <a
               href={`/volunteer/${op.post_id}`}
+              target="_blank"
               className="ml-auto mr-3 underline"
             >
               View opportuntiy
@@ -120,7 +122,35 @@ const Organization: NextPage = () => {
       title: `CAUSES (${causeData.length})`,
       data: causeData,
       makeRow: (c: CauseMetadata) => {
-        return <p>test</p>
+        const active = true
+        return (
+          <div
+            className={`flex items-center border border-gray-500 ${
+              active ? 'bg-green-100' : 'bg-gray-100'
+            }`}
+          >
+            <div
+              className={`text-xs border border-gray-500 ml-3 w-14 shrink-0 ${
+                active ? 'bg-emerald-200' : 'bg-gray-200'
+              }`}
+            >
+              <p className="w-full text-center">
+                {active ? 'ongoing' : 'ended'}
+              </p>
+            </div>
+            <p className="ml-3 font-semibold">{c.name}</p>
+            {/* <p className="ml-3">{c.startDate}</p>
+            <p className="ml-3">{op.endDate ? op.endDate : 'ongoing'}</p> */}
+            <p className="ml-3">{formatLocation(c.location)}</p>
+            <a
+              href={`/project/${c.post_id}`}
+              target="_blank"
+              className="ml-auto mr-3 underline"
+            >
+              View cause
+            </a>
+          </div>
+        )
       }
     }
   ]
@@ -325,12 +355,21 @@ const Organization: NextPage = () => {
                         )
                       })}
                     </div>
-                    <div className="flex flex-col items-stretch">
-                      {tabs[selectedTabIndex].data.map((v) => {
-                        //@ts-ignore
-                        return tabs[selectedTabIndex].makeRow(v)
-                      })}
-                    </div>
+                    {loading ? (
+                      <Spinner></Spinner>
+                    ) : (
+                      <div className="flex flex-col items-stretch">
+                        {tabs[selectedTabIndex].data.map((v) => {
+                          //@ts-ignore
+                          return tabs[selectedTabIndex].makeRow(v)
+                        })}
+                      </div>
+                    )}
+                    {postDataError && (
+                      <ErrorMessage
+                        error={new Error(postDataError)}
+                      ></ErrorMessage>
+                    )}
                   </div>
                 </div>
               )}
