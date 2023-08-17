@@ -1,6 +1,11 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * A component that displays a footer that comptains internal and
+ * external links to information pages and social media links
+ */
+
 const Footer: FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.footer'
