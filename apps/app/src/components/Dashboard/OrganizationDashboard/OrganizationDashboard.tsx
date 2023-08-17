@@ -1,4 +1,5 @@
 import {
+  ClipboardCheckIcon,
   CogIcon,
   GlobeIcon,
   HomeIcon,
@@ -26,9 +27,21 @@ const OrganizationDashboard: React.FC = () => {
 
   const tabs: IDashboardTab[] = [
     {
+      label: 'ORGANIZATION',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
+    },
+    {
       label: t('home'),
       icon: <HomeIcon className="w-4 inline" />,
       component: <OrganizationHomeTab />
+    },
+    {
+      label: 'MANAGEMENT',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
     },
     {
       label: 'VHR',
@@ -41,9 +54,27 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationCausesTab />
     },
     {
+      label: 'RECRUITMENT',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
+    },
+    //Placeholder for Applications component
+    {
+      label: 'Applications',
+      icon: <ClipboardCheckIcon className="w-4 inline" />,
+      component: <div></div>
+    },
+    {
       label: t('verify'),
       icon: <LockClosedIcon className="w-4 inline" />,
       component: <OrganizationLogVHRTab />
+    },
+    {
+      label: 'SETTINGS',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
     },
     {
       label: t('settings'),
@@ -61,7 +92,6 @@ const OrganizationDashboard: React.FC = () => {
         setSelectedIndex={setSelectedTab}
         tabs={tabs}
       />
-
       <div className="grow">
         <GradientWrapper>
           <div className="min-h-screen overflow-x-scroll">
