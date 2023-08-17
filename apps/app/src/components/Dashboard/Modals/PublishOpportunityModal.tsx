@@ -69,6 +69,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [image, setImage] = useState<File | null>(null)
+  const [isChecked, setIsChecked] = useState(false)
 
   const form = useForm<IPublishOpportunityFormProps>()
 
@@ -88,6 +89,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     } catch (e) {
       return false
     }
+  }
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked)
   }
 
   const onCancel = () => {
@@ -112,9 +117,13 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     try {
       const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
+      const publishTag = isChecked
+        ? PostTags.OrgPublish.Opportunity
+        : PostTags.OrgPublish.OpportunityDraft
+
       const metadata = buildMetadata<OpportunityMetadataRecord>(
         publisher,
-        [PostTags.OrgPublish.Opportunity],
+        [PostTags.OrgPublish.Opportunity, publishTag],
         {
           version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
           type: PostTags.OrgPublish.Opportunity,
@@ -238,6 +247,31 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
+
+            <label
+              style={{
+                display: 'inline-block',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginTop: '15px',
+                marginBottom: '15px'
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                style={{
+                  appearance: 'none',
+                  backgroundColor: 'transparent',
+                  border: '1px solid grey',
+                  width: '25px',
+                  height: '25px'
+                }}
+              />
+              <span style={{ marginLeft: '12px' }}>Publish Now?</span>
+            </label>
+
             <FileInput
               label={t('image')}
               accept="image/*"

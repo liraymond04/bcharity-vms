@@ -1,12 +1,34 @@
 import { ChangeEventHandler, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface Props {
+/**
+ * Properties of {@link ChooseFile}
+ */
+export interface ChooseFileProps {
+  /**
+   * Used in the component label's htmlFor attribute
+   */
   id: string
+  /**
+   * Function that runs when the input component changes
+   */
   onChange: ChangeEventHandler<HTMLInputElement>
 }
 
-const ChooseFile: FC<Props> = ({ id, onChange }) => {
+/**
+ * A component that displays an input component for choosing files
+ *
+ * @example ChooseFile used in the {@link Picture} component
+ * ```tsx
+ * <ChooseFile
+ *   id="avatar"
+ *   onChange={(evt: ChangeEvent<HTMLInputElement>) =>
+ *     handleUpload(evt)
+ *   }
+ * />
+ * ```
+ */
+const ChooseFile: FC<ChooseFileProps> = ({ id, onChange }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.choose-file'
   })

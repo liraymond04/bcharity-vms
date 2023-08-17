@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * Properties of GradientWrapper component
+ * Properties of {@link GradientWrapper}
  */
 export interface IGradientWrapperProps {
   /**
@@ -18,7 +18,7 @@ export interface IGradientWrapperProps {
  * A component that wraps its children in a gradient background
  *
  * @example Add a gradient background to main body content in {@link SiteLayout}
- * ```ts
+ * ```tsx
  * <GradientWrapper className="grow">
  *   ...
  *   {children}

@@ -22,11 +22,11 @@ import { getProfilesOwnedBy, lensClient } from '@/lib/lens-protocol'
 import Logger from '@/lib/logger'
 
 /**
- * Properties of WalletSelector component
+ * Properties of {@link WalletSelector}
  */
 export interface WalletSelectorProps {
   /**
-   * Dispatch to set store value for connected state
+   * Dispatch to set store value for has connected state
    */
   setHasConnected: Dispatch<boolean>
   /**

@@ -9,7 +9,7 @@ import { Button } from '@/components/UI/Button'
 import GradientWrapper from '../Gradient/GradientWrapper'
 
 /**
- * Properties of GradientModal component
+ * Properties of {@link Modal}
  */
 export interface IGradientModalProps {
   /**
@@ -42,7 +42,7 @@ export interface IGradientModalProps {
  * A component that displays a modal window with a gradient background using {@link GradientWrapper}
  *
  * @example Using a gradient modal component for the {@link DeleteCauseModal}
- * ```ts
+ * ```tsx
  * const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
  *   open,
  *   onClose,
