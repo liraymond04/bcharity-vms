@@ -92,13 +92,15 @@ const Organization: NextPage = () => {
               active ? 'bg-green-100' : 'bg-gray-100'
             }`}
           >
-            <span
-              className={`text-xs border border-gray-500 px-1 ml-3 ${
+            <div
+              className={`text-xs border border-gray-500 ml-3 w-14 shrink-0 ${
                 active ? 'bg-emerald-200' : 'bg-gray-200'
               }`}
             >
-              {active ? 'ongoing' : 'ended'}
-            </span>
+              <p className="w-full text-center">
+                {active ? 'ongoing' : 'ended'}
+              </p>
+            </div>
 
             <p className="ml-3 font-semibold">{op.name}</p>
             <p className="ml-3">{op.startDate}</p>
