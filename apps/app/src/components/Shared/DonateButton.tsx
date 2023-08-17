@@ -34,10 +34,25 @@ import { Modal } from '../UI/Modal'
 import { Spinner } from '../UI/Spinner'
 import Uniswap from './Uniswap'
 
-interface Props {
+/**
+ * Properties of {@link DonateButton}
+ */
+export interface DonateButtonProps {
+  /**
+   * Original post that is being donated to
+   */
   post: PostFragment
+  /**
+   * Metadata object of cause that is being donated to
+   */
   cause: CauseMetadata
+  /**
+   * Size of button being rendered
+   */
   size?: 'lg' | 'sm' | 'md'
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
 }
 
@@ -45,7 +60,30 @@ export interface IDonateFormProps {
   contribution: string
 }
 
-const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
+/**
+ * Component that displays a button to open a modal to donate to a cause
+ *
+ * This component handles fetching total contributions from original post
+ * and comments, fetches currency data such as symbols, and swapping currency
+ * with Uniswap
+ *
+ * Total contribution amounts are calculated by fetching the number of collects
+ * on a post or comment and multiplying by its contribution amount. This
+ * calculation works because contribution amounts on publication posts are
+ * immutable.
+ *
+ * The donate modal sets the contribution amount as the default set by the
+ * original cause post, and new amounts are set by creating new comments
+ * copying the details of the original post and only modifying the amount
+ * in the collect module. Their amounts are later fetched and added to the
+ * total during calculation of total contribution amount.
+ */
+const DonateButton: FC<DonateButtonProps> = ({
+  post,
+  cause,
+  size,
+  className
+}) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.donate-button'
   })

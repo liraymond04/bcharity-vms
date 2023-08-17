@@ -1,13 +1,36 @@
 import clsx from 'clsx'
 import React, { FC } from 'react'
 
-interface Props {
+/**
+ * Properties of {@link Slug}
+ */
+export interface SlugProps {
+  /**
+   * String of text to display
+   */
   slug: string | undefined | null
+  /**
+   * String of prefix to add before the slug
+   */
   prefix?: string
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
 }
 
-const Slug: FC<Props> = ({ slug, prefix, className = '' }) => {
+/**
+ * A component that renders a styled string used for slugs
+ *
+ * @example Slug used for an organiation's profile link in {@link VolunteerPage}
+ * ```tsx
+ * <div className="flex space-x-3 items-center">
+ *   <Slug prefix="@" slug={opportunity.from.handle} />
+ *   <FollowButton followId={opportunity.from.id} />
+ * </div>
+ * ```
+ */
+const Slug: FC<SlugProps> = ({ slug, prefix, className = '' }) => {
   return (
     <span
       className={clsx(
