@@ -15,6 +15,7 @@ import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
 import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata/PostTags'
 import { MetadataVersion } from '@/lib/types'
+import validImageExtension from '@/lib/validImageExtension'
 
 import Error from './Error'
 
@@ -237,7 +238,17 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
             <FileInput
               label={t('image')}
               accept="image/*"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0]
+                setError(false)
+
+                if (selectedFile && validImageExtension(selectedFile.name)) {
+                  setImage(selectedFile)
+                } else {
+                  setError(true)
+                  setErrorMessage(e('invalid-file-format'))
+                }
+              }}
             />
           </Form>
         ) : (

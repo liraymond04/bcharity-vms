@@ -17,6 +17,7 @@ import {
   PostTags
 } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
+import validImageExtension from '@/lib/validImageExtension'
 
 import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
@@ -232,7 +233,17 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label={t('image')}
               accept="image/*"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0]
+                setError(false)
+
+                if (selectedFile && validImageExtension(selectedFile.name)) {
+                  setImage(selectedFile)
+                } else {
+                  setError(true)
+                  setErrorMessage(e('invalid-file-type'))
+                }
+              }}
             />
           </Form>
         ) : (
