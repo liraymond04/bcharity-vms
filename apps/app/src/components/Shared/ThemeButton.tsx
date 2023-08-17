@@ -2,6 +2,13 @@ import { MoonIcon, SunIcon } from '@heroicons/react/outline'
 import { useTheme } from 'next-themes'
 import React, { FC, useEffect, useState } from 'react'
 
+/**
+ * A component used to display a button that toggles the theme
+ * between light mode and dark mode
+ *
+ * The component uses the useTheme hook from the 'next-themes' package
+ * to handle theme switching
+ */
 const ThemeButton: FC = () => {
   const { theme, setTheme } = useTheme()
 

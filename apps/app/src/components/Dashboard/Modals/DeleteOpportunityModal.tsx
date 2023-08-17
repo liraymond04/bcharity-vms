@@ -7,8 +7,7 @@ import { FileInput } from '@/components/UI/FileInput'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { checkAuth, lensClient } from '@/lib/lens-protocol'
 import { getOpportunityMetadata } from '@/lib/metadata'
 
 import Error from './Error'
@@ -41,7 +40,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ids = getOpportunityMetadata(postData).map((p) => p.id)
+    const ids = getOpportunityMetadata(postData).map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])

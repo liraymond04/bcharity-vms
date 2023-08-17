@@ -10,8 +10,7 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import useCreatePost from '@/lib/lens-protocol/useCreatePost'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
 import {
   buildMetadata,
   OpportunityMetadataRecord,
@@ -20,7 +19,7 @@ import {
 import { MetadataVersion } from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 
-import Error from './Error'
+import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
 interface IPublishOpportunityModalProps {
@@ -53,6 +52,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [image, setImage] = useState<File | null>(null)
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
+  const [isChecked, setIsChecked] = useState(false)
 
   useEffect(() => {
     reset(defaultValues)
@@ -64,8 +64,11 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     resetField,
     register,
     clearErrors,
+    watch,
     formState: { errors }
   } = form
+
+  const currentFormData = watch()
 
   const validUrl = (url: string) => {
     try {
@@ -74,6 +77,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     } catch (e) {
       return false
     }
+  }
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked)
   }
 
   const onCancel = () => {
@@ -100,36 +107,40 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         ? (await upload({ data: [image] }))[0]
         : defaultValues.imageUrl
 
+      const { applicationRequired, ...rest } = formData
+
+      const publishTag = isChecked
+        ? PostTags.OrgPublish.Opportunity
+        : PostTags.OrgPublish.OpportunityDraft
+
       const metadata = buildMetadata<OpportunityMetadataRecord>(
         publisher,
-        [PostTags.OrgPublish.Opportunity],
+        [publishTag],
         {
-          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-          type: PostTags.OrgPublish.Opportunity,
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
+          type: publishTag,
           id,
-          applicationRequired: 'false', // set in formData in VM-178
-          ...formData,
+          ...rest,
+          applicationRequired: applicationRequired ? 'true' : 'false',
           imageUrl
         }
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata
       })
 
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
-
       reset()
       onClose(true)
     } catch (e: any) {
-      setErrorMessage(e.message)
       setError(true)
+      if (e instanceof Error) {
+        setErrorMessage(e.message)
+      } else {
+        console.error(e)
+      }
     }
     setIsPending(false)
   }
@@ -232,6 +243,57 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
+            <div className="flex-row space-x-96">
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: isChecked ? 'purple' : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }}>Publish Now?</span>
+              </label>
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  {...register('applicationRequired')}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: currentFormData.applicationRequired
+                      ? 'purple'
+                      : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }}>
+                  Registration required?
+                </span>
+              </label>
+            </div>
             <FileInput
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label={t('image')}
@@ -254,7 +316,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         )}
 
         {error && (
-          <Error
+          <ErrorComponent
             message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}

@@ -6,7 +6,7 @@ import {
 import { ProfileFragment } from '@lens-protocol/client'
 import { useTranslation } from 'react-i18next'
 
-import getAvatar from '@/lib/getAvatar'
+import { getAvatar } from '@/lib/lens-protocol'
 
 import FollowButton from '../Shared/FollowButton'
 import { Card } from '../UI/Card'

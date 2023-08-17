@@ -88,7 +88,7 @@ const VolunteerDashboard: React.FC = () => {
   ]
 
   return (
-    <div className="flex">
+    <div className="flex max-w-screen overflow-scroll">
       <Sidebar
         emptyTop
         selectedIndex={selectedTab}

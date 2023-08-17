@@ -7,10 +7,12 @@ import { useEffect, useState } from 'react'
 import { useInView } from 'react-cool-inview'
 import { useTranslation } from 'react-i18next'
 
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { OpportunityMetadata } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { useExplorePublications } from '@/lib/lens-protocol'
+import {
+  getOpportunityMetadata,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
 import testSearch from '@/lib/search'
 
 import Error from '../Dashboard/Modals/Error'
@@ -35,7 +37,7 @@ const Volunteers: NextPage = () => {
     data,
     error: exploreError,
     loading,
-    pageInfo,
+    hasMore,
     fetchMore
   } = useExplorePublications(
     {
@@ -59,7 +61,6 @@ const Volunteers: NextPage = () => {
       _posts.push(post)
       if (post.category) _categories.add(post.category)
       if (post.from.handle) _Orgs.add(post.from.handle)
-      console.log('post', post)
     })
     setPosts(_posts)
     setCategories(_categories)
@@ -68,9 +69,18 @@ const Volunteers: NextPage = () => {
 
   const { observe } = useInView({
     onChange: async ({ unobserve, inView }) => {
-      if (pageInfo?.next && inView) {
-        unobserve()
-        fetchMore(pageInfo?.next)
+      console.log(
+        'on change: in view? %s | has more? %s | loading? %s',
+        inView,
+        hasMore,
+        loading
+      )
+      if (inView) {
+        if (hasMore) {
+          fetchMore()
+        } else {
+          unobserve()
+        }
       }
     }
   })
@@ -128,33 +138,28 @@ const Volunteers: NextPage = () => {
           {t('title')}
         </p>
       </div>
-      {loading ? (
-        <div className="flex justify-center m-5">
-          <Spinner />
-        </div>
-      ) : (
-        <GridLayout>
-          {posts
-            .filter(
-              (post) =>
-                testSearch(post.name, searchValue) &&
-                (selectedCategory === '' ||
-                  post.category === selectedCategory) &&
-                (selectedOrg === '' || post.from.handle === selectedOrg)
-            )
-            .map((post) => (
-              <GridItemFour key={post.id}>
-                <VolunteerCard post={post} />
-              </GridItemFour>
-            ))}
+      <GridLayout>
+        {posts
+          .filter(
+            (post) =>
+              testSearch(post.name, searchValue) &&
+              (selectedCategory === '' || post.category === selectedCategory) &&
+              (selectedOrg === '' || post.from.handle === selectedOrg)
+          )
+          .map((post) => (
+            <GridItemFour key={post.id}>
+              <VolunteerCard post={post} />
+            </GridItemFour>
+          ))}
 
-          {pageInfo?.next && (
-            <span className="flex justify-center p-5">
-              <Spinner size="md" />
-            </span>
-          )}
-        </GridLayout>
-      )}
+        <span
+          className="flex justify-center p-5"
+          ref={observe}
+          hidden={!loading}
+        >
+          {loading && <Spinner size="md" />}
+        </span>
+      </GridLayout>
       {exploreError && (
         <Error
           message={`${e('generic-front')}${exploreError}${e('generic-back')}`}
