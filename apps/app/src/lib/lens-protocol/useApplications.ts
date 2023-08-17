@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import {
   ApplicationMetadata,
   ApplicationMetadataBuilder,
+  buildMetadata,
   getOpportunityMetadata,
   InvalidMetadataException,
   isComment,
@@ -12,6 +13,7 @@ import {
 } from '../metadata'
 import { logIgnoreWarning } from '../metadata/get/logIgnoreWarning'
 import lensClient from './lensClient'
+import useCreateComment from './useCreateComment'
 
 interface GetIsRequestHandledParams {
   profileId: string
@@ -139,6 +141,22 @@ const useApplications = ({ profile }: UseApplicationsParams) => {
   useEffect(refetch, [profile])
 
   return { refetch, data: applications, loading, error }
+}
+
+const useAccept = (profile: ProfileFragment, publicationId: string) => {
+  const { createComment } = useCreateComment()
+
+  const metadata = buildMetadata<{}>(profile, [PostTags.Application.Accept], {})
+
+  createComment({ publicationId, metadata, profileId: profile.id })
+}
+
+const useReject = (profile: ProfileFragment, publicationId: string) => {
+  const { createComment } = useCreateComment()
+
+  const metadata = buildMetadata(profile, [PostTags.Application.REJECT], {})
+
+  createComment({ publicationId, metadata, profileId: profile.id })
 }
 
 export default useApplications

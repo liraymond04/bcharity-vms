@@ -15,10 +15,10 @@ import getUserLocale from '../getUserLocale'
  * A function to build metadata of a type
  *
  * @template T The metadata record type, e.g. {@link OpportunityMetadataRecord}
- * @param {ProfileFragment} publisher The profile making the post
- * @param {string[]} tags The array of PostTags for the post
- * @param {T} data the attribute data for the post
- * @returns {PublicationMetadataV2Input} metadata that can be passed into createPost()
+ * @param publisher The profile making the post
+ * @param tags The array of PostTags for the post
+ * @param data the attribute data for the post
+ * @returns  metadata that can be passed into createPost()
  *
  * @example
  *
@@ -43,7 +43,7 @@ import getUserLocale from '../getUserLocale'
  * ```
  *
  */
-const buildMetadata = <T extends Record<string, string>>(
+const buildMetadata = <T extends Record<string, string> = {}>(
   publisher: ProfileFragment,
   tags: string[],
   data: T
