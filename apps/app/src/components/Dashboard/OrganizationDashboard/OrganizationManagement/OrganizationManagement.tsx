@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { checkAuth, useCreateComment } from '@/lib/lens-protocol'
@@ -51,11 +51,7 @@ const OrganizationManagement: React.FC<IOrganizationLogVHRProps> = () => {
     try {
       await checkAuth(profile.ownedBy)
 
-      const metadata = buildMetadata<{}>(
-        profile,
-        [PostTags.Application.Accept],
-        {}
-      )
+      const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
 
       await createComment({ publicationId, metadata, profileId: profile.id })
     } catch (e: any) {
@@ -73,11 +69,7 @@ const OrganizationManagement: React.FC<IOrganizationLogVHRProps> = () => {
     try {
       await checkAuth(profile.ownedBy)
 
-      const metadata = buildMetadata<{}>(
-        profile,
-        [PostTags.Application.Accept],
-        {}
-      )
+      const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
 
       await createComment({ publicationId, metadata, profileId: profile.id })
     } catch (e: any) {
@@ -87,7 +79,40 @@ const OrganizationManagement: React.FC<IOrganizationLogVHRProps> = () => {
     removeIdPending(publicationId)
   }
 
-  return <div>test</div>
+  const shouldShowError = () => {
+    return (
+      (verifyOrRejectError &&
+        !verifyOrRejectError.startsWith('UserRejectedRequestError') &&
+        !verifyOrRejectError.startsWith('User rejected the request')) ||
+      error
+    )
+  }
+
+  const getErrorMessage = () => {
+    if (error) {
+      return error
+    } else if (
+      verifyOrRejectError &&
+      !verifyOrRejectError.startsWith('UserRejectedRequestError') &&
+      !verifyOrRejectError.startsWith('User rejected the request')
+    ) {
+      return verifyOrRejectError
+    }
+  }
+
+  useEffect(() => {
+    let result = new Set<string>()
+    data.map((value) => result.add(value.opportunity.category))
+    setCategories(Array.from(result))
+  }, [data])
+
+  return (
+    <div>
+      {data.map((ap) => {
+        return <p key={ap.post_id}>{ap.description}</p>
+      })}
+    </div>
+  )
 }
 
 export default OrganizationManagement
