@@ -15,7 +15,10 @@ import { useAppPersistStore } from '@/store/app'
 /**
  * Properties of Create component
  */
-export interface Props {
+export interface CreateProps {
+  /**
+   * Determines if extra styling should be shown for displaying in a modal
+   */
   isModal?: boolean
 }
 
@@ -37,7 +40,7 @@ export interface Props {
  * </Modal>
  * ```
  */
-const Create: FC<Props> = ({ isModal = false }) => {
+const Create: FC<CreateProps> = ({ isModal = false }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.navbar.login.create'
   })

@@ -24,8 +24,14 @@ import Logger from '@/lib/logger'
 /**
  * Properties of WalletSelector component
  */
-interface Props {
+export interface WalletSelectorProps {
+  /**
+   * Dispatch to set store value for connected state
+   */
   setHasConnected: Dispatch<boolean>
+  /**
+   * Dispatch to set store value for has profile state
+   */
   setHasProfile: Dispatch<boolean>
 }
 
@@ -33,7 +39,10 @@ interface Props {
  * A component to connect wallet addresses through services such as
  * {@link https://metamask.io/ | Metamask} and {@link https://walletconnect.com/ | WalletConnect}
  */
-const WalletSelector: FC<Props> = ({ setHasConnected, setHasProfile }) => {
+const WalletSelector: FC<WalletSelectorProps> = ({
+  setHasConnected,
+  setHasProfile
+}) => {
   const { setProfiles } = useAppStore()
   const { setIsAuthenticated, setCurrentUser } = useAppPersistStore()
 

@@ -4,7 +4,13 @@ import React from 'react'
  * Properties of GradientWrapper component
  */
 export interface IGradientWrapperProps {
+  /**
+   * React components wrapped by the component
+   */
   children: React.ReactNode
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
 }
 

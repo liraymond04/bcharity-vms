@@ -12,11 +12,29 @@ import GradientWrapper from '../Gradient/GradientWrapper'
  * Properties of GradientModal component
  */
 export interface IGradientModalProps {
+  /**
+   * Title of the modal component
+   */
   title: string
+  /**
+   * Determines if modal should be visible or hidden
+   */
   open: boolean
+  /**
+   * Function that runs when modal is closed
+   */
   onCancel: () => void
+  /**
+   * Function that runs when the submit button is pressed
+   */
   onSubmit: () => void
+  /**
+   * Determines if submit button should be disabled
+   */
   submitDisabled?: boolean
+  /**
+   * React components wrapped by the component
+   */
   children: React.ReactNode
 }
 
