@@ -54,8 +54,7 @@ const OrganizationCauses: React.FC = () => {
 
   const [currentModifyId, setCurrentModifyId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
-  const { data, error, loading, refetch } = usePostData({
-    profileId: profile?.id,
+  const { data, error, loading, refetch } = usePostData(profile?.id, {
     metadata: {
       tags: { all: [PostTags.OrgPublish.Cause] }
     }

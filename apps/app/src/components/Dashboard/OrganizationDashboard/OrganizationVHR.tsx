@@ -93,8 +93,7 @@ const OrganizationVHRTab: React.FC = () => {
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
 
-  const { data, error, loading, refetch } = usePostData({
-    profileId: profile?.id,
+  const { data, error, loading, refetch } = usePostData(profile?.id, {
     metadata: {
       tags: { all: [PostTags.OrgPublish.Opportunity] }
     }

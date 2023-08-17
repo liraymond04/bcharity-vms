@@ -25,7 +25,10 @@ import lensClient from './lensClient'
  * })
  * ```
  */
-const usePostData = (params: PublicationsQueryRequest) => {
+const usePostData = (
+  profileId: string | undefined,
+  params: PublicationsQueryRequest
+) => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<PublicationFragment[]>([])
   const [error, setError] = useState('')
@@ -34,7 +37,10 @@ const usePostData = (params: PublicationsQueryRequest) => {
     setLoading(true)
     setError('')
     lensClient()
-      .publication.fetchAll(params)
+      .publication.fetchAll({
+        ...params,
+        profileId
+      })
       .then((data) => {
         setData(data.items)
       })
@@ -46,7 +52,7 @@ const usePostData = (params: PublicationsQueryRequest) => {
       })
   }
 
-  useEffect(refetch, [])
+  useEffect(refetch, [profileId])
 
   return {
     loading,
