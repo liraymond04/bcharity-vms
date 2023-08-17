@@ -44,6 +44,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
       <div className="flex flex-col">
         {tabs.map((tab, i) => {
           if (tab.isGroup) {
+            if (!openSidebar) return <div />
             return (
               <div
                 className="text-[20px] font-sans text-white items-center pl-3 py-2"
