@@ -31,6 +31,7 @@ export interface IPublishOpportunityFormProps {
   website: string
   description: string
   imageUrl: string
+  applicationRequired: boolean
 }
 
 export const emptyPublishFormData: IPublishOpportunityFormProps = {
@@ -41,7 +42,8 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   category: '',
   website: '',
   description: '',
-  imageUrl: ''
+  imageUrl: '',
+  applicationRequired: false
 }
 
 interface IPublishOpportunityModalProps {
@@ -70,7 +72,6 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [image, setImage] = useState<File | null>(null)
   const [isChecked, setIsChecked] = useState(false)
-
   const form = useForm<IPublishOpportunityFormProps>()
 
   const {
@@ -79,8 +80,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     resetField,
     register,
     clearErrors,
+    watch,
     formState: { errors }
   } = form
+
+  const currentFormData = watch()
 
   const validUrl = (url: string) => {
     try {
@@ -121,15 +125,16 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         ? PostTags.OrgPublish.Opportunity
         : PostTags.OrgPublish.OpportunityDraft
 
+      const { applicationRequired, ...rest } = formData
       const metadata = buildMetadata<OpportunityMetadataRecord>(
         publisher,
-        [PostTags.OrgPublish.Opportunity, publishTag],
+        [publishTag],
         {
           version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
           type: PostTags.OrgPublish.Opportunity,
           id: v4(),
-          applicationRequired: 'false', // set in formData in VM-178
-          ...formData,
+          ...rest,
+          applicationRequired: applicationRequired ? 'true' : 'false',
           imageUrl
         }
       )
@@ -248,29 +253,57 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               {...register('description', { required: true, maxLength: 250 })}
             />
 
-            <label
-              style={{
-                display: 'inline-block',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginTop: '15px',
-                marginBottom: '15px'
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={handleCheckboxChange}
+            <div className="flex-row space-x-96">
+              <label
                 style={{
-                  appearance: 'none',
-                  backgroundColor: 'transparent',
-                  border: '1px solid grey',
-                  width: '25px',
-                  height: '25px'
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
                 }}
-              />
-              <span style={{ marginLeft: '12px' }}>Publish Now?</span>
-            </label>
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: isChecked ? 'purple' : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }}>Publish Now?</span>
+              </label>
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  {...register('applicationRequired')}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: currentFormData.applicationRequired
+                      ? 'purple'
+                      : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }}>
+                  Registration required?
+                </span>
+              </label>
+            </div>
 
             <FileInput
               label={t('image')}

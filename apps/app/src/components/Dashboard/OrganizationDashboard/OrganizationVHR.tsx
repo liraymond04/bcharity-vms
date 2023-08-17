@@ -197,7 +197,8 @@ const OrganizationVHRTab: React.FC = () => {
           category: d.category ?? '',
           website: d.website ?? '',
           description: d.description ?? '',
-          imageUrl: d.imageUrl ?? ''
+          imageUrl: d.imageUrl ?? '',
+          applicationRequired: d.applicationRequired ?? ''
         }
       : { ...emptyPublishFormData }
   }
