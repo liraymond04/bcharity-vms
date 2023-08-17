@@ -19,7 +19,7 @@ export interface IErrorBodyProps {
  * Component that displays an error message for individual post pages
  *
  * @example Error body used in {@link VolunteerPage} for the individual volunteer opportunity page
- * ```ts
+ * ```tsx
  * const VolunteerPage: NextPage = () => {
  *   ...
  *   const getDisplayed = () => {

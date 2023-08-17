@@ -24,7 +24,7 @@ export interface IGradientModalProps {
  * A component that displays a modal window with a gradient background using {@link GradientWrapper}
  *
  * @example Using a gradient modal component for the {@link DeleteCauseModal}
- * ```ts
+ * ```tsx
  * const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
  *   open,
  *   onClose,

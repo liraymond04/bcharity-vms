@@ -28,7 +28,7 @@ export interface BookmarkButtonProps {
  * hook
  *
  * @example Bookmark button used in the {@link VolunteerPage}
- * ```ts
+ * ```tsx
  * <BookmarkButton
  *   publicationId={opportunity.post_id}
  *   postTag={PostTags.Bookmark.Opportunity}

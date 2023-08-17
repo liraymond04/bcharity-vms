@@ -1,4 +1,6 @@
 import BookmarkButton, { BookmarkButtonProps } from './BookmarkButton'
+import ChooseFile, { ChooseFileProps } from './ChooseFile'
+import ClearFilters, { ClearFiltersProps } from './ClearFilters'
 import Footer from './Footer'
 import GradientWrapper, {
   IGradientWrapperProps
@@ -9,6 +11,8 @@ import * as PublicationPage from './PublicationPage'
 
 export {
   BookmarkButton,
+  ChooseFile,
+  ClearFilters,
   Footer,
   GradientModal,
   GradientWrapper,
@@ -16,4 +20,10 @@ export {
   PublicationPage
 }
 
-export type { BookmarkButtonProps, IGradientModalProps, IGradientWrapperProps }
+export type {
+  BookmarkButtonProps,
+  ChooseFileProps,
+  ClearFiltersProps,
+  IGradientModalProps,
+  IGradientWrapperProps
+}
