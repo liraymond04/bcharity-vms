@@ -65,7 +65,7 @@ export enum Application {
  */
 export enum VhrRequest {
   /**
-   * Tags realted to making and verifying VHR requests for a volunteer opportunity
+   * Tags related to making and verifying VHR requests for a volunteer opportunity
    */
   Opportunity = 'VHR_REQUEST_OPPORTUNITY',
   Reject = 'VHR_REJECT_REQUEST'
