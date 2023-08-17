@@ -12,8 +12,11 @@ import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
-import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata/PostTags'
+import {
+  buildMetadata,
+  OpportunityMetadataRecord,
+  PostTags
+} from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 
