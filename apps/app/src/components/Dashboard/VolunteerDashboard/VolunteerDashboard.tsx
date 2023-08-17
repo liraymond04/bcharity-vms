@@ -1,4 +1,5 @@
 import {
+  ClipboardCheckIcon,
   ClockIcon,
   CogIcon,
   GlobeIcon,
@@ -29,9 +30,21 @@ const VolunteerDashboard: React.FC = () => {
 
   const tabs: IDashboardTab[] = [
     {
+      label: 'VOLUNTEER',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
+    },
+    {
       label: t('home'),
       icon: <HomeIcon className="inline" />,
       component: <VolunteerHomeTab />
+    },
+    {
+      label: 'EXPLORE',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
     },
     {
       label: 'VHR',
@@ -44,9 +57,27 @@ const VolunteerDashboard: React.FC = () => {
       component: <VolunteerCausesTab />
     },
     {
+      label: 'MANAGE',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
+    },
+    //Placeholder for Applications component
+    {
+      label: 'Applications',
+      icon: <ClipboardCheckIcon className="inline" />,
+      component: <div></div>
+    },
+    {
       label: t('log-vhr'),
       icon: <ClockIcon className="inline" />,
       component: <VolunteerLogHoursTab />
+    },
+    {
+      label: 'SETTINGS',
+      icon: <div></div>,
+      component: <div></div>,
+      isGroup: true
     },
     {
       label: t('settings'),
