@@ -216,7 +216,7 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
 
       const result = await createComment({
         publicationId: post.id,
-        profileId: currentUser.ownedBy,
+        profileId: currentUser.id,
         metadata,
         collectModule,
         referenceModule
