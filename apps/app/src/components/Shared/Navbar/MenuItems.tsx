@@ -21,8 +21,8 @@ import { GIT_COMMIT_SHA } from 'src/constants'
 import { useAppPersistStore, useAppStore } from 'src/store/app'
 import { useDisconnect } from 'wagmi'
 
-import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
+import { getAvatar } from '@/lib/lens-protocol'
 
 import Slug from '../Slug'
 import Login from './Login'

@@ -1,7 +1,9 @@
 import {
   CollectModuleParams,
+  isRelayerError,
   PublicationMetadataV2Input,
-  ReferenceModuleParams
+  ReferenceModuleParams,
+  RelayerResultFragment
 } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
@@ -11,19 +13,48 @@ import getSignature from './getSignature'
 import lensClient from './lensClient'
 
 /**
- * Params for createPost returned by useCreatePost
+ * Params for `createPost` returned by {@link useCreatePost}
  */
 export interface CreatePostParams {
+  /**
+   * The profile id of the profile creating the comment
+   */
   profileId: string
+  /**
+   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.PublicationMetadataV2Input.html | PublicationMetadataV2Input} for the comment
+   */
   metadata: PublicationMetadataV2Input
+  /**
+   * {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.CollectModuleParams.html | CollectModuleParams} for the comment
+   *
+   * Defaults to
+   * { freeCollectModule: { followerOnly: false } },
+   */
   collectModule?: CollectModuleParams
+  /**
+   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.ReferenceModuleParams.html | ReferenceModuleParams } for the comment
+   *
+   * Defaults to
+   * { followerOnlyReferenceModule: false }
+   */
   referenceModule?: ReferenceModuleParams
 }
 
 /**
+ * Returned by the {@link useCreatePost} hook
+ */
+export interface CreatePostReturn {
+  /**
+   *
+   * @param params The {@link CreatePostParams} for the request
+   * @returns
+   */
+  createPost: (params: CreatePostParams) => Promise<RelayerResultFragment>
+}
+/**
  * A hook that wraps createPostTypedData {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#createPostTypedData}
- * to simply allow for metadata upload with the thirdweb storage react hooks sdk,
- * to automatically sign and broadcast the result.
+ * to simplify to process of metadata upload with the thirdweb storage react hooks sdk,
+ * signing, and broadcasting the transaction
  *
  * It is necessary to check authentication with {@link checkAuth} before running
  * createPost to prevent authentication errors
@@ -31,7 +62,7 @@ export interface CreatePostParams {
  * @returns the result from broadcasting the transaction
  */
 
-const useCreatePost = () => {
+const useCreatePost = (): CreatePostReturn => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const sdk = useSDK()
   const { mutateAsync: upload } = useStorageUpload()
@@ -43,6 +74,7 @@ const useCreatePost = () => {
     referenceModule = { followerOnlyReferenceModule: false }
   }: CreatePostParams) => {
     if (!sdk) throw new Error(e('metadata-upload-fail'))
+
     const contentURI = sdk?.storage.resolveScheme(
       (await upload({ data: [metadata] }))[0]
     )
@@ -72,19 +104,25 @@ const useCreatePost = () => {
     })
 
     if (typedDataResult.isFailure()) {
-      console.log('not authed')
+      throw new Error(typedDataResult.error.message)
     }
 
     const signature = await signTypedData(
-      getSignature(typedDataResult.unwrap().typedData)
+      getSignature(typedDataResult.value.typedData)
     )
 
     const broadcastResult = await lensClient().transaction.broadcast({
-      id: typedDataResult.unwrap().id,
-      signature: signature
+      id: typedDataResult.value.id,
+      signature
     })
 
-    return broadcastResult
+    if (broadcastResult.isFailure()) {
+      throw new Error(broadcastResult.error.message)
+    } else if (isRelayerError(broadcastResult.value)) {
+      throw new Error(broadcastResult.value.reason)
+    } else {
+      return broadcastResult.value
+    }
   }
 
   return { createPost }

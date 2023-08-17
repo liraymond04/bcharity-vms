@@ -9,8 +9,7 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
 
-import { checkAuth } from '@/lib/lens-protocol'
-import createProfile, { isValidHandle } from '@/lib/lens-protocol/createProfile'
+import { checkAuth, createProfile, isValidHandle } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 /**

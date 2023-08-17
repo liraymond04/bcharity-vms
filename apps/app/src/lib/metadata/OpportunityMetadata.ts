@@ -94,7 +94,10 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
       this.website = this.getAttribute('website')
       this.description = this.getAttribute('description')
       this.imageUrl = this.getAttribute('imageUrl')
-    } else if (this.version === OpportunityMetadataVersion['1.0.1']) {
+    } else if (
+      this.version === OpportunityMetadataVersion['1.0.1'] ||
+      this.version === OpportunityMetadataVersion['1.0.2']
+    ) {
       this.name = this.getAttribute('name')
       this.startDate = this.getAttribute('startDate')
       this.endDate = this.getAttribute('endDate', { default: '' })

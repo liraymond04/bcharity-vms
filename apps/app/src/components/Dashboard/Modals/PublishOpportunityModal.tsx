@@ -11,10 +11,12 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import useCreatePost from '@/lib/lens-protocol/useCreatePost'
-import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata/PostTags'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
+import {
+  buildMetadata,
+  OpportunityMetadataRecord,
+  PostTags
+} from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 
@@ -124,16 +126,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata
       })
-
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
 
       reset()
       onClose(true)

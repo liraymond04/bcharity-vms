@@ -4,9 +4,7 @@ import {
   MetadataAttributeInput,
   PostFragment,
   PublicationMainFocus,
-  ReferenceModuleParams,
-  RelayerResultFragment,
-  RelayErrorFragment
+  ReferenceModuleParams
 } from '@lens-protocol/client'
 import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { fetchBalance, signTypedData } from '@wagmi/core'
@@ -19,10 +17,12 @@ import Progress from '@/components/Shared/Progress'
 import { APP_NAME, CURRENCIES } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useCreateComment from '@/lib/lens-protocol/useCreateComment'
+import {
+  checkAuth,
+  getSignature,
+  lensClient,
+  useCreateComment
+} from '@/lib/lens-protocol'
 import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
@@ -216,22 +216,16 @@ const DonateButton: FC<Props> = ({ post, cause, size, className }) => {
 
       const result = await createComment({
         publicationId: post.id,
-        profileId: currentUser.ownedBy,
+        profileId: currentUser.id,
         metadata,
         collectModule,
         referenceModule
       })
 
-      const res: RelayerResultFragment | RelayErrorFragment = result.unwrap()
-
-      if (res.__typename === 'RelayError') {
-        throw Error(res.reason)
-      }
-
-      await lensClient().transaction.waitForIsIndexed(res.txId)
+      await lensClient().transaction.waitForIsIndexed(result.txId)
 
       const publication = await lensClient().publication.fetch({
-        txHash: res.txHash
+        txHash: result.txHash
       })
 
       if (!publication || !isComment(publication))

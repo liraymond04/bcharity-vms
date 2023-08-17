@@ -2,8 +2,7 @@ import { FC, ReactNode, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-import { checkAuth } from '@/lib/lens-protocol'
-import useFollow from '@/lib/lens-protocol/useFollow'
+import { useFollow } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
@@ -16,7 +15,12 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
+const FollowButton: FC<Props> = ({
+  followId,
+  icon,
+  className,
+  size = 'sm'
+}) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.follow-button'
   })
@@ -28,7 +32,9 @@ const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
   })
 
   useEffect(() => {
-    if (error) toast.error(error)
+    if (error) {
+      toast.error(error)
+    }
   }, [error])
 
   return (
@@ -36,16 +42,13 @@ const FollowButton: FC<Props> = ({ followId, icon, className, size }) => {
       disabled={isLoading}
       icon={isLoading ? <Spinner size="sm" /> : icon}
       onClick={() => {
-        if (!currentUser) return
-        checkAuth(currentUser.ownedBy).then(() => {
-          if (following) {
-            unfollowUser(currentUser.ownedBy, followId)
-          } else {
-            followUser(currentUser.ownedBy, followId)
-          }
-        })
+        if (following) {
+          unfollowUser()
+        } else {
+          followUser()
+        }
       }}
-      size={size ? size : 'sm'}
+      size={size}
       className={className}
     >
       {following ? t('unfollow') : t('follow')}

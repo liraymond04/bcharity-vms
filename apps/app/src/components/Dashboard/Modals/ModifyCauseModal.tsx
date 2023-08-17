@@ -14,14 +14,12 @@ import LocationFormComponent from '@/components/UI/LocationDropdowns'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import getTokenImage from '@/lib/getTokenImage'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import useCreatePost from '@/lib/lens-protocol/useCreatePost'
-import { buildMetadata, CauseMetadataRecord } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
+import { buildMetadata, CauseMetadataRecord, PostTags } from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 
-import Error from './Error'
+import ErrorComponent from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
 
 interface IPublishCauseModalProps {
@@ -137,23 +135,22 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
 
       await checkAuth(publisher.ownedBy)
 
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata,
         collectModule: collectModuleParams
       })
 
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
-
       reset(formData)
       onClose(true)
     } catch (e: any) {
-      setErrorMessage(e.message)
       setError(true)
+
+      if (e instanceof Error) {
+        setErrorMessage(e.message)
+      } else {
+        console.error(e)
+      }
     }
     setIsPending(false)
   }
@@ -287,7 +284,7 @@ const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
         )}
 
         {error && (
-          <Error
+          <ErrorComponent
             message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
