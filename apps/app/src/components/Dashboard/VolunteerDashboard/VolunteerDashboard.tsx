@@ -65,7 +65,7 @@ const VolunteerDashboard: React.FC = () => {
     //Placeholder for Applications component
     {
       label: 'Applications',
-      icon: <ClipboardCheckIcon className="w-4 inline" />,
+      icon: <ClipboardCheckIcon className="inline" />,
       component: <div></div>
     },
     {

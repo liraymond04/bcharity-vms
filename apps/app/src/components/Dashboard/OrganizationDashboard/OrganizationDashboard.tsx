@@ -34,7 +34,7 @@ const OrganizationDashboard: React.FC = () => {
     },
     {
       label: t('home'),
-      icon: <HomeIcon className="w-4 inline" />,
+      icon: <HomeIcon className="inline" />,
       component: <OrganizationHomeTab />
     },
     {
@@ -45,12 +45,12 @@ const OrganizationDashboard: React.FC = () => {
     },
     {
       label: 'VHR',
-      icon: <StarIcon className="w-4 inline" />,
+      icon: <StarIcon className="inline" />,
       component: <OrganizationVHRTab />
     },
     {
       label: t('projects'),
-      icon: <GlobeIcon className="w-4 inline" />,
+      icon: <GlobeIcon className="inline" />,
       component: <OrganizationCausesTab />
     },
     {
@@ -62,12 +62,12 @@ const OrganizationDashboard: React.FC = () => {
     //Placeholder for Applications component
     {
       label: 'Applications',
-      icon: <ClipboardCheckIcon className="w-4 inline" />,
+      icon: <ClipboardCheckIcon className="inline" />,
       component: <div></div>
     },
     {
       label: t('verify'),
-      icon: <LockClosedIcon className="w-4 inline" />,
+      icon: <LockClosedIcon className="inline" />,
       component: <OrganizationLogVHRTab />
     },
     {
@@ -78,7 +78,7 @@ const OrganizationDashboard: React.FC = () => {
     },
     {
       label: t('settings'),
-      icon: <CogIcon className="w-4 inline" />,
+      icon: <CogIcon className="inline" />,
       component: <div />,
       redirect: '/settings'
     }
