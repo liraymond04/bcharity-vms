@@ -16,6 +16,7 @@ import {
   MetadataVersion,
   ProfileMetadata
 } from '@/lib/types'
+import validImageExtension from '@/lib/validImageExtension'
 import { useAppPersistStore } from '@/store/app'
 
 import { Button } from '../UI/Button'
@@ -297,7 +298,16 @@ const VolunteerHomeTab: React.FC = () => {
                 label={t('cover')}
                 type="file"
                 id="cover"
-                onChange={(e) => setCover(e.target.files?.[0] || null)}
+                onChange={(event) => {
+                  const selectedFile = event.target.files?.[0]
+                  setError(undefined)
+
+                  if (selectedFile && validImageExtension(selectedFile.name)) {
+                    setCover(selectedFile)
+                  } else {
+                    setError(Error(e('invalid-file-type')))
+                  }
+                }}
               />
             </div>
             <div className="flex justify-end">

@@ -236,13 +236,15 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label={t('image')}
               accept="image/*"
-              onChange={(e) => {
-                const selectedFile = e.target.files?.[0]
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0]
+                setError(false)
 
                 if (selectedFile && validImageExtension(selectedFile.name)) {
                   setImage(selectedFile)
                 } else {
-                  setErrorMessage('Invalid file format')
+                  setError(true)
+                  setErrorMessage(e('invalid-file-type'))
                 }
               }}
             />

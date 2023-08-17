@@ -26,7 +26,8 @@
     "generic-back": ". Please try again.",
     "profiles": "Could not get profiles!",
     "expected-organization": "Profile is not an organization!",
-    "expected-volunteer": "Profile is not a volunteer!"
+    "expected-volunteer": "Profile is not a volunteer!",
+    "invalid-file-type": "Invalid file format!"
   },
   "components": {
     "causes": {
