@@ -52,19 +52,28 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [image, setImage] = useState<File | null>(null)
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
+  const [isChecked, setIsChecked] = useState(false)
+  const [ongoing, setOngoing] = useState<boolean>(false)
 
   useEffect(() => {
     reset(defaultValues)
+    if (defaultValues.endDate === '') {
+      setOngoing(true)
+    }
   }, [defaultValues])
 
+  console.log(ongoing)
   const {
     handleSubmit,
     reset,
     resetField,
     register,
     clearErrors,
+    watch,
     formState: { errors }
   } = form
+
+  const currentFormData = watch()
 
   const validUrl = (url: string) => {
     try {
@@ -73,6 +82,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     } catch (e) {
       return false
     }
+  }
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked)
   }
 
   const onCancel = () => {
@@ -99,15 +112,21 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
         ? (await upload({ data: [image] }))[0]
         : defaultValues.imageUrl
 
+      const { applicationRequired, ...rest } = formData
+
+      const publishTag = isChecked
+        ? PostTags.OrgPublish.Opportunity
+        : PostTags.OrgPublish.OpportunityDraft
+
       const metadata = buildMetadata<OpportunityMetadataRecord>(
         publisher,
-        [PostTags.OrgPublish.Opportunity],
+        [publishTag],
         {
-          version: MetadataVersion.OpportunityMetadataVersion['1.0.1'],
-          type: PostTags.OrgPublish.Opportunity,
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
+          type: publishTag,
           id,
-          applicationRequired: 'false', // set in formData in VM-178
-          ...formData,
+          ...rest,
+          applicationRequired: applicationRequired ? 'true' : 'false',
           imageUrl
         }
       )
@@ -183,9 +202,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label={t('end-date')}
               type="endDate"
               placeholder="yyyy-mm-dd"
-              disabled={!endDateDisabled}
+              // disabled={!endDateDisabled}
               min={minDate}
               error={!!errors.endDate?.type}
+              defaultValue={ongoing.toString()}
               {...register('endDate', {})}
               onChange={(e) => {
                 if (e.target.value === 'on') {
@@ -229,6 +249,57 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
+            <div className="flex-row space-x-96">
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: isChecked ? 'purple' : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }}>Publish Now?</span>
+              </label>
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  {...register('applicationRequired')}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: currentFormData.applicationRequired
+                      ? 'purple'
+                      : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }}>
+                  Registration required?
+                </span>
+              </label>
+            </div>
             <FileInput
               defaultImageIPFS={defaultValues.imageUrl ?? ''}
               label={t('image')}

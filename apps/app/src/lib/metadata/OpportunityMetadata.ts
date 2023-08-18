@@ -112,7 +112,6 @@ export class OpportunityMetadataBuilder extends UpdateableMetadataBuilder<Opport
       this.applicationRequired = true
     } else {
       const applicationRequiredString = this.getAttribute('applicationRequired')
-
       if (applicationRequiredString === 'true') {
         this.applicationRequired = true
       } else if (applicationRequiredString === 'false') {

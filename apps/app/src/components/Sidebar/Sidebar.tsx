@@ -7,6 +7,7 @@ export interface ITabProps {
   icon: React.ReactElement
   label: string
   redirect?: string
+  isGroup?: boolean
 }
 interface ISidebarProps {
   emptyTop?: boolean
@@ -42,6 +43,17 @@ const Sidebar: React.FC<ISidebarProps> = ({
       )}
       <div className="flex flex-col">
         {tabs.map((tab, i) => {
+          if (tab.isGroup) {
+            if (!openSidebar) return <div />
+            return (
+              <div
+                className="text-[20px] font-sans text-white items-center pl-3 py-2"
+                key={i}
+              >
+                {tab.label}
+              </div>
+            )
+          }
           return (
             <TabTitle
               key={i}
