@@ -17,10 +17,41 @@ import {
 import { logIgnoreWarning } from '../metadata/get/logIgnoreWarning'
 import lensClient from './lensClient'
 
-interface UseRegisteredOpportunitiesParams {
+/**
+ * Returned by the {@link useRegisteredOpportunities} hook
+ */
+export interface useRegisteredOpportunitiesReturn {
+  /**
+   * The ApplicationMetadata of applications the volunteer is registered for
+   */
+  data: ApplicationMetadata[]
+  /**
+   * Whether or not the data is loading
+   */
+  loading: boolean
+  /**
+   * An error message data fetch failed
+   */
+  error: string
+  refetch: () => Promise<void>
+}
+
+/**
+ * Params for the {@link useRegisteredOpportunities} hook
+ */
+export interface UseRegisteredOpportunitiesParams {
+  /**
+   * The profile id of the profile to fetch data for
+   */
   profileId: string | undefined
 }
 
+/**
+ * React hook to get all the opportunities a profile is (and/or was) registered for
+ *
+ * @param params Parameters for the hook
+ * @returns
+ */
 const useRegisteredOpportunities = ({
   profileId
 }: UseRegisteredOpportunitiesParams) => {

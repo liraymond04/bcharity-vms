@@ -10,6 +10,10 @@ import useBookmark, {
   UseBookmarkParams,
   UseBookmarkReturn
 } from './useBookmark'
+import useCausesDonatedTo, {
+  UseCausesDonatedToParams,
+  UseCausesDonatedToReturn
+} from './useCausesDonatedTo'
 import useCreateComment, {
   CreateCommentParams,
   CreateCommentReturn
@@ -30,7 +34,10 @@ import usePublication, {
   UsePublicationParams,
   UsePublicationReturn
 } from './usePublication'
-import useRegisteredOpportunities from './useRegisteredOpportunities'
+import useRegisteredOpportunities, {
+  UseRegisteredOpportunitiesParams,
+  useRegisteredOpportunitiesReturn
+} from './useRegisteredOpportunities'
 import useVHRRequests from './useVHRRequests'
 import isValidHandle from './util/isValidHandle'
 
@@ -45,6 +52,7 @@ export {
   isValidHandle,
   lensClient,
   useBookmark,
+  useCausesDonatedTo,
   useCreateComment,
   useCreatePost,
   useEnabledCurrencies,
@@ -64,10 +72,14 @@ export type {
   CreatePostReturn,
   UseBookmarkParams,
   UseBookmarkReturn,
+  UseCausesDonatedToParams,
+  UseCausesDonatedToReturn,
   UseFollowParams,
   UseFollowReturn,
   UseLogHoursParams,
   UseLogHoursReturn,
   UsePublicationParams,
-  UsePublicationReturn
+  UsePublicationReturn,
+  UseRegisteredOpportunitiesParams,
+  useRegisteredOpportunitiesReturn
 }
