@@ -53,11 +53,16 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
   const [isChecked, setIsChecked] = useState(false)
+  const [ongoing, setOngoing] = useState<boolean>(false)
 
   useEffect(() => {
     reset(defaultValues)
+    if (defaultValues.endDate === '') {
+      setOngoing(true)
+    }
   }, [defaultValues])
 
+  console.log(ongoing)
   const {
     handleSubmit,
     reset,
@@ -197,9 +202,10 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label={t('end-date')}
               type="endDate"
               placeholder="yyyy-mm-dd"
-              disabled={!endDateDisabled}
+              // disabled={!endDateDisabled}
               min={minDate}
               error={!!errors.endDate?.type}
+              defaultValue={ongoing.toString()}
               {...register('endDate', {})}
               onChange={(e) => {
                 if (e.target.value === 'on') {
