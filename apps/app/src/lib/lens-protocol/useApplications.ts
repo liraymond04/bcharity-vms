@@ -48,11 +48,46 @@ const getApplicationComments = (params: getApplicationCommentsParams) => {
   })
 }
 
-interface UseApplicationsParams {
+/**
+ * Returned by the {@link useApplications} hook
+ */
+export interface UseApplicationsReturn {
+  /**
+   * The unhandled applications still pending review from the orgnaization
+   */
+  data: ApplicationMetadata[]
+  /**
+   * Whether or not the applicaiton data is loading
+   */
+  loading: boolean
+  /**
+   * An error message if an error occured when fetching the data
+   */
+  error: string
+  /**
+   * A function to call to refetch the application data
+   */
+  refetch: () => void
+}
+
+/**
+ * Params for the {@link useApplications} hook
+ */
+export interface UseApplicationsParams {
+  /**
+   * The profile of the organization to fetch requests for
+   */
   profile: ProfileFragment | null
 }
 
-const useApplications = ({ profile }: UseApplicationsParams) => {
+/**
+ * Hook to retrieve the volunteer applications that have not been handled yet (by accepting or rejecting the application)
+ *
+ * @param params Parameters for the request
+ */
+const useApplications = ({
+  profile
+}: UseApplicationsParams): UseApplicationsReturn => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
 
   const [applications, setApplications] = useState<ApplicationMetadata[]>([])

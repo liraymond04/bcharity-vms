@@ -6,6 +6,7 @@ import getProfile from './getProfile'
 import getProfilesOwnedBy from './getProfilesOwnedBy'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
+import { UseApplicationsParams, UseApplicationsReturn } from './useApplications'
 import useBookmark, {
   UseBookmarkParams,
   UseBookmarkReturn
@@ -70,6 +71,8 @@ export type {
   CreateCommentReturn,
   CreatePostParams,
   CreatePostReturn,
+  UseApplicationsParams,
+  UseApplicationsReturn,
   UseBookmarkParams,
   UseBookmarkReturn,
   UseCausesDonatedToParams,
