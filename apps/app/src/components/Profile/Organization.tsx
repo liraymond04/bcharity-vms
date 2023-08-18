@@ -163,8 +163,6 @@ const Organization: NextPage = () => {
     }
   ]
 
-  console.log(opportunityData, causeData)
-
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -272,7 +270,7 @@ const Organization: NextPage = () => {
                           </div>
                           {getSlug('location') !== '' && (
                             <div className="flex space-x-2 items-center text-gray-400">
-                              <LocationMarkerIcon className="h-5 w-5" />
+                              <LocationMarkerIcon className="w-5" />
                               <span className="text-md">
                                 {getSlug('location').toLocaleUpperCase()}
                               </span>
