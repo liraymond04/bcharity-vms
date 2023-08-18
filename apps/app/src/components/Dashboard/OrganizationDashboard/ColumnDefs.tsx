@@ -1,4 +1,8 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
+import {
+  PaperAirplaneIcon,
+  PencilIcon,
+  TrashIcon
+} from '@heroicons/react/outline'
 import {
   CellClickedEvent,
   ColDef,
@@ -16,6 +20,7 @@ export const defaultColumnDef = {
 }
 
 interface IColumnDefParams {
+  onPublishNowClick?: (id: string) => void
   onEditClick: (id: string) => void
   onDeleteClick: (id: string) => void
 }
@@ -26,13 +31,15 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
     return i18n.t(`common:${keyPrefix}.${key}`)
   }
 
-  return [
+  const result: ColDef[] = [
     {
       field: 'edit',
       headerName: '',
       resizable: false,
       cellRenderer: () => {
-        return <PencilIcon className="w-4 inline" />
+        return (
+          <PencilIcon className="w-4 inline transition duration-150 hover:scale-110 hover:cursor-pointer" />
+        )
       },
       onCellClicked: (event: CellClickedEvent) => {
         params.onEditClick(event.data['id'])
@@ -44,7 +51,9 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
       headerName: '',
       resizable: false,
       cellRenderer: () => {
-        return <TrashIcon className="w-4 inline" />
+        return (
+          <TrashIcon className="w-4 inline transition duration-150 hover:scale-110 hover:cursor-pointer" />
+        )
       },
       onCellClicked: (event: CellClickedEvent) => {
         params.onDeleteClick(event.data['id'])
@@ -134,6 +143,25 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
       } as ITextFilterParams
     }
   ]
+
+  if (params.onPublishNowClick) {
+    result.unshift({
+      field: 'publish',
+      headerName: '',
+      resizable: false,
+      cellRenderer: () => {
+        return (
+          <PaperAirplaneIcon className="w-4 inline rotate-90 transition duration-150 hover:scale-110 hover:cursor-pointer" />
+        )
+      },
+      onCellClicked: (event: CellClickedEvent) => {
+        if (params.onPublishNowClick) params.onPublishNowClick(event.data['id'])
+      },
+      width: 50
+    })
+  }
+
+  return result
 }
 
 export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
