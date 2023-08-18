@@ -202,7 +202,7 @@ const Organization: NextPage = () => {
       <div className="dark:darkprofilegradient">
         <GridLayout>
           <GridItemTwelve>
-            <Card className="bg-purple-100 !rounded-none dark:border dark:border-white">
+            <Card className="!rounded-none dark:border dark:border-white bg-purple-100">
               <div className="p-1 mt-10">
                 {error ? (
                   <div className="min-h-[calc(100vh-800px)] p-4">
@@ -228,9 +228,10 @@ const Organization: NextPage = () => {
 
                         <div className="flex justify-center">
                           <div
-                            className="py-4 border bg-accent-content dark:darkgradient 
-                      border-gray-400 dark:border-black rounded-md font-semibold 
-                      text-gray-500 dark:text-white text-sm flex flex-col space-y-2"
+                            className="py-4 border rounded-md font-semibold text-sm flex flex-col space-y-2
+                            bg-gray-50 dark:darkgradient 
+                            border-gray-400 dark:border-black 
+                            text-gray-500 dark:text-white "
                           >
                             <div
                               className="flex items-center mx-4"
@@ -341,7 +342,7 @@ const Organization: NextPage = () => {
                           >
                             {t('about')}
                           </div>
-                          <div className="bg-accent-content dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
+                          <div className="bg-gray-50 dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
                             <div className="w-full text-gray-600 dark:text-white text-xl p-5">
                               {profile.bio}
                             </div>
