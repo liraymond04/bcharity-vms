@@ -17,6 +17,7 @@ import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
 import OrganizationCausesTab from './OrganizationCauses'
 import OrganizationHomeTab from './OrganizationHome'
 import OrganizationLogVHRTab from './OrganizationLogVHR/OrganizationLogVHR'
+import OrganizationManagement from './OrganizationManagement/OrganizationManagement'
 import OrganizationVHRTab from './OrganizationVHR'
 
 const OrganizationDashboard: React.FC = () => {
@@ -63,7 +64,7 @@ const OrganizationDashboard: React.FC = () => {
     {
       label: 'Applications',
       icon: <ClipboardCheckIcon className="inline" />,
-      component: <div></div>
+      component: <OrganizationManagement></OrganizationManagement>
     },
     {
       label: t('verify'),

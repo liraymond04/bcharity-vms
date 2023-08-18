@@ -1,5 +1,6 @@
 import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   ApplicationMetadata,
@@ -36,14 +37,14 @@ const getIsRequestHandled = (params: GetIsRequestHandledParams) => {
     })
 }
 
-interface getVHRRequestCommentsParams {
+interface getApplicationCommentsParams {
   publicationId: string
 }
 
-const getVHRRequestComments = (params: getVHRRequestCommentsParams) => {
+const getApplicationComments = (params: getApplicationCommentsParams) => {
   return lensClient().publication.fetchAll({
     commentsOf: params.publicationId,
-    metadata: { tags: { all: [PostTags.VhrRequest.Opportunity] } }
+    metadata: { tags: { all: [PostTags.Application.Apply] } }
   })
 }
 
@@ -52,13 +53,15 @@ interface UseApplicationsParams {
 }
 
 const useApplications = ({ profile }: UseApplicationsParams) => {
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
   const [applications, setApplications] = useState<ApplicationMetadata[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const refetch = () => {
     if (!profile) {
-      setError('Not signed in')
+      setError(e('profile-null'))
       return
     }
     let ops: OpportunityMetadata[] = []
@@ -77,7 +80,7 @@ const useApplications = ({ profile }: UseApplicationsParams) => {
       })
       .then(() => {
         const postsComments = ops.map((op) =>
-          getVHRRequestComments({ publicationId: op.post_id })
+          getApplicationComments({ publicationId: op.post_id })
         )
 
         return Promise.all(postsComments)
@@ -106,9 +109,10 @@ const useApplications = ({ profile }: UseApplicationsParams) => {
         const data: ApplicationMetadata[] = []
 
         postsComments.forEach((postComments, i) => {
+          console.log(postComments.items, statusMap)
           const filteredPosts = postComments.items
             .filter(isComment)
-            .filter((p) => !p.hidden && statusMap[p.id])
+            .filter((p) => !p.hidden && !statusMap[p.id])
 
           filteredPosts.forEach((post) => {
             try {

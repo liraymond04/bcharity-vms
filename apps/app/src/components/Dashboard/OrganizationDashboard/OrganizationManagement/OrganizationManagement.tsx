@@ -20,6 +20,7 @@ const OrganizationManagement: React.FC<IOrganizationLogVHRProps> = () => {
 
   const { loading, data, error, refetch } = useApplications({ profile })
 
+  console.log(data, error, loading)
   const [selectedId, setSelectedId] = useState('')
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
 

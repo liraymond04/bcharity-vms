@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { STATIC_ASSETS } from '@/constants'
@@ -45,6 +45,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
     }
   }
 
+  const [showModal, setShowModal] = useState(false)
   return (
     <div
       onClick={() => {
@@ -52,7 +53,11 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
-        <ApplyToOpportunityModal></ApplyToOpportunityModal>
+        <ApplyToOpportunityModal
+          id={post.post_id}
+          open={showModal}
+          onClose={() => setShowModal(false)}
+        />
         <div className="flex">
           <div className="flex-shrink-0 h-36 w-36 overflow-hidden rounded-l-xl">
             {getDisplayedImage()}

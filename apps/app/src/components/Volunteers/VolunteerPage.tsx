@@ -21,6 +21,7 @@ import FollowButton from '../Shared/FollowButton'
 import LogHoursButton from '../Shared/LogHoursButton'
 import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import Slug from '../Shared/Slug'
+import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
@@ -82,10 +83,15 @@ const VolunteerPage: NextPage = () => {
   }
 
   const Body = ({ opportunity }: { opportunity: OpportunityMetadata }) => {
+    const [showModal, setShowModal] = useState(false)
     return (
       <>
-        {' '}
-        <ApplyToOpportunityModal></ApplyToOpportunityModal>
+        <ApplyToOpportunityModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          id={opportunity.post_id}
+        ></ApplyToOpportunityModal>
+        <Button onClick={() => setShowModal(true)}>Apply</Button>
         <div className="p-6">
           <div className="grid md:grid-cols-[auto_100px] sm:grid-cols-[auto_100px] gap-x-4 w-full">
             <div className="flex space-x-2 items-center overflow-hidden">

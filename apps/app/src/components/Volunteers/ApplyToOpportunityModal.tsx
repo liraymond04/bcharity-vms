@@ -1,10 +1,18 @@
 import { Button } from '@components/UI/Button'
 import { Modal } from '@components/UI/Modal'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import Link from 'next/link'
 import { FC, useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { checkAuth, useCreateComment } from '@/lib/lens-protocol'
+import { buildMetadata, PostTags } from '@/lib/metadata'
+import { ApplicationMetadataRecord } from '@/lib/metadata/ApplicationMetadata'
+import { MetadataVersion } from '@/lib/types'
+import { useAppPersistStore } from '@/store/app'
+
+import { FileInput } from '../UI/FileInput'
 import { TextArea } from '../UI/TextArea'
 
 export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
@@ -13,23 +21,51 @@ export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
   </Link>
 )
 
-const ApplyToOpportunityModal: FC = () => {
+const ApplyToOpportunityModal: FC<{
+  id: string
+  open: boolean
+  onClose: VoidFunction
+}> = ({ id, open, onClose }) => {
+  const { createComment } = useCreateComment()
+  const { mutateAsync: upload } = useStorageUpload()
+  const sdk = useSDK()
+
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.apply-to-opportunity-modal'
   })
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const [resume, setResume] = useState<File>()
 
-  function setImage(arg0: File | null): void {
-    throw new Error('Function not implemented.')
+  const { currentUser } = useAppPersistStore()
+
+  const onSubmit = async () => {
+    if (!currentUser || !sdk || !resume) return
+
+    const link = sdk.storage.resolveScheme(
+      (await upload({ data: [resume] }))[0]
+    )
+
+    const metadata = buildMetadata<ApplicationMetadataRecord>(
+      currentUser,
+      [PostTags.Application.Apply],
+      {
+        description: 'test desc',
+        resume: link,
+        manual: 'false',
+        version: MetadataVersion.ApplicationMetadataVersion['1.0.0'],
+        type: PostTags.Application.Apply
+      }
+    )
+
+    await checkAuth(currentUser.ownedBy)
+    await createComment({
+      publicationId: id,
+      profileId: currentUser.id,
+      metadata
+    })
   }
 
   return (
-    <Modal
-      show={showModal}
-      title=""
-      size="lg"
-      onClose={() => setShowModal(false)}
-    >
+    <Modal show={open} title="" size="lg" onClose={onClose}>
       <div className="px-10 py-4 flex flex-col space-y-4">
         <div className="flex flex-row ">
           <div
@@ -90,9 +126,16 @@ const ApplyToOpportunityModal: FC = () => {
       </div>
       <div className="flex items-center justify-center">
         {' '}
+        <FileInput
+          label="upload your resume"
+          onChange={(e) => {
+            setResume(e.target.files?.item(0) ?? undefined)
+          }}
+        />
         <Button
           className=" shrink-0 text-2xl my-5 w-52 h-16 align-middle"
           suppressHydrationWarning
+          onClick={() => onSubmit()}
         >
           {t('submit')}
         </Button>
