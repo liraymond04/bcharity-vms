@@ -399,7 +399,7 @@ const OrganizationCauses: React.FC = () => {
                       <div>
                         <TextArea
                           suppressHydrationWarning
-                          label="Description"
+                          label={t('cause-description')}
                           id="causeDescription"
                           value={causeDescription}
                           placeholder="Description"
