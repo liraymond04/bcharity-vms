@@ -43,7 +43,7 @@ import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import DeleteCauseModal from '../Modals/DeleteCauseModal'
-import Error from '../Modals/Error'
+import ErrorMessage from '../Modals/Error'
 import GoalModal from '../Modals/GoalModal'
 import ModifyCauseModal from '../Modals/ModifyCauseModal'
 import PublishCauseModal, {
@@ -456,7 +456,7 @@ const OrganizationCauses: React.FC = () => {
                 />
               )}
             </div>
-            {error && <Error message={e('generic')} />}
+            {error && <ErrorMessage message={e('generic')} />}
             <PublishCauseModal
               open={publishModalOpen}
               onClose={onPublishClose}
