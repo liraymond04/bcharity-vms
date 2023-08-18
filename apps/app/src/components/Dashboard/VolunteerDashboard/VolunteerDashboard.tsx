@@ -26,7 +26,7 @@ const VolunteerDashboard: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.tabs'
   })
-  const [selectedTab, setSelectedTab] = useState(0)
+  const [selectedTab, setSelectedTab] = useState(1)
 
   const tabs: IDashboardTab[] = [
     {
