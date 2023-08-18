@@ -27,6 +27,7 @@ interface IPublishOpportunityModalProps {
   onClose: (shouldRefetch: boolean) => void
   id: string
   publisher: ProfileFragment | null
+  isDraft: boolean
   defaultValues: IPublishOpportunityFormProps
 }
 
@@ -35,6 +36,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   onClose,
   id,
   publisher,
+  isDraft,
   defaultValues
 }) => {
   const { t } = useTranslation('common', {
@@ -52,7 +54,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [image, setImage] = useState<File | null>(null)
   const [endDateDisabled, setEndDateDisabled] = useState<boolean>(true)
   const form = useForm<IPublishOpportunityFormProps>({ defaultValues })
-  const [isChecked, setIsChecked] = useState(false)
   const [ongoing, setOngoing] = useState<boolean>(false)
 
   useEffect(() => {
@@ -62,7 +63,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     }
   }, [defaultValues])
 
-  console.log(ongoing)
   const {
     handleSubmit,
     reset,
@@ -82,10 +82,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     } catch (e) {
       return false
     }
-  }
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked)
   }
 
   const onCancel = () => {
@@ -114,7 +110,7 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
 
       const { applicationRequired, ...rest } = formData
 
-      const publishTag = isChecked
+      const publishTag = !isDraft
         ? PostTags.OrgPublish.Opportunity
         : PostTags.OrgPublish.OpportunityDraft
 
@@ -261,29 +257,6 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               >
                 <input
                   type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  style={{
-                    appearance: 'none',
-                    backgroundColor: isChecked ? 'purple' : 'transparent',
-                    border: '1px solid grey',
-                    width: '25px',
-                    height: '25px'
-                  }}
-                />
-                <span style={{ marginLeft: '12px' }}>Publish Now?</span>
-              </label>
-              <label
-                style={{
-                  display: 'inline-block',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginTop: '15px',
-                  marginBottom: '15px'
-                }}
-              >
-                <input
-                  type="checkbox"
                   {...register('applicationRequired')}
                   style={{
                     appearance: 'none',
@@ -295,8 +268,8 @@ const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
                     height: '25px'
                   }}
                 />
-                <span style={{ marginLeft: '12px' }}>
-                  Registration required?
+                <span style={{ marginLeft: '12px' }} suppressHydrationWarning>
+                  {t('registration-required')}
                 </span>
               </label>
             </div>

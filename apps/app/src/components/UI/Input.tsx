@@ -84,12 +84,12 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
                   style={{ position: 'relative' }}
                   checked={checked}
                   onChange={(e) => {
+                    if (!props.onChange) return
                     if (inputRef && inputRef.current) {
                       const el = inputRef.current
                         .children[0] as HTMLInputElement
                       el.disabled = !el.disabled
                     }
-                    if (!props.onChange) return
                     setChecked(!checked)
                     props.onChange(e)
                   }}

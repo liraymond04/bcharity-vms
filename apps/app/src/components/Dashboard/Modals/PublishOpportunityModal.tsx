@@ -275,7 +275,9 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
                     height: '25px'
                   }}
                 />
-                <span style={{ marginLeft: '12px' }}>Publish Now?</span>
+                <span style={{ marginLeft: '12px' }} suppressHydrationWarning>
+                  {t('publish-now')}
+                </span>
               </label>
               <label
                 style={{
@@ -299,8 +301,8 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
                     height: '25px'
                   }}
                 />
-                <span style={{ marginLeft: '12px' }}>
-                  Registration required?
+                <span style={{ marginLeft: '12px' }} suppressHydrationWarning>
+                  {t('registration-required')}
                 </span>
               </label>
             </div>

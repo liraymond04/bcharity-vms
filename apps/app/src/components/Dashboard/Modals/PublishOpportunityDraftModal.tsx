@@ -1,5 +1,5 @@
-import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
-import React, { useEffect, useState } from 'react'
+import { ProfileFragment } from '@lens-protocol/client'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import GradientModal from '@/components/Shared/Modal/GradientModal'
@@ -7,50 +7,44 @@ import { FileInput } from '@/components/UI/FileInput'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import { checkAuth, lensClient } from '@/lib/lens-protocol'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
+import {
+  buildMetadata,
+  OpportunityMetadataRecord,
+  PostTags
+} from '@/lib/metadata'
+import { MetadataVersion } from '@/lib/types'
 
-import Error from './Error'
+import ErrorMessage from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
-interface IDeleteOpportunityModalProps {
+interface IPublishOpportunityDraftModalProps {
   open: boolean
   onClose: (shouldRefetch: boolean) => void
   id: string
   publisher: ProfileFragment | null
   values: IPublishOpportunityFormProps
-  postData: PublicationFragment[]
 }
 
-const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
-  open,
-  onClose,
-  id,
-  publisher,
-  values,
-  postData
-}) => {
+const PublishOpportunityDraftModal: React.FC<
+  IPublishOpportunityDraftModalProps
+> = ({ open, onClose, id, publisher, values }) => {
   const { t } = useTranslation('common', {
-    keyPrefix: 'components.dashboard.modals.delete-opportunity'
+    keyPrefix: 'components.dashboard.modals.publish-opportunity-draft'
   })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const [publicationIds, setPublicationIds] = useState<string[]>([])
 
   const [pending, setPending] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
-  useEffect(() => {
-    const ids = getOpportunityMetadata(postData).map((p) => p.post_id)
-
-    setPublicationIds(ids)
-  }, [id, postData])
+  const { createPost } = useCreatePost()
 
   const onCancel = () => {
     setErrorMessage('')
     onClose(false)
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setErrorMessage('')
     setPending(false)
 
@@ -60,30 +54,44 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
       return
     }
 
-    checkAuth(publisher.ownedBy)
-      .then(() =>
-        Promise.all(
-          publicationIds.map((id) =>
-            lensClient().publication.hide({ publicationId: id })
-          )
-        )
+    try {
+      setPending(true)
+      const publishTag = PostTags.OrgPublish.Opportunity
+
+      const metadata = buildMetadata<OpportunityMetadataRecord>(
+        publisher,
+        [publishTag],
+        {
+          version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
+          type: publishTag,
+          id,
+          name: values.name,
+          startDate: values.startDate,
+          endDate: values.endDate,
+          hoursPerWeek: values.hoursPerWeek,
+          category: values.category,
+          website: values.website,
+          description: values.description,
+          imageUrl: values.imageUrl,
+          applicationRequired: values.applicationRequired ? 'true' : 'false'
+        }
       )
-      .then((res) => {
-        res.map((r) => {
-          if (r.isFailure()) {
-            throw r.error.message
-          }
-        })
+
+      await checkAuth(publisher.ownedBy)
+      await createPost({
+        profileId: publisher.id,
+        metadata
       })
-      .then(() => {
-        onClose(true)
-      })
-      .catch((e) => {
+
+      onClose(true)
+    } catch (e: any) {
+      if (e instanceof Error) {
         setErrorMessage(e.message)
-      })
-      .finally(() => {
-        setPending(false)
-      })
+      } else {
+        console.error(e)
+      }
+    }
+    setPending(false)
   }
 
   return (
@@ -159,7 +167,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
         )}
 
         {!!errorMessage && (
-          <Error
+          <ErrorMessage
             message={`${e('generic-front')}${errorMessage}${e('generic-back')}`}
           />
         )}
@@ -168,4 +176,4 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   )
 }
 
-export default DeleteOpportunityModal
+export default PublishOpportunityDraftModal
