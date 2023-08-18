@@ -8,7 +8,11 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import isVerified from '@/lib/isVerified'
-import { getAvatar, getProfile } from '@/lib/lens-protocol'
+import {
+  getAvatar,
+  getProfile,
+  useRegisteredOpportunities
+} from '@/lib/lens-protocol'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import { Card } from '../UI/Card'
@@ -27,9 +31,18 @@ const Volunteer: NextPage = () => {
   const [profile, setProfile] = useState<ProfileFragment>()
 
   const {
+    data,
+    loading,
+    error: registeredOpportunitiesError,
+    refetch
+  } = useRegisteredOpportunities({ profileId: profile?.id })
+
+  const {
     query: { username },
     isReady
   } = useRouter()
+
+  console.log(data)
 
   useEffect(() => {
     const fetch = async () => {

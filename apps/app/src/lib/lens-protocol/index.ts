@@ -30,6 +30,7 @@ import usePublication, {
   UsePublicationParams,
   UsePublicationReturn
 } from './usePublication'
+import useRegisteredOpportunities from './useRegisteredOpportunities'
 import useVHRRequests from './useVHRRequests'
 import isValidHandle from './util/isValidHandle'
 
@@ -52,6 +53,7 @@ export {
   useLogHours,
   usePostData,
   usePublication,
+  useRegisteredOpportunities,
   useVHRRequests
 }
 

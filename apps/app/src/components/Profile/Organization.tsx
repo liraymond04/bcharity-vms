@@ -163,8 +163,6 @@ const Organization: NextPage = () => {
     }
   ]
 
-  console.log(opportunityData, causeData)
-
   useEffect(() => {
     const fetch = async () => {
       try {
