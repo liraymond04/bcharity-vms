@@ -452,5 +452,6 @@
   "components.dashboard.modals.modify-opportunity.registration-required": "需要注册吗？",
   "components.dashboard.modals.publish-opportunity.publish-now": "现在发布？",
   "components.dashboard.modals.publish-opportunity.registration-required": "需要注册吗？",
-  "components.dashboard.modals.publish-opportunity-draft.registration-required": "需要注册吗？"
+  "components.dashboard.modals.publish-opportunity-draft.registration-required": "需要注册吗？",
+  "components.dashboard.organization.causes.cause-description": "原因描述："
 }

@@ -225,6 +225,7 @@
         "causes": {
           "set-goal": "Set a goal",
           "our-cause": "Our Cause",
+          "cause-description": "Cause Description: ",
           "create-new": "Create new project"
         },
         "tabs": {
