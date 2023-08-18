@@ -22,7 +22,7 @@ import {
 import { logIgnoreWarning } from '../metadata/get/logIgnoreWarning'
 import lensClient from './lensClient'
 
-type Volunteer = {
+export type VolunteerData = {
   profile: ProfileFragment
   currentOpportunities: OpportunityMetadata[]
   completedOpportunities: LogVhrRequestMetadata[]
@@ -41,23 +41,49 @@ const getCollectedPosts = (params: getCollectedPostIdsParams) => {
     .then((res) => res.items)
 }
 
+/**
+ * Returned by the {@link useVolunteers} hook
+ */
 export interface UseVolunteersReturn {
-  data: Volunteer[]
+  /**
+   * The volunteer data
+   */
+  data: VolunteerData[]
+  /**
+   * Whether or not the volunteer data is loading
+   */
   loading: boolean
+  /**
+   * The error message if an error occured while attempting to fetch the data
+   */
   error: string
+  /**
+   * A function to call to refetch the data
+   */
   refetch: () => Promise<void>
 }
 
+/**
+ * Params for the {@link useVolunteers} hook
+ */
 export interface UseVolunteersParams {
+  /**
+   * The profile to fetch data for, returned as { currentUser } in useAppPersistStore()
+   */
   profile: ProfileFragment | null
 }
 
+/**
+ * React hook for the management page in the Organization dashboard
+ *
+ * @param params Parameters for the hook
+ */
 export const useVolunteers = ({
   profile
 }: UseVolunteersParams): UseVolunteersReturn => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
 
-  const [data, setData] = useState<Volunteer[]>([])
+  const [data, setData] = useState<VolunteerData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -146,7 +172,7 @@ export const useVolunteers = ({
       })
       .filter((a): a is LogVhrRequestMetadata => !!a)
 
-    const volunteerDataMap = new Map<string, Volunteer>()
+    const volunteerDataMap = new Map<string, VolunteerData>()
 
     applications.forEach((a) => {
       const id = a.from.id
