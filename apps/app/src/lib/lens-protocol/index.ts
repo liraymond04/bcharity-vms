@@ -40,6 +40,7 @@ import useRegisteredOpportunities, {
   useRegisteredOpportunitiesReturn
 } from './useRegisteredOpportunities'
 import useVHRRequests from './useVHRRequests'
+import { useVolunteers } from './useVolunteers'
 import isValidHandle from './util/isValidHandle'
 
 export {
@@ -63,7 +64,8 @@ export {
   usePostData,
   usePublication,
   useRegisteredOpportunities,
-  useVHRRequests
+  useVHRRequests,
+  useVolunteers
 }
 
 export type {

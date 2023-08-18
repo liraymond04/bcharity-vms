@@ -1,0 +1,194 @@
+import {
+  CommentFragment,
+  isCommentPublication,
+  isPostPublication,
+  PostFragment,
+  ProfileFragment,
+  PublicationTypes
+} from '@lens-protocol/client'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import {
+  ApplicationMetadata,
+  ApplicationMetadataBuilder,
+  getOpportunityMetadata,
+  InvalidMetadataException,
+  LogVhrRequestMetadata,
+  LogVhrRequestMetadataBuilder,
+  OpportunityMetadata,
+  PostTags
+} from '../metadata'
+import { logIgnoreWarning } from '../metadata/get/logIgnoreWarning'
+import lensClient from './lensClient'
+
+type Volunteer = {
+  profile: ProfileFragment
+  currentOpportunities: OpportunityMetadata[]
+  completedOpportunities: LogVhrRequestMetadata[]
+}
+
+interface getCollectedPostIdsParams {
+  profile: ProfileFragment
+}
+
+const getCollectedPosts = (params: getCollectedPostIdsParams) => {
+  return lensClient()
+    .publication.fetchAll({
+      collectedBy: params.profile.ownedBy,
+      publicationTypes: [PublicationTypes.Comment]
+    })
+    .then((res) => res.items)
+}
+
+export interface UseVolunteersReturn {
+  data: Volunteer[]
+  loading: boolean
+  error: string
+  refetch: () => Promise<void>
+}
+
+export interface UseVolunteersParams {
+  profile: ProfileFragment | null
+}
+
+export const useVolunteers = ({
+  profile
+}: UseVolunteersParams): UseVolunteersReturn => {
+  const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
+  const [data, setData] = useState<Volunteer[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const refetch = async () => {
+    if (!profile) {
+      setError(e('profile-null'))
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    const apAcceptCommentsData = (
+      await lensClient().publication.fetchAll({
+        profileId: profile.id,
+        publicationTypes: [PublicationTypes.Comment],
+        metadata: {
+          tags: { all: [PostTags.Application.Accept] }
+        }
+      })
+    ).items.filter(isCommentPublication)
+
+    const vhrCollectData = (await getCollectedPosts({ profile })).filter(
+      isCommentPublication
+    )
+
+    const opData: PostFragment[] = []
+
+    opData.push(
+      ...apAcceptCommentsData.map((d) => d.mainPost).filter(isPostPublication)
+    )
+
+    opData.push(
+      ...vhrCollectData.map((d) => d.mainPost).filter(isPostPublication)
+    )
+
+    const ops = getOpportunityMetadata(opData)
+
+    const opMap = new Map<string, OpportunityMetadata>(
+      ops.map((o) => [o.post_id, o])
+    )
+
+    const filteredApAcceptComments = apAcceptCommentsData.filter((a) =>
+      opMap.has(a.mainPost.id)
+    )
+
+    const filteredColData = vhrCollectData.filter((a) =>
+      opMap.has(a.mainPost.id)
+    )
+
+    const applicationDataComments = filteredApAcceptComments
+      .map((a) => a.commentOn)
+      .filter((a): a is CommentFragment => !!a && isCommentPublication(a))
+
+    const applications = applicationDataComments
+      .map((a) => {
+        try {
+          const op = opMap.get(a.mainPost.id)
+          if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
+          return new ApplicationMetadataBuilder(a, op).build()
+        } catch (e) {
+          if (e instanceof InvalidMetadataException) {
+            logIgnoreWarning(a, e)
+          } else {
+            console.error(e)
+          }
+          return null
+        }
+      })
+      .filter((a): a is ApplicationMetadata => !!a)
+
+    const vhrRequests = filteredColData
+      .map((a) => {
+        try {
+          const op = opMap.get(a.mainPost.id)
+          if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
+          return new LogVhrRequestMetadataBuilder(a, op).build()
+        } catch (e) {
+          if (e instanceof InvalidMetadataException) {
+            logIgnoreWarning(a, e)
+          } else {
+            console.error(e)
+          }
+          return null
+        }
+      })
+      .filter((a): a is LogVhrRequestMetadata => !!a)
+
+    const volunteerDataMap = new Map<string, Volunteer>()
+
+    applications.forEach((a) => {
+      const id = a.from.id
+      if (!volunteerDataMap.has(id)) {
+        volunteerDataMap.set(id, {
+          profile: a.from,
+          currentOpportunities: [],
+          completedOpportunities: []
+        })
+      }
+
+      const prev = volunteerDataMap.get(id)!
+      const newOps = [...prev.currentOpportunities, a.opportunity] // a volunteer can only register once so no risk of duplicates
+      volunteerDataMap.set(id, { ...prev, currentOpportunities: newOps })
+    })
+
+    vhrRequests.forEach((a) => {
+      const id = a.from.id
+      if (!volunteerDataMap.has(id)) {
+        volunteerDataMap.set(id, {
+          profile: a.from,
+          currentOpportunities: [],
+          completedOpportunities: []
+        })
+      }
+
+      const prev = volunteerDataMap.get(id)!
+      const newComp = [...prev.completedOpportunities, a]
+      volunteerDataMap.set(id, { ...prev, completedOpportunities: newComp })
+    })
+
+    setData(Array.from(volunteerDataMap.values()))
+  }
+
+  useEffect(() => {
+    refetch()
+  }, [profile])
+
+  return {
+    data,
+    loading,
+    error,
+    refetch
+  }
+}
