@@ -44,6 +44,7 @@ const VolunteerHomeTab: React.FC = () => {
   const [name, setName] = useState<string>('')
   const [location, setLocation] = useState<string>('')
   const [bio, setBio] = useState<string>('')
+  const [causeDescription, setCauseDescription] = useState<string>('')
   const [website, setWebsite] = useState<string>('')
   const [discord, setDiscord] = useState<string>('')
   const [twitter, setTwitter] = useState<string>('')
@@ -88,8 +89,13 @@ const VolunteerHomeTab: React.FC = () => {
                 (attr) => attr.key === 'linkedin'
               )
               setLinkedin(linkedinAttribute?.value || '')
+              const causeDescriptionAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'causeDescription'
+              )
+              setCauseDescription(userProfile.causeDescription || '')
             }
             setBio(userProfile.bio || '')
+            setCauseDescription(userProfile.causeDescription || '')
           }
           console.log('profile', userProfile)
         }

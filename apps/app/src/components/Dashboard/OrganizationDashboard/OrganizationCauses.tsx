@@ -3,24 +3,42 @@ import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
+import { signTypedData } from '@wagmi/core'
 import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
+import { v4 } from 'uuid'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
+import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
-import usePostData from '@/lib/lens-protocol/usePostData'
-import { CauseMetadata, isPost } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getCauseMetadata } from '@/lib/metadata'
+import { TextArea } from '@/components/UI/TextArea'
+import {
+  getSignature,
+  lensClient,
+  useEnabledCurrencies,
+  usePostData
+} from '@/lib/lens-protocol'
+import checkAuth from '@/lib/lens-protocol/checkAuth'
+import {
+  CauseMetadata,
+  getCauseMetadata,
+  isPost,
+  PostTags
+} from '@/lib/metadata'
+import {
+  AttributeData,
+  MetadataDisplayType,
+  MetadataVersion,
+  ProfileMetadata
+} from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
@@ -44,21 +62,176 @@ const OrganizationCauses: React.FC = () => {
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
   const [postMetadata, setPostMetadata] = useState<CauseMetadata[]>([])
+  const [bio, setBio] = useState<string>('')
 
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
-
+  const { mutateAsync: upload } = useStorageUpload()
+  const sdk = useSDK()
   const [currentModifyId, setCurrentModifyId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
-  const { data, error, loading, refetch } = usePostData({
-    profileId: profile?.id,
+  const { data, error, loading, refetch } = usePostData(profile?.id, {
     metadata: {
       tags: { all: [PostTags.OrgPublish.Cause] }
     }
   })
 
+  const [location, setLocation] = useState<string>('')
+  const [errora, setErrora] = useState<Error>()
+  const [website, setWebsite] = useState<string>('')
+  const [discord, setDiscord] = useState<string>('')
+  const [twitter, setTwitter] = useState<string>('')
+  const [linkedin, setLinkedin] = useState<string>('')
+  const [causeDescription, setCauseDescription] = useState<string>('')
+  const [cover, setCover] = useState<File | null>(null)
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
+  const { currentUser } = useAppPersistStore()
+  const [name, setName] = useState<string>('')
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        setErrora(undefined)
+        if (currentUser) {
+          setUserId(currentUser.id)
+          setUserHandle(currentUser.handle)
+
+          const userProfile = await lensClient().profile.fetch({
+            profileId: currentUser?.id
+          })
+
+          if (userProfile) {
+            setName(userProfile.name || '')
+
+            if (userProfile.attributes) {
+              const locationAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'location'
+              )
+              setLocation(locationAttribute?.value || '')
+              const websiteAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'website'
+              )
+              setWebsite(websiteAttribute?.value || '')
+              const discordAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'discord'
+              )
+              setDiscord(discordAttribute?.value || '')
+              const twitterAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'twitter'
+              )
+              setTwitter(twitterAttribute?.value || '')
+              const linkedinAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'linkedin'
+              )
+              setLinkedin(linkedinAttribute?.value || '')
+              const causeDescriptionAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'causeDescription'
+              )
+              setCauseDescription(causeDescriptionAttribute?.value || '')
+              console.log('descripton', causeDescriptionAttribute)
+            }
+            setBio(userProfile.bio || '')
+          }
+          console.log('profile', userProfile)
+        }
+      } catch (error) {
+        if (errora instanceof Error) {
+        }
+      }
+    }
+    fetchProfileData()
+  }, [currentUser])
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsLoading(true)
+    try {
+      if (currentUser) {
+        await checkAuth(currentUser?.ownedBy)
+
+        const attributes: AttributeData[] = [
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'website',
+            value: website,
+            key: 'website'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'location',
+            value: location,
+            key: 'location'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'discord',
+            value: discord,
+            key: 'discord'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'twitter',
+            value: twitter,
+            key: 'twitter'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'linkedin',
+            value: linkedin,
+            key: 'linkedin'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'causeDescription',
+            value: causeDescription,
+            key: 'causeDescription'
+          }
+        ]
+
+        const avatarUrl = cover ? (await upload({ data: [cover] }))[0] : null
+
+        const metadata: ProfileMetadata = {
+          version: MetadataVersion.ProfileMetadataVersions['1.0.0'],
+          metadata_id: v4(),
+          name,
+          bio,
+          cover_picture: avatarUrl,
+          attributes
+        }
+
+        const metadataUrl = sdk?.storage.resolveScheme(
+          (await upload({ data: [metadata] }))[0]
+        )
+
+        if (!metadataUrl) throw Error(e('metadata-upload-fail'))
+
+        const typedDataResult =
+          await lensClient().profile.createSetProfileMetadataTypedData({
+            metadata: metadataUrl,
+            profileId: currentUser?.id
+          })
+
+        const signature = await signTypedData(
+          getSignature(typedDataResult.unwrap().typedData)
+        )
+
+        const broadcastResult = await lensClient().transaction.broadcast({
+          id: typedDataResult.unwrap().id,
+          signature: signature
+        })
+      }
+      console.log('Profile saved successfully')
+    } catch (error) {
+      if (error instanceof Error) {
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
@@ -136,7 +309,6 @@ const OrganizationCauses: React.FC = () => {
     }
   }, [profile])
 
-  const { currentUser } = useAppPersistStore()
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
     currentUser?.ownedBy ?? ''
   )
@@ -174,6 +346,9 @@ const OrganizationCauses: React.FC = () => {
         }
       : { ...emptyPublishFormData }
   }
+
+  const [userId, setUserId] = useState('')
+  const [userHandle, setUserHandle] = useState('')
 
   return (
     <GridLayout>
@@ -217,7 +392,34 @@ const OrganizationCauses: React.FC = () => {
                 </div>
                 <div className=" w-full lg:flex mt-5">
                   <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                    {currentUser?.causeDescription}
+                    <form
+                      className="my-5 mx-5 flex-col space-y-4"
+                      onSubmit={handleSubmit}
+                    >
+                      <div>
+                        <TextArea
+                          suppressHydrationWarning
+                          label="Description"
+                          id="causeDescription"
+                          value={causeDescription}
+                          placeholder="Description"
+                          onChange={(e) => setCauseDescription(e.target.value)}
+                          rows={10}
+                        />
+                      </div>
+
+                      <div className="flex justify-end">
+                        <Button
+                          className="my-5"
+                          disabled={isLoading}
+                          icon={isLoading && <Spinner size="sm" />}
+                          type="submit"
+                          suppressHydrationWarning
+                        >
+                          Submit
+                        </Button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </>

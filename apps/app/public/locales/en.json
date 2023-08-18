@@ -406,7 +406,9 @@
         "name": "Name: ",
         "location": "Location: ",
         "bio": "Bio: ",
+
         "bio-placeholder": "Tell us something about you!",
+        "causeDescription": "Cause Description: ",
         "website": "Website: ",
         "discord": "Discord: ",
         "twitter": "Twitter: ",
