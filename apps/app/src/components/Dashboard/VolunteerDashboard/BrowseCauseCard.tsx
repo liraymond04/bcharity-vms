@@ -5,7 +5,7 @@ import React from 'react'
 
 import DonateButton from '@/components/Shared/DonateButton'
 import { Card } from '@/components/UI/Card'
-import getAvatar from '@/lib/getAvatar'
+import { getAvatar } from '@/lib/lens-protocol'
 import { CauseMetadata } from '@/lib/metadata'
 
 const inter500 = Inter({

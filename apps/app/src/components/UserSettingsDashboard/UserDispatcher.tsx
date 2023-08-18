@@ -3,10 +3,12 @@ import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import getProfile from '@/lib/lens-protocol/getProfile'
-import getSignature from '@/lib/lens-protocol/getSignature'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import {
+  checkAuth,
+  getProfile,
+  getSignature,
+  lensClient
+} from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Spinner } from '../UI/Spinner'

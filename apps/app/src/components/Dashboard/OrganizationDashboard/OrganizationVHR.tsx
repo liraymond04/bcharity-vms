@@ -18,17 +18,20 @@ import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import i18n from '@/i18n'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import usePostData from '@/lib/lens-protocol/usePostData'
-import { isPost, OpportunityMetadata } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import { lensClient, usePostData } from '@/lib/lens-protocol'
+import {
+  getOpportunityMetadata,
+  isPost,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import DeleteOpportunityModal from '../Modals/DeleteOpportunityModal'
 import Error from '../Modals/Error'
 import ModifyOpportunityModal from '../Modals/ModifyOpportunityModal'
+import PublishOpportunityDraftModal from '../Modals/PublishOpportunityDraftModal'
 import PublishOpportunityModal, {
   emptyPublishFormData,
   IPublishOpportunityFormProps
@@ -52,11 +55,12 @@ const organizationGridTabs: OrgGridTab[] = [
     name: getTranslation('active-posting'),
     inactiveString: getTranslation('active-inactive'),
     filter: (p) => {
-      const d = new Date()
+      const [y, m, d] = p.endDate.split('-')
       return (
         p.type === PostTags.OrgPublish.Opportunity &&
         (!p.endDate ||
-          p.endDate > `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`)
+          new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() >
+            new Date().getTime())
       )
     }
   },
@@ -69,11 +73,12 @@ const organizationGridTabs: OrgGridTab[] = [
     name: getTranslation('inactive'),
     inactiveString: getTranslation('inactive-inactive'),
     filter: (p) => {
-      const d = new Date()
+      const [y, m, d] = p.endDate.split('-')
       return (
         p.type === PostTags.OrgPublish.Opportunity &&
-        !!p.endDate &&
-        p.endDate < `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+        p.endDate !== '' &&
+        new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() <
+          new Date().getTime()
       )
     }
   }
@@ -89,8 +94,7 @@ const OrganizationVHRTab: React.FC = () => {
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
 
-  const { data, error, loading, refetch } = usePostData({
-    profileId: profile?.id,
+  const { data, error, loading, refetch } = usePostData(profile?.id, {
     metadata: {
       tags: { all: [PostTags.OrgPublish.Opportunity] }
     }
@@ -102,9 +106,11 @@ const OrganizationVHRTab: React.FC = () => {
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [modifyModalOpen, setModifyModalOpen] = useState(false)
+  const [publishDraftModalOpen, setPublishDraftModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
   const [currentModifyId, setCurrentModifyId] = useState('')
+  const [currentPublishDraftId, setCurrentPublishDraftId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
 
   const onPublishClose = (shouldRefetch: boolean) => {
@@ -118,6 +124,13 @@ const OrganizationVHRTab: React.FC = () => {
   const onModifyClose = (shouldRefetch: boolean) => {
     setModifyModalOpen(false)
 
+    if (shouldRefetch) {
+      refetch()
+    }
+  }
+
+  const onPublishDraftClose = (shouldRefetch: boolean) => {
+    setPublishDraftModalOpen(false)
     if (shouldRefetch) {
       refetch()
     }
@@ -146,6 +159,11 @@ const OrganizationVHRTab: React.FC = () => {
   const onEdit = (id: string) => {
     setCurrentModifyId(id)
     setModifyModalOpen(true)
+  }
+
+  const onPublishDraft = (id: string) => {
+    setCurrentPublishDraftId(id)
+    setPublishDraftModalOpen(true)
   }
 
   const onDelete = (id: string) => {
@@ -195,7 +213,8 @@ const OrganizationVHRTab: React.FC = () => {
           category: d.category ?? '',
           website: d.website ?? '',
           description: d.description ?? '',
-          imageUrl: d.imageUrl ?? ''
+          imageUrl: d.imageUrl ?? '',
+          applicationRequired: d.applicationRequired ?? ''
         }
       : { ...emptyPublishFormData }
   }
@@ -237,6 +256,11 @@ const OrganizationVHRTab: React.FC = () => {
         defaultColDef={defaultColumnDef}
         rowData={data}
         columnDefs={makeOrgVHRColumnDefs({
+          onPublishNowClick:
+            organizationGridTabs[selectedTabIndex].name ===
+            getTranslation('drafts')
+              ? onPublishDraft
+              : undefined,
           onEditClick: onEdit,
           onDeleteClick: onDelete
         })}
@@ -366,7 +390,18 @@ const OrganizationVHRTab: React.FC = () => {
             onClose={onModifyClose}
             publisher={profile}
             id={currentModifyId}
+            isDraft={
+              organizationGridTabs[selectedTabIndex].name ===
+              getTranslation('drafts')
+            }
             defaultValues={getFormDefaults(currentModifyId)}
+          />
+          <PublishOpportunityDraftModal
+            open={publishDraftModalOpen}
+            onClose={onPublishDraftClose}
+            publisher={profile}
+            id={currentPublishDraftId}
+            values={getFormDefaults(currentPublishDraftId)}
           />
           <DeleteOpportunityModal
             open={deleteModalOpen}

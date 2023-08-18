@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import ClearFilters from '@/components/Shared/ClearFilters'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import { Spinner } from '@/components/UI/Spinner'
-import usePostData from '@/lib/lens-protocol/usePostData'
+import { usePostData } from '@/lib/lens-protocol'
 import {
   getOpportunityMetadata,
   isComment,
@@ -39,8 +39,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
   })
   const { currentUser: profile } = useAppPersistStore()
 
-  const { loading, data, error, refetch } = usePostData({
-    profileId: profile?.id,
+  const { loading, data, error, refetch } = usePostData(profile?.id, {
     publicationTypes: [PublicationTypes.Comment],
     metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
   })

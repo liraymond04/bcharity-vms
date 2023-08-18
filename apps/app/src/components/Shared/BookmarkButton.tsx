@@ -3,52 +3,62 @@ import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/solid'
 import { FC, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import useBookmark from '@/lib/lens-protocol/useBookmark'
+import { useBookmark } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 import { Spinner } from '../UI/Spinner'
 
-interface Props {
+/**
+ * Properties of {@link BookmarkButton}
+ */
+export interface BookmarkButtonProps {
+  /**
+   * Publication ID of the post being bookmarked
+   */
   publicationId: string
+  /**
+   * Post tag to be used for the bookmark comment
+   */
   postTag: string
 }
 
-const BookmarkButton: FC<Props> = ({ publicationId, postTag }) => {
+/**
+ * A component that displays a button as a bookmark icon and handles bookmarking and
+ * unbookmarking posts as well as their error messages using the {@link useBookmark}
+ * hook
+ *
+ * @example Bookmark button used in the {@link VolunteerPage}
+ * ```tsx
+ * <BookmarkButton
+ *   publicationId={opportunity.post_id}
+ *   postTag={PostTags.Bookmark.Opportunity}
+ * />
+ * ```
+ */
+const BookmarkButton: FC<BookmarkButtonProps> = ({
+  publicationId,
+  postTag
+}) => {
   const { currentUser } = useAppPersistStore()
-  const { fetch, bookmarked, error, isLoading, addBookmark, removeBookmark } =
+  const { bookmarked, error, isLoading, addBookmark, removeBookmark } =
     useBookmark({
-      postTag
+      postTag,
+      profile: currentUser,
+      publicationId
     })
 
-  // custom hook
-  // { bookmarked }, value is whether bookmarked or not, set on useEffect of hook
-  //                 get latest comments under publication by currentuser to get bookmark value (custom post type and tag)
-  //                 hide to unbookmark, (so if no publications found from those filters, then bookmarked = false)
-  // { createBookmarkedPublication }, create comment under publication ID
-  //                                  set metadata (doesn't need forms like the others, most is hardcoded)
-  // { hideBookmarkedPublication }, check if has a publication after filters (custom post type and tag)
-  //                                hide the publication if it exists
-
   useEffect(() => {
-    if (error) toast.error(error?.message)
+    if (error) toast.error(error)
   }, [error])
-
-  useEffect(() => {
-    fetch(currentUser, publicationId)
-  }, [])
 
   return (
     <button
       disabled={isLoading}
       onClick={() => {
         if (bookmarked) {
-          removeBookmark(currentUser, publicationId)
+          removeBookmark()
         } else {
-          addBookmark(currentUser, publicationId).then((result) => {
-            if (result?.isFailure()) {
-              console.log(result.error)
-            }
-          })
+          addBookmark()
         }
       }}
     >

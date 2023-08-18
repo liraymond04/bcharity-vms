@@ -11,11 +11,14 @@ import { Form } from '@/components/UI/Form'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import useCreatePost from '@/lib/lens-protocol/useCreatePost'
-import { buildMetadata, OpportunityMetadataRecord } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata/PostTags'
+import { checkAuth, useCreatePost } from '@/lib/lens-protocol'
+import {
+  buildMetadata,
+  OpportunityMetadataRecord,
+  PostTags
+} from '@/lib/metadata'
 import { MetadataVersion } from '@/lib/types'
+import validImageExtension from '@/lib/validImageExtension'
 
 import Error from './Error'
 
@@ -28,6 +31,7 @@ export interface IPublishOpportunityFormProps {
   website: string
   description: string
   imageUrl: string
+  applicationRequired: boolean
 }
 
 export const emptyPublishFormData: IPublishOpportunityFormProps = {
@@ -38,7 +42,8 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   category: '',
   website: '',
   description: '',
-  imageUrl: ''
+  imageUrl: '',
+  applicationRequired: false
 }
 
 interface IPublishOpportunityModalProps {
@@ -66,7 +71,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   const [error, setError] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [image, setImage] = useState<File | null>(null)
-
+  const [isChecked, setIsChecked] = useState(false)
   const form = useForm<IPublishOpportunityFormProps>()
 
   const {
@@ -75,8 +80,11 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     resetField,
     register,
     clearErrors,
+    watch,
     formState: { errors }
   } = form
+
+  const currentFormData = watch()
 
   const validUrl = (url: string) => {
     try {
@@ -85,6 +93,10 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     } catch (e) {
       return false
     }
+  }
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked)
   }
 
   const onCancel = () => {
@@ -109,30 +121,29 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     try {
       const imageUrl = image ? (await upload({ data: [image] }))[0] : ''
 
+      const publishTag = isChecked
+        ? PostTags.OrgPublish.Opportunity
+        : PostTags.OrgPublish.OpportunityDraft
+
+      const { applicationRequired, ...rest } = formData
       const metadata = buildMetadata<OpportunityMetadataRecord>(
         publisher,
-        [PostTags.OrgPublish.Opportunity],
+        [publishTag],
         {
           version: MetadataVersion.OpportunityMetadataVersion['1.0.2'],
-          type: PostTags.OrgPublish.Opportunity,
+          type: publishTag,
           id: v4(),
-          applicationRequired: 'false', // set in formData in VM-178
-          ...formData,
+          ...rest,
+          applicationRequired: applicationRequired ? 'true' : 'false',
           imageUrl
         }
       )
 
       await checkAuth(publisher.ownedBy)
-      const createPostResult = await createPost({
+      await createPost({
         profileId: publisher.id,
         metadata
       })
-
-      if (createPostResult.isFailure()) {
-        setError(true)
-        setErrorMessage(createPostResult.error.message)
-        throw createPostResult.error.message
-      }
 
       reset()
       onClose(true)
@@ -241,10 +252,75 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               error={!!errors.description?.type}
               {...register('description', { required: true, maxLength: 250 })}
             />
+
+            <div className="flex-row space-x-96">
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: isChecked ? 'purple' : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }} suppressHydrationWarning>
+                  {t('publish-now')}
+                </span>
+              </label>
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  {...register('applicationRequired')}
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: currentFormData.applicationRequired
+                      ? 'purple'
+                      : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                />
+                <span style={{ marginLeft: '12px' }} suppressHydrationWarning>
+                  {t('registration-required')}
+                </span>
+              </label>
+            </div>
+
             <FileInput
               label={t('image')}
               accept="image/*"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0]
+                setError(false)
+
+                if (selectedFile && validImageExtension(selectedFile.name)) {
+                  setImage(selectedFile)
+                } else {
+                  setError(true)
+                  setErrorMessage(e('invalid-file-format'))
+                }
+              }}
             />
           </Form>
         ) : (

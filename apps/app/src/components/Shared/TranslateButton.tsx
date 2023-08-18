@@ -6,6 +6,12 @@ import { useTranslation } from 'react-i18next'
 
 import i18n from '@/i18n'
 
+/**
+ * A component that displays a button to switch the current language
+ * from a dropdown list
+ *
+ * The component uses {@link i18n} to change the current language
+ */
 const TranslateButton: FC = () => {
   const { t } = useTranslation('common')
 

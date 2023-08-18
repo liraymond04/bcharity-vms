@@ -21,19 +21,29 @@ import { GIT_COMMIT_SHA } from 'src/constants'
 import { useAppPersistStore, useAppStore } from 'src/store/app'
 import { useDisconnect } from 'wagmi'
 
-import getAvatar from '@/lib/getAvatar'
 import isVerified from '@/lib/isVerified'
+import { getAvatar } from '@/lib/lens-protocol'
 
 import Slug from '../Slug'
 import Login from './Login'
 import Create from './Login/Create'
 
+/**
+ * A component that wraps its children as a Next.js Link router
+ */
 export const NextLink = ({ href, children, ...rest }: Record<string, any>) => (
   <Link href={href} {...rest}>
     {children}
   </Link>
 )
 
+/**
+ * A component that displays menu items for the {@link Navbar}
+ *
+ * Displays login buttons when not authenticated and a profile dropdown menu
+ * when authenticated, which handles routing to profile and settings pages,
+ * logging out, as well as profile switching and creation
+ */
 const MenuItems: FC = () => {
   const router = useRouter()
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false)

@@ -8,14 +8,79 @@ import { Button } from '@/components/UI/Button'
 
 import GradientWrapper from '../Gradient/GradientWrapper'
 
-interface IGradientModalProps {
+/**
+ * Properties of {@link GradientModal}
+ */
+export interface IGradientModalProps {
+  /**
+   * Title of the modal component
+   */
   title: string
+  /**
+   * Determines if modal should be visible or hidden
+   */
   open: boolean
+  /**
+   * Function that runs when modal is closed
+   */
   onCancel: () => void
+  /**
+   * Function that runs when the submit button is pressed
+   */
   onSubmit: () => void
+  /**
+   * Determines if submit button should be disabled
+   */
   submitDisabled?: boolean
+  /**
+   * React components wrapped by the component
+   */
   children: React.ReactNode
 }
+
+/**
+ * A component that displays a modal window with a gradient background using {@link GradientWrapper}
+ *
+ * @example Using a gradient modal component for the {@link DeleteCauseModal}
+ * ```tsx
+ * const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
+ *   open,
+ *   onClose,
+ *   id,
+ *   publisher,
+ *   values,
+ *   postData,
+ *   currencyData
+ * }) => {
+ *   ...
+ *   const [pending, setPending] = useState(false)
+ *
+ *   ...
+ *   const onCancel = () => {
+ *     ...
+ *     onClose(false)
+ *   }
+ *
+ *   const onSubmit = () => {
+ *     setPending(true)
+ *     ...
+ *     setPending(false)
+ *   }
+ *
+ *   return (
+ *     <GradientModal
+ *       title={t('title')}
+ *       open={open}
+ *       onCancel={onCancel}
+ *       onSubmit={onSubmit}
+ *       submitDisabled={pending}
+ *     >
+ *       ...
+ *     </GradientModal>
+ *   )
+ *
+ * ```
+ */
 
 const GradientModal: React.FC<IGradientModalProps> = ({
   title,

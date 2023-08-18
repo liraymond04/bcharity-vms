@@ -437,5 +437,20 @@
   "components.settings.dispatcher.dispatcher": "调度员",
   "components.shared.navbar.menuitems.create-profile": "创建个人资料",
   "components.causes.status-accepting": "状态：接受捐赠",
-  "components.causes.status-not-accepting": "状态：不接受捐赠"
+  "components.causes.status-not-accepting": "状态：不接受捐赠",
+  "errors.invalid-file-type": "文件格式无效",
+  "components.dashboard.modals.publish-opportunity-draft.title": "发布草稿",
+  "components.dashboard.modals.publish-opportunity-draft.name": "志愿者机会名称",
+  "components.dashboard.modals.publish-opportunity-draft.start-date": "开始日期",
+  "components.dashboard.modals.publish-opportunity-draft.end-date": "结束日期",
+  "components.dashboard.modals.publish-opportunity-draft.hours": "预计小时数",
+  "components.dashboard.modals.publish-opportunity-draft.category": "类别",
+  "components.dashboard.modals.publish-opportunity-draft.website": "网站（如果不链接到外部机会，则留空）",
+  "components.dashboard.modals.publish-opportunity-draft.description": "活动说明",
+  "components.dashboard.modals.publish-opportunity-draft.image": "图片（可选）：",
+  "components.dashboard.modals.delete-opportunity.registration-required": "需要注册吗？",
+  "components.dashboard.modals.modify-opportunity.registration-required": "需要注册吗？",
+  "components.dashboard.modals.publish-opportunity.publish-now": "现在发布？",
+  "components.dashboard.modals.publish-opportunity.registration-required": "需要注册吗？",
+  "components.dashboard.modals.publish-opportunity-draft.registration-required": "需要注册吗？"
 }
