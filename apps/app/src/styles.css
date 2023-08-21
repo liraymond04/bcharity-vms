@@ -99,6 +99,11 @@ table {
   scrollbar-width: none;
 }
 
+.scrollbar {
+  height: 600px;
+  overflow-y: scroll;
+}
+
 .giphy-gif {
   @apply !rounded-none;
 }
