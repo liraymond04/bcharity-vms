@@ -20,6 +20,25 @@ import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
 
+/**
+ * A component that displays the browse causes page
+ *
+ * Cause posts are fetched using the {@link useExplorePublications} hook, and are filtered
+ * using the metadata tags {@link PostTags.OrgPublish.Cause}.
+ *
+ * Results from the Lens hook are mapped and displayed as a {@link CauseCard} in a grid,
+ * and are loaded with infinite scrolling that uses the fetchMore method provided by the
+ * {@link useExplorePublications} hook.
+ *
+ * Infinite scrolling uses the useInView hook from the {@link https://github.com/wellyshen/react-cool-inview | react-cool-inview} package
+ * to check if the bottom of the loaded list of posts is in the user's view, and call the
+ * fetchMore method if it is in view.
+ *
+ * Displayed posts are further filtered by the search inputs and category dropdown filter.
+ * Search uses the {@link testSearch} function to fuzzy search posts matching the search
+ * query. The category dropdown filter displays posts only with the selected category in
+ * their metadata, and its dropdown is displayed with the {@link DashboardDropDown} component.
+ */
 const Causes: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })

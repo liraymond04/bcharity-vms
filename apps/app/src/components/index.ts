@@ -1,3 +1,4 @@
+import * as Causes from './Causes/namespace'
 import * as Shared from './Shared'
 
-export { Shared }
+export { Causes, Shared }
