@@ -27,7 +27,7 @@ export interface BookmarkButtonProps {
  * unbookmarking posts as well as their error messages using the {@link useBookmark}
  * hook
  *
- * @example Bookmark button used in the {@link VolunteerPage}
+ * @example Bookmark button used in the {@link components.Volunteers.VolunteerPage}
  * ```tsx
  * <BookmarkButton
  *   publicationId={opportunity.post_id}

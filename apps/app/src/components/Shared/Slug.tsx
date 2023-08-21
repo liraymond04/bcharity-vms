@@ -22,7 +22,7 @@ export interface SlugProps {
 /**
  * A component that renders a styled string used for slugs
  *
- * @example Slug used for an organiation's profile link in {@link VolunteerPage}
+ * @example Slug used for an organiation's profile link in {@link components.Volunteers.VolunteerPage}
  * ```tsx
  * <div className="flex space-x-3 items-center">
  *   <Slug prefix="@" slug={opportunity.from.handle} />
