@@ -13,7 +13,12 @@ import { useTranslation } from 'react-i18next'
 
 import { formatLocation } from '@/lib/formatLocation'
 import isVerified from '@/lib/isVerified'
-import { getAvatar, getProfile, usePostData } from '@/lib/lens-protocol'
+import {
+  getAvatar,
+  getProfile,
+  usePostData,
+  usePostData
+} from '@/lib/lens-protocol'
 import {
   CauseMetadata,
   getCauseMetadata,
@@ -21,6 +26,14 @@ import {
   OpportunityMetadata,
   PostTags
 } from '@/lib/metadata'
+import {
+  CauseMetadata,
+  getCauseMetadata,
+  getOpportunityMetadata,
+  OpportunityMetadata,
+  PostTags
+} from '@/lib/metadata'
+import { useAppPersistStore } from '@/store/app'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import { Card } from '../UI/Card'
@@ -38,6 +51,8 @@ const Organization: NextPage = () => {
   const [error, setError] = useState<Error>()
   const [profile, setProfile] = useState<ProfileFragment>()
 
+  const { currentUser } = useAppPersistStore()
+
   const {
     query: { username },
     isReady
@@ -49,6 +64,7 @@ const Organization: NextPage = () => {
     error: postDataError,
     refetch: refetchPostData
   } = usePostData(profile?.id, {
+    profileId: currentUser?.id,
     publicationTypes: [PublicationTypes.Post],
     metadata: {
       tags: {
@@ -56,6 +72,12 @@ const Organization: NextPage = () => {
       }
     }
   })
+
+  useEffect(() => {
+    if (currentUser) {
+      refetchPostData()
+    }
+  }, [currentUser])
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 

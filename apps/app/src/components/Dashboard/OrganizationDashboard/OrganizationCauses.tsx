@@ -6,6 +6,8 @@ import {
 } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
+import { signTypedData } from '@wagmi/core'
 import { signTypedData } from '@wagmi/core'
 import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
@@ -90,6 +92,17 @@ const OrganizationCauses: React.FC = () => {
       tags: { all: [PostTags.OrgPublish.Cause] }
     }
   })
+
+  const [location, setLocation] = useState<string>('')
+  const [errora, setErrora] = useState<Error>()
+  const [website, setWebsite] = useState<string>('')
+  const [discord, setDiscord] = useState<string>('')
+  const [twitter, setTwitter] = useState<string>('')
+  const [linkedin, setLinkedin] = useState<string>('')
+  const [causeDescription, setCauseDescription] = useState<string>('')
+  const [cover, setCover] = useState<File | null>(null)
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [showModal, setShowModal] = useState<boolean>(false)
   const [location, setLocation] = useState<string>('')
