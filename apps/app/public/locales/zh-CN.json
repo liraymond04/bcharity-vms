@@ -192,7 +192,6 @@
   "components.dashboard.volunteer.log-hours.total-hours": "全部小时数",
   "components.dashboard.volunteer.log-hours.filters": "过滤器：",
   "components.dashboard.volunteer.log-hours.present": "展示",
-  "components.dashboard.volunteer.log-hours.hours-in-total": "总计小时数",
   "components.dashboard.volunteer.vhr.set-goal": "设定一个目标",
   "components.dashboard.volunteer.vhr.search": "搜索",
   "components.dashboard.volunteer.vhr.filter": "筛选：",
@@ -466,5 +465,6 @@
   "components.dashboard.organization.vhr.set-description": "设置描述",
   "components.dashboard.organization.vhr.no-description": "还没有描述",
   "components.dashboard.organization.vhr.submit": "提交",
-  "components.dashboard.organization.vhr.cancel": "取消"
+  "components.dashboard.organization.vhr.cancel": "取消",
+  "components.dashboard.volunteer.log-hours.hours-in-total": "每周几小时"
 }
