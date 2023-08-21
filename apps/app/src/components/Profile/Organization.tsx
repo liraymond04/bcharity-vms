@@ -21,6 +21,7 @@ import {
   OpportunityMetadata,
   PostTags
 } from '@/lib/metadata'
+import { useAppPersistStore } from '@/store/app'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
 import { Card } from '../UI/Card'
@@ -38,6 +39,8 @@ const Organization: NextPage = () => {
   const [error, setError] = useState<Error>()
   const [profile, setProfile] = useState<ProfileFragment>()
 
+  const { currentUser } = useAppPersistStore()
+
   const {
     query: { username },
     isReady
@@ -49,6 +52,7 @@ const Organization: NextPage = () => {
     error: postDataError,
     refetch: refetchPostData
   } = usePostData(profile?.id, {
+    profileId: currentUser?.id,
     publicationTypes: [PublicationTypes.Post],
     metadata: {
       tags: {
