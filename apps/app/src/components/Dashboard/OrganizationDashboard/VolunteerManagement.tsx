@@ -51,8 +51,7 @@ const PurpleBox: React.FC<PurpleBoxProps> = ({
 
 const VolunteerInfoCard: React.FC<VolunteerInfoProps> = (info) => {
   const { t } = useTranslation('common', {
-    keyPrefix:
-      'components.dashboard.organization.VolunteerManagment.VolunteerInfo-card'
+    keyPrefix: 'components.dashboard.organization.volunteer-managment'
   })
   return (
     <Card className="pt-10 pl-10 pr-10 justify-center">
@@ -99,7 +98,7 @@ const VolunteerInfoCard: React.FC<VolunteerInfoProps> = (info) => {
   )
 }
 
-const VolunteerManagmentTab: React.FC = () => {
+const VolunteerManagementTab: React.FC = () => {
   const [searchValue, setSearchValue] = useState('')
   const [categories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -269,4 +268,4 @@ const VolunteerManagmentTab: React.FC = () => {
   )
 }
 
-export default VolunteerManagmentTab
+export default VolunteerManagementTab
