@@ -1,8 +1,10 @@
 import { PlusCircleIcon } from '@heroicons/react/outline'
+import { PencilIcon } from '@heroicons/react/solid'
 import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
+import { Inter } from '@next/font/google'
 import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
@@ -14,6 +16,7 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
+import { Modal } from '@/components/UI/Modal'
 import { Spinner } from '@/components/UI/Spinner'
 import {
   lensClient,
@@ -39,6 +42,21 @@ import PublishCauseModal, {
 } from '../Modals/PublishCauseModal'
 import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
 
+const inter400 = Inter({
+  subsets: ['latin'],
+  weight: ['400']
+})
+
+const inter500 = Inter({
+  subsets: ['latin'],
+  weight: ['500']
+})
+
+const inter700 = Inter({
+  subsets: ['latin'],
+  weight: ['700']
+})
+
 const OrganizationCauses: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.causes'
@@ -60,6 +78,8 @@ const OrganizationCauses: React.FC = () => {
       tags: { all: [PostTags.OrgPublish.Cause] }
     }
   })
+
+  const [showModal, setShowModal] = useState<boolean>(false)
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -150,6 +170,10 @@ const OrganizationCauses: React.FC = () => {
     currentUser?.ownedBy
   )
 
+  const onCancel = () => {
+    setShowModal(false)
+  }
+
   useEffect(() => {
     if (currencyError) {
       toast.error(currencyError)
@@ -220,8 +244,46 @@ const OrganizationCauses: React.FC = () => {
                 >
                   {t('our-cause')}
                 </div>
-                <div className=" w-full lg:flex mt-5">
-                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
+                <button
+                  onClick={() => {
+                    setShowModal(true)
+                  }}
+                  className="bg-purple-500 w-20 h-8 flex justify-around items-center rounded-lg focus:ring-2 focus:ring-purple-700 hover:bg-purple-600"
+                >
+                  <PencilIcon className="w-5 h-5 ml-2" />
+                  <p className={`${inter500.className} mr-2 text-sm`}>Edit</p>
+                </button>
+                <Modal
+                  show={showModal}
+                  onClose={() => {
+                    setShowModal(false)
+                  }}
+                  title="Edit Description"
+                >
+                  <div className="mx-5 my-3 w-auto h-auto ">
+                    <div className={`${inter500.className} text-sm`}>
+                      Set a description
+                    </div>
+                    <textarea
+                      placeholder="Description..."
+                      className={`w-full h-44 rounded-md mt-2 ${inter400.className} resize-none border-gray-300 text-sm focus:ring-0 focus:border-violet-500`}
+                    ></textarea>
+                  </div>
+                  <div className="w-full h-[1px] bg-gray-300"></div>
+                  <div className="flex justify-between">
+                    <button className="bg-purple-500 rounded-lg text-white py-2 px-5 my-3 ml-5 focus:ring-2 focus:ring-purple-700 hover:bg-purple-600">
+                      Submit
+                    </button>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="bg-gray-400 rounded-lg text-white py-2 px-5 my-3 mr-5 focus:ring-2 focus:ring-gray-700 hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Modal>
+                <div className=" w-full lg:flex mt-2">
+                  <div className="border-r border-b border-l p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
                     dolor sit amet, consectetur adipiscing elit. Praesent
