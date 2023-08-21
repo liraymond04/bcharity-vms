@@ -453,5 +453,11 @@
   "components.dashboard.modals.publish-opportunity.publish-now": "现在发布？",
   "components.dashboard.modals.publish-opportunity.registration-required": "需要注册吗？",
   "components.dashboard.modals.publish-opportunity-draft.registration-required": "需要注册吗？",
-  "components.dashboard.organization.causes.cause-description": "原因描述："
+  "components.dashboard.organization.causes.cause-edit": "编辑",
+  "components.dashboard.organization.causes.cause-description": "编辑说明",
+  "components.dashboard.organization.causes.description-placeholder": "描述...",
+  "components.dashboard.organization.causes.set-description": "设置描述",
+  "components.dashboard.organization.causes.no-description": "还没有描述",
+  "components.dashboard.organization.causes.submit": "提交",
+  "components.dashboard.organization.causes.cancel": "取消"
 }

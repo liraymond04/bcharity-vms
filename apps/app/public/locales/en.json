@@ -225,8 +225,14 @@
         "causes": {
           "set-goal": "Set a goal",
           "our-cause": "Our Cause",
-          "cause-description": "Cause Description: ",
-          "create-new": "Create new project"
+          "cause-edit": "Edit",
+          "cause-description": "Edit Description",
+          "description-placeholder": "Description...",
+          "set-description": "Set a description",
+          "no-description": "No description yet",
+          "create-new": "Create New Project",
+          "submit": "Submit",
+          "cancel": "Cancel"
         },
         "tabs": {
           "home": "Home",

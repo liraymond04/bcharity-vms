@@ -18,9 +18,11 @@ import { v4 } from 'uuid'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
+import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Modal } from '@/components/UI/Modal'
 import { Spinner } from '@/components/UI/Spinner'
+import { TextArea } from '@/components/UI/TextArea'
 import {
   getSignature,
   lensClient,
@@ -45,6 +47,7 @@ import { useAppPersistStore } from '@/store/app'
 
 import DeleteCauseModal from '../Modals/DeleteCauseModal'
 import ErrorMessage from '../Modals/Error'
+import ErrorComponent from '../Modals/Error'
 import GoalModal from '../Modals/GoalModal'
 import ModifyCauseModal from '../Modals/ModifyCauseModal'
 import PublishCauseModal, {
@@ -163,9 +166,12 @@ const OrganizationCauses: React.FC = () => {
     fetchProfileData()
   }, [currentUser])
 
+  const [submitError, setSubmitError] = useState<Error>()
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setIsLoading(true)
+    setSubmitError(undefined)
     try {
       if (currentUser) {
         await checkAuth(currentUser?.ownedBy)
@@ -241,9 +247,11 @@ const OrganizationCauses: React.FC = () => {
           signature: signature
         })
       }
+      setShowModal(false)
       console.log('Profile saved successfully')
     } catch (error) {
       if (error instanceof Error) {
+        setSubmitError(error)
       }
     } finally {
       setIsLoading(false)
@@ -336,6 +344,7 @@ const OrganizationCauses: React.FC = () => {
 
   const onCancel = () => {
     setShowModal(false)
+    setSubmitError(undefined)
   }
 
   useEffect(() => {
@@ -406,55 +415,75 @@ const OrganizationCauses: React.FC = () => {
                 )}
 
                 <div
-                  className="text-2xl mt-10 font-bold text-black dark:text-white sm:text-4xl"
+                  className="text-2xl mt-10 font-bold sm:text-4xl"
                   suppressHydrationWarning
                 >
                   {t('our-cause')}
                 </div>
-                <button
+                <Button
+                  icon={<PencilIcon className="w-5 h-5" />}
                   onClick={() => {
                     setShowModal(true)
                   }}
-                  className="bg-purple-500 w-20 h-8 flex justify-around items-center rounded-lg focus:ring-2 focus:ring-purple-700 hover:bg-purple-600"
+                  suppressHydrationWarning
                 >
-                  <PencilIcon className="w-5 h-5 ml-2" />
-                  <p className={`${inter500.className} mr-2 text-sm`}>Edit</p>
-                </button>
+                  {t('cause-edit')}
+                </Button>
                 <Modal
                   show={showModal}
-                  onClose={() => {
-                    setShowModal(false)
-                  }}
-                  title="Edit Description"
+                  onClose={onCancel}
+                  title={t('cause-description')}
                 >
-                  <div className="mx-5 my-3 w-auto h-auto ">
-                    <div className={`${inter500.className} text-sm`}>
-                      Set a description
+                  <form onSubmit={handleSubmit}>
+                    <div className="mx-5 my-3 ">
+                      <div className="w-auto h-auto ">
+                        <TextArea
+                          suppressHydrationWarning
+                          label={t('cause-description')}
+                          id="causeDescription"
+                          value={causeDescription}
+                          placeholder={t('description-placeholder')}
+                          onChange={(e) => setCauseDescription(e.target.value)}
+                          rows={10}
+                        />
+                      </div>
+                      {submitError && (
+                        <ErrorComponent
+                          message={`${e('generic-front')}${
+                            submitError.message
+                          }${e('generic-back')}`}
+                        />
+                      )}
                     </div>
-                    <textarea
-                      placeholder="Description..."
-                      className={`w-full h-44 rounded-md mt-2 ${inter400.className} resize-none border-gray-300 text-sm focus:ring-0 focus:border-violet-500`}
-                    ></textarea>
-                  </div>
-                  <div className="w-full h-[1px] bg-gray-300"></div>
-                  <div className="flex justify-between">
-                    <button
-                      onClick={() => handleSubmit}
-                      className="bg-purple-500 rounded-lg text-white py-2 px-5 my-3 ml-5 focus:ring-2 focus:ring-purple-700 hover:bg-purple-600"
-                    >
-                      Submit
-                    </button>
-                    <button
-                      onClick={() => setShowModal(false)}
-                      className="bg-gray-400 rounded-lg text-white py-2 px-5 my-3 mr-5 focus:ring-2 focus:ring-gray-700 hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                    <div className="custom-divider" />
+                    <div className="flex justify-between">
+                      <Button
+                        onClick={() => handleSubmit}
+                        className="bg-purple-500 my-3 ml-5"
+                        icon={isLoading && <Spinner size="sm" />}
+                        disabled={isLoading}
+                        suppressHydrationWarning
+                        type="submit"
+                      >
+                        {t('submit')}
+                      </Button>
+                      <Button
+                        onClick={onCancel}
+                        className="bg-gray-400 hover:bg-gray-500 my-3 mr-5"
+                        suppressHydrationWarning
+                        type="button"
+                      >
+                        {t('cancel')}
+                      </Button>
+                    </div>
+                  </form>
                 </Modal>
                 <div className=" w-full lg:flex mt-2">
-                  <div className="border-r border-b border-l p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                    No description yet.
+                  <div
+                    className="border-r border-b border-l p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full"
+                    suppressHydrationWarning
+                  >
+                    {causeDescription ? causeDescription : t('no-description')}
                   </div>
                 </div>
               </>
@@ -468,7 +497,9 @@ const OrganizationCauses: React.FC = () => {
                 onClick={onNew}
                 className="flex items-center text-brand-400 mx-4"
               >
-                <span className="mr-2 font-bold">Create New Project</span>
+                <span className="mr-2 font-bold" suppressHydrationWarning>
+                  {t('create-new')}
+                </span>
                 <PlusCircleIcon className="w-8 text-brand-400" />
               </button>
             </div>
