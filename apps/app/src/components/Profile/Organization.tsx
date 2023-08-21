@@ -61,6 +61,12 @@ const Organization: NextPage = () => {
     }
   })
 
+  useEffect(() => {
+    if (currentUser) {
+      refetchPostData()
+    }
+  }, [currentUser])
+
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
   const opportunityData = useMemo(() => {
