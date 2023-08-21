@@ -13,19 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import { formatLocation } from '@/lib/formatLocation'
 import isVerified from '@/lib/isVerified'
-import {
-  getAvatar,
-  getProfile,
-  usePostData,
-  usePostData
-} from '@/lib/lens-protocol'
-import {
-  CauseMetadata,
-  getCauseMetadata,
-  getOpportunityMetadata,
-  OpportunityMetadata,
-  PostTags
-} from '@/lib/metadata'
+import { getAvatar, getProfile, usePostData } from '@/lib/lens-protocol'
 import {
   CauseMetadata,
   getCauseMetadata,
