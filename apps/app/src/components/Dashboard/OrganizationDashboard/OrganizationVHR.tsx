@@ -1,35 +1,54 @@
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
-import { PlusCircleIcon } from '@heroicons/react/outline'
+import { PencilIcon, PlusCircleIcon } from '@heroicons/react/outline'
 import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
+import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
+import { signTypedData } from '@wagmi/core'
 import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { v4 } from 'uuid'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
+import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
+import { Form } from '@/components/UI/Form'
+import { Modal } from '@/components/UI/Modal'
 import { Spinner } from '@/components/UI/Spinner'
+import { TextArea } from '@/components/UI/TextArea'
 import i18n from '@/i18n'
-import { lensClient, usePostData } from '@/lib/lens-protocol'
+import {
+  checkAuth,
+  getSignature,
+  lensClient,
+  usePostData
+} from '@/lib/lens-protocol'
 import {
   getOpportunityMetadata,
   isPost,
   OpportunityMetadata,
   PostTags
 } from '@/lib/metadata'
+import {
+  AttributeData,
+  MetadataDisplayType,
+  MetadataVersion,
+  ProfileMetadata
+} from '@/lib/types'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'
 
 import DeleteOpportunityModal from '../Modals/DeleteOpportunityModal'
-import Error from '../Modals/Error'
+import ErrorComponent from '../Modals/Error'
 import ModifyOpportunityModal from '../Modals/ModifyOpportunityModal'
 import PublishOpportunityDraftModal from '../Modals/PublishOpportunityDraftModal'
 import PublishOpportunityModal, {
@@ -84,6 +103,14 @@ const organizationGridTabs: OrgGridTab[] = [
   }
 ]
 
+interface FormProps {
+  causeDescription: string
+}
+
+const emptyFormProps: FormProps = {
+  causeDescription: ''
+}
+
 const OrganizationVHRTab: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.vhr'
@@ -91,6 +118,7 @@ const OrganizationVHRTab: React.FC = () => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
 
   const { currentUser: profile } = useAppPersistStore()
+
   const { resolvedTheme } = useTheme()
   const [gridTheme, setGridTheme] = useState<string>()
 
@@ -112,6 +140,186 @@ const OrganizationVHRTab: React.FC = () => {
   const [currentModifyId, setCurrentModifyId] = useState('')
   const [currentPublishDraftId, setCurrentPublishDraftId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
+
+  const form = useForm<FormProps>({
+    defaultValues: { ...emptyFormProps }
+  })
+
+  const { handleSubmit, register } = form
+
+  const { mutateAsync: upload } = useStorageUpload()
+  const sdk = useSDK()
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const [location, setLocation] = useState<string>('')
+  const [errora, setErrora] = useState<Error>()
+  const [website, setWebsite] = useState<string>('')
+  const [discord, setDiscord] = useState<string>('')
+  const [twitter, setTwitter] = useState<string>('')
+  const [linkedin, setLinkedin] = useState<string>('')
+  const [causeDescription, setCauseDescription] = useState<string>('')
+  const [cover, setCover] = useState<File | null>(null)
+  const [name, setName] = useState<string>('')
+  const [bio, setBio] = useState<string>('')
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [userId, setUserId] = useState('')
+  const [userHandle, setUserHandle] = useState('')
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        setErrora(undefined)
+        if (profile) {
+          setUserId(profile.id)
+          setUserHandle(profile.handle)
+
+          const userProfile = await lensClient().profile.fetch({
+            profileId: profile?.id
+          })
+
+          if (userProfile) {
+            setName(userProfile.name || '')
+
+            if (userProfile.attributes) {
+              const locationAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'location'
+              )
+              setLocation(locationAttribute?.value || '')
+              const websiteAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'website'
+              )
+              setWebsite(websiteAttribute?.value || '')
+              const discordAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'discord'
+              )
+              setDiscord(discordAttribute?.value || '')
+              const twitterAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'twitter'
+              )
+              setTwitter(twitterAttribute?.value || '')
+              const linkedinAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'linkedin'
+              )
+              setLinkedin(linkedinAttribute?.value || '')
+              const causeDescriptionAttribute = userProfile.attributes.find(
+                (attr) => attr.key === 'causeDescription'
+              )
+              setCauseDescription(causeDescriptionAttribute?.value || '')
+              form.setValue(
+                'causeDescription',
+                causeDescriptionAttribute?.value ?? ''
+              )
+              console.log('descripton', causeDescriptionAttribute)
+            }
+            setBio(userProfile.bio || '')
+          }
+          console.log('profile', userProfile)
+        }
+      } catch (error) {
+        if (errora instanceof Error) {
+        }
+      }
+    }
+    fetchProfileData()
+  }, [profile])
+
+  const [submitError, setSubmitError] = useState<Error>()
+
+  const onSubmit = async (formData: FormProps) => {
+    setIsLoading(true)
+    setSubmitError(undefined)
+    try {
+      if (profile) {
+        await checkAuth(profile?.ownedBy)
+
+        const attributes: AttributeData[] = [
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'website',
+            value: website,
+            key: 'website'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'location',
+            value: location,
+            key: 'location'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'discord',
+            value: discord,
+            key: 'discord'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'twitter',
+            value: twitter,
+            key: 'twitter'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'linkedin',
+            value: linkedin,
+            key: 'linkedin'
+          },
+          {
+            displayType: MetadataDisplayType.string,
+            traitType: 'causeDescription',
+            value: formData.causeDescription,
+            key: 'causeDescription'
+          }
+        ]
+
+        const avatarUrl = cover ? (await upload({ data: [cover] }))[0] : null
+
+        const metadata: ProfileMetadata = {
+          version: MetadataVersion.ProfileMetadataVersions['1.0.0'],
+          metadata_id: v4(),
+          name,
+          bio,
+          cover_picture: avatarUrl,
+          attributes
+        }
+
+        const metadataUrl = sdk?.storage.resolveScheme(
+          (await upload({ data: [metadata] }))[0]
+        )
+
+        if (!metadataUrl) throw Error(e('metadata-upload-fail'))
+
+        const typedDataResult =
+          await lensClient().profile.createSetProfileMetadataTypedData({
+            metadata: metadataUrl,
+            profileId: profile?.id
+          })
+
+        const signature = await signTypedData(
+          getSignature(typedDataResult.unwrap().typedData)
+        )
+
+        const broadcastResult = await lensClient().transaction.broadcast({
+          id: typedDataResult.unwrap().id,
+          signature: signature
+        })
+      }
+      setCauseDescription(formData.causeDescription)
+      setShowModal(false)
+      console.log('Profile saved successfully')
+    } catch (error) {
+      if (error instanceof Error) {
+        setSubmitError(error)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const onCancel = () => {
+    setShowModal(false)
+    setSubmitError(undefined)
+  }
 
   const onPublishClose = (shouldRefetch: boolean) => {
     setPublishModalOpen(false)
@@ -219,11 +427,10 @@ const OrganizationVHRTab: React.FC = () => {
       : { ...emptyPublishFormData }
   }
 
-  const { currentUser } = useAppPersistStore()
   const [vhrGoal, setVhrGoal] = useState(0)
 
-  const { isLoading, data: balanceData } = useWalletBalance(
-    currentUser?.ownedBy ?? ''
+  const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
+    profile?.ownedBy ?? ''
   )
 
   const getHeight = () => {
@@ -275,7 +482,7 @@ const OrganizationVHRTab: React.FC = () => {
       <GridItemTwelve>
         <Card>
           <div className="p-10 m-10">
-            {isLoading ? (
+            {isBalanceLoading ? (
               <Spinner />
             ) : (
               <>
@@ -302,48 +509,80 @@ const OrganizationVHRTab: React.FC = () => {
                     className="mt-10 mb-10"
                   />
                 )}
+
                 <div
-                  className="text-2xl font-bold text-black dark:text-white sm:text-4xl"
+                  className="text-2xl mt-10 font-bold sm:text-4xl"
                   suppressHydrationWarning
                 >
                   {t('our-cause')}
                 </div>
-                <div className=" w-full lg:flex mt-5">
-                  <div className="border-r border-b border-l  p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Praesent dapibus, neque in auctor tincidunt, Lorem ipsum
-                    dolor sit amet, consectetur adipiscing elit. Praesent
-                    dapibus, neque in auctor tincidunt, tellus libero elementum
-                    nisl, vitae tristique eros lorem in odio. Nullam et eros
-                    sem. Duis molestie libero vel consequat suscipit. Sed
-                    maximus lacus vitae sem euismod ornare. In lacinia tempor
-                    lacus, vitae porta lectus luctus ac. Cras ultrices nulla eu
-                    enim ullamcorper iaculis. Nam gravida nibh sed sem interdum
-                    hendrerit. Nunc posuere purus id massa malesuada
-                    pellentesque. Etiam ipsum metus, laoreet eu libero a,
-                    suscipit sagittis ante. Nulla at purus consequat libero
-                    imperdiet efficitur quis quis orci. Aliquam felis orci,
-                    pretium sit amet volutpat ac, bibendum eu velit. Vivamus
-                    mollis, neque in aliquam malesuada, elit mi euismod velit,
-                    ac sagittis metus enim aliquet elit. Quisque fringilla
-                    sapien nec magna porta varius. Mauris bibendum, dui in
-                    dapibus bibendum, ex sapien ultricies lacus, a eleifend
-                    mauris erat sit amet purus.tellus libero elementum nisl,
-                    vitae tristique eros lorem in odio. Nullam et eros sem. Duis
-                    molestie libero vel consequat suscipit. Sed maximus lacus
-                    vitae sem euismod ornare. In lacinia tempor lacus, vitae
-                    porta lectus luctus ac. Cras ultrices nulla eu enim
-                    ullamcorper iaculis. Nam gravida nibh sed sem interdum
-                    hendrerit. Nunc posuere purus id massa malesuada
-                    pellentesque. Etiam ipsum metus, laoreet eu libero a,
-                    suscipit sagittis ante. Nulla at purus consequat libero
-                    imperdiet efficitur quis quis orci. Aliquam felis orci,
-                    pretium sit amet volutpat ac, bibendum eu velit. Vivamus
-                    mollis, neque in aliquam malesuada, elit mi euismod velit,
-                    ac sagittis metus enim aliquet elit. Quisque fringilla
-                    sapien nec magna porta varius. Mauris bibendum, dui in
-                    dapibus bibendum, ex sapien ultricies lacus, a eleifend
-                    mauris erat sit amet purus.
+                <Button
+                  icon={<PencilIcon className="w-5 h-5" />}
+                  onClick={() => {
+                    setShowModal(true)
+                  }}
+                  suppressHydrationWarning
+                >
+                  {t('cause-edit')}
+                </Button>
+                <Modal
+                  show={showModal}
+                  onClose={onCancel}
+                  title={t('cause-description')}
+                >
+                  <Form
+                    form={form}
+                    onSubmit={() => handleSubmit((data) => onSubmit(data))}
+                  >
+                    <div className="mx-5 my-3 ">
+                      <div className="w-auto h-auto ">
+                        <TextArea
+                          suppressHydrationWarning
+                          label={t('cause-description')}
+                          id="causeDescription"
+                          defaultValue={causeDescription}
+                          placeholder={t('description-placeholder')}
+                          rows={10}
+                          {...register('causeDescription')}
+                        />
+                      </div>
+                      {submitError && (
+                        <ErrorComponent
+                          message={`${e('generic-front')}${
+                            submitError.message
+                          }${e('generic-back')}`}
+                        />
+                      )}
+                    </div>
+                    <div className="custom-divider" />
+                    <div className="flex justify-between">
+                      <Button
+                        onClick={handleSubmit((data) => onSubmit(data))}
+                        className="bg-purple-500 my-3 ml-5"
+                        icon={isLoading && <Spinner size="sm" />}
+                        disabled={isLoading}
+                        suppressHydrationWarning
+                        type="submit"
+                      >
+                        {t('submit')}
+                      </Button>
+                      <Button
+                        onClick={onCancel}
+                        className="bg-gray-400 hover:bg-gray-500 my-3 mr-5"
+                        suppressHydrationWarning
+                        type="button"
+                      >
+                        {t('cancel')}
+                      </Button>
+                    </div>
+                  </Form>
+                </Modal>
+                <div className=" w-full lg:flex mt-2">
+                  <div
+                    className="border-r border-b border-l p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full"
+                    suppressHydrationWarning
+                  >
+                    {causeDescription ? causeDescription : t('no-description')}
                   </div>
                 </div>
               </>
@@ -378,7 +617,7 @@ const OrganizationVHRTab: React.FC = () => {
             >
               {getDisplayedGrid()}
             </div>
-            {error && <Error message={e('generic')} />}
+            {error && <ErrorComponent message={e('generic')} />}
           </div>
           <PublishOpportunityModal
             open={publishModalOpen}
