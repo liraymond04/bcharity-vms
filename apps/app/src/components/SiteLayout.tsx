@@ -18,11 +18,26 @@ import { Modal } from './UI/Modal'
 const Navbar = dynamic(() => import('./Shared/Navbar'), { suspense: true })
 const Footer = dynamic(() => import('./Shared/Footer'), { suspense: true })
 
-interface Props {
+/**
+ * Properties of {@link SiteLayout}
+ */
+export interface SiteLayoutProps {
+  /**
+   * React components wrapped by the component
+   */
   children: ReactNode
 }
 
-const SiteLayout: FC<Props> = ({ children }) => {
+/**
+ * Component that defines the basic layout of the site, such as the HTML metadata
+ * tags for the site head, {@link components.Shared.Navbar.Navbar}, {@link components.Shared.Footer},
+ * and main page content.
+ *
+ * This component is where react toast messages from the {@link https://github.com/timolins/react-hot-toast | react-hot-toast} package
+ * are handled and shown. The popup modal to accept/reject cookies is also managed
+ * by the site layout component.
+ */
+const SiteLayout: FC<SiteLayoutProps> = ({ children }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.site-layout'
   })

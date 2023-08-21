@@ -225,7 +225,14 @@
         "causes": {
           "set-goal": "Set a goal",
           "our-cause": "Our Cause",
-          "create-new": "Create new project"
+          "cause-edit": "Edit",
+          "cause-description": "Edit Description",
+          "description-placeholder": "Description...",
+          "set-description": "Set a description",
+          "no-description": "No description yet",
+          "create-new": "Create New Project",
+          "submit": "Submit",
+          "cancel": "Cancel"
         },
         "tabs": {
           "home": "Home",
@@ -242,6 +249,13 @@
         "vhr": {
           "set-goal": "Set a goal",
           "our-cause": "Our Cause",
+          "cause-edit": "Edit",
+          "cause-description": "Edit Description",
+          "description-placeholder": "Description...",
+          "set-description": "Set a description",
+          "no-description": "No description yet",
+          "submit": "Submit",
+          "cancel": "Cancel",
           "create-new": "Create Post",
           "active-posting": "Active Postings",
           "active-inactive": "You do not have any active posts.",
@@ -278,7 +292,7 @@
           "total-hours": "Total Hours",
           "filters": "Filters:",
           "present": "Present",
-          "hours-in-total": "hours in total"
+          "hours-in-total": "hours per week"
         },
         "vhr": {
           "set-goal": "Set a goal",
