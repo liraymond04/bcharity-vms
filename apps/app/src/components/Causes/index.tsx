@@ -3,6 +3,7 @@ import { SearchIcon } from '@heroicons/react/outline'
 import { PublicationSortCriteria } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+import { useInView } from 'react-cool-inview'
 import { useTranslation } from 'react-i18next'
 
 import { useExplorePublications } from '@/lib/lens-protocol'
@@ -19,6 +20,25 @@ import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
 import CauseCard from './CauseCard'
 
+/**
+ * A component that displays the browse causes page
+ *
+ * Cause posts are fetched using the {@link useExplorePublications} hook, and are filtered
+ * using the metadata tags {@link PostTags.OrgPublish.Cause}.
+ *
+ * Results from the Lens hook are mapped and displayed as a {@link CauseCard} in a grid,
+ * and are loaded with infinite scrolling that uses the fetchMore method provided by the
+ * {@link useExplorePublications} hook.
+ *
+ * Infinite scrolling uses the useInView hook from the {@link https://github.com/wellyshen/react-cool-inview | react-cool-inview} package
+ * to check if the bottom of the loaded list of posts is in the user's view, and call the
+ * fetchMore method if it is in view.
+ *
+ * Displayed posts are further filtered by the search inputs and category dropdown filter.
+ * Search uses the {@link testSearch} function to fuzzy search posts matching the search
+ * query. The category dropdown filter displays posts only with the selected category in
+ * their metadata, and its dropdown is displayed with the {@link DashboardDropDown} component.
+ */
 const Causes: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
@@ -32,6 +52,8 @@ const Causes: NextPage = () => {
   const {
     data,
     error: exploreError,
+    hasMore,
+    fetchMore,
     loading
   } = useExplorePublications(
     {
@@ -55,6 +77,24 @@ const Causes: NextPage = () => {
     setPosts(_posts)
     setCategories(_categories)
   }, [data])
+
+  const { observe } = useInView({
+    onChange: async ({ unobserve, inView }) => {
+      console.log(
+        'on change: in view? %s | has more? %s | loading? %s',
+        inView,
+        hasMore,
+        loading
+      )
+      if (inView) {
+        if (hasMore) {
+          fetchMore()
+        } else {
+          unobserve()
+        }
+      }
+    }
+  })
 
   return (
     <>
@@ -110,6 +150,13 @@ const Causes: NextPage = () => {
                 <CauseCard cause={post} />
               </GridItemFour>
             ))}
+          <span
+            className="flex justify-center p-5"
+            ref={observe}
+            hidden={!loading}
+          >
+            {loading && <Spinner size="md" />}
+          </span>
         </GridLayout>
       )}
       {exploreError && (

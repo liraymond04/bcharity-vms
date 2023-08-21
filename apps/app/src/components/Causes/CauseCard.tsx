@@ -12,10 +12,29 @@ import Progress from '../Shared/Progress'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 
-interface ICauseCardProps {
+/**
+ * Properties of {@link CauseCard}
+ */
+export interface ICauseCardProps {
+  /**
+   * Cause metadata to display
+   */
   cause: CauseMetadata
 }
 
+/**
+ * Individual cause post card displayed in the {@link Causes} page. Redirects
+ * to individual cause post page when clicked. Displayed cause post information
+ * is passed as cause post metadata in its properties.
+ *
+ * Total contribution amounts are calculated by fetching the number of collects
+ * on a post or comment and multiplying by its contribution amount. This
+ * calculation works because contribution amounts on publication posts are
+ * immutable. However, this means that comments under the original cause post
+ * need to be queried for their collects, because different contribution amounts
+ * are done by creating an identical collect module with a different collect
+ * amount as a comment.
+ */
 const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
