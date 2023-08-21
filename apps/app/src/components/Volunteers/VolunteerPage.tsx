@@ -26,6 +26,13 @@ import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
+/**
+ * Component that displays an individual opportunity page
+ *
+ * Post information is grabbed by using the publication id passed by the Next.js
+ * dynamic router, and used in the {@link usePublication} hook to fetch the post
+ * from Lens.
+ */
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.page'

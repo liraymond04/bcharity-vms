@@ -1,10 +1,22 @@
 import lensClient from './lensClient'
 
-interface PropsHandle {
+/**
+ * Properties of {@link getProfile} for passing in a profile handle
+ */
+export interface PropsHandle {
+  /**
+   * Profile handle
+   */
   handle: string
 }
 
-interface PropsId {
+/**
+ * Properties of {@link getProfile} for passing in a profile ID
+ */
+export interface PropsId {
+  /**
+   * Profile ID
+   */
   id: string
 }
 

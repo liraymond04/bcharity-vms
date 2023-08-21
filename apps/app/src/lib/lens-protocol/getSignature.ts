@@ -14,9 +14,21 @@ const omit = <T extends Record<string, any>, K extends keyof T>(
   return rest
 }
 
-interface TypedData {
+/**
+ * Represents a typed data structure used for maintaining consistency, integrity, and security in web3 applications.
+ */
+export interface TypedData {
+  /**
+   * The contextual information about the message being signed.
+   */
   domain: Record<string, any>
+  /**
+   * The structure of data fields being signed.
+   */
   types: Record<string, any>
+  /**
+   * The actual values for each field being signed.
+   */
   value: Record<string, any>
 }
 

@@ -59,7 +59,13 @@ const getVHRRequestComments = (params: getVHRRequestCommentsParams) => {
   })
 }
 
-interface UseVHRRequestsParams {
+/**
+ * Parameters of {@link useVHRRequests} method
+ */
+export interface UseVHRRequestsParams {
+  /**
+   * Lens profile fragment
+   */
   profile: ProfileFragment | null
 }
 
