@@ -10,6 +10,7 @@ import { AgGridReact } from 'ag-grid-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
@@ -19,6 +20,7 @@ import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
+import { Form } from '@/components/UI/Form'
 import { Modal } from '@/components/UI/Modal'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
@@ -53,6 +55,14 @@ import PublishCauseModal, {
   IPublishCauseFormProps
 } from '../Modals/PublishCauseModal'
 import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
+
+interface FormProps {
+  causeDescription: string
+}
+
+const emptyFormProps: FormProps = {
+  causeDescription: ''
+}
 
 const OrganizationCauses: React.FC = () => {
   const { t } = useTranslation('common', {
@@ -95,6 +105,12 @@ const OrganizationCauses: React.FC = () => {
   const { currentUser } = useAppPersistStore()
   const [name, setName] = useState<string>('')
 
+  const form = useForm<FormProps>({
+    defaultValues: { ...emptyFormProps }
+  })
+
+  const { handleSubmit, register } = form
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -135,6 +151,10 @@ const OrganizationCauses: React.FC = () => {
                 (attr) => attr.key === 'causeDescription'
               )
               setCauseDescription(causeDescriptionAttribute?.value || '')
+              form.setValue(
+                'causeDescription',
+                causeDescriptionAttribute?.value ?? ''
+              )
               console.log('descripton', causeDescriptionAttribute)
             }
             setBio(userProfile.bio || '')
@@ -151,8 +171,7 @@ const OrganizationCauses: React.FC = () => {
 
   const [submitError, setSubmitError] = useState<Error>()
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const onSubmit = async (formData: FormProps) => {
     setIsLoading(true)
     setSubmitError(undefined)
     try {
@@ -193,7 +212,7 @@ const OrganizationCauses: React.FC = () => {
           {
             displayType: MetadataDisplayType.string,
             traitType: 'causeDescription',
-            value: causeDescription,
+            value: formData.causeDescription,
             key: 'causeDescription'
           }
         ]
@@ -230,6 +249,7 @@ const OrganizationCauses: React.FC = () => {
           signature: signature
         })
       }
+      setCauseDescription(formData.causeDescription)
       setShowModal(false)
       console.log('Profile saved successfully')
     } catch (error) {
@@ -417,7 +437,10 @@ const OrganizationCauses: React.FC = () => {
                   onClose={onCancel}
                   title={t('cause-description')}
                 >
-                  <form onSubmit={handleSubmit}>
+                  <Form
+                    form={form}
+                    onSubmit={() => handleSubmit((data) => onSubmit(data))}
+                  >
                     <div className="mx-5 my-3 ">
                       <div className="w-auto h-auto ">
                         <TextArea
@@ -427,6 +450,7 @@ const OrganizationCauses: React.FC = () => {
                           defaultValue={causeDescription}
                           placeholder={t('description-placeholder')}
                           rows={10}
+                          {...register('causeDescription')}
                         />
                       </div>
                       {submitError && (
@@ -440,7 +464,7 @@ const OrganizationCauses: React.FC = () => {
                     <div className="custom-divider" />
                     <div className="flex justify-between">
                       <Button
-                        onClick={() => handleSubmit}
+                        onClick={handleSubmit((data) => onSubmit(data))}
                         className="bg-purple-500 my-3 ml-5"
                         icon={isLoading && <Spinner size="sm" />}
                         disabled={isLoading}
@@ -458,7 +482,7 @@ const OrganizationCauses: React.FC = () => {
                         {t('cancel')}
                       </Button>
                     </div>
-                  </form>
+                  </Form>
                 </Modal>
                 <div className=" w-full lg:flex mt-2">
                   <div
