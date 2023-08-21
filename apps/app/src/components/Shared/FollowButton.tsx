@@ -8,14 +8,36 @@ import { useAppPersistStore } from '@/store/app'
 import { Button } from '../UI/Button'
 import { Spinner } from '../UI/Spinner'
 
-interface Props {
+/**
+ * Properties of {@link FollowButton}
+ */
+export interface FollowButtonProps {
+  /**
+   * ID of profile to follow
+   */
   followId: string
+  /**
+   * Icon component to render in button
+   */
   icon?: ReactNode
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
+  /**
+   * Size of button being rendered
+   */
   size?: 'sm' | 'md' | 'lg'
 }
 
-const FollowButton: FC<Props> = ({
+/**
+ * Component that displays a button to follow a profile
+ *
+ * The component uses the {@link useFollow} hook to check if the current user
+ * is already following the profile, and provides functions to follow and
+ * unfollow the user
+ */
+const FollowButton: FC<FollowButtonProps> = ({
   followId,
   icon,
   className,

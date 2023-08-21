@@ -39,8 +39,7 @@ const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
   })
   const { currentUser: profile } = useAppPersistStore()
 
-  const { loading, data, error, refetch } = usePostData({
-    profileId: profile?.id,
+  const { loading, data, error, refetch } = usePostData(profile?.id, {
     publicationTypes: [PublicationTypes.Comment],
     metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
   })

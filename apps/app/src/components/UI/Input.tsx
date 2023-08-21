@@ -24,10 +24,20 @@ interface Props extends Omit<ComponentProps<'input'>, 'prefix'> {
   error?: boolean
   onChange?: ChangeEventHandler<HTMLInputElement>
   name?: string
+  defaultValue?: string
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(
-  { label, prefix, type = 'text', error, className = '', helper, ...props },
+  {
+    label,
+    prefix,
+    type = 'text',
+    error,
+    className = '',
+    helper,
+    defaultValue,
+    ...props
+  },
   ref
 ) {
   const id = useId()
@@ -43,6 +53,10 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
     if (inputRef && inputRef.current) {
       const el = inputRef.current.children[0] as HTMLInputElement
       setChecked(el.disabled)
+      if (defaultValue && defaultValue === 'true') {
+        setChecked(true)
+        el.disabled = true
+      }
     }
   }, [inputRef])
 
@@ -71,6 +85,11 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
                   checked={checked}
                   onChange={(e) => {
                     if (!props.onChange) return
+                    if (inputRef && inputRef.current) {
+                      const el = inputRef.current
+                        .children[0] as HTMLInputElement
+                      el.disabled = !el.disabled
+                    }
                     setChecked(!checked)
                     props.onChange(e)
                   }}

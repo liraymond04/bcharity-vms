@@ -4,11 +4,24 @@ import { useTranslation } from 'react-i18next'
 
 import getUniswapURL from '@/lib/getUniswapURL'
 
-interface Props {
+/**
+ * Properties of {@link Uniswap}
+ */
+export interface UniswapProps {
+  /**
+   * Fee collecte module used to get currency data
+   */
   module: FeeCollectModuleSettingsFragment | undefined
 }
 
-const Uniswap: FC<Props> = ({ module }) => {
+/**
+ * A component that displays a button to redirect a user to
+ * swap their currency at Uniswap
+ *
+ * The component uses {@link getUniswapURL} to generate a
+ * Uniswap link that autofills the currency swap details
+ */
+const Uniswap: FC<UniswapProps> = ({ module }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.uniswap'
   })

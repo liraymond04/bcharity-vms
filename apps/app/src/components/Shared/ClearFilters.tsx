@@ -1,11 +1,38 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface Props {
+/**
+ * Properties of {@link ClearFilters}
+ */
+export interface ClearFiltersProps {
+  /**
+   * Function that runs when the component button is clicked
+   */
   onClick: Function
 }
 
-const ClearFilters: FC<Props> = ({ onClick }) => {
+/**
+ * A component that styles a button used for clearing filters
+ *
+ * Note: this component does not provide clearing filter functionality,
+ * it only provides the styling and button label
+ *
+ * @example ClearFilters component used in {@link Organizations}
+ * ```tsx
+ * <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
+ *   <div className="h-[50px] z-10 ">
+ *     <DashboardDropDown
+ *       label={t('filters')}
+ *       options={['Option 1', 'Option 2', 'Option 3']}
+ *       onClick={(c) => setSelectedCategory(c)}
+ *       selected={selectedCategory}
+ *     ></DashboardDropDown>
+ *   </div>
+ *   <ClearFilters onClick={() => setSelectedCategory('')} />
+ * </div>
+ * ```
+ */
+const ClearFilters: FC<ClearFiltersProps> = ({ onClick }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.clear-filters'
   })

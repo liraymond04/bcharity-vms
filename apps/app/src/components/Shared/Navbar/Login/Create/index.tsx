@@ -9,13 +9,16 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
 
-import { checkAuth, createProfile, isValidHandle } from '@/lib/lens-protocol'
+import { createProfile, isValidHandle } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
 /**
- * Properties of Create component
+ * Properties of {@link Create}
  */
-export interface Props {
+export interface CreateProps {
+  /**
+   * Determines if extra styling should be shown for displaying in a modal
+   */
   isModal?: boolean
 }
 
@@ -23,7 +26,7 @@ export interface Props {
  * A component to create new Lens profile
  *
  * @example Create component used in a {@link Modal} in {@link MenuItems}
- * ```ts
+ * ```tsx
  * <Modal
  *   title={t('create-profile')}
  *   show={showCreate}
@@ -37,7 +40,7 @@ export interface Props {
  * </Modal>
  * ```
  */
-const Create: FC<Props> = ({ isModal = false }) => {
+const Create: FC<CreateProps> = ({ isModal = false }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.navbar.login.create'
   })
@@ -71,8 +74,6 @@ const Create: FC<Props> = ({ isModal = false }) => {
         const username = handle.toLowerCase()
         if (isValidHandle(username)) {
           try {
-            if (!currentUser) throw Error(e('profile-null'))
-            await checkAuth(currentUser.ownedBy)
             const result = await createProfile(username)
             if (!isRelayerResult(result)) {
               setErrorMessage(`${result.reason}`)

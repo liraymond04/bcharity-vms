@@ -1,7 +1,7 @@
 import Create from '.'
-import { Props } from '.'
+import { CreateProps } from '.'
 import Pending from './Pending'
 
 export { Create, Pending }
 
-export type { Props }
+export type { CreateProps }

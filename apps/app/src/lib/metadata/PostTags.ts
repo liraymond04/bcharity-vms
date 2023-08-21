@@ -53,7 +53,11 @@ export enum Application {
   /**
    * Tag to use for rejecting a request
    */
-  REJECT = 'ORGANIZATION_REJECT_APPLICATION'
+  REJECT = 'ORGANIZATION_REJECT_APPLICATION',
+  /**
+   * Tag to use for accepting a request
+   */
+  Accept = 'ORGANIZATION_REJECT_APPLICATION'
 }
 
 /**

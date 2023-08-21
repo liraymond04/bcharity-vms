@@ -2,12 +2,38 @@ import React, { ComponentProps, forwardRef } from 'react'
 
 import { FieldError } from '../UI/Form'
 
-interface IFilterDropdownProps extends ComponentProps<'select'> {
+/**
+ * Properties of {@link FormDropdown}
+ */
+export interface IFilterDropdownProps extends ComponentProps<'select'> {
+  /**
+   * Label displayed in front of the dropdown
+   */
   label: string
+  /**
+   * Array of options listed in the dropdown
+   */
   options: string[]
+  /**
+   * Array of items to be displayed from options
+   */
   displayedOptions?: string[]
 }
 
+/**
+ * A component that lists a dropdown of string items that can be filtered
+ * to be used in a Form
+ *
+ * @example FormDropdown used in the {@link PublishCauseModal}
+ * ```tsx
+ * <FormDropdown
+ *   label={t('selected-currency')}
+ *   options={currencyData?.map((c) => c.address) ?? []}
+ *   displayedOptions={currencyData?.map((c) => c.name) ?? []}
+ *   {...register('currency')}
+ * />
+ * ```
+ */
 const FormDropdown = forwardRef<HTMLSelectElement, IFilterDropdownProps>(
   function FormDropdown({ label, options, displayedOptions, ...props }, ref) {
     return (

@@ -1,3 +1,26 @@
+/**
+ * Function used in filtering for fuzzy search
+ * @param searched string of the original item being compared to
+ * @param searchInput string of the user's search input
+ * @returns if the search input matches the searched item
+ *
+ * @example testSearch used for fuzzy searching cause posts
+ * ```tsx
+ * <GridLayout>
+ *   {posts
+ *     .filter(
+ *       (post) =>
+ *         testSearch(post.name, searchValue) &&
+ *         (selectedCategory === '' || post.category === selectedCategory)
+ *     )
+ *     .map((post) => (
+ *       <GridItemFour key={post.id}>
+ *         <CauseCard cause={post} />
+ *       </GridItemFour>
+ *     ))}
+ * </GridLayout>
+ * ```
+ */
 const testSearch = (searched: string, searchInput: string) => {
   const nameArr = searched.toLowerCase().split(' ')
   const searchArr = searchInput.toLowerCase().split(' ')

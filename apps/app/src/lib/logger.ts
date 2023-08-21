@@ -1,3 +1,6 @@
+/**
+ * Provides specific console logging functions
+ */
 const Logger = {
   log: (...args: any) => {
     console.log(...args)
