@@ -4,7 +4,6 @@ import {
   PublicationsQueryRequest,
   PublicationTypes
 } from '@lens-protocol/client'
-import { Inter } from '@next/font/google'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { AgGridReact } from 'ag-grid-react'
@@ -47,7 +46,6 @@ import { useAppPersistStore } from '@/store/app'
 
 import DeleteCauseModal from '../Modals/DeleteCauseModal'
 import ErrorMessage from '../Modals/Error'
-import ErrorComponent from '../Modals/Error'
 import GoalModal from '../Modals/GoalModal'
 import ModifyCauseModal from '../Modals/ModifyCauseModal'
 import PublishCauseModal, {
@@ -55,21 +53,6 @@ import PublishCauseModal, {
   IPublishCauseFormProps
 } from '../Modals/PublishCauseModal'
 import { defaultColumnDef, makeOrgCauseColumnDefs } from './ColumnDefs'
-
-const inter400 = Inter({
-  subsets: ['latin'],
-  weight: ['400']
-})
-
-const inter500 = Inter({
-  subsets: ['latin'],
-  weight: ['500']
-})
-
-const inter700 = Inter({
-  subsets: ['latin'],
-  weight: ['700']
-})
 
 const OrganizationCauses: React.FC = () => {
   const { t } = useTranslation('common', {
@@ -441,14 +424,13 @@ const OrganizationCauses: React.FC = () => {
                           suppressHydrationWarning
                           label={t('cause-description')}
                           id="causeDescription"
-                          value={causeDescription}
+                          defaultValue={causeDescription}
                           placeholder={t('description-placeholder')}
-                          onChange={(e) => setCauseDescription(e.target.value)}
                           rows={10}
                         />
                       </div>
                       {submitError && (
-                        <ErrorComponent
+                        <ErrorMessage
                           message={`${e('generic-front')}${
                             submitError.message
                           }${e('generic-back')}`}
