@@ -18,11 +18,9 @@ import { v4 } from 'uuid'
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
-import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Modal } from '@/components/UI/Modal'
 import { Spinner } from '@/components/UI/Spinner'
-import { TextArea } from '@/components/UI/TextArea'
 import {
   getSignature,
   lensClient,
@@ -93,6 +91,7 @@ const OrganizationCauses: React.FC = () => {
     }
   })
 
+  const [showModal, setShowModal] = useState<boolean>(false)
   const [location, setLocation] = useState<string>('')
   const [errora, setErrora] = useState<Error>()
   const [website, setWebsite] = useState<string>('')
@@ -103,8 +102,6 @@ const OrganizationCauses: React.FC = () => {
   const [cover, setCover] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const [showModal, setShowModal] = useState<boolean>(false)
 
   const [publishModalOpen, setPublishModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -441,7 +438,10 @@ const OrganizationCauses: React.FC = () => {
                   </div>
                   <div className="w-full h-[1px] bg-gray-300"></div>
                   <div className="flex justify-between">
-                    <button className="bg-purple-500 rounded-lg text-white py-2 px-5 my-3 ml-5 focus:ring-2 focus:ring-purple-700 hover:bg-purple-600">
+                    <button
+                      onClick={() => handleSubmit}
+                      className="bg-purple-500 rounded-lg text-white py-2 px-5 my-3 ml-5 focus:ring-2 focus:ring-purple-700 hover:bg-purple-600"
+                    >
                       Submit
                     </button>
                     <button
@@ -454,34 +454,7 @@ const OrganizationCauses: React.FC = () => {
                 </Modal>
                 <div className=" w-full lg:flex mt-2">
                   <div className="border-r border-b border-l p-5 lg:border-l-0 lg:border-t dark:border-Card bg-accent-content dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 rounded-b lg:rounded-b-none lg:rounded-r  flex flex-col justify-between leading-normal w-full">
-                    <form
-                      className="my-5 mx-5 flex-col space-y-4"
-                      onSubmit={handleSubmit}
-                    >
-                      <div>
-                        <TextArea
-                          suppressHydrationWarning
-                          label={t('cause-description')}
-                          id="causeDescription"
-                          value={causeDescription}
-                          placeholder="Description"
-                          onChange={(e) => setCauseDescription(e.target.value)}
-                          rows={10}
-                        />
-                      </div>
-
-                      <div className="flex justify-end">
-                        <Button
-                          className="my-5"
-                          disabled={isLoading}
-                          icon={isLoading && <Spinner size="sm" />}
-                          type="submit"
-                          suppressHydrationWarning
-                        >
-                          Submit
-                        </Button>
-                      </div>
-                    </form>
+                    No description yet.
                   </div>
                 </div>
               </>
