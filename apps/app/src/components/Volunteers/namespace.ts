@@ -1,3 +1,7 @@
 import Volunteers from '.'
+import VolunteerCard, { IVolunteerCardProps } from './VolunteerCard'
+import VolunteerPage from './VolunteerPage'
 
-export { Volunteers }
+export { VolunteerCard, VolunteerPage, Volunteers }
+
+export type { IVolunteerCardProps }
