@@ -1,3 +1,6 @@
 import Causes from '.'
+import CauseCard, { ICauseCardProps } from './CauseCard'
 
-export { Causes }
+export { CauseCard, Causes }
+
+export type { ICauseCardProps }
