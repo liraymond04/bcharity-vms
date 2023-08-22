@@ -77,6 +77,7 @@ const Volunteers: NextPage = () => {
     let _Orgs: Set<string> = new Set()
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {
+      if (post.type === PostTags.OrgPublish.OpportunityDraft) return
       _posts.push(post)
       if (post.category) _categories.add(post.category)
       if (post.from.handle) _Orgs.add(post.from.handle)

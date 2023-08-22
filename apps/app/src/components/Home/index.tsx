@@ -39,7 +39,13 @@ const Home: NextPage = () => {
 
   const [otherError, setOtherError] = useState(false)
 
-  const posts = useMemo(() => getOpportunityMetadata(data), [data])
+  const posts = useMemo(
+    () =>
+      getOpportunityMetadata(data).filter(
+        (post) => post.type !== PostTags.OrgPublish.OpportunityDraft
+      ),
+    [data]
+  )
 
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
   const [postings, setPostings] = useState<number[]>([])
