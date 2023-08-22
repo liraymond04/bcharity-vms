@@ -68,7 +68,6 @@ const ApplyButton: FC<ApplyButtonProps> = ({
     // handle on submit here
   }
 
-  console.log()
   return (
     <div>
       <Modal show={showModal} title="" size="lg" onClose={onCancel}>
