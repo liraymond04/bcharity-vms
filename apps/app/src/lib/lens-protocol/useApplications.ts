@@ -144,7 +144,6 @@ const useApplications = ({
         const data: ApplicationMetadata[] = []
 
         postsComments.forEach((postComments, i) => {
-          console.log(postComments.items, statusMap)
           const filteredPosts = postComments.items
             .filter(isComment)
             .filter((p) => !p.hidden && !statusMap[p.id])

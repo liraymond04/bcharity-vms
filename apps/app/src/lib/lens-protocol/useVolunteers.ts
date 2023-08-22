@@ -165,7 +165,6 @@ export const useVolunteers = ({
 
     const vhrRequests = filteredColData
       .map((a) => {
-        console.log('test a', a)
         try {
           const op = opMap.get(a.mainPost.id)
           if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
