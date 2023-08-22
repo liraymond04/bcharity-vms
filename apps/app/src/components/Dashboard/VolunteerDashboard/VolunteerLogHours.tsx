@@ -26,8 +26,6 @@ import { useAppPersistStore } from '@/store/app'
 import Error from '../Modals/Error'
 import DashboardDropDown from './DashboardDropDown'
 
-interface IVolunteerLogHoursProps {}
-
 const inter500 = Inter({
   subsets: ['latin'],
   weight: ['500']
@@ -43,7 +41,7 @@ const inter500 = Inter({
  *
  * The table results are refreshed manually using the {@link GridRefreshButton}
  */
-const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
+const VolunteerLogHours: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.log-hours'
   })
