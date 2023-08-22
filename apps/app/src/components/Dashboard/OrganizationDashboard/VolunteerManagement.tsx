@@ -13,7 +13,8 @@ import {
   checkAuth,
   getAvatar,
   lensClient,
-  useCreateComment
+  useCreateComment,
+  useVolunteers
 } from '@/lib/lens-protocol'
 import useApplications from '@/lib/lens-protocol/useApplications'
 import { ApplicationMetadata, buildMetadata, PostTags } from '@/lib/metadata'
@@ -233,6 +234,9 @@ const VolunteerManagementTab: React.FC = () => {
 
     removeIdPending(selectedId)
   }
+
+  const volunteerData = useVolunteers({ profile })
+  console.log('volunteerdata', volunteerData)
 
   return (
     <GridLayout>

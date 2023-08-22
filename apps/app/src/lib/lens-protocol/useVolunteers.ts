@@ -134,6 +134,12 @@ export const useVolunteers = ({
       opMap.has(a.mainPost.id)
     )
 
+    const applicationIdOpportunityIdMap = new Map<string, string>(
+      filteredApAcceptComments
+        .map((v) => [v.commentOn?.id, v.mainPost.id])
+        .filter((pair): pair is [string, string] => !!pair[0] && !!pair[1])
+    )
+
     const applicationDataComments = filteredApAcceptComments
       .map((a) => a.commentOn)
       .filter((a): a is CommentFragment => !!a && isCommentPublication(a))
@@ -141,7 +147,9 @@ export const useVolunteers = ({
     const applications = applicationDataComments
       .map((a) => {
         try {
-          const op = opMap.get(a.mainPost.id)
+          const opId = applicationIdOpportunityIdMap.get(a.id)
+          if (!opId) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
+          const op = opMap.get(opId) // 2nd level down, does not have mainPost
           if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
           return new ApplicationMetadataBuilder(a, op).build()
         } catch (e) {
@@ -157,6 +165,7 @@ export const useVolunteers = ({
 
     const vhrRequests = filteredColData
       .map((a) => {
+        console.log('test a', a)
         try {
           const op = opMap.get(a.mainPost.id)
           if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
