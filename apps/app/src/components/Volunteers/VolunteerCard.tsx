@@ -11,7 +11,7 @@ import validImageExtension from '@/lib/validImageExtension'
 import { Card } from '../UI/Card'
 import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
-interface IVolunteerCardProps {
+export interface IVolunteerCardProps {
   post: OpportunityMetadata
 }
 
