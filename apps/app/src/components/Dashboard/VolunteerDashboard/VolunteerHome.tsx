@@ -14,6 +14,15 @@ import { getAvatar, lensClient } from '@/lib/lens-protocol'
 import { isPost } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
+/**
+ * Component that displays the volunteer home tab page, and shows the profile
+ * data of the current volunteer's profile.
+ *
+ * Profile data is grabbed using the currentUser store, and the information
+ * fields are filled using metadata attributes.
+ *
+ * Profile metadata is updated through the user settings page home tab.
+ */
 const VolunteerHome: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.home'
