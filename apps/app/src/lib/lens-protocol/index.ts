@@ -2,9 +2,9 @@ import checkAuth from './checkAuth'
 import createCollect from './createCollect'
 import createProfile from './createProfile'
 import getAvatar from './getAvatar'
-import getProfile from './getProfile'
+import getProfile, { PropsHandle, PropsId } from './getProfile'
 import getProfilesOwnedBy from './getProfilesOwnedBy'
-import getSignature from './getSignature'
+import getSignature, { TypedData } from './getSignature'
 import lensClient from './lensClient'
 import { UseApplicationsParams, UseApplicationsReturn } from './useApplications'
 import useBookmark, {
@@ -39,7 +39,7 @@ import useRegisteredOpportunities, {
   UseRegisteredOpportunitiesParams,
   useRegisteredOpportunitiesReturn
 } from './useRegisteredOpportunities'
-import useVHRRequests from './useVHRRequests'
+import useVHRRequests, { UseVHRRequestsParams } from './useVHRRequests'
 import { useVolunteers, VolunteerData } from './useVolunteers'
 import isValidHandle from './util/isValidHandle'
 
@@ -73,6 +73,9 @@ export type {
   CreateCommentReturn,
   CreatePostParams,
   CreatePostReturn,
+  PropsHandle,
+  PropsId,
+  TypedData,
   UseApplicationsParams,
   UseApplicationsReturn,
   UseBookmarkParams,
@@ -86,7 +89,8 @@ export type {
   UsePublicationParams,
   UsePublicationReturn,
   UseRegisteredOpportunitiesParams,
-  useRegisteredOpportunitiesReturn
+  useRegisteredOpportunitiesReturn,
+  UseVHRRequestsParams
 }
 
 export type { VolunteerData }

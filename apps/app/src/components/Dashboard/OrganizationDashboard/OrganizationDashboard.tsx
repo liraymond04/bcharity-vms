@@ -17,8 +17,8 @@ import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
 import OrganizationCausesTab from './OrganizationCauses'
 import OrganizationHomeTab from './OrganizationHome'
 import OrganizationLogVHRTab from './OrganizationLogVHR/OrganizationLogVHR'
-import OrganizationManagement from './OrganizationManagement/OrganizationManagement'
 import OrganizationVHRTab from './OrganizationVHR'
+import VolunteerManagementTab from './VolunteerManagement'
 
 const OrganizationDashboard: React.FC = () => {
   const { t } = useTranslation('common', {
@@ -64,7 +64,7 @@ const OrganizationDashboard: React.FC = () => {
     {
       label: 'Applications',
       icon: <ClipboardCheckIcon className="inline" />,
-      component: <OrganizationManagement></OrganizationManagement>
+      component: <VolunteerManagementTab />
     },
     {
       label: t('verify'),

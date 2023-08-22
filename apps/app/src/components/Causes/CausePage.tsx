@@ -30,6 +30,21 @@ import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
+/**
+ * Component that displays an individual causes page
+ *
+ * Post information is grabbed by using the publication id passed by the Next.js
+ * dynamic router, and used in the {@link usePublication} hook to fetch the post
+ * from Lens. Donations are handled by the {@link DonateButton}.
+ *
+ * Total contribution amounts are calculated by fetching the number of collects
+ * on a post or comment and multiplying by its contribution amount. This
+ * calculation works because contribution amounts on publication posts are
+ * immutable. However, this means that comments under the original cause post
+ * need to be queried for their collects, because different contribution amounts
+ * are done by creating an identical collect module with a different collect
+ * amount as a comment.
+ */
 const CausePage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
