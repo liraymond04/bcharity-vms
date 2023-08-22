@@ -21,19 +21,11 @@ import FollowButton from '../Shared/FollowButton'
 import LogHoursButton from '../Shared/LogHoursButton'
 import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import Slug from '../Shared/Slug'
-import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
-/**
- * Component that displays an individual opportunity page
- *
- * Post information is grabbed by using the publication id passed by the Next.js
- * dynamic router, and used in the {@link usePublication} hook to fetch the post
- * from Lens.
- */
 const VolunteerPage: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.page'
@@ -90,15 +82,10 @@ const VolunteerPage: NextPage = () => {
   }
 
   const Body = ({ opportunity }: { opportunity: OpportunityMetadata }) => {
-    const [showModal, setShowModal] = useState(false)
     return (
       <>
-        <ApplyToOpportunityModal
-          open={showModal}
-          onClose={() => setShowModal(false)}
-          id={opportunity.post_id}
-        ></ApplyToOpportunityModal>
-        <Button onClick={() => setShowModal(true)}>Apply</Button>
+        {' '}
+        <ApplyToOpportunityModal></ApplyToOpportunityModal>
         <div className="p-6">
           <div className="grid md:grid-cols-[auto_100px] sm:grid-cols-[auto_100px] gap-x-4 w-full">
             <div className="flex space-x-2 items-center overflow-hidden">
