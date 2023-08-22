@@ -91,6 +91,7 @@ const LogHoursButton: FC<LogHoursButtonProps> = ({
             <Form
               form={form}
               onSubmit={() => handleSubmit((data) => onSubmit(data))}
+              className="flex flex-col space-y-2"
             >
               <Input
                 label={t('num-hours')}

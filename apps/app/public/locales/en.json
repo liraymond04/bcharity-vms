@@ -488,7 +488,8 @@
         "click-to-upload": "Click to upload",
         "drag-and-drop": "or drag and drop",
         "description": "Description",
-        "submit": "Submit"
+        "submit": "Submit",
+        "apply": "Apply"
       },
       "title": "Browse Volunteer Opportunities",
       "search": "Search",
