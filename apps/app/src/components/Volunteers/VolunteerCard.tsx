@@ -11,21 +11,10 @@ import validImageExtension from '@/lib/validImageExtension'
 import { Card } from '../UI/Card'
 import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
-/**
- * Properties of {@link VolunteerCard}
- */
 export interface IVolunteerCardProps {
-  /**
-   * Opportunity metadata to display
-   */
   post: OpportunityMetadata
 }
 
-/**
- * Individual opportunity post card displayed in the {@link Volunteers} page. Redirects
- * to individual opportunity post page when clicked. Displayed opportunity post information
- * is passed as cause post metadata in its properties.
- */
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.card'

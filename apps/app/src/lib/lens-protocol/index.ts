@@ -6,6 +6,7 @@ import getProfile, { PropsHandle, PropsId } from './getProfile'
 import getProfilesOwnedBy from './getProfilesOwnedBy'
 import getSignature, { TypedData } from './getSignature'
 import lensClient from './lensClient'
+import { UseApplicationsParams, UseApplicationsReturn } from './useApplications'
 import useBookmark, {
   UseBookmarkParams,
   UseBookmarkReturn
@@ -39,6 +40,7 @@ import useRegisteredOpportunities, {
   useRegisteredOpportunitiesReturn
 } from './useRegisteredOpportunities'
 import useVHRRequests, { UseVHRRequestsParams } from './useVHRRequests'
+import { useVolunteers, VolunteerData } from './useVolunteers'
 import isValidHandle from './util/isValidHandle'
 
 export {
@@ -62,7 +64,8 @@ export {
   usePostData,
   usePublication,
   useRegisteredOpportunities,
-  useVHRRequests
+  useVHRRequests,
+  useVolunteers
 }
 
 export type {
@@ -73,6 +76,8 @@ export type {
   PropsHandle,
   PropsId,
   TypedData,
+  UseApplicationsParams,
+  UseApplicationsReturn,
   UseBookmarkParams,
   UseBookmarkReturn,
   UseCausesDonatedToParams,
@@ -87,3 +92,5 @@ export type {
   useRegisteredOpportunitiesReturn,
   UseVHRRequestsParams
 }
+
+export type { VolunteerData }

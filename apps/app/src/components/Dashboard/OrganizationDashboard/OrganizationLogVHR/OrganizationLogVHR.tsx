@@ -1,24 +1,17 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import {
-  PublicationMainFocus,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { v4 } from 'uuid'
 
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import { APP_NAME } from '@/constants'
-import getUserLocale from '@/lib/getUserLocale'
 import {
   checkAuth,
   createCollect,
   useCreateComment,
   useVHRRequests
 } from '@/lib/lens-protocol'
-import { PostTags } from '@/lib/metadata'
+import { buildMetadata, PostTags } from '@/lib/metadata'
 import testSearch from '@/lib/search'
 import { useAppPersistStore } from '@/store/app'
 
@@ -86,17 +79,8 @@ const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
 
     try {
       await checkAuth(profile.ownedBy)
-      const metadata: PublicationMetadataV2Input = {
-        version: '2.0.0',
-        metadata_id: v4(),
-        content: `#${PostTags.VhrRequest.Reject}`,
-        locale: getUserLocale(),
-        tags: [PostTags.VhrRequest.Reject],
-        mainContentFocus: PublicationMainFocus.TextOnly,
-        name: `${PostTags.VhrRequest.Reject} by ${profile?.handle}`,
-        attributes: [],
-        appId: APP_NAME
-      }
+
+      const metadata = buildMetadata(profile, [PostTags.VhrRequest.Reject], {})
 
       await createComment({
         profileId: profile.id,

@@ -1,8 +1,4 @@
-import {
-  CommentFragment,
-  ProfileFragment,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
 import {
@@ -14,6 +10,7 @@ import {
   PostTags
 } from '../metadata'
 import { getOpportunityMetadata } from '../metadata/get/getOpportunityMetadata'
+import { logIgnoreWarning } from '../metadata/get/logIgnoreWarning'
 import lensClient from './lensClient'
 
 interface getCollectedPostIdsParams {
@@ -30,7 +27,7 @@ const getCollectedPostIds = (params: getCollectedPostIdsParams) => {
 }
 
 interface getRejectedPostIdsParams {
-  profile: ProfileFragment
+  profileId: string
   commentId: string
 }
 
@@ -42,7 +39,7 @@ const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
     })
     .then((values) => {
       const filtered = values.items.filter((value) => {
-        return value.profile.ownedBy == params.profile.ownedBy
+        return value.profile.id == params.profileId
       })
       return filtered.length > 0
     })
@@ -77,55 +74,50 @@ export interface UseVHRRequestsParams {
  *          `error`: error message (if request fails), \
  *          `refetch`: function that triggers the data to refetch
  */
-const useVHRRequests = (params: UseVHRRequestsParams) => {
+const useVHRRequests = ({ profile }: UseVHRRequestsParams) => {
   const [requests, setRequests] = useState<LogVhrRequestMetadata[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const refetch = () => {
-    if (!params.profile) return
-    let opportunities: OpportunityMetadata[] = []
+    if (!profile) {
+      setError('Not signed in')
+      return
+    }
+    let ops: OpportunityMetadata[] = []
 
     setLoading(true)
     setError('')
 
-    if (params.profile === null) {
-      setError('Not signed in')
-      setLoading(false)
-      return
-    }
-
     lensClient()
       .publication.fetchAll({
-        profileId: params.profile!.id,
+        profileId: profile.id,
         publicationTypes: [PublicationTypes.Post],
         metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
       })
       .then((res) => {
-        opportunities = getOpportunityMetadata(res.items)
+        ops = getOpportunityMetadata(res.items)
       })
       .then(() => {
-        const collectedIds = getCollectedPostIds({ profile: params.profile! })
+        const collectedIds = getCollectedPostIds({ profile })
 
-        const postsComments = opportunities.map((op) => {
+        const postsComments = ops.map((op) => {
           return getVHRRequestComments({ publicationId: op.post_id })
         })
 
         return Promise.all([collectedIds, ...postsComments])
       })
       .then(([collectedPostsIds, ...postsComments]) => {
-        const rejectedPostPromises = postsComments
-          .map((comment) => {
-            return comment.items.map((c) =>
-              getIsRequestRejected({
-                profile: params.profile!,
-                commentId: c.id
-              }).then((value) => {
-                return { k: c.id, v: value }
-              })
-            )
-          })
-          .flat(1)
+        const rejectedPostPromises = postsComments.flatMap((comment) =>
+          comment.items.map((c) =>
+            getIsRequestRejected({
+              profileId: profile.id,
+              commentId: c.id
+            }).then((value) => {
+              return { k: c.id, v: value }
+            })
+          )
+        )
 
         const rejectedPostMap: Record<string, boolean> = {}
 
@@ -150,21 +142,17 @@ const useVHRRequests = (params: UseVHRRequestsParams) => {
               return !(rejectedPostMap[p.id] || accepted) && !p.hidden
             })
 
-          filteredPosts.map((post) => {
+          filteredPosts.forEach((post) => {
             try {
-              const request = new LogVhrRequestMetadataBuilder(
-                post as CommentFragment,
-                opportunities[i]
-              ).build()
-
+              const builder = new LogVhrRequestMetadataBuilder(post, ops[i])
+              const request = builder.build()
               data.push(request)
             } catch (e) {
-              console.debug(
-                'warning: ignored metadata from post %o due to error %o',
-                (post as CommentFragment).metadata,
-                (e as unknown as InvalidMetadataException).message
-              )
-              return null
+              if (e instanceof InvalidMetadataException) {
+                logIgnoreWarning(post, e)
+              } else {
+                console.error(e)
+              }
             }
           })
         })
@@ -180,14 +168,9 @@ const useVHRRequests = (params: UseVHRRequestsParams) => {
       })
   }
 
-  useEffect(refetch, [params.profile])
+  useEffect(refetch, [profile])
 
-  return {
-    loading,
-    data: requests,
-    error,
-    refetch
-  }
+  return { loading, data: requests, error, refetch }
 }
 
 export default useVHRRequests
