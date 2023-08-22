@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 export interface DashboardDropDownProps {
   /**
    *  Function that runs when a dropdown item is selected
-   * @param string string
+   * @param string
    * @returns
    */
   onClick: (string: string) => void

@@ -4,11 +4,20 @@ import { InformationCircleIcon } from '@heroicons/react/outline'
 import Tippy from '@tippyjs/react'
 import React, { FC, ReactNode } from 'react'
 
-interface Props {
+/**
+ * Properties of {@link HelpTooltip}
+ */
+export interface HelpTooltipProps {
+  /**
+   * Content to display in help tool tip
+   */
   content: ReactNode
 }
 
-const HelpTooltip: FC<Props> = ({ content }) => {
+/**
+ * Component that displays a help tool tip
+ */
+const HelpTooltip: FC<HelpTooltipProps> = ({ content }) => {
   if (!content) return null
 
   return (

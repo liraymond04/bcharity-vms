@@ -1,13 +1,43 @@
 import clsx from 'clsx'
 import { FC } from 'react'
 
-interface Props {
+/**
+ * Properties of {@link Spinner}
+ */
+export interface SpinnerProps {
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
+  /**
+   * Style of spinner to display
+   */
   variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'super' | 'danger'
+  /**
+   * size of the button to render
+   */
   size?: 'xs' | 'sm' | 'md' | 'lg'
 }
 
-export const Spinner: FC<Props> = ({
+/**
+ * Component that displays an animated loading spinner
+ *
+ * @example Spinner used as an icon when loading in {@link components.Shared.DonateButton}
+ * ```tsx
+ * <Button
+ *   className="h-10"
+ *   icon={_setIsLoading && <Spinner size="sm" />}
+ *   disabled={
+ *     currentContribution === formContribution || _setIsLoading
+ *   }
+ *   onClick={onSet}
+ *   suppressHydrationWarning
+ * >
+ *   {t('set')}
+ * </Button>
+ * ```
+ */
+export const Spinner: FC<SpinnerProps> = ({
   className = '',
   variant = 'primary',
   size = 'md'

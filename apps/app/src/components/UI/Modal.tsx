@@ -3,16 +3,59 @@ import { XIcon } from '@heroicons/react/outline'
 import clsx from 'clsx'
 import React, { FC, Fragment, ReactNode } from 'react'
 
-interface Props {
+/**
+ * Properties of {@link Modal}
+ */
+export interface ModalProps {
+  /**
+   * Component to display as butotn icon
+   */
   icon?: ReactNode
+  /**
+   * String of component title
+   */
   title: ReactNode
+  /**
+   * size of the button to render
+   */
   size?: 'sm' | 'md' | 'lg'
+  /**
+   * Whether the modal should be shown
+   */
   show: boolean
+  /**
+   * React components wrapped by the component
+   */
   children: ReactNode[] | ReactNode
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: () => void
 }
 
-export const Modal: FC<Props> = ({
+/**
+ * Component that displays a popup modal.
+ *
+ * The component is hidden by default, and will be shown once its
+ * `shown` property is set to true.
+ *
+ * @example Create component used in {@link components.Shared.Navbar.MenuItems}
+ * ```tsx
+ * <Modal
+ *   title={t('create-profile')}
+ *   show={showCreate}
+ *   onClose={() => {
+ *     setShowCreate(false)
+ *   }}
+ * >
+ *   <div className="p-5">
+ *     <Create isModal />
+ *   </div>
+ * </Modal>
+ * ```
+ */
+export const Modal: FC<ModalProps> = ({
   icon,
   title,
   size = 'sm',
