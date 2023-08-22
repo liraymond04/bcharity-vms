@@ -7,16 +7,25 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import ClearFilters from '@/components/Shared/ClearFilters'
 import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
+import { ErrorMessage } from '@/components/UI/ErrorMessage'
 import { Spinner } from '@/components/UI/Spinner'
-import { getAvatar, lensClient } from '@/lib/lens-protocol'
+import {
+  checkAuth,
+  getAvatar,
+  lensClient,
+  useCreateComment
+} from '@/lib/lens-protocol'
 import useApplications from '@/lib/lens-protocol/useApplications'
-import { ApplicationMetadata } from '@/lib/metadata'
+import { ApplicationMetadata, buildMetadata, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
 
 import DashboardDropDown from '../VolunteerDashboard/DashboardDropDown'
 
 interface VolunteerInfoProps {
   application: ApplicationMetadata
+  onAccept: VoidFunction
+  onReject: VoidFunction
+  pending?: boolean
 }
 
 interface PurpleBoxProps {
@@ -51,7 +60,12 @@ const PurpleBox: React.FC<PurpleBoxProps> = ({
   )
 }
 
-const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({ application }) => {
+const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({
+  application,
+  onAccept,
+  onReject,
+  pending
+}) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.volunteer-managment'
   })
@@ -61,10 +75,11 @@ const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({ application }) => {
   const [userProfile, setUserProfile] = useState<ProfileFragment>()
 
   const [profileDataLoading, setProfileDataLoading] = useState(false)
-  const [profileError, setProfileError] = useState('')
+  const [profileError, setProfileError] = useState('test')
 
   useEffect(() => {
     setProfileDataLoading(true)
+    setProfileError('')
 
     lensClient()
       .profile.fetch({
@@ -77,6 +92,9 @@ const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({ application }) => {
           setProfileError(e('profile-null'))
         }
       })
+      .catch((e) => {
+        setProfileError(e?.message ?? e)
+      })
       .finally(() => setProfileDataLoading(false))
   }, [application.from.id])
 
@@ -87,6 +105,7 @@ const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({ application }) => {
 
   return (
     <Card className="pt-10 pl-10 pr-10 justify-center">
+      {profileError && <ErrorMessage error={new Error(profileError)} />}
       <div className="justify-center font-black text-3xl py-4">
         Volunteer Information
       </div>
@@ -123,11 +142,21 @@ const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({ application }) => {
       </div>
       <div className="flex mt-40">
         {' '}
-        <Button className="my-5" type="submit" suppressHydrationWarning>
-          save
+        <Button
+          className="my-5"
+          suppressHydrationWarning
+          onClick={onReject}
+          disabled={pending}
+        >
+          Reject
         </Button>
-        <Button className="my-5 ml-40" type="submit" suppressHydrationWarning>
-          accept
+        <Button
+          className="my-5 ml-40"
+          suppressHydrationWarning
+          onClick={onAccept}
+          disabled={pending}
+        >
+          Accept
         </Button>
       </div>
     </Card>
@@ -136,6 +165,7 @@ const VolunteerInfoCard: React.FC<VolunteerInfoProps> = ({ application }) => {
 
 const VolunteerManagementTab: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
+  const { createComment } = useCreateComment()
 
   const [searchValue, setSearchValue] = useState('')
   const [categories] = useState<Set<string>>(new Set())
@@ -148,9 +178,68 @@ const VolunteerManagementTab: React.FC = () => {
     return data.find((val) => val.post_id === selectedId) ?? null
   }, [data, selectedId])
 
+  const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({})
+  const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
+
+  const setIdPending = (id: string) => {
+    const newPendingIds = { ...pendingIds, [id]: true }
+    setPendingIds(newPendingIds)
+  }
+
+  const removeIdPending = (id: string) => {
+    setPendingIds({ ...pendingIds, [id]: false })
+  }
+
+  const onAcceptClick = async () => {
+    if (profile === null) return
+
+    setIdPending(selectedId)
+
+    try {
+      await checkAuth(profile.ownedBy)
+
+      const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
+
+      await createComment({
+        publicationId: selectedId,
+        metadata,
+        profileId: profile.id
+      })
+    } catch (e: any) {
+      setVerifyOrRejectError(e.message ?? e)
+    }
+
+    removeIdPending(selectedId)
+  }
+
+  const onRejectClick = async () => {
+    if (profile === null) return
+
+    setIdPending(selectedId)
+
+    try {
+      await checkAuth(profile.ownedBy)
+
+      const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
+
+      await createComment({
+        publicationId: selectedId,
+        metadata,
+        profileId: profile.id
+      })
+    } catch (e: any) {
+      setVerifyOrRejectError(e.message ?? e)
+    }
+
+    removeIdPending(selectedId)
+  }
+
   return (
     <GridLayout>
       <GridItemTwelve>
+        {(verifyOrRejectError || error) && (
+          <ErrorMessage error={new Error(verifyOrRejectError || error)} />
+        )}
         <div className="flex item-center my-10 px-10">
           <div className="border-black bg-white text-black border-l px-2">
             All Volunteers
@@ -198,28 +287,39 @@ const VolunteerManagementTab: React.FC = () => {
         <div className="flex space-x-24 pt-5">
           <Card className={`h-1/2 w-1/2`}>
             <div className="scrollbar">
-              {data.map((item) => {
-                return (
-                  <PurpleBox
-                    key={item.post_id}
-                    selected={selectedId === item.post_id}
-                    userName={item.from.name ?? item.from.handle}
-                    dateCreated={item.createdAt}
-                    onClick={() => {
-                      setSelectedId(
-                        selectedId === item.post_id ? '' : item.post_id
-                      )
-                    }}
-                  />
-                )
-              })}
+              {loading ? (
+                <Spinner />
+              ) : (
+                <>
+                  {data.map((item) => {
+                    return (
+                      <PurpleBox
+                        key={item.post_id}
+                        selected={selectedId === item.post_id}
+                        userName={item.from.name ?? item.from.handle}
+                        dateCreated={item.createdAt}
+                        onClick={() => {
+                          setSelectedId(
+                            selectedId === item.post_id ? '' : item.post_id
+                          )
+                        }}
+                      />
+                    )
+                  })}
+                </>
+              )}
 
               {/* the box placeholder for the data ^ */}
             </div>
           </Card>
           {selectedId !== '' && !!selectedValue && (
             <div className="pb-10">
-              <VolunteerInfoCard application={selectedValue} />
+              <VolunteerInfoCard
+                application={selectedValue}
+                onAccept={() => onAcceptClick()}
+                onReject={() => onRejectClick()}
+                pending={pendingIds[selectedId]}
+              />
             </div>
           )}
         </div>
