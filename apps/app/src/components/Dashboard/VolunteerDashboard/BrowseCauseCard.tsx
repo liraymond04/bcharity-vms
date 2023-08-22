@@ -13,12 +13,25 @@ const inter500 = Inter({
   weight: ['500']
 })
 
-interface IBrowseCardProps {
+/**
+ * Properties of {@link BrowseCauseCard}
+ */
+export interface IBrowseCauseCardProps {
+  /**
+   * Metadata of cause to display
+   */
   cause: CauseMetadata
+  /**
+   * Raw lens post fragment of cause to display
+   */
   post: PostFragment
 }
 
-const BrowseCauseCard: React.FC<IBrowseCardProps> = ({ cause, post }) => {
+/**
+ * Component that displays an individual cause post in a card used in
+ * {@link VolunteerCauses}.
+ */
+const BrowseCauseCard: React.FC<IBrowseCauseCardProps> = ({ cause, post }) => {
   const getDisplayedImage = () => {
     if (!cause.imageUrl) {
       return (

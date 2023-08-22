@@ -10,14 +10,36 @@ const inter500 = Inter({
   weight: ['500']
 })
 
-interface IBrowseCardProps {
+/**
+ * Properties of {@link BrowseCard}
+ */
+export interface IBrowseCardProps {
+  /**
+   * Source URL of the post image
+   */
   imageSrc: string
+  /**
+   * Source URL of the poster avatar image
+   */
   avatarSrc?: string
+  /**
+   * String of the poster's name
+   */
   name: string
+  /**
+   * String of the text displayed on the button
+   */
   buttonText: string
+  /**
+   * String of the href redirect link of the button
+   */
   buttonHref: string
 }
 
+/**
+ * Component that displays an individual volunteer opportunity post
+ * in a card used in {@link VolunteerVHR}.
+ */
 const BrowseCard: React.FC<IBrowseCardProps> = ({
   imageSrc,
   avatarSrc,

@@ -10,12 +10,29 @@ import { Button } from './Button'
 import { Input } from './Input'
 import { Spinner } from './Spinner'
 
-interface ILocationFormComponentProps {
+/**
+ * Properties of {@link LocationFormComponent}
+ */
+export interface ILocationFormComponentProps {
+  /**
+   * Default string value of location country
+   */
   defaultCountry?: string
+  /**
+   * Default string value of location province
+   */
   defaultProvince?: string
+  /**
+   * Default string value of location city
+   */
   defaultCity?: string
 }
 
+/**
+ * Component to display a location dropdown input.
+ *
+ * To use a disabled location dropdown (read only) for display, use {@link DisabledLocationDropdowns}
+ */
 const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
   defaultCountry,
   defaultProvince,

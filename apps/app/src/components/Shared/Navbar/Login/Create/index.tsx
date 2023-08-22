@@ -25,7 +25,7 @@ export interface CreateProps {
 /**
  * A component to create new Lens profile
  *
- * @example Create component used in a {@link Modal} in {@link MenuItems}
+ * @example Create component used in a {@link components.UI.Modal} in {@link MenuItems}
  * ```tsx
  * <Modal
  *   title={t('create-profile')}
