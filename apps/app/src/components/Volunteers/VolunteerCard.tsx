@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { STATIC_ASSETS } from '@/constants'
@@ -11,21 +11,10 @@ import validImageExtension from '@/lib/validImageExtension'
 import { Card } from '../UI/Card'
 import ApplyToOpportunityModal from './ApplyToOpportunityModal'
 
-/**
- * Properties of {@link VolunteerCard}
- */
-export interface IVolunteerCardProps {
-  /**
-   * Opportunity metadata to display
-   */
+interface IVolunteerCardProps {
   post: OpportunityMetadata
 }
 
-/**
- * Individual opportunity post card displayed in the {@link Volunteers} page. Redirects
- * to individual opportunity post page when clicked. Displayed opportunity post information
- * is passed as cause post metadata in its properties.
- */
 const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.card'
@@ -56,7 +45,6 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
     }
   }
 
-  const [showModal, setShowModal] = useState(false)
   return (
     <div
       onClick={() => {
@@ -64,11 +52,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
       }}
     >
       <Card className="transition duration-100 hover:scale-105 hover:cursor-pointer">
-        <ApplyToOpportunityModal
-          id={post.post_id}
-          open={showModal}
-          onClose={() => setShowModal(false)}
-        />
+        <ApplyToOpportunityModal></ApplyToOpportunityModal>
         <div className="flex">
           <div className="flex-shrink-0 h-36 w-36 overflow-hidden rounded-l-xl">
             {getDisplayedImage()}
