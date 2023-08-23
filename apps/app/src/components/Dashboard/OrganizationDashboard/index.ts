@@ -8,8 +8,8 @@ import OrganizationCauses from './OrganizationCauses'
 import OrganizationDashboard from './OrganizationDashboard'
 import OrganizationHome from './OrganizationHome'
 import * as OrganizationLogVHR from './OrganizationLogVHR'
+import VolunteerManagement from './OrganizationManagement/VolunteerManagement'
 import OrganizationVHR from './OrganizationVHR'
-import VolunteerManagement from './VolunteerManagement'
 
 const ColumnDefs = {
   makeOrgVHRColumnDefs,

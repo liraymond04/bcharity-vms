@@ -136,52 +136,45 @@ export const useVolunteers = ({
       ops.map((o) => [o.post_id, o])
     )
 
-    const filteredApAcceptComments = apAcceptCommentsData.filter((a) =>
-      opMap.has(a.mainPost.id)
-    )
+    // structure
+    //                        a.commentOn            doesn't work
+    // application accept comment -> application comment -x-> opportunity post
+    //
+    //                        a.mainPost
+    // application accept comment -> opportunity post
+    //
+    //                   a.mainPost
+    // vhr request comment -> opportunity post
+
+    const filteredApAcceptComments = apAcceptCommentsData
+      .filter((a) => opMap.has(a.mainPost.id))
+      .filter((a) => !!a.commentOn && isCommentPublication(a.commentOn))
 
     const filteredColData = vhrCollectData.filter((a) =>
       opMap.has(a.mainPost.id)
     )
 
-    const applicationIdOpportunityIdMap = new Map<
-      string,
-      { id: string; createdAt: string }
-    >(
-      filteredApAcceptComments
-        .map((v) => [
-          v.commentOn?.id,
-          { id: v.mainPost.id, createdAt: v.createdAt }
-        ])
-        .filter(
-          (pair): pair is [string, { id: string; createdAt: string }] =>
-            !!pair[0] && !!pair[1]
-        )
-    )
+    const dateJoinedMap = new Map<string, string>([
+      ...filteredApAcceptComments
+        .map((v) => [v.commentOn?.id, v.createdAt])
+        .filter((pair): pair is [string, string] => !!pair[0] && !!pair[1]),
+      ...filteredColData
+        .map((v) => [v.id, v.createdAt])
+        .filter((pair): pair is [string, string] => !!pair[0] && !!pair[1])
+    ])
 
-    const applicationDataComments = filteredApAcceptComments
-      .map((a) => a.commentOn)
-      .filter((a): a is CommentFragment => !!a && isCommentPublication(a))
-
-    // store data as <>
-    const requestIdDateAcceptedMap = new Map<string, string>()
-
-    applicationDataComments
-
-    const applications = applicationDataComments
-      .map((a) => {
+    const applications = filteredApAcceptComments
+      .map((a) => [a.commentOn, a.mainPost] as [CommentFragment, PostFragment])
+      .map(([a, opPost]) => {
         try {
-          const opId = applicationIdOpportunityIdMap.get(a.id)?.id
-          const timeAccepted = applicationIdOpportunityIdMap.get(a.id)
-            ?.createdAt
+          const opId = opPost.id
+          const op = opMap.get(opId)
 
-          if (!opId || !timeAccepted) {
+          if (!op) {
             throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
           }
-          const op = opMap.get(opId) // 2nd level down, does not have mainPost
-          if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
+
           const app = new ApplicationMetadataBuilder(a, op).build()
-          requestIdDateAcceptedMap.set(a.id, timeAccepted)
           return app
         } catch (e) {
           if (e instanceof InvalidMetadataException) {
@@ -210,28 +203,28 @@ export const useVolunteers = ({
         }
       })
       .filter((a): a is LogVhrRequestMetadata => !!a)
-
     const volunteerDataMap = new Map<string, VolunteerData>()
 
     applications.forEach((a) => {
-      const id = a.from.id
-      if (!volunteerDataMap.has(id)) {
-        volunteerDataMap.set(id, makeEmptyVolunteerData(a.from))
+      const postId = a.post_id
+      const profileId = a.from.id
+      if (!volunteerDataMap.has(profileId)) {
+        volunteerDataMap.set(profileId, makeEmptyVolunteerData(a.from))
       }
 
-      const prev = volunteerDataMap.get(id)!
+      const prev = volunteerDataMap.get(profileId)!
       const newOps = [...prev.currentOpportunities, a.opportunity] // a volunteer can only register once so no risk of duplicates
-      const currentDate = requestIdDateAcceptedMap.get(id)!
+      const currentDate = dateJoinedMap.get(postId)
 
       let newDate = prev.dateJoined
-      if (currentDate) {
-        newDate =
-          !prev.dateJoined ||
-          new Date(prev.dateJoined).getTime() > new Date().getTime()
-            ? newDate
-            : currentDate
+      if (
+        currentDate &&
+        (prev.dateJoined === '' ||
+          new Date(prev.dateJoined).getTime() > new Date().getTime())
+      ) {
+        newDate = currentDate
       }
-      volunteerDataMap.set(id, {
+      volunteerDataMap.set(profileId, {
         ...prev,
         currentOpportunities: newOps,
         dateJoined: newDate
@@ -239,14 +232,15 @@ export const useVolunteers = ({
     })
 
     vhrRequests.forEach((a) => {
-      const id = a.from.id
-      if (!volunteerDataMap.has(id)) {
-        volunteerDataMap.set(id, makeEmptyVolunteerData(a.from))
+      const postId = a.post_id
+      const profileId = a.from.id
+      if (!volunteerDataMap.has(profileId)) {
+        volunteerDataMap.set(profileId, makeEmptyVolunteerData(a.from))
       }
 
-      const prev = volunteerDataMap.get(id)!
+      const prev = volunteerDataMap.get(profileId)!
       const newComp = [...prev.completedOpportunities, a]
-      const currentDate = requestIdDateAcceptedMap.get(id)!
+      const currentDate = dateJoinedMap.get(postId)
 
       let newDate = prev.dateJoined
       if (currentDate) {
@@ -257,7 +251,7 @@ export const useVolunteers = ({
             : currentDate
       }
 
-      volunteerDataMap.set(id, {
+      volunteerDataMap.set(profileId, {
         ...prev,
         completedOpportunities: newComp,
         dateJoined: newDate
@@ -265,6 +259,7 @@ export const useVolunteers = ({
     })
 
     setData(Array.from(volunteerDataMap.values()))
+    setLoading(false)
   }
 
   useEffect(() => {

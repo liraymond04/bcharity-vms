@@ -32,7 +32,6 @@ const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
         <div className="text-violet-500">
           {vol.profile.name ?? vol.profile.handle}&nbsp;
         </div>
-        <p> wants to work with your organization</p>
       </div>
       <div className="flex">
         {vol.profile.coverPicture !== undefined && (
