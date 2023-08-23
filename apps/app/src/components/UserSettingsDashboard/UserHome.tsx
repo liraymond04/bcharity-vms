@@ -23,6 +23,17 @@ import { ErrorMessage } from '../UI/ErrorMessage'
 import { Spinner } from '../UI/Spinner'
 import SelectAvatar from './UserHome/SelectAvatar'
 
+/**
+ * Component that displays a tab page for editing the current profile's
+ * metadata.
+ *
+ * Editing the current profile metadata is handled with the Lens client {@link https://docs.lens.xyz/docs/create-set-update-profile-metadata-typed-data | createSetProfileMetadataTypedData} method.
+ * The metadata standard for the set profile metadata should implement {@link ProfileMetadata},
+ * and custom fields such as social media links should be added as custom attributes as an array
+ * of {@link AttributeData} in the metadata.
+ *
+ * The current profile's profile picture is set with {@link SelectAvatar}.
+ */
 const VolunteerHomeTab: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.settings.home'

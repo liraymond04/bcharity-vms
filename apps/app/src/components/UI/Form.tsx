@@ -65,19 +65,34 @@ export const FieldError: FC<FieldErrorProps> = ({ name }) => {
   )
 }
 
-interface Props<T extends FieldValues = Record<string, unknown>>
+/**
+ * Properties of {@link Form} that extends react-hook-form FieldValues
+ */
+export interface FormProps<T extends FieldValues = Record<string, unknown>>
   extends Omit<ComponentProps<'form'>, 'onSubmit'> {
+  /**
+   * React hook form object to use
+   */
   form: UseFormReturn<T>
+  /**
+   * Submit handler to run when form is submitted
+   */
   onSubmit: SubmitHandler<T>
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
 }
 
+/**
+ * Component that wraps a react-hook-form Form
+ */
 export const Form = <T extends FieldValues>({
   form,
   onSubmit,
   children,
   className = ''
-}: Props<T>) => {
+}: FormProps<T>) => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

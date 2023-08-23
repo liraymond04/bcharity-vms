@@ -22,15 +22,45 @@ import validImageExtension from '@/lib/validImageExtension'
 
 import Error from './Error'
 
+/**
+ * Properties of a publish opportunity form
+ */
 export interface IPublishOpportunityFormProps {
+  /**
+   * The opportunity name
+   */
   name: string
+  /**
+   * The opportunity start date in YYYY-MM-DD format
+   */
   startDate: string
+  /**
+   * The opportunity end date in YYYY-MM-DD format
+   */
   endDate: string
+  /**
+   * The number of hours per week for this volunteer opportunity
+   */
   hoursPerWeek: string
+  /**
+   * The category associated with the volunteer opportunity
+   */
   category: string
+  /**
+   * An optional url to link to an external webste
+   */
   website: string
+  /**
+   * The opportunity description
+   */
   description: string
+  /**
+   * An optional URL to image uploaded to IPFS. Empty string if no image
+   */
   imageUrl: string
+  /**
+   * Whether or not applications are required for this volunteer opportunity
+   */
   applicationRequired: boolean
 }
 
@@ -46,12 +76,41 @@ export const emptyPublishFormData: IPublishOpportunityFormProps = {
   applicationRequired: false
 }
 
-interface IPublishOpportunityModalProps {
+/**
+ * Properties of {@link PublishOpportunityModal}
+ */
+export interface IPublishOpportunityModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: Profile | null
 }
 
+/**
+ * Component that displays a popup modal for publishing a volunteer opportunity post, wraps a {@link GradientModal}.
+ *
+ * Because publications are immutable in Lens, cause posts are modified by using a separately
+ * generated UUID for a publication. The new UUID is generated when the original publication is
+ * published, and passed to its modified posts. Modified posts are new Lens publications, but
+ * the passed down UUID is used to hide older posts with the same UUID, and only display its
+ * latest version.
+ *
+ * Drafts are published by copying its contents into a new Lens publication, but with its
+ * attribute isDraft set to false. Similarly to modifying posts, the original unique UUID is
+ * passed down and publishing a draft post will hide its draft publication since it is no longer
+ * the latest version of the original post.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
 const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
   open,
   onClose,

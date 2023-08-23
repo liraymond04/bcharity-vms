@@ -26,14 +26,22 @@ import { useAppPersistStore } from '@/store/app'
 import Error from '../Modals/Error'
 import DashboardDropDown from './DashboardDropDown'
 
-interface IVolunteerLogHoursProps {}
-
 const inter500 = Inter({
   subsets: ['latin'],
   weight: ['500']
 })
 
-const VolunteerLogHours: React.FC<IVolunteerLogHoursProps> = () => {
+/**
+ * Component that displays the volunteer log hours tab page, which displays the
+ * opportunity posts that a user has bookmarked
+ *
+ * Bookmarked posts are fetched using the {@link usePostData} hook, and the
+ * metadata post tags {@link PostTags.Bookmark.Opportunity}, which are filtered
+ * using the {@link DashboardDropDown}.
+ *
+ * The table results are refreshed manually using the {@link GridRefreshButton}
+ */
+const VolunteerLogHours: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.log-hours'
   })

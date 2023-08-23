@@ -23,17 +23,53 @@ import validImageExtension from '@/lib/validImageExtension'
 
 import ErrorComponent from './Error'
 
+/**
+ * Properties of a publish cause form
+ */
 export interface IPublishCauseFormProps {
+  /**
+   * TODO
+   */
   currency: string
+  /**
+   * The cause name
+   */
   name: string
+  /**
+   * The category associated with the cause
+   */
   category: string
+  /**
+   * TODO
+   */
   contribution: string
+  /**
+   * TODO
+   */
   goal: string
+  /**
+   * TODO
+   */
   recipient: string
+  /**
+   * description for this project
+   */
   description: string
+  /**
+   * An optional URL to image uploaded to IPFS. Empty string if no image
+   */
   imageUrl: string
+  /**
+   * The country of the cause location
+   */
   country: string
+  /**
+   * The province of the cause location
+   */
   province: string
+  /**
+   * The city of the cause location
+   */
   city: string
 }
 
@@ -51,13 +87,40 @@ export const emptyPublishFormData: IPublishCauseFormProps = {
   city: ''
 }
 
-interface IPublishCauseModalProps {
+/**
+ * Properties of {@link PublishCauseModal}
+ */
+export interface IPublishCauseModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: Profile | null
+  /**
+   * Information about the token used in the cause post
+   */
   currencyData: Erc20Fragment[] | undefined
 }
 
+/**
+ * Component that displays a popup modal for publishing a cause post, wraps a {@link GradientModal}.
+ *
+ * Because publications are immutable in Lens, cause posts are modified by using a separately
+ * generated UUID for a publication. The new UUID is generated when the original publication is
+ * published, and passed to its modified posts. Modified posts are new Lens publications, but
+ * the passed down UUID is used to hide older posts with the same UUID, and only display its
+ * latest version.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
+ */
 const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
   open,
   onClose,

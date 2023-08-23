@@ -10,6 +10,11 @@ import { useAppPersistStore } from '@/store/app'
 import OrganizationDashboard from './OrganizationDashboard/OrganizationDashboard'
 import VolunteerDashboard from './VolunteerDashboard/VolunteerDashboard'
 
+/**
+ * Component that displays the dashboard page
+ *
+ * Redirects the user to the home page if they are not authenticated
+ */
 const Dashboard: NextPage = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
   const [loading, setLoading] = useState<boolean>(true)

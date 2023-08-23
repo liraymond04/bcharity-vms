@@ -1,12 +1,31 @@
 import React, { FC } from 'react'
 
-interface Props {
+/**
+ * Properties of {@link ErrorMessage}
+ */
+export interface ErrorMessageProps {
+  /**
+   * String of component title
+   */
   title?: string
+  /**
+   * Error to display
+   */
   error?: Error
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
 }
 
-export const ErrorMessage: FC<Props> = ({ title, error, className = '' }) => {
+/**
+ * Component that displays a message component from an Error
+ */
+export const ErrorMessage: FC<ErrorMessageProps> = ({
+  title,
+  error,
+  className = ''
+}) => {
   if (!error) return null
 
   return (

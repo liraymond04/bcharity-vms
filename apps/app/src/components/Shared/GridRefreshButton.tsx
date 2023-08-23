@@ -23,7 +23,7 @@ export interface IGridRefreshButtonProps {
  * This component does not implement the grid refresh functions,
  * it only calls a provided void function when its button is pressed
  *
- * @example {@link OrganizationVHR} component uses the GridRefreshButton
+ * @example {@link components.Dashboard.OrganizationDashboard.OrganizationVHR} component uses the GridRefreshButton
  * to call the `refetch()` method provided by the {@link lib.lens.usePostData}
  * hook with the onClick property
  * ```tsx

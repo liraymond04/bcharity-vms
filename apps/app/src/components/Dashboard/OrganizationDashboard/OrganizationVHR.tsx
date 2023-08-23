@@ -111,6 +111,37 @@ const emptyFormProps: FormProps = {
   causeDescription: ''
 }
 
+/**
+ * Component that displays the organization VHR tab page, which displays the
+ * total amount of VHR displayed, a user defined goal, and a cause description.
+ * Opportunity posts are fetched and displayed in an {@link https://github.com/ag-grid/ag-grid | ag-grid}
+ * table.
+ *
+ * @remarks
+ * VHR raised is fetched using the {@link useWalletBalance} hook. Organization
+ * opportunity posts are fetched using the {@link usePostData} hook and the
+ * metadata tag {@link PostTags.OrgPublish.Opportunity}.
+ *
+ * User defined goals are fetched with the {@link https://docs.lens.xyz/docs/get-publications | fetchAll publications}
+ * method with the metadata tag {@link PostTags.OrgPublish.VHRGoal} and the
+ * current organization's profile. The latest goal post is read to set the
+ * current goal. The goal is set by creating a new publication with the new
+ * goal value, and is handled by the {@link VHRGoalModal}.
+ *
+ * The "Our Cause" description is set as a custom attribute in the organization's
+ * profile metadata, and is fetched by requesting it from Lens. It is set by
+ * requesting Lens protocol to {@link https://docs.lens.xyz/docs/create-set-update-profile-metadata-typed-data | set the profile metadata}.
+ *
+ * Different actions are performed using different modals. Publishing new posts
+ * is handled by the {@link PublishOpportunityModal}, which is opened from the
+ * `Create Post` button. In the table, the edit button modifies a post using the
+ * {@link ModifyOpportunityModal}, and the delete button hides a post using the
+ * {@link DeleteOpportunityModal}. Draft posts are set to active by using the
+ * {@link PublishOpportunityDraftModal}.
+ *
+ * New posts are created using the {@link usePostData} hook and passing in the
+ * {@link PostTags.OrgPublish.Opportunity} metadata tag.
+ */
 const OrganizationVHRTab: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.vhr'

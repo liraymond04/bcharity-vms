@@ -8,6 +8,9 @@ import { useAppPersistStore } from '@/store/app'
 
 import UserDashboard from './UserDashboard'
 
+/**
+ * Component that displays the user settings page
+ */
 const UserSettingsDashboard: NextPage = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
   const [loading, setLoading] = useState<boolean>(true)

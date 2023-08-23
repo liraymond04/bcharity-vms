@@ -30,6 +30,19 @@ import GoalModal from '../Modals/GoalModal'
 import BrowseCauseCard from './BrowseCauseCard'
 import DashboardDropDown from './DashboardDropDown'
 
+/**
+ * Component that displays the volunteer causes tab page, which displays
+ * the total amount of VHR displayed, and a user defined goal. Cause posts
+ * can be browsed, searched, filtered, and applied to in this tab.
+ *
+ * VHR raised is fetched using the {@link useWalletBalance} hook. Cause
+ * posts are fetched using the {@link useExplorePublications} hook with
+ * the metadata tag {@link PostTags.OrgPublish.Cause}, and filtered using
+ * {@link testSearch} or {@link DashboardDropDown}.
+ *
+ * Individual post cards are displayed by passing their metadata to the
+ * {@link BrowseCauseCard} component.
+ */
 const VolunteerCauses: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.causes'

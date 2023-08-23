@@ -133,32 +133,26 @@ const Causes: NextPage = () => {
           {t('browse-projects')}
         </p>
       </div>
-      {loading ? (
-        <div className="flex justify-center">
-          <Spinner />
-        </div>
-      ) : (
-        <GridLayout>
-          {posts
-            .filter(
-              (post) =>
-                testSearch(post.name, searchValue) &&
-                (selectedCategory === '' || post.category === selectedCategory)
-            )
-            .map((post) => (
-              <GridItemFour key={post.id}>
-                <CauseCard cause={post} />
-              </GridItemFour>
-            ))}
-          <span
-            className="flex justify-center p-5"
-            ref={observe}
-            hidden={!loading}
-          >
-            {loading && <Spinner size="md" />}
-          </span>
-        </GridLayout>
-      )}
+      <GridLayout>
+        {posts
+          .filter(
+            (post) =>
+              testSearch(post.name, searchValue) &&
+              (selectedCategory === '' || post.category === selectedCategory)
+          )
+          .map((post) => (
+            <GridItemFour key={post.id}>
+              <CauseCard cause={post} />
+            </GridItemFour>
+          ))}
+        <span
+          className="flex justify-center p-5"
+          ref={observe}
+          hidden={!loading}
+        >
+          {loading && <Spinner size="md" />}
+        </span>
+      </GridLayout>
       {exploreError && (
         <Error
           message={`${e('generic-front')}${exploreError}${e('generic-back')}`}

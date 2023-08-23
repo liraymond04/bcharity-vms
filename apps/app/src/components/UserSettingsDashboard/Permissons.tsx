@@ -115,6 +115,11 @@ const AllowanceButton: FC<Props> = ({
   )
 }
 
+/**
+ * Component that displays a tab page for editing currency permissions
+ *
+ * The permissions for each token are set by using the Lens client {@link https://docs.lens.xyz/docs/generate-module-currency-approval-data | generateCurrencyApprovalData} method.
+ */
 const Permissons: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.settings.permissions'

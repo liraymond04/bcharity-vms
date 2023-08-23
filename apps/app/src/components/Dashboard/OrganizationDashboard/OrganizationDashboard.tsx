@@ -17,9 +17,14 @@ import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
 import OrganizationCausesTab from './OrganizationCauses'
 import OrganizationHomeTab from './OrganizationHome'
 import OrganizationLogVHRTab from './OrganizationLogVHR/OrganizationLogVHR'
+import VolunteerManagementTab from './OrganizationManagement/VolunteerManagement'
 import OrganizationVHRTab from './OrganizationVHR'
-import VolunteerManagementTab from './VolunteerManagement'
 
+/**
+ * Component that displays page layout and dashboard tabs definitions for volunteer dashboard
+ *
+ * Tabs are displayed using a {@link Sidebar} component, and implement a {@link IDashboardTab}.
+ */
 const OrganizationDashboard: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.tabs'

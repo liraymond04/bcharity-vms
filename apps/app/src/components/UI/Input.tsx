@@ -16,18 +16,121 @@ import { FieldError } from './Form'
 
 const HelpTooltip = dynamic(() => import('./HelpTooltip'))
 
-interface Props extends Omit<ComponentProps<'input'>, 'prefix'> {
+/**
+ * Properties of {@link Input} that extends an HTML input element
+ */
+export interface InputProps extends Omit<ComponentProps<'input'>, 'prefix'> {
+  /**
+   * String of label to display in front of input component
+   */
   label?: string
+  /**
+   * String or component to display in front of input component
+   */
   prefix?: string | ReactNode
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
+  /**
+   * Component of help tooltip to display
+   */
   helper?: ReactNode
+  /**
+   * Whether the input has an error
+   */
   error?: boolean
+  /**
+   * Function to run when the input component has changed
+   */
   onChange?: ChangeEventHandler<HTMLInputElement>
+  /**
+   * String of input component name
+   */
   name?: string
+  /**
+   * String of default IPFS URL for file selection
+   */
   defaultValue?: string
 }
 
-export const Input = forwardRef<HTMLInputElement, Props>(function Input(
+/**
+ * Component that displays a styled input component, that extends a
+ * default HTML input component.
+ *
+ * Passing in an additional type property with "endDate" adds a custom
+ * "Ongoing" checkbox component. The ongoing checkbox component disables
+ * the date picker.
+ *
+ * @example String input used in {@link components.Dashboard.Modals.PublishOpportunityModal}
+ * ```tsx
+ * <Input
+ *   label={t('end-date')}
+ *   type="endDate"
+ *   value={values.endDate}
+ *   disabled
+ * />
+ * ```
+ *
+ * @example Number input with regex validation used in {@link components.Dashboard.Modals.PublishOpportunityModal}
+ * ```tsx
+ * <Input
+ *   label={t('hours')}
+ *   placeholder="5.5"
+ *   error={!!errors.hoursPerWeek?.type}
+ *   {...register('hoursPerWeek', {
+ *     required: true,
+ *     pattern: {
+ *       value: /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,1}$/,
+ *       message: t('hours-invalid')
+ *     }
+ *   })}
+ * />
+ * ```
+ *
+ * @example Date input used in {@link components.Dashboard.Modals.PublishOpportunityModal}
+ * ```tsx
+ * <Input
+ *   label={t('start-date')}
+ *   type="date"
+ *   placeholder="yyyy-mm-dd"
+ *   min={new Date().toLocaleDateString()}
+ *   error={!!errors.startDate?.type}
+ *   {...register('startDate', {
+ *     required: true
+ *   })}
+ *   onChange={(e) => {
+ *     if (
+ *       Date.parse(form.getValues('endDate')) <
+ *       Date.parse(e.target.value)
+ *     ) {
+ *       resetField('endDate')
+ *     }
+ *     setMinDate(e.target.value)
+ *   }}
+ * />
+ * ```
+ *
+ * @example endDate input used in {@link components.Dashboard.Modals.PublishOpportunityModal}
+ * ```tsx
+ * <Input
+ *   label={t('end-date')}
+ *   type="endDate"
+ *   placeholder="yyyy-mm-dd"
+ *   disabled={!endDateDisabled}
+ *   min={minDate}
+ *   error={!!errors.endDate?.type}
+ *   {...register('endDate', {})}
+ *   onChange={(e) => {
+ *     if (e.target.value === 'on') {
+ *       resetField('endDate')
+ *       setEndDateDisabled(!endDateDisabled)
+ *     }
+ *   }}
+ * />
+ * ```
+ */
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
     label,
     prefix,

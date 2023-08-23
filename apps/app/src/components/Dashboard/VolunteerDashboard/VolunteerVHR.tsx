@@ -34,6 +34,19 @@ import VHRGoalModal from '../Modals/VHRGoalModal'
 import BrowseCard from './BrowseCard'
 import DashboardDropDown from './DashboardDropDown'
 
+/**
+ * Component that displays the volunteer VHR tab page, which displays the
+ * total amount of VHR displayed, and a user defined goal. Opportunity posts
+ * can be browsed, searched, filtered, and applied to in this tab.
+ *
+ * VHR raised is fetched using the {@link useWalletBalance} hook. Volunteer
+ * opportunity posts are fetched using the {@link useExplorePublications}
+ * hook with the metadata tag {@link PostTags.OrgPublish.Opportunity}, and
+ * filtered using {@link testSearch} or {@link DashboardDropDown}.
+ *
+ * Individual post cards are displayed by passing their metadata to the
+ * {@link BrowseCard} component.
+ */
 const VolunteerVHRTab: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.vhr'
@@ -77,7 +90,9 @@ const VolunteerVHRTab: React.FC = () => {
 
   useEffect(() => {
     let _categories: Set<string> = new Set()
-    const _posts = getOpportunityMetadata(postData)
+    const _posts = getOpportunityMetadata(postData).filter(
+      (post) => post.type !== PostTags.OrgPublish.OpportunityDraft
+    )
     _posts.forEach((post) => {
       if (post.category) _categories.add(post.category)
     })

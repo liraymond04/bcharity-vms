@@ -1,16 +1,47 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import React from 'react'
 
-interface ITabTitleProps {
+/**
+ * Properties of {@link TabTitle}
+ */
+export interface ITabTitleProps {
+  /**
+   * Whether the current tab title is selected
+   */
   selected: boolean
+  /**
+   * String of the current tab title's label
+   */
   label: string
+  /**
+   * Function that runs when the component is clicked
+   * @returns
+   */
   onClick: () => void
+  /**
+   * Component for the tab tile icon
+   */
   icon: React.ReactElement
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string | undefined
+  /**
+   * Function that runs when the sidebar is collapsed or opened
+   * @returns
+   */
   changeOpen: () => void
+  /**
+   * Whether the sidebar is collapsed or opened
+   */
   open: boolean
 }
 
+/**
+ * Component use to display tab title items in sidebars.
+ *
+ * Used in {@link Sidebar} and {@link Sidebar2}.
+ */
 const TabTitle: React.FC<ITabTitleProps> = ({
   selected,
   label,

@@ -1,14 +1,46 @@
 import { CheckIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import React, { useState } from 'react'
 
-interface Props {
+/**
+ * Properties of {@link DashboardDropDown}
+ */
+export interface DashboardDropDownProps {
+  /**
+   *  Function that runs when a dropdown item is selected
+   * @param string
+   * @returns
+   */
   onClick: (string: string) => void
+  /**
+   * String of the currently selected dropdown item
+   */
   selected: string
+  /**
+   * String of the label in front of the dropdown component
+   */
   label: string
+  /**
+   * String array of the available options to select
+   */
   options: string[]
 }
 
-const DashboardDropDown: React.FC<Props> = ({
+/**
+ * Component that displays a dropdown menu of string items to select
+ *
+ * @example DashboardDropdown used in {@link VolunteerVHR} to filter categories
+ * ```tsx
+ *  <div className="h-[50px] z-10 ">
+ *    <DashboardDropDown
+ *      label={t('filter')}
+ *      options={Array.from(categories)}
+ *      onClick={(c) => setSelectedCategory(c)}
+ *      selected={selectedCategory}
+ *    ></DashboardDropDown>
+ *  </div>
+ * ```
+ */
+const DashboardDropDown: React.FC<DashboardDropDownProps> = ({
   onClick,
   selected,
   label,

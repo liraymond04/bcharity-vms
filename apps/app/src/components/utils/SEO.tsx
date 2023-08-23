@@ -8,12 +8,24 @@ import {
   STATIC_ASSETS
 } from 'src/constants'
 
-interface Props {
+/**
+ * Properties of {@link SEO}
+ */
+export interface SEOProps {
+  /**
+   * String of tab title
+   */
   title?: string
+  /**
+   * String of description for page metadata
+   */
   description?: string
 }
 
-const SEO: FC<Props> = ({ title = APP_NAME, description = DESCRIPTION }) => {
+/**
+ * Component with HTML elements for search engine optimization
+ */
+const SEO: FC<SEOProps> = ({ title = APP_NAME, description = DESCRIPTION }) => {
   return (
     <Head>
       <title>{title}</title>
