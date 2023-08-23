@@ -8,6 +8,14 @@ import DashboardDropDown from '../../VolunteerDashboard/DashboardDropDown'
 import AllVolunteersTab from './AllVolunteersTab'
 import VolunteerApplicationsTab from './VolunteerApplicationsTab'
 
+/**
+ * Component that displays a page to manage volunteer applications. Open applications
+ * and application requests are fetched using the {@link useApplications} hook.
+ *
+ * Applications are accepted/rejected by adding a comment under the application post
+ * using the {@link useCreateComment} hook and the {@link PostTags.Application.Accept}
+ * or {@link PostTags.Application.REJECT} metadata tag.
+ */
 const VolunteerManagementTab: React.FC = () => {
   const [searchValue, setSearchValue] = useState('')
   const [categories] = useState<Set<string>>(new Set())
