@@ -24,7 +24,7 @@ export interface IFilterDropdownProps extends ComponentProps<'select'> {
  * A component that lists a dropdown of string items that can be filtered
  * to be used in a Form
  *
- * @example FormDropdown used in the {@link PublishCauseModal}
+ * @example FormDropdown used in the {@link components.Dashboard.Modals.PublishCauseModal}
  * ```tsx
  * <FormDropdown
  *   label={t('selected-currency')}

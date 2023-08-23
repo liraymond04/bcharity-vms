@@ -79,7 +79,7 @@ const emptyFormProps: FormProps = {
  * method with the metadata tag {@link PostTags.OrgPublish.Goal} and the
  * current organization's profile. The latest goal post is read to set the
  * current goal. The goal is set by creating a new publication with the new
- * goal value, and is handled by the {@link VHRGoalModal}.
+ * goal value, and is handled by the {@link components.Dashboard.Modals.VHRGoalModal}.
  *
  * The "Our Cause" description is set as a custom attribute in the organization's
  * profile metadata, and is fetched by requesting it from Lens. It is set by
