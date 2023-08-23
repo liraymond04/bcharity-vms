@@ -3,19 +3,65 @@ import React, { useState } from 'react'
 
 import TabTitle from './TabTile'
 
+/**
+ * Properties of a tab tile item in {@link Sidebar}
+ */
 export interface ITabProps {
+  /**
+   * Component for the tab tile icon
+   */
   icon: React.ReactElement
+  /**
+   * String of the tab tile label
+   */
   label: string
+  /**
+   * URL the tab should redirect to.
+   *
+   * If a redirect URL is not provided, then the tab tile
+   * will not redirect.
+   */
   redirect?: string
+  /**
+   * Whether the tab tile is not an item, and is instead
+   * a group label
+   */
   isGroup?: boolean
 }
-interface ISidebarProps {
+
+/**
+ * Properties of {@link Sidebar}
+ */
+export interface ISidebarProps {
+  /**
+   * Whether to add an empty tab tile at the top of the side bar
+   * for spacing
+   */
   emptyTop?: boolean
+  /**
+   * The index of the currently selected tab tile
+   */
   selectedIndex: number
+  /**
+   * Function to set the currently selected tab tile
+   * @param i
+   * @returns
+   */
   setSelectedIndex: (i: number) => void
+  /**
+   * Array of the sidebar's tab tiles
+   */
   tabs: ITabProps[]
 }
 
+/**
+ * Component that displays a sidebar for the dashboard page.
+ *
+ * Items are supplied as an array of {@link ITabProps}, and mapped to
+ * {@link TabTitle}.
+ *
+ * Used in {@link Dashboard} to display the Dashboard sidebar items.
+ */
 const Sidebar: React.FC<ISidebarProps> = ({
   emptyTop,
   selectedIndex,
