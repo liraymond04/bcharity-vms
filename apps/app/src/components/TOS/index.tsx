@@ -3,6 +3,9 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * Component that displays a terms of service page
+ */
 const TOS: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.tos'

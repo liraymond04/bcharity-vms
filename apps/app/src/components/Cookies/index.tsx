@@ -3,6 +3,9 @@ import { NextPage } from 'next'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * Component that displays a cookies policy page
+ */
 const Cookies: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.cookies'

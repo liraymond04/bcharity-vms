@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next'
 
 import GradientWrapper from '../Shared/Gradient/GradientWrapper'
 
+/**
+ * Component that displays a contact page
+ */
 const Contact: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.contact' })
 
