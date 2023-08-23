@@ -221,7 +221,7 @@ const VolunteerManagementTab: React.FC = () => {
     try {
       await checkAuth(profile.ownedBy)
 
-      const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
+      const metadata = buildMetadata(profile, [PostTags.Application.REJECT], {})
 
       await createComment({
         publicationId: selectedId,
