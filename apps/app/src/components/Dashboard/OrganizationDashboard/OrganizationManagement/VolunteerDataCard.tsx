@@ -57,6 +57,35 @@ const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
         <div className="text-violet-500">Date joined:&nbsp;</div>
         <p>{vol.dateJoined}</p>
       </div>
+
+      <div className="text-violet-500 pb-2">Active Volunteer Opportunities</div>
+      <div>
+        {vol.currentOpportunities.map((o) => (
+          <div
+            key={o.id}
+            className="flex items-center justify-between bg-brand-300 rounded-sm"
+          >
+            <p>{o.startDate}</p>
+            <p>{o.name}</p>
+            <p></p>
+          </div>
+        ))}
+      </div>
+      <div className="text-violet-500 pb-2">
+        Completed volunteer opportunities
+      </div>
+      <div>
+        {vol.completedOpportunities.map((o) => (
+          <div
+            key={o.post_id}
+            className="flex items-center justify-between bg-brand-300 rounded-sm"
+          >
+            <p>{o.createdAt}</p>
+            <p>{o.opportunity.name}</p>
+            <p>{o.hoursToVerify} VHR</p>
+          </div>
+        ))}
+      </div>
     </Card>
   )
 }
