@@ -17,8 +17,8 @@ import { IDashboardTab } from '../VolunteerDashboard/VolunteerDashboard'
 import OrganizationCausesTab from './OrganizationCauses'
 import OrganizationHomeTab from './OrganizationHome'
 import OrganizationLogVHRTab from './OrganizationLogVHR/OrganizationLogVHR'
+import VolunteerManagementTab from './OrganizationManagement/VolunteerManagement'
 import OrganizationVHRTab from './OrganizationVHR'
-import VolunteerManagementTab from './VolunteerManagement'
 
 const OrganizationDashboard: React.FC = () => {
   const { t } = useTranslation('common', {

@@ -26,6 +26,16 @@ export type VolunteerData = {
   profile: ProfileFragment
   currentOpportunities: OpportunityMetadata[]
   completedOpportunities: LogVhrRequestMetadata[]
+  dateJoined: string
+}
+
+const makeEmptyVolunteerData = (profile: ProfileFragment): VolunteerData => {
+  return {
+    profile,
+    currentOpportunities: [],
+    completedOpportunities: [],
+    dateJoined: ''
+  }
 }
 
 interface getCollectedPostIdsParams {
@@ -134,24 +144,45 @@ export const useVolunteers = ({
       opMap.has(a.mainPost.id)
     )
 
-    const applicationIdOpportunityIdMap = new Map<string, string>(
+    const applicationIdOpportunityIdMap = new Map<
+      string,
+      { id: string; createdAt: string }
+    >(
       filteredApAcceptComments
-        .map((v) => [v.commentOn?.id, v.mainPost.id])
-        .filter((pair): pair is [string, string] => !!pair[0] && !!pair[1])
+        .map((v) => [
+          v.commentOn?.id,
+          { id: v.mainPost.id, createdAt: v.createdAt }
+        ])
+        .filter(
+          (pair): pair is [string, { id: string; createdAt: string }] =>
+            !!pair[0] && !!pair[1]
+        )
     )
 
     const applicationDataComments = filteredApAcceptComments
       .map((a) => a.commentOn)
       .filter((a): a is CommentFragment => !!a && isCommentPublication(a))
 
+    // store data as <>
+    const requestIdDateAcceptedMap = new Map<string, string>()
+
+    applicationDataComments
+
     const applications = applicationDataComments
       .map((a) => {
         try {
-          const opId = applicationIdOpportunityIdMap.get(a.id)
-          if (!opId) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
+          const opId = applicationIdOpportunityIdMap.get(a.id)?.id
+          const timeAccepted = applicationIdOpportunityIdMap.get(a.id)
+            ?.createdAt
+
+          if (!opId || !timeAccepted) {
+            throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
+          }
           const op = opMap.get(opId) // 2nd level down, does not have mainPost
           if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
-          return new ApplicationMetadataBuilder(a, op).build()
+          const app = new ApplicationMetadataBuilder(a, op).build()
+          requestIdDateAcceptedMap.set(a.id, timeAccepted)
+          return app
         } catch (e) {
           if (e instanceof InvalidMetadataException) {
             logIgnoreWarning(a, e)
@@ -185,31 +216,52 @@ export const useVolunteers = ({
     applications.forEach((a) => {
       const id = a.from.id
       if (!volunteerDataMap.has(id)) {
-        volunteerDataMap.set(id, {
-          profile: a.from,
-          currentOpportunities: [],
-          completedOpportunities: []
-        })
+        volunteerDataMap.set(id, makeEmptyVolunteerData(a.from))
       }
 
       const prev = volunteerDataMap.get(id)!
       const newOps = [...prev.currentOpportunities, a.opportunity] // a volunteer can only register once so no risk of duplicates
-      volunteerDataMap.set(id, { ...prev, currentOpportunities: newOps })
+      const currentDate = requestIdDateAcceptedMap.get(id)!
+
+      let newDate = prev.dateJoined
+      if (currentDate) {
+        newDate =
+          !prev.dateJoined ||
+          new Date(prev.dateJoined).getTime() > new Date().getTime()
+            ? newDate
+            : currentDate
+      }
+      volunteerDataMap.set(id, {
+        ...prev,
+        currentOpportunities: newOps,
+        dateJoined: newDate
+      })
     })
 
     vhrRequests.forEach((a) => {
       const id = a.from.id
       if (!volunteerDataMap.has(id)) {
-        volunteerDataMap.set(id, {
-          profile: a.from,
-          currentOpportunities: [],
-          completedOpportunities: []
-        })
+        volunteerDataMap.set(id, makeEmptyVolunteerData(a.from))
       }
 
       const prev = volunteerDataMap.get(id)!
       const newComp = [...prev.completedOpportunities, a]
-      volunteerDataMap.set(id, { ...prev, completedOpportunities: newComp })
+      const currentDate = requestIdDateAcceptedMap.get(id)!
+
+      let newDate = prev.dateJoined
+      if (currentDate) {
+        newDate =
+          !prev.dateJoined ||
+          new Date(prev.dateJoined).getTime() > new Date().getTime()
+            ? newDate
+            : currentDate
+      }
+
+      volunteerDataMap.set(id, {
+        ...prev,
+        completedOpportunities: newComp,
+        dateJoined: newDate
+      })
     })
 
     setData(Array.from(volunteerDataMap.values()))
