@@ -12,6 +12,16 @@ import { useAppPersistStore } from '@/store/app'
 import NFTPicture from './NFTPicture'
 import Picture from './Picture'
 
+/**
+ * Component with two tabs that lets the user set their profile picture
+ * with an image file or an NFT.
+ *
+ * Setting the profile picture with an image file is handled with {@link Picture},
+ * and setting the profile picture with an NFT is handled with {@link NFTPicture}.
+ *
+ * This component is used in {@link VolunteerHomeTab} to set the user's profile
+ * picture.
+ */
 const SelectAvatar: FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.settings.home.select-avatar'

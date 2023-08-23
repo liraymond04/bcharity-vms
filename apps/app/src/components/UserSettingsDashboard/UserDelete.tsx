@@ -10,6 +10,13 @@ import { useAppPersistStore } from '@/store/app'
 
 import GradientWrapper from '../Shared/Gradient/GradientWrapper'
 
+/**
+ * Component that displays a tab page for deleting the current profile
+ *
+ * Deleting the current profile is handled with the Lens client {@link https://docs.lens.xyz/docs/create-burn-profile-typed-data | createBurnProfileTypedData} method.
+ * Once the profile is deleted, it is removed from the local storage and
+ * cookies, and the user is logged out and redirected to the home page.
+ */
 const DeleteProfileSection: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.settings.delete'

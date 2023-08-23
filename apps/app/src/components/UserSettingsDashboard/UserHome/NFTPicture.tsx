@@ -19,11 +19,24 @@ interface FormProps {
   tokenId: string
 }
 
-interface Props {
+/**
+ * Properties of {@link NFTPicture}
+ */
+export interface NFTPictureProps {
+  /**
+   * Profile to set the profile picture of
+   */
   profile: ProfileFragment | undefined
 }
 
-const NFTPicture: FC<Props> = ({ profile }) => {
+/**
+ * Component that lets the user select a NFT as a profile picture
+ *
+ * Uses {@link https://docs.lens.xyz/docs/nft-ownership-challenge | ownershipChallenge} to sign
+ * the NFT transaction, and {@link https://docs.lens.xyz/docs/create-set-profile-image-uri-typed-data | createSetProfileImageURITypedData}
+ * to set the profile picture.
+ */
+const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
   const form = useForm<FormProps>()
   const {
     handleSubmit,

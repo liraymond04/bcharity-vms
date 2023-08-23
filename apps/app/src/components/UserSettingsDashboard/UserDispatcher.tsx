@@ -13,6 +13,12 @@ import { useAppPersistStore } from '@/store/app'
 
 import { Spinner } from '../UI/Spinner'
 
+/**
+ * Component that displays a tab page for enabling/disabling the Lens dispatcher.
+ * The dispatcher allows users to create posts without signing every transaction.
+ *
+ * Enabling/disabling the dispatcher is handled with the Lens client {@link https://docs.lens.xyz/docs/dispatcher | createSetDispatcherTypedData} method.
+ */
 const UserDispatcher: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.settings.dispatcher'
