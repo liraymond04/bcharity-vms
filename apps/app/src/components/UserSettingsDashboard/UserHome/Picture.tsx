@@ -12,11 +12,24 @@ import { ErrorMessage } from '@/components/UI/ErrorMessage'
 import { Spinner } from '@/components/UI/Spinner'
 import { checkAuth, getSignature, lensClient } from '@/lib/lens-protocol'
 
-interface Props {
+/**
+ * Properties of {@link Picture}
+ */
+export interface PictureProps {
+  /**
+   * Profile to set the profile picture of
+   */
   profile: ProfileFragment | undefined
 }
 
-const Picture: FC<Props> = ({ profile }) => {
+/**
+ * Component that uses {@link ChooseFile} to select an image file to set as
+ * the profile's profile picture.
+ *
+ * Uses {@link https://docs.lens.xyz/docs/create-set-profile-image-uri-typed-data | createSetProfileImageURITypedData}
+ * to set the profile picture.
+ */
+const Picture: FC<PictureProps> = ({ profile }) => {
   const { mutateAsync: upload } = useStorageUpload()
 
   const { t } = useTranslation('common', {
