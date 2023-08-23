@@ -95,10 +95,10 @@ const VolunteerPage: NextPage = () => {
                   postTag={PostTags.Bookmark.Opportunity}
                 />
               </div>
-              <div className="text-2xl font-bold text-brand-600 truncate col-span-1">
+              <div className="text-2xl font-bold text-brand-600 truncate text-ellipsis">
                 {opportunity.name}
               </div>
-              <div className="text-xl text-gray-400 font-bold truncate col-span-1">
+              <div className="text-xl text-gray-400 font-bold truncate text-ellipsis">
                 {opportunity.category}
               </div>
             </div>

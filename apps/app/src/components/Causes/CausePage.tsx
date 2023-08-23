@@ -168,15 +168,15 @@ const CausePage: NextPage = () => {
     return (
       <div className="p-6">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-6">
+          <div className="flex space-x-2 items-center overflow-hidden">
             <BookmarkButton
               publicationId={cause.post_id}
               postTag={PostTags.Bookmark.Cause}
             />
-            <div className="text-5xl font-bold p-2 bg-purple-300 dark:bg-info-content rounded-lg">
+            <div className="text-2xl font-bold p-2 bg-purple-300 dark:bg-info-content rounded-lg truncate text-ellipsis">
               {cause.name}
             </div>
-            <div className="text-3xl text-gray-400 font-bold pl-5">
+            <div className="text-xl text-gray-400 font-bold pl-5 min-w-[30%] truncate text-ellipsis">
               -{cause.category}
             </div>
           </div>
@@ -270,7 +270,7 @@ const CausePage: NextPage = () => {
                   <div className="text-2xl font-bold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
                     {totalDonated}
                   </div>
-                  <div className="text-xl font-bold text-black dark:text-white sm:text-xl mt-8">
+                  <div className="text-xl font-bold text-black dark:text-white sm:text-xl mt-8 break-all pr-2">
                     {`${
                       CURRENCIES[cause.currency as keyof typeof CURRENCIES]
                         .symbol
