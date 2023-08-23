@@ -1,14 +1,37 @@
 import clsx from 'clsx'
 import { FC, MouseEvent, ReactNode } from 'react'
 
-interface CardProps {
+/**
+ * Properties of {@link CardProps}
+ */
+export interface CardProps {
+  /**
+   * React components wrapped by the component
+   */
   children: ReactNode
+  /**
+   * Class names and tailwind styles passed to the component
+   */
   className?: string
+  /**
+   * Whether to force card component to be rounded
+   */
   forceRounded?: boolean
+  /**
+   * ID property to use for testing libraries
+   */
   testId?: string
+  /**
+   * Function that runs when the component is clicked
+   * @param event
+   * @returns
+   */
   onClick?: (event: MouseEvent<HTMLDivElement>) => void
 }
 
+/**
+ * Component that displays its children in a styled Card component
+ */
 export const Card: FC<CardProps> = ({
   children,
   className = '',

@@ -18,10 +18,21 @@ import VolunteerHomeTab from './VolunteerHome'
 import VolunteerLogHoursTab from './VolunteerLogHours'
 import VolunteerVHRTab from './VolunteerVHR'
 
+/**
+ * Interface for dashboard tabs
+ */
 export interface IDashboardTab extends ITabProps {
+  /**
+   * Page body component for dashboard tab
+   */
   component: React.ReactElement
 }
 
+/**
+ * Component that displays page layout and dashboard tabs definitions for volunteer dashboard
+ *
+ * Tabs are displayed using a {@link Sidebar} component.
+ */
 const VolunteerDashboard: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.volunteer.tabs'

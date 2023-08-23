@@ -2,13 +2,30 @@ import FormDropdown from '../Shared/FormDropdown'
 import { Button } from './Button'
 import { Input } from './Input'
 
-interface ILocationFormComponentProps {
+/**
+ * Properties of {@link DisabledLocationDropdowns}
+ */
+export interface IDisabledLocationDropdownsProps {
+  /**
+   * String of location country
+   */
   country: string
+  /**
+   * String of location province
+   */
   province: string
+  /**
+   * String of location city
+   */
   city: string
 }
 
-const DisabledLocationDropdowns: React.FC<ILocationFormComponentProps> = ({
+/**
+ * Component to display a disabled location dropdown (read only).
+ *
+ * To use a location dropdown as an input, use {@link LocationFormComponent}
+ */
+const DisabledLocationDropdowns: React.FC<IDisabledLocationDropdownsProps> = ({
   country,
   province,
   city
