@@ -18,7 +18,7 @@ export interface ChooseFileProps {
 /**
  * A component that displays an input component for choosing files
  *
- * @example ChooseFile used in the {@link Picture} component
+ * @example ChooseFile used in the {@link components.UserSettings.UserHome.Picture} component
  * ```tsx
  * <ChooseFile
  *   id="avatar"
