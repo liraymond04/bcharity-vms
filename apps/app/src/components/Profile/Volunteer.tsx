@@ -20,6 +20,14 @@ import { ErrorMessage } from '../UI/ErrorMessage'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
+/**
+ * Component that displays an individual volunteers's profile page using
+ * Next.js's dynamic router.
+ *
+ * The volunteers's Lens profile fragment is fetched by grabbing the profile
+ * ID from the URL with Next.js's router, and passing it to the {@link getProfile}
+ * hook.
+ */
 const Volunteer: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.profile.volunteer'
