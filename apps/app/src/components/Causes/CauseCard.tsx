@@ -128,7 +128,9 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
               cause.location ? cause.location : 'Canada-Alberta-Calgary'
             )}
           </p>
-          <p className="text-lg font-semibold leading-7">{cause.name}</p>
+          <p className="text-lg font-semibold leading-7 truncate shrink-0">
+            {cause.name}
+          </p>
           <p className="text-lg grow overflow-auto">{cause.description}</p>
           {totalDonatedIsLoading ? (
             <Spinner />
