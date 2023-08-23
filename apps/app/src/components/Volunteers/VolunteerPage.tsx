@@ -1,12 +1,14 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { CommentFragment } from '@lens-protocol/client'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-import { usePublication } from '@/lib/lens-protocol'
+import { lensClient, usePublication } from '@/lib/lens-protocol'
 import {
   InvalidMetadataException,
   isPost,
@@ -14,13 +16,16 @@ import {
   OpportunityMetadataBuilder
 } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
+import { useAppPersistStore } from '@/store/app'
 
 import { GridItemTwelve, GridLayout } from '../GridLayout'
+import ApplyButton from '../Shared/ApplyButton'
 import BookmarkButton from '../Shared/BookmarkButton'
 import FollowButton from '../Shared/FollowButton'
 import LogHoursButton from '../Shared/LogHoursButton'
 import ErrorBody from '../Shared/PublicationPage/ErrorBody'
 import Slug from '../Shared/Slug'
+import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
@@ -34,6 +39,8 @@ const VolunteerPage: NextPage = () => {
   const {
     query: { id }
   } = useRouter()
+
+  const { currentUser } = useAppPersistStore()
 
   const { data, loading, error } = usePublication({
     publicationId: Array.isArray(id) ? '' : id
@@ -80,6 +87,99 @@ const VolunteerPage: NextPage = () => {
 
     return e('generic')
   }
+
+  const isAccepted = async (
+    item: CommentFragment,
+    opportunity: OpportunityMetadata
+  ) => {
+    const accepted = await lensClient().publication.fetchAll({
+      commentsOf: item.id,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.Application.Accept]
+        }
+      }
+    })
+
+    return (
+      accepted.items.filter(
+        (item) => item.profile.id === opportunity.from.id && !item.hidden
+      ).length > 0
+    )
+  }
+
+  const isRejected = async (
+    item: CommentFragment,
+    opportunity: OpportunityMetadata
+  ) => {
+    const rejected = await lensClient().publication.fetchAll({
+      commentsOf: item.id,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.Application.REJECT]
+        }
+      }
+    })
+
+    return (
+      rejected.items.filter(
+        (item) => item.profile.id === opportunity.from.id && !item.hidden
+      ).length > 0
+    )
+  }
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (opportunity?.post_id && currentUser?.id) {
+        try {
+          const result = await lensClient().publication.fetchAll({
+            commentsOf: opportunity.post_id,
+            metadata: {
+              tags: {
+                oneOf: [PostTags.Application.Apply]
+              }
+            }
+          })
+
+          // get latest application
+          const latestApplication = result.items
+            .filter((item) => !item.hidden)
+            .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
+            .pop()
+
+          console.log(latestApplication)
+
+          if (latestApplication?.__typename !== 'Comment')
+            throw Error(e('incorrect-publication-type'))
+
+          // Found application
+          if (latestApplication.profile.id === currentUser.id) {
+            setApplied(true)
+
+            // check if user application was accepted/rejected here
+            if (await isAccepted(latestApplication, opportunity)) {
+              setDecision('accepted')
+              return
+            }
+
+            if (await isRejected(latestApplication, opportunity)) {
+              setDecision('rejected')
+              return
+            }
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            toast.error(error.message)
+          }
+        }
+      }
+    }
+
+    if (opportunity?.applicationRequired) fetch()
+  })
+
+  const [applied, setApplied] = useState<boolean>(false)
+  const [decision, setDecision] = useState<string>('')
 
   const Body = ({ opportunity }: { opportunity: OpportunityMetadata }) => {
     return (
@@ -135,11 +235,23 @@ const VolunteerPage: NextPage = () => {
                 </div>
               </Link>
             )}
-            <LogHoursButton
-              hoursDefault={opportunity.hoursPerWeek}
-              publicationId={opportunity.post_id}
-              organizationId={opportunity.from.id}
-            />
+            {opportunity.applicationRequired && decision !== 'accepted' ? (
+              applied && decision !== 'rejected' ? (
+                <Button disabled>{t('applied-already')}</Button>
+              ) : (
+                <ApplyButton
+                  publicationId={opportunity.post_id}
+                  organizationId={opportunity.from.id}
+                  rejected={decision === 'rejected'}
+                />
+              )
+            ) : (
+              <LogHoursButton
+                hoursDefault={opportunity.hoursPerWeek}
+                publicationId={opportunity.post_id}
+                organizationId={opportunity.from.id}
+              />
+            )}
           </div>
         </div>
       </>
