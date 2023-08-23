@@ -58,6 +58,9 @@ export interface IDeleteCauseModalProps {
 /**
  * Component that displays a popup modal for deleting a cause post, wraps a {@link GradientModal}.
  *
+ * Because publications in Lens cannot be completely deleted, "deleting" a publication means hiding
+ * it {@link https://docs.lens.xyz/docs/hide-publication}.
+ *
  * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
  */
 const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({

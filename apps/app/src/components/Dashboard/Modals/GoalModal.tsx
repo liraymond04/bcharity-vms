@@ -46,6 +46,10 @@ export interface IPublishGoalModalProps {
 /**
  * Component that displays a popup modal for setting a cause goal, wraps a {@link GradientModal}.
  *
+ * Goals are set by publishing posts using the {@link useCreatePost} hook and the metadata tag
+ * {@link PostTags.OrgPublish.Goal}. The goal value is stored as a custom metadata attribute in
+ * the goal post, and is read by querying the latest goal post from a user.
+ *
  * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
  */
 const GoalModal: React.FC<IPublishGoalModalProps> = ({

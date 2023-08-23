@@ -113,6 +113,12 @@ export interface IPublishCauseModalProps {
 /**
  * Component that displays a popup modal for publishing a cause post, wraps a {@link GradientModal}.
  *
+ * Because publications are immutable in Lens, cause posts are modified by using a separately
+ * generated UUID for a publication. The new UUID is generated when the original publication is
+ * published, and passed to its modified posts. Modified posts are new Lens publications, but
+ * the passed down UUID is used to hide older posts with the same UUID, and only display its
+ * latest version.
+ *
  * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
  */
 const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
