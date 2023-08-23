@@ -24,12 +24,30 @@ export const emptyPublishFormData: IPublishGoalFormProps = {
   goalDate: ''
 }
 
-interface IPublishGoalModalProps {
+/**
+ * Properties of {@link GoalModal}
+ */
+export interface IPublishGoalModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: Profile | null
 }
 
+/**
+ * Component that displays a popup modal for setting a cause goal, wraps a {@link GradientModal}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
+ */
 const GoalModal: React.FC<IPublishGoalModalProps> = ({
   open,
   onClose,

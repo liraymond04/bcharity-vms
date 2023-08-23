@@ -18,14 +18,38 @@ import { MetadataVersion } from '@/lib/types'
 import ErrorMessage from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
-interface IPublishOpportunityDraftModalProps {
+/**
+ * Properties of {@link PublishOpportunityDraftModal}
+ */
+export interface IPublishOpportunityDraftModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: ProfileFragment | null
+  /**
+   * Default post values displayed in the form
+   */
   values: IPublishOpportunityFormProps
 }
 
+/**
+ * Component that displays a popup modal for publishing a volunteer opportunity draft, wraps a {@link GradientModal}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
 const PublishOpportunityDraftModal: React.FC<
   IPublishOpportunityDraftModalProps
 > = ({ open, onClose, id, publisher, values }) => {

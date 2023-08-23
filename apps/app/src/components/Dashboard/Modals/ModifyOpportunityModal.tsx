@@ -22,16 +22,43 @@ import validImageExtension from '@/lib/validImageExtension'
 import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
-interface IPublishOpportunityModalProps {
+/**
+ * Properties of {@link ModifyOpportunityModal}
+ */
+export interface IModifyOpportunityModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: ProfileFragment | null
+  /**
+   * Whether the opportunity post is a draft
+   */
   isDraft: boolean
+  /**
+   * Default post values displayed in the form
+   */
   defaultValues: IPublishOpportunityFormProps
 }
 
-const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
+/**
+ * Component that displays a popup modal for modifying a volunteer opportunity post, wraps a {@link GradientModal}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
+const ModifyOpportunityModal: React.FC<IModifyOpportunityModalProps> = ({
   open,
   onClose,
   id,

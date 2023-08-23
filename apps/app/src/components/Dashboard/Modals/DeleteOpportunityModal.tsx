@@ -13,15 +13,42 @@ import { getOpportunityMetadata } from '@/lib/metadata'
 import Error from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
-interface IDeleteOpportunityModalProps {
+/**
+ * Properties of {@link DeleteOpportunityModal}
+ */
+export interface IDeleteOpportunityModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: ProfileFragment | null
+  /**
+   * Default post values displayed in the form
+   */
   values: IPublishOpportunityFormProps
+  /**
+   * List of the posts to be deleted
+   */
   postData: PublicationFragment[]
 }
 
+/**
+ * Component that displays a popup modal for deleting a volunteer opportunity post, wraps a {@link GradientModal}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
 const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   open,
   onClose,

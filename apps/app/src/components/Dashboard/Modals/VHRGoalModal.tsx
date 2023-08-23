@@ -24,12 +24,30 @@ export const emptyPublishFormData: IPublishVHRGoalFormProps = {
   goalDate: ''
 }
 
-interface IPublishVHRGoalModalProps {
+/**
+ * Properties of {@link VHRGoalModal}
+ */
+export interface IPublishVHRGoalModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: Profile | null
 }
 
+/**
+ * Component that displays a popup modal for setting a VHR goal, wraps a {@link GradientModal}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
 const VHRGoalModal: React.FC<IPublishVHRGoalModalProps> = ({
   open,
   onClose,

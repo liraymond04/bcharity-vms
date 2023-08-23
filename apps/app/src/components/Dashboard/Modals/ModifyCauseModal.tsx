@@ -22,16 +22,43 @@ import validImageExtension from '@/lib/validImageExtension'
 import ErrorComponent from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
 
-interface IPublishCauseModalProps {
+/**
+ * Properties of {@link ModifyCauseModal}
+ */
+export interface IModifyCauseModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: Profile | null
+  /**
+   * Default post values displayed in the form
+   */
   defaultValues: IPublishCauseFormProps
+  /**
+   * Information about the token used in the cause post
+   */
   currencyData: Erc20Fragment[] | undefined
 }
 
-const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
+/**
+ * Component that displays a popup modal for modifying a cause post, wraps a {@link GradientModal}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
+ */
+const ModifyCauseModal: React.FC<IModifyCauseModalProps> = ({
   open,
   onClose,
   id,
