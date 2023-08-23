@@ -13,6 +13,7 @@ import { lensClient, useExplorePublications } from '@/lib/lens-protocol'
 import { getOpportunityMetadata, PostTags } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'
+import { GridItemSix, GridLayout } from '../GridLayout'
 import OrganizationCard from '../Organizations/OrganizationCard'
 import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
@@ -103,37 +104,41 @@ const Home: NextPage = () => {
               <Spinner />
             </div>
           ) : (
-            <div className="flex flex-wrap items-stretch justify-between">
-              <div className="mx-auto">
-                <h1 className="text-2xl font-bold" suppressHydrationWarning>
-                  {t('components.organizations.title')}
-                </h1>
-                <Divider className="w-full" />
-                <div className="flex flex-col max-h-screen overflow-auto">
-                  {profiles.map((profile, index) => (
-                    <div key={profile.id} className="my-2 mx-6">
-                      <OrganizationCard
-                        profile={profile}
-                        postings={postings[index]}
-                      />
-                    </div>
-                  ))}
+            <GridLayout>
+              <GridItemSix>
+                <div className="mx-auto">
+                  <h1 className="text-2xl font-bold" suppressHydrationWarning>
+                    {t('components.organizations.title')}
+                  </h1>
+                  <Divider className="w-full" />
+                  <div className="flex flex-col max-h-screen overflow-auto">
+                    {profiles.map((profile, index) => (
+                      <div key={profile.id} className="my-2 mx-6">
+                        <OrganizationCard
+                          profile={profile}
+                          postings={postings[index]}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="mx-auto">
-                <h1 className=" text-2xl font-bold" suppressHydrationWarning>
-                  {t('components.volunteers.title')}
-                </h1>
-                <Divider className="w-full" />
-                <div className="flex flex-col max-h-screen overflow-auto">
-                  {posts.map((post) => (
-                    <div key={post.id} className="my-2 mx-6">
-                      <VolunteerCard post={post} />
-                    </div>
-                  ))}
+              </GridItemSix>
+              <GridItemSix>
+                <div className="mx-auto">
+                  <h1 className=" text-2xl font-bold" suppressHydrationWarning>
+                    {t('components.volunteers.title')}
+                  </h1>
+                  <Divider className="w-full" />
+                  <div className="flex flex-col max-h-screen overflow-auto">
+                    {posts.map((post) => (
+                      <div key={post.id} className="my-2 mx-6">
+                        <VolunteerCard post={post} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+              </GridItemSix>
+            </GridLayout>
           )}
         </div>
       </div>
