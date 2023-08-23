@@ -1,5 +1,9 @@
 import store from 'store'
 
+/**
+ * Methods for handling stores
+ */
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   get(key: string) {

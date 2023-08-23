@@ -1,7 +1,16 @@
 import { RefObject, useEffect } from 'react'
 
-type AnyEvent = MouseEvent | TouchEvent
+/**
+ * Input event used in {@link useOnClickOutside}
+ */
+export type AnyEvent = MouseEvent | TouchEvent
 
+/**
+ * Custom hook to handle a mouse/touch event for when the
+ * oustide of the component is clicked
+ * @param ref
+ * @param handler
+ */
 function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
   // eslint-disable-next-line no-unused-vars
