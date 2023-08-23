@@ -19,12 +19,58 @@ export const defaultColumnDef = {
   resizable: true
 }
 
-interface IColumnDefParams {
+/**
+ * Parameteres for {@link ColumnDefs}
+ */
+export interface IColumnDefParams {
+  /**
+   * Function that runs when the publish draft now button is clicked
+   *
+   * Optional because it is only used by the VHR drafts table tab
+   * @param id
+   * @returns
+   */
   onPublishNowClick?: (id: string) => void
+  /**
+   * Function that runs when the edit button is clicked
+   * @param id
+   * @returns
+   */
   onEditClick: (id: string) => void
+  /**
+   * Function that runs when the delete button is clicked
+   * @param id
+   * @returns
+   */
   onDeleteClick: (id: string) => void
 }
 
+/**
+ * Function to build array of {@link ColDef} for ag-grid table row items
+ * for VHR tab
+ *
+ * @example Used in {@link OrganizationVHR}
+ * ```tsx
+ * <AgGridReact
+ *   defaultColDef={defaultColumnDef}
+ *   rowData={data}
+ *   columnDefs={makeOrgVHRColumnDefs({
+ *     onPublishNowClick:
+ *       organizationGridTabs[selectedTabIndex].name ===
+ *       getTranslation('drafts')
+ *         ? onPublishDraft
+ *         : undefined,
+ *     onEditClick: onEdit,
+ *     onDeleteClick: onDelete
+ *   })}
+ *   pagination
+ *   paginationPageSize={20}
+ * />
+ * ```
+ *
+ * @param params
+ * @returns
+ */
 export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
   const keyPrefix = 'components.dashboard.organization.column-defs.opportunity'
   const getTranslation = (key: string) => {
@@ -164,6 +210,27 @@ export const makeOrgVHRColumnDefs = (params: IColumnDefParams): ColDef[] => {
   return result
 }
 
+/**
+ * Function to build array of {@link ColDef} for ag-grid table row items
+ * for causes tab
+ *
+ * @example Used in {@link OrganizationCauses}
+ * ```tsx
+ * <AgGridReact
+ *   defaultColDef={defaultColumnDef}
+ *   rowData={postMetadata}
+ *   columnDefs={makeOrgCauseColumnDefs({
+ *     onEditClick: onEdit,
+ *     onDeleteClick: onDelete
+ *   })}
+ *   pagination
+ *   paginationPageSize={20}
+ * />
+ * ```
+ *
+ * @param params
+ * @returns
+ */
 export const makeOrgCauseColumnDefs = (params: IColumnDefParams): ColDef[] => {
   const keyPrefix = 'components.dashboard.organization.column-defs.cause'
   const getTranslation = (key: string) => {

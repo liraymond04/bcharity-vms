@@ -3,6 +3,11 @@ import { useToken } from 'wagmi'
 
 import { Spinner } from '@/components/UI/Spinner'
 
+/**
+ * Component that displays the name of a token given its address
+ *
+ * Used as a cell renderer in {@link ColumnDefs}
+ */
 const CurrencyCell: FC = (props: any) => {
   const currency = props?.data?.currency
 

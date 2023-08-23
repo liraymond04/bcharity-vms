@@ -22,16 +22,49 @@ import validImageExtension from '@/lib/validImageExtension'
 import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
-interface IPublishOpportunityModalProps {
+/**
+ * Properties of {@link ModifyOpportunityModal}
+ */
+export interface IModifyOpportunityModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: ProfileFragment | null
+  /**
+   * Whether the opportunity post is a draft
+   */
   isDraft: boolean
+  /**
+   * Default post values displayed in the form
+   */
   defaultValues: IPublishOpportunityFormProps
 }
 
-const ModifyOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
+/**
+ * Component that displays a popup modal for modifying a volunteer opportunity post, wraps a {@link GradientModal}.
+ *
+ * Because publications are immutable in Lens, cause posts are modified by using a separately
+ * generated UUID for a publication. The new UUID is generated when the original publication is
+ * published, and passed to its modified posts. Modified posts are new Lens publications, but
+ * the passed down UUID is used to hide older posts with the same UUID, and only display its
+ * latest version.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
+const ModifyOpportunityModal: React.FC<IModifyOpportunityModalProps> = ({
   open,
   onClose,
   id,

@@ -20,16 +20,49 @@ import { getCauseMetadata } from '@/lib/metadata'
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
 
-interface IDeleteCauseModalProps {
+/**
+ * Properties of {@link DeleteCauseModal}
+ */
+export interface IDeleteCauseModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: ProfileFragment | null
+  /**
+   * Default post values displayed in the form
+   */
   values: IPublishCauseFormProps
+  /**
+   * List of the posts to be deleted
+   */
   postData: PublicationFragment[]
+  /**
+   * Information about the token used in the cause post
+   */
   currencyData: Erc20Fragment[] | undefined
 }
 
+/**
+ * Component that displays a popup modal for deleting a cause post, wraps a {@link GradientModal}.
+ *
+ * Because publications in Lens cannot be completely deleted, "deleting" a publication means hiding
+ * it {@link https://docs.lens.xyz/docs/hide-publication}.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
+ */
 const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   open,
   onClose,

@@ -22,16 +22,49 @@ import validImageExtension from '@/lib/validImageExtension'
 import ErrorComponent from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
 
-interface IPublishCauseModalProps {
+/**
+ * Properties of {@link ModifyCauseModal}
+ */
+export interface IModifyCauseModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: Profile | null
+  /**
+   * Default post values displayed in the form
+   */
   defaultValues: IPublishCauseFormProps
+  /**
+   * Information about the token used in the cause post
+   */
   currencyData: Erc20Fragment[] | undefined
 }
 
-const ModifyCauseModal: React.FC<IPublishCauseModalProps> = ({
+/**
+ * Component that displays a popup modal for modifying a cause post, wraps a {@link GradientModal}.
+ *
+ * Because publications are immutable in Lens, cause posts are modified by using a separately
+ * generated UUID for a publication. The new UUID is generated when the original publication is
+ * published, and passed to its modified posts. Modified posts are new Lens publications, but
+ * the passed down UUID is used to hide older posts with the same UUID, and only display its
+ * latest version.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationCauses}
+ */
+const ModifyCauseModal: React.FC<IModifyCauseModalProps> = ({
   open,
   onClose,
   id,

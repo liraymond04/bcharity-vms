@@ -39,7 +39,7 @@ export interface TextAreaProps
  * extends a default HTML input component, and handles text area input
  * specifically.
  *
- * @example TextArea used in {@link PublishOpportunityModal}
+ * @example TextArea used in {@link components.Dashboard.Modals.PublishOpportunityModal}
  * ```tsx
  * <TextArea
  *   label={t('description')}
