@@ -10,6 +10,7 @@ import { MetadataVersion } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import ErrorComponent from '../Dashboard/Modals/Error'
+import { Spinner } from '../UI'
 import { Button } from '../UI/Button'
 import { FileInput } from '../UI/FileInput'
 import { Form } from '../UI/Form'
@@ -28,6 +29,10 @@ export interface ApplyButtonProps {
    * ID of the organization the application is sent to
    */
   organizationId: string
+  /**
+   * Whether the application has already been rejected
+   */
+  rejected?: boolean
 }
 
 export interface IApplyFormProps {
@@ -41,7 +46,8 @@ export interface IApplyFormProps {
  */
 const ApplyButton: FC<ApplyButtonProps> = ({
   publicationId,
-  organizationId
+  organizationId,
+  rejected
 }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.apply-to-opportunity-modal'
@@ -78,6 +84,7 @@ const ApplyButton: FC<ApplyButtonProps> = ({
   const { createComment } = useCreateComment()
 
   const [resume, setResume] = useState<File>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const onSubmit = async (formData: IApplyFormProps) => {
     if (resume === undefined) {
@@ -89,6 +96,7 @@ const ApplyButton: FC<ApplyButtonProps> = ({
     }
 
     setModalError(undefined)
+    setIsLoading(true)
 
     try {
       if (!currentUser) throw Error(e('profile-null'))
@@ -115,11 +123,15 @@ const ApplyButton: FC<ApplyButtonProps> = ({
         publicationId: publicationId,
         metadata
       })
+
+      setShowModal(false)
+      setResume(undefined)
     } catch (error) {
       if (error instanceof Error) {
         setModalError(error)
       }
     }
+    setIsLoading(false)
   }
 
   return (
@@ -182,8 +194,9 @@ const ApplyButton: FC<ApplyButtonProps> = ({
           <div className="flex items-center justify-center">
             {' '}
             <Button
-              className=" shrink-0 text-2xl my-5 w-52 h-16 align-middle"
               type="submit"
+              icon={isLoading && <Spinner size="sm" />}
+              disabled={isLoading}
               onClick={handleSubmit((data) => onSubmit(data))}
               suppressHydrationWarning
             >
@@ -206,7 +219,7 @@ const ApplyButton: FC<ApplyButtonProps> = ({
           setShowModal(true)
         }}
       >
-        {t('apply')}
+        {rejected ? t('apply-rejected') : t('apply')}
       </Button>
     </div>
   )

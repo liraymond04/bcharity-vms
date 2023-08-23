@@ -31,7 +31,7 @@ const getIsRequestHandled = (params: GetIsRequestHandledParams) => {
     })
     .then((values) => {
       const filtered = values.items.filter(
-        (value) => value.profile.id == params.profileId
+        (value) => value.profile.id == params.profileId && !value.hidden
       )
       return filtered.length > 0
     })

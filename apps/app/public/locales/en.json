@@ -489,7 +489,8 @@
         "drag-and-drop": "or drag and drop",
         "description": "Description",
         "submit": "Submit",
-        "apply": "Apply"
+        "apply": "Apply",
+        "apply-rejected": "Application rejected, apply again"
       },
       "title": "Browse Volunteer Opportunities",
       "search": "Search",
@@ -501,7 +502,8 @@
       "page": {
         "ongoing": "Ongoing",
         "valid-from": "Valid from:",
-        "external-url": "External URL"
+        "external-url": "External URL",
+        "applied-already": "Applied already!"
       }
     },
     "site-layout": {

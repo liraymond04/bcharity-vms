@@ -467,5 +467,7 @@
   "components.dashboard.organization.vhr.submit": "提交",
   "components.dashboard.organization.vhr.cancel": "取消",
   "components.dashboard.volunteer.log-hours.hours-in-total": "每周几小时",
-  "components.volunteers.apply-to-opportunity-modal.apply": "申请"
+  "components.volunteers.apply-to-opportunity-modal.apply": "申请",
+  "components.volunteers.apply-to-opportunity-modal.apply-rejected": "申请被拒绝，重新申请",
+  "components.volunteers.page.applied-already": "已经申请了！"
 }

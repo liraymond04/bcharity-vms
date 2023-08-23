@@ -1,9 +1,11 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { CommentFragment } from '@lens-protocol/client'
 import { MediaRenderer } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { lensClient, usePublication } from '@/lib/lens-protocol'
@@ -86,6 +88,46 @@ const VolunteerPage: NextPage = () => {
     return e('generic')
   }
 
+  const isAccepted = async (
+    item: CommentFragment,
+    opportunity: OpportunityMetadata
+  ) => {
+    const accepted = await lensClient().publication.fetchAll({
+      commentsOf: item.id,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.Application.Accept]
+        }
+      }
+    })
+
+    return (
+      accepted.items.filter(
+        (item) => item.profile.id === opportunity.from.id && !item.hidden
+      ).length > 0
+    )
+  }
+
+  const isRejected = async (
+    item: CommentFragment,
+    opportunity: OpportunityMetadata
+  ) => {
+    const rejected = await lensClient().publication.fetchAll({
+      commentsOf: item.id,
+      metadata: {
+        tags: {
+          oneOf: [PostTags.Application.REJECT]
+        }
+      }
+    })
+
+    return (
+      rejected.items.filter(
+        (item) => item.profile.id === opportunity.from.id && !item.hidden
+      ).length > 0
+    )
+  }
+
   useEffect(() => {
     const fetch = async () => {
       if (opportunity?.post_id && currentUser?.id) {
@@ -98,19 +140,36 @@ const VolunteerPage: NextPage = () => {
               }
             }
           })
-          result.items.forEach((item) => {
-            if (item.__typename !== 'Comment')
-              throw Error('Unexpected post type')
 
-            // Found application
-            if (item.profile.id === currentUser.id) {
-              // check if user application was accepted/rejected here
+          // get latest application
+          const latestApplication = result.items
+            .filter((item) => !item.hidden)
+            .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
+            .pop()
+
+          console.log(latestApplication)
+
+          if (latestApplication?.__typename !== 'Comment')
+            throw Error(e('incorrect-publication-type'))
+
+          // Found application
+          if (latestApplication.profile.id === currentUser.id) {
+            setApplied(true)
+
+            // check if user application was accepted/rejected here
+            if (await isAccepted(latestApplication, opportunity)) {
+              setDecision('accepted')
+              return
             }
-          })
+
+            if (await isRejected(latestApplication, opportunity)) {
+              setDecision('rejected')
+              return
+            }
+          }
         } catch (error) {
           if (error instanceof Error) {
-            // maybe toast error here
-            console.log(error)
+            toast.error(error.message)
           }
         }
       }
@@ -119,8 +178,8 @@ const VolunteerPage: NextPage = () => {
     if (opportunity?.applicationRequired) fetch()
   })
 
-  const [applied, setApplied] = useState<boolean>(false) // this one is possibly handled inside of ApplyButton
-  const [accepted, setAccepted] = useState<boolean>(false) // this one is required to be implemented in this component
+  const [applied, setApplied] = useState<boolean>(false)
+  const [decision, setDecision] = useState<string>('')
 
   const Body = ({ opportunity }: { opportunity: OpportunityMetadata }) => {
     return (
@@ -176,14 +235,14 @@ const VolunteerPage: NextPage = () => {
                 </div>
               </Link>
             )}
-            {opportunity.applicationRequired && !accepted ? (
-              applied ? (
-                // possibly move this logic into ApplyButton
-                <Button>Applied already here</Button>
+            {opportunity.applicationRequired && decision !== 'accepted' ? (
+              applied && decision !== 'rejected' ? (
+                <Button disabled>{t('applied-already')}</Button>
               ) : (
                 <ApplyButton
                   publicationId={opportunity.post_id}
                   organizationId={opportunity.from.id}
+                  rejected={decision === 'rejected'}
                 />
               )
             ) : (
