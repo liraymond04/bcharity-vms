@@ -1,7 +1,12 @@
+import { useStorageUpload } from '@thirdweb-dev/react'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { checkAuth, useCreateComment } from '@/lib/lens-protocol'
+import { buildMetadata, PostTags } from '@/lib/metadata'
+import { ApplicationMetadataRecord } from '@/lib/metadata/ApplicationMetadata'
+import { MetadataVersion } from '@/lib/types'
 import { useAppPersistStore } from '@/store/app'
 
 import ErrorComponent from '../Dashboard/Modals/Error'
@@ -41,6 +46,11 @@ const ApplyButton: FC<ApplyButtonProps> = ({
   const { t } = useTranslation('common', {
     keyPrefix: 'components.volunteers.apply-to-opportunity-modal'
   })
+  const { t: e } = useTranslation('common', {
+    keyPrefix: 'errors'
+  })
+
+  const [error, setModalError] = useState<Error>()
 
   const { currentUser } = useAppPersistStore()
 
@@ -60,12 +70,56 @@ const ApplyButton: FC<ApplyButtonProps> = ({
   const onCancel = () => {
     reset()
     setShowModal(false)
+    setResume(undefined)
+    setModalError(undefined)
   }
+
+  const { mutateAsync: upload } = useStorageUpload()
+  const { createComment } = useCreateComment()
 
   const [resume, setResume] = useState<File>()
 
   const onSubmit = async (formData: IApplyFormProps) => {
-    // handle on submit here
+    if (resume === undefined) {
+      setError('resume', {
+        type: 'required',
+        message: 'A resume is required.'
+      })
+      return
+    }
+
+    setModalError(undefined)
+
+    try {
+      if (!currentUser) throw Error(e('profile-null'))
+      console.log(formData)
+
+      await checkAuth(currentUser.ownedBy)
+
+      const resumeUrl = (await upload({ data: [resume] }))[0]
+
+      const metadata = buildMetadata<ApplicationMetadataRecord>(
+        currentUser,
+        [PostTags.Application.Apply],
+        {
+          version: MetadataVersion.ApplicationMetadataVersion['1.0.0'],
+          type: PostTags.Application.Apply,
+          resume: resumeUrl,
+          description: formData.description,
+          manual: 'false'
+        }
+      )
+
+      await createComment({
+        profileId: currentUser.id,
+        publicationId: publicationId,
+        metadata
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        setModalError(error)
+      }
+    }
   }
 
   return (
@@ -137,6 +191,15 @@ const ApplyButton: FC<ApplyButtonProps> = ({
             </Button>
           </div>
         </Form>
+        <div className="m-4">
+          {error && (
+            <ErrorComponent
+              message={`${e('generic-front')}${error.message}${e(
+                'generic-back'
+              )}`}
+            />
+          )}
+        </div>
       </Modal>
       <Button
         onClick={() => {
