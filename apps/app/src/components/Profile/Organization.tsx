@@ -29,6 +29,18 @@ import { ErrorMessage } from '../UI/ErrorMessage'
 import { Spinner } from '../UI/Spinner'
 import SEO from '../utils/SEO'
 
+/**
+ * Component that displays an individual organization's profile page using
+ * Next.js's dynamic router.
+ *
+ * The organizations's Lens profile fragment is fetched by grabbing the profile
+ * ID from the URL with Next.js's router, and passing it to the {@link getProfile}
+ * hook.
+ *
+ * The posts listed under the opportunties and causes tabs are fetched using
+ * the {@link usePostData} hook and the {@link PostTags.OrgPublish.Opportunity}
+ * and {@link PostTags.OrgPublish.Cause} metadata tags.
+ */
 const Organization: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.profile.organization'

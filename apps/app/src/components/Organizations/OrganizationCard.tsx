@@ -12,11 +12,25 @@ import FollowButton from '../Shared/FollowButton'
 import { Card } from '../UI/Card'
 import { Spinner } from '../UI/Spinner'
 
-interface IOrganizationCardProps {
+/**
+ * Properties of {@link OrganizationCard}
+ */
+export interface IOrganizationCardProps {
+  /**
+   * Lens profile fragment of organization to display
+   */
   profile: ProfileFragment
+  /**
+   * Number of posts made by the organization
+   */
   postings: number | undefined
 }
 
+/**
+ * Component that displays the details of an organization in a styled card.
+ *
+ * Used in {@link Organizations}.
+ */
 const OrganizationCard: React.FC<IOrganizationCardProps> = ({
   profile,
   postings

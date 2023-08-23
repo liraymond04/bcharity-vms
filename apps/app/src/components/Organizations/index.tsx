@@ -9,17 +9,31 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { testSearch } from '@/lib'
 import { useExplorePublications } from '@/lib/lens-protocol'
 import { isPost, PostTags } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'
-import DashboardDropDown from '../Dashboard/VolunteerDashboard/DashboardDropDown'
 import { GridItemFour, GridLayout } from '../GridLayout'
-import ClearFilters from '../Shared/ClearFilters'
 import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
 import OrganizationCard from './OrganizationCard'
 
+/**
+ * A component that displays the browse organizations page.
+ *
+ * Organizations are fetched using the {@link useExplorePublications} hook filtered
+ * using the metadata tags {@link PostTags.OrgPublish.Opportunity} and {@link PostTags.OrgPublish.Cause},
+ * and storing all the organization profiles that posted them.
+ *
+ * Results from the Lens hook are mapped and displayed as a {@link OrganizationCard} in a grid.
+ * The number of postings made by an organization are counted during the first fectch and sorting
+ * of organization profiles, and are passed as a property to the card.
+ *
+ * Displayed posts are further filtered by the search inputs and category dropdown filter.
+ * Search uses the {@link testSearch} function to fuzzy search posts matching the search
+ * query.
+ */
 const Organizations: NextPage = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.organizations'
@@ -94,7 +108,7 @@ const Organizations: NextPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
+          {/* <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
                 label={t('filters')}
@@ -104,7 +118,7 @@ const Organizations: NextPage = () => {
               ></DashboardDropDown>
             </div>
             <ClearFilters onClick={() => setSelectedCategory('')} />
-          </div>
+          </div> */}
         </div>
         <Divider className="mt-5" />
         <p className="font-bold text-2xl" suppressHydrationWarning>
@@ -117,14 +131,16 @@ const Organizations: NextPage = () => {
         </div>
       ) : (
         <GridLayout>
-          {profiles.map((profile) => (
-            <GridItemFour key={profile.id}>
-              <OrganizationCard
-                profile={profile}
-                postings={postings[profile.id]}
-              />
-            </GridItemFour>
-          ))}
+          {profiles
+            .filter((profile) => testSearch(profile.handle, searchValue))
+            .map((profile) => (
+              <GridItemFour key={profile.id}>
+                <OrganizationCard
+                  profile={profile}
+                  postings={postings[profile.id]}
+                />
+              </GridItemFour>
+            ))}
         </GridLayout>
       )}
       {exploreError && (
