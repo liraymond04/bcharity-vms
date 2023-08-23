@@ -62,7 +62,7 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'prefix'> {
  * "Ongoing" checkbox component. The ongoing checkbox component disables
  * the date picker.
  *
- * @example String input used in {@link PublishOpportunityModal}
+ * @example String input used in {@link components.Dashboard.Modals.PublishOpportunityModal}
  * ```tsx
  * <Input
  *   label={t('end-date')}
@@ -72,7 +72,7 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'prefix'> {
  * />
  * ```
  *
- * @example Number input with regex validation used in {@link PublishOpportunityModal}
+ * @example Number input with regex validation used in {@link components.Dashboard.Modals.PublishOpportunityModal}
  * ```tsx
  * <Input
  *   label={t('hours')}
@@ -88,7 +88,7 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'prefix'> {
  * />
  * ```
  *
- * @example Date input used in {@link PublishOpportunityModal}
+ * @example Date input used in {@link components.Dashboard.Modals.PublishOpportunityModal}
  * ```tsx
  * <Input
  *   label={t('start-date')}
@@ -111,7 +111,7 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'prefix'> {
  * />
  * ```
  *
- * @example endDate input used in {@link PublishOpportunityModal}
+ * @example endDate input used in {@link components.Dashboard.Modals.PublishOpportunityModal}
  * ```tsx
  * <Input
  *   label={t('end-date')}

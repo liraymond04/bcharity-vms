@@ -5,10 +5,22 @@ import { useTranslation } from 'react-i18next'
 
 import { LogVhrRequestMetadata } from '@/lib/metadata'
 
-interface IVHRDetailCardProps {
+/**
+ * Properties of {@link VHRDetailCard}
+ */
+export interface IVHRDetailCardProps {
+  /**
+   * Metadata of VHR request to display
+   */
   value: LogVhrRequestMetadata
 }
 
+/**
+ * Component that renders a styled card component for an individual VHR request
+ *
+ * Used in {@link OrganizationLogVHR} to display the details of a selected VHR
+ * request.
+ */
 const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.log-vhr.detail-card'

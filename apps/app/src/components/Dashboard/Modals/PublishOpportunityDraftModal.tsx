@@ -18,14 +18,49 @@ import { MetadataVersion } from '@/lib/types'
 import ErrorMessage from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
-interface IPublishOpportunityDraftModalProps {
+/**
+ * Properties of {@link PublishOpportunityDraftModal}
+ */
+export interface IPublishOpportunityDraftModalProps {
+  /**
+   * Whether the modal is open
+   */
   open: boolean
+  /**
+   * Function to run when the modal is closed
+   * @returns
+   */
   onClose: (shouldRefetch: boolean) => void
+  /**
+   * Post ID of the post being deleted
+   */
   id: string
+  /**
+   * Lens profile fragment of the publisher of the post
+   */
   publisher: ProfileFragment | null
+  /**
+   * Default post values displayed in the form
+   */
   values: IPublishOpportunityFormProps
 }
 
+/**
+ * Component that displays a popup modal for publishing a volunteer opportunity draft, wraps a {@link GradientModal}.
+ *
+ * Because publications are immutable in Lens, cause posts are modified by using a separately
+ * generated UUID for a publication. The new UUID is generated when the original publication is
+ * published, and passed to its modified posts. Modified posts are new Lens publications, but
+ * the passed down UUID is used to hide older posts with the same UUID, and only display its
+ * latest version.
+ *
+ * Drafts are published by copying its contents into a new Lens publication, but with its
+ * attribute isDraft set to false. Similarly to modifying posts, the original unique UUID is
+ * passed down and publishing a draft post will hide its draft publication since it is no longer
+ * the latest version of the original post.
+ *
+ * Used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
+ */
 const PublishOpportunityDraftModal: React.FC<
   IPublishOpportunityDraftModalProps
 > = ({ open, onClose, id, publisher, values }) => {

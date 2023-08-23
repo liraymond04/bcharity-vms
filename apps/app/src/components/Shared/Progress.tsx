@@ -24,7 +24,7 @@ export interface ProgressProps {
  * The percentage of the progress bar filled is automatically
  * calculated given the progress and total properties
  *
- * @example Progress used in {@link OrganizationVHR}
+ * @example Progress used in {@link components.Dashboard.OrganizationDashboard.OrganizationVHR}
  * ```tsx
  * {vhrGoal !== 0 && (
  *   <Progress

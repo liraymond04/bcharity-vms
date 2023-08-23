@@ -5,15 +5,42 @@ import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { LogVhrRequestMetadata } from '@/lib/metadata'
 
-interface IVHRVerifyCardProps {
+/**
+ * Properties of {@link VHRVerifyCard}
+ */
+export interface IVHRVerifyCardProps {
+  /**
+   * Whether the current request item is selected
+   */
   selected?: boolean
+  /**
+   * Whether the request data is loading
+   */
   pending: boolean
+  /**
+   * Metadata of VHR request to display
+   */
   value: LogVhrRequestMetadata
+  /**
+   * Function that runs when the component is clicked
+   */
   onClick: VoidFunction
+  /**
+   * Function that runs when the accept button is clicked
+   */
   onAcceptClick: () => void
+  /**
+   * Function that runs when the reject button is clicked
+   */
   onRejectClick: () => void
 }
 
+/**
+ * Component that renders a styled card component for an individual VHR request
+ *
+ * Used in {@link OrganizationLogVHR} to map a VHR request item in the list of
+ * requests.
+ */
 const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
   pending,
   selected,
