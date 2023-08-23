@@ -13,6 +13,15 @@ import { Card } from '@/components/UI/Card'
 import { getAvatar, getProfile, lensClient } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
+/**
+ * Component that displays the organization home tab page, and shows the profile
+ * data of the current organization's profile.
+ *
+ * Profile data is grabbed using the currentUser store, and the information
+ * fields are filled using metadata attributes.
+ *
+ * Profile metadata is updated through the user settings page home tab.
+ */
 const OrganizationHome: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.home'

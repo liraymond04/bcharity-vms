@@ -20,9 +20,24 @@ import DashboardDropDown from '../../VolunteerDashboard/DashboardDropDown'
 import VHRDetailCard from './VHRDetailCard'
 import VHRVerifyCard from './VHRVerifyCard'
 
-interface IOrganizationLogVHRProps {}
-
-const OrganizationLogVHRTab: React.FC<IOrganizationLogVHRProps> = () => {
+/**
+ * Component that displays a page to manage volunteer VHR requests. Requests are fetched
+ * using the {@link useVHRRequests} hook.
+ *
+ * @remarks
+ * Requests are accepted by using Lens to collect the publication, and rejected by adding
+ * a comment under the post using the {@link useCreateComment} hook and the {@link PostTags.VhrRequest.Reject}
+ * metadata tag.
+ *
+ * Displayed posts are further filtered by the search inputs and category dropdown filter.
+ * Search uses the {@link testSearch} function to fuzzy search posts matching the search
+ * query. The category dropdown filter displays posts only with the selected category in
+ * their metadata, and its dropdown is displayed with the {@link DashboardDropDown} component.
+ *
+ * Selected VHR requests are displayed using the {@link VHRDetailCard}, and the items in
+ * the list of VHR requests is displayed using the {@link VHRVerifyCard}.
+ */
+const OrganizationLogVHRTab: React.FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.log-vhr'
   })
