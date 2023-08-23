@@ -24,7 +24,7 @@ export interface IDashboardTab extends ITabProps {
 /**
  * Component that displays page layout and dashboard tabs definitions for the user settings page
  *
- * Tabs are displayed using a {@link Sidebar2} component.
+ * Tabs are displayed using a {@link SideBar2} component.
  */
 const UserDashboard: React.FC = () => {
   const { t } = useTranslation('common', {
