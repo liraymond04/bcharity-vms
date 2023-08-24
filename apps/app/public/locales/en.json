@@ -228,6 +228,13 @@
             "reject": "Reject",
             "accept": "Accept"
           },
+          "add-volunteer": {
+            "title": "Manually Add Volunteer",
+            "handle": "Volunteer Handle",
+            "handle-invalid": "Handle is invalid.",
+            "submit": "Submit",
+            "cancel": "Cancel"
+          },
           "tabs": {
             "all": "All Volunteers",
             "applications": "Volunteer Applications"
