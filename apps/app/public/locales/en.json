@@ -225,11 +225,14 @@
             "resume": "Resume:",
             "link-to-resume": "Link to resume PDF",
             "description": "Description:",
+            "manual": "Application manually added by organization",
             "reject": "Reject",
             "accept": "Accept"
           },
           "add-volunteer": {
-            "title": "Manually Add Volunteer",
+            "title": "Add Volunteer",
+            "opportunity-id": "Opportunity ID",
+            "opportunity-id-invalid": "Opportunity ID is invalid",
             "handle": "Volunteer Handle",
             "handle-invalid": "Handle is invalid.",
             "submit": "Submit",

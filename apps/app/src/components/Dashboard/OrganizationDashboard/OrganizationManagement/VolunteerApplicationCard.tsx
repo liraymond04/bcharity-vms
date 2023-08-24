@@ -60,9 +60,12 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
     setProfileDataLoading(true)
     setProfileError('')
 
+    let profileId = application.from.id
+    if (application.manual === 'true') profileId = application.description
+
     lensClient()
       .profile.fetch({
-        profileId: application.from.id
+        profileId: profileId
       })
       .then((p) => {
         if (p) {
@@ -92,87 +95,104 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
         {t('volunteer-information')}
       </div>
 
-      <div className="justify-start flex">
-        <div className="text-violet-500">
-          {application.from.name ?? application.from.handle}&nbsp;
-        </div>
-        <p suppressHydrationWarning>{t('wants-to')}</p>
-      </div>
-      <div className="flex flex-wrap">
-        <div className="shrink-0">
-          {application.from.coverPicture !== undefined && (
-            <img
-              className="rounded-sm py-3 "
-              src={getAvatar(application.from)}
-              alt="Rounded avatar"
-              style={{ width: '100px', height: 'auto' }}
-            />
-          )}
-        </div>
-
-        <div className="flex justify-between py-3 pl-5">
-          <div className="text-violet-500" suppressHydrationWarning>
-            {t('bio')}&nbsp;
-          </div>
-          <p>{application.from.bio}</p>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-violet-500" suppressHydrationWarning>
-          {t('location')}&nbsp;
-        </div>
-        {profileDataLoading ? <Spinner /> : <p>{location ?? ''}</p>}
-
-        {/* placeholder */}
-      </div>
-      <div className="flex">
-        <div className="text-violet-500" suppressHydrationWarning>
-          {t('date-created')}&nbsp;
-        </div>
-        <p>{getFormattedDate(application.createdAt)}</p>
-      </div>
-      <div className="flex">
-        <div className="text-violet-500" suppressHydrationWarning>
-          {t('resume')}&nbsp;
-        </div>
-        <Link
-          href={application.resume.replace('ipfs://', 'https://ipfs.io/ipfs/')}
-          target="_blank"
-          className="flex"
-        >
-          <div className="flex items-center hover:underline">
-            <div className="mr-1 whitespace-nowrap" suppressHydrationWarning>
-              {t('link-to-resume')}
+      {!userProfile ? (
+        <Spinner className="m-4" />
+      ) : (
+        <>
+          <div className="justify-start flex">
+            <div className="text-violet-500">
+              {userProfile.name ?? userProfile.handle}&nbsp;
             </div>
-            <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
+            <p suppressHydrationWarning>{t('wants-to')}</p>
           </div>
-        </Link>
-      </div>
-      <div className="flex">
-        <div className="text-violet-500" suppressHydrationWarning>
-          {t('description')}&nbsp;
-        </div>
-        <p>{application.description}</p>
-      </div>
-      <div className="flex mt-40">
-        {' '}
-        <Button
-          className="my-5"
-          suppressHydrationWarning
-          onClick={onReject}
-          disabled={pending}
-        >
-          {t('reject')}
-        </Button>
-        <Button
-          className="my-5 ml-40"
-          suppressHydrationWarning
-          onClick={onAccept}
-          disabled={pending}
-        >
-          {t('accept')}
-        </Button>
-      </div>
+          <div className="flex flex-wrap">
+            <div className="shrink-0">
+              <img
+                className="rounded-sm py-3 "
+                src={getAvatar(userProfile)}
+                alt="Rounded avatar"
+                style={{ width: '100px', height: 'auto' }}
+              />
+            </div>
+
+            <div className="flex justify-between py-3 pl-5">
+              <div className="text-violet-500" suppressHydrationWarning>
+                {t('bio')}&nbsp;
+              </div>
+              <p>{userProfile.bio}</p>
+            </div>
+          </div>
+          <div className="flex">
+            <div className="text-violet-500" suppressHydrationWarning>
+              {t('location')}&nbsp;
+            </div>
+            {profileDataLoading ? <Spinner /> : <p>{location ?? ''}</p>}
+
+            {/* placeholder */}
+          </div>
+          <div className="flex">
+            <div className="text-violet-500" suppressHydrationWarning>
+              {t('date-created')}&nbsp;
+            </div>
+            <p>{getFormattedDate(application.createdAt)}</p>
+          </div>
+          {application.resume !== '' && (
+            <div className="flex">
+              <div className="text-violet-500" suppressHydrationWarning>
+                {t('resume')}&nbsp;
+              </div>
+              <Link
+                href={application.resume.replace(
+                  'ipfs://',
+                  'https://ipfs.io/ipfs/'
+                )}
+                target="_blank"
+                className="flex"
+              >
+                <div className="flex items-center hover:underline">
+                  <div
+                    className="mr-1 whitespace-nowrap"
+                    suppressHydrationWarning
+                  >
+                    {t('link-to-resume')}
+                  </div>
+                  <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
+                </div>
+              </Link>
+            </div>
+          )}
+
+          <div className="flex">
+            <div className="text-violet-500" suppressHydrationWarning>
+              {t('description')}&nbsp;
+            </div>
+            <p suppressHydrationWarning>
+              {application.manual === 'false'
+                ? application.description
+                : t('manual')}
+            </p>
+          </div>
+          <div className="flex mt-40">
+            {' '}
+            <Button
+              className="my-5"
+              suppressHydrationWarning
+              onClick={onReject}
+              disabled={pending}
+            >
+              {t('reject')}
+            </Button>
+            <Button
+              className="my-5 ml-40"
+              suppressHydrationWarning
+              onClick={onAccept}
+              disabled={pending}
+            >
+              {t('accept')}
+            </Button>
+          </div>
+        </>
+      )}
     </Card>
   )
 }

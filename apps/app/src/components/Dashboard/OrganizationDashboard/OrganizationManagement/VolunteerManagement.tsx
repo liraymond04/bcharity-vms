@@ -82,9 +82,8 @@ const VolunteerManagementTab: React.FC = () => {
           <div className="grow" />
 
           <GridRefreshButton className="mx-2" onClick={handleRefetch} />
-          <div className="flex items-center shrink-0 justify-end ml-auto pt-2">
-            <AddVolunteerModal></AddVolunteerModal>
-          </div>
+
+          <AddVolunteerModal />
         </div>
         <div className="ml-5">
           <AllVolunteersTab hidden={openTab !== 0} ref={allRef} />
