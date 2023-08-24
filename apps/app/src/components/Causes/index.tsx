@@ -133,7 +133,7 @@ const Causes: NextPage = () => {
           {t('browse-projects')}
         </p>
       </div>
-      <GridLayout>
+      <GridLayout className="flex items-center justify-center">
         {posts
           .filter(
             (post) =>
