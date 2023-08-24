@@ -46,7 +46,7 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
   pending
 }) => {
   const { t } = useTranslation('common', {
-    keyPrefix: 'components.dashboard.organization.volunteer-managment'
+    keyPrefix: 'components.dashboard.organization.management.applications'
   })
 
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
@@ -85,15 +85,18 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
   return (
     <Card className="pt-10 pl-10 pr-10 justify-center">
       {profileError && <ErrorMessage error={new Error(profileError)} />}
-      <div className="justify-center font-black text-3xl py-4">
-        Volunteer Information
+      <div
+        className="justify-center font-black text-3xl py-4"
+        suppressHydrationWarning
+      >
+        {t('volunteer-information')}
       </div>
 
       <div className="justify-start flex">
         <div className="text-violet-500">
           {application.from.name ?? application.from.handle}&nbsp;
         </div>
-        <p> wants to work with your organization</p>
+        <p suppressHydrationWarning>{t('wants-to')}</p>
       </div>
       <div className="flex flex-wrap">
         <div className="shrink-0">
@@ -108,22 +111,30 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
         </div>
 
         <div className="flex justify-between py-3 pl-5">
-          <div className="text-violet-500">bio:&nbsp;</div>
+          <div className="text-violet-500" suppressHydrationWarning>
+            {t('bio')}&nbsp;
+          </div>
           <p>{application.from.bio}</p>
         </div>
       </div>
       <div className="flex">
-        <div className="text-violet-500">Location:&nbsp;</div>
+        <div className="text-violet-500" suppressHydrationWarning>
+          {t('location')}&nbsp;
+        </div>
         {profileDataLoading ? <Spinner /> : <p>{location ?? ''}</p>}
 
         {/* placeholder */}
       </div>
       <div className="flex">
-        <div className="text-violet-500">Date created:&nbsp;</div>
+        <div className="text-violet-500" suppressHydrationWarning>
+          {t('date-created')}&nbsp;
+        </div>
         <p>{getFormattedDate(application.createdAt)}</p>
       </div>
       <div className="flex">
-        <div className="text-violet-500">Resume:&nbsp;</div>
+        <div className="text-violet-500" suppressHydrationWarning>
+          {t('resume')}&nbsp;
+        </div>
         <Link
           href={application.resume.replace('ipfs://', 'https://ipfs.io/ipfs/')}
           target="_blank"
@@ -131,14 +142,16 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
         >
           <div className="flex items-center hover:underline">
             <div className="mr-1 whitespace-nowrap" suppressHydrationWarning>
-              Link to resume PDF
+              {t('link-to-resume')}
             </div>
             <ExternalLinkIcon className="w-4 h-4 inline-flex mb-1" />
           </div>
         </Link>
       </div>
       <div className="flex">
-        <div className="text-violet-500">Description:&nbsp;</div>
+        <div className="text-violet-500" suppressHydrationWarning>
+          {t('description')}&nbsp;
+        </div>
         <p>{application.description}</p>
       </div>
       <div className="flex mt-40">
@@ -149,7 +162,7 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
           onClick={onReject}
           disabled={pending}
         >
-          Reject
+          {t('reject')}
         </Button>
         <Button
           className="my-5 ml-40"
@@ -157,7 +170,7 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
           onClick={onAccept}
           disabled={pending}
         >
-          Accept
+          {t('accept')}
         </Button>
       </div>
     </Card>

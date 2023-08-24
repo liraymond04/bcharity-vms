@@ -1,4 +1,5 @@
 import { MouseEventHandler } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { getFormattedDate } from './VolunteerManagement'
 
@@ -41,6 +42,9 @@ const PurpleBox: React.FC<PurpleBoxProps> = ({
   onClick,
   tab
 }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.management'
+  })
   const boxClassName = selected
     ? 'bg-blue-100 dark:bg-violet-500 scale-105'
     : 'bg-violet-200 dark:bg-Within dark:bg-opacity-10'
@@ -51,9 +55,9 @@ const PurpleBox: React.FC<PurpleBoxProps> = ({
     >
       <div>{userName}</div>
       <div className="flex justify-end my-3">
-        <div className="text-sm font-extralight">
-          {tab === 'all' && 'Date joined:'}
-          {tab === 'applications' && 'Date created:'}&nbsp;
+        <div className="text-sm font-extralight" suppressHydrationWarning>
+          {tab === 'all' && t('date-joined')}
+          {tab === 'applications' && t('date-created')}&nbsp;
         </div>
         <div className="text-sm font-extralight">
           {getFormattedDate(dateCreated)}

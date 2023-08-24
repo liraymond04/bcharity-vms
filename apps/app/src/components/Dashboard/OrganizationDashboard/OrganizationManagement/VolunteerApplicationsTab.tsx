@@ -1,5 +1,6 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemSix, GridLayout } from '@/components/GridLayout'
 import { ClearFilters } from '@/components/Shared'
@@ -45,6 +46,9 @@ const VolunteerApplicationsTab = forwardRef<
   ApplicationsRef | null,
   IVolunteerApplicationsTabProps
 >(({ hidden }, ref) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.management.applications'
+  })
   const { currentUser: profile } = useAppPersistStore()
   const { createComment } = useCreateComment()
 
@@ -122,14 +126,17 @@ const VolunteerApplicationsTab = forwardRef<
 
   return (
     <div className={`${hidden ? 'hidden' : ''} pt-5`}>
-      <h1 className="text-3xl font-bold pb-3">Volunteer Applications</h1>
+      <h1 className="text-3xl font-bold pb-3" suppressHydrationWarning>
+        {t('title')}
+      </h1>
       <div className="flex flex-wrap items-center">
         <div className="flex justify-between h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 dark:bg-Input">
           <input
+            suppressHydrationWarning
             className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none bg-transparent rounded-2xl"
             type="text"
             value={searchValue}
-            placeholder={'search'}
+            placeholder={t('search')}
             onChange={(e) => {
               setSearchValue(e.target.value)
             }}
@@ -142,7 +149,7 @@ const VolunteerApplicationsTab = forwardRef<
         <div className="flex flex-wrap items-center py-2">
           <div className="h-[50px] z-10 ">
             <DashboardDropDown
-              label={'filter'}
+              label={t('filter')}
               options={Array.from(categories)}
               onClick={(c) => setSelectedCategory(c)}
               selected={selectedCategory}
