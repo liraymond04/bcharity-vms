@@ -38,7 +38,7 @@ const ClearFilters: FC<ClearFiltersProps> = ({ onClick }) => {
   })
   return (
     <button
-      className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:cursor-pointer dark:text-[#fff2f2] dark:text-opacity-80 dark:bg-[#555591] dark:border-[#20203f] dark:hover:text-opacity-100 dark:hover:text-[#ff8585]"
+      className="ml-3 min-w-[110px] h-fit text-red-500 bg-[#ffc2d4] border-red-500 border-2 rounded-md px-2 hover:bg-red-500 hover:text-white hover:cursor-pointer dark:text-[#fff2f2] dark:text-opacity-80 dark:bg-[#555591] dark:border-[#20203f] dark:hover:text-opacity-100 hover:dark:bg-indigo-800 duration-200 active:bg-red-800 active:border-red-800 active:dark:bg-indigo-950 active:dark:border-indigo-950"
       onClick={() => {
         onClick()
       }}
