@@ -627,7 +627,11 @@ const OrganizationVHRTab: React.FC = () => {
                   <p
                     key={i}
                     onClick={() => setSelectedTabIndex(i)}
-                    className="px-3 cursor-pointer bg-white border border-zinc-400 dark:bg-brand-400"
+                    className={`px-3 cursor-pointer border border-zinc-400 ${
+                      selectedTabIndex === i
+                        ? 'bg-zinc-300 dark:bg-brand-600'
+                        : 'bg-white dark:bg-brand-400'
+                    }`}
                   >
                     {v.name}
                   </p>
