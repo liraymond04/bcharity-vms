@@ -469,5 +469,15 @@
   "components.dashboard.volunteer.log-hours.hours-in-total": "每周几小时",
   "components.volunteers.apply-to-opportunity-modal.apply": "申请",
   "components.volunteers.apply-to-opportunity-modal.apply-rejected": "申请被拒绝，重新申请",
-  "components.volunteers.page.applied-already": "已经申请了！"
+  "components.volunteers.page.applied-already": "已经申请了！",
+  "components.dashboard.organization.tabs.organization": "组织",
+  "components.dashboard.organization.tabs.management": "管理",
+  "components.dashboard.organization.tabs.recruitment": "招聘",
+  "components.dashboard.organization.tabs.applications": "应用领域",
+  "components.dashboard.organization.tabs.settings-group": "设置",
+  "components.dashboard.volunteer.tabs.volunteer": "志愿者",
+  "components.dashboard.volunteer.tabs.explore": "探索",
+  "components.dashboard.volunteer.tabs.manage": "管理",
+  "components.dashboard.volunteer.tabs.applications": "应用领域",
+  "components.dashboard.volunteer.tabs.settings-group": "设置"
 }

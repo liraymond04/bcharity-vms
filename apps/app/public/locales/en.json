@@ -235,9 +235,14 @@
           "cancel": "Cancel"
         },
         "tabs": {
+          "organization": "ORGANIZATION",
           "home": "Home",
+          "management": "MANAGEMENT",
           "projects": "Projects",
+          "recruitment": "RECRUITMENT",
+          "applications": "Applications",
           "verify": "Verify VHR",
+          "settings-group": "SETTINGS",
           "settings": "User Settings"
         },
         "home": {
@@ -274,9 +279,14 @@
           "filter": "Filter: "
         },
         "tabs": {
+          "volunteer": "VOLUNTEER",
           "home": "Home",
+          "explore": "EXPLORE",
           "projects": "Projects",
+          "manage": "MANAGE",
+          "applications": "Applications",
           "log-vhr": "Log VHR",
+          "settings-group": "SETTINGS",
           "settings": "User Settings"
         },
         "home": {

@@ -33,7 +33,7 @@ const OrganizationDashboard: React.FC = () => {
 
   const tabs: IDashboardTab[] = [
     {
-      label: 'ORGANIZATION',
+      label: t('organization'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
@@ -44,7 +44,7 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationHomeTab />
     },
     {
-      label: 'MANAGEMENT',
+      label: t('management'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
@@ -60,14 +60,14 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationCausesTab />
     },
     {
-      label: 'RECRUITMENT',
+      label: t('recruitment'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
     },
     //Placeholder for Applications component
     {
-      label: 'Applications',
+      label: t('applications'),
       icon: <ClipboardCheckIcon className="inline" />,
       component: <VolunteerManagementTab />
     },
@@ -77,7 +77,7 @@ const OrganizationDashboard: React.FC = () => {
       component: <OrganizationLogVHRTab />
     },
     {
-      label: 'SETTINGS',
+      label: t('settings-group'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
