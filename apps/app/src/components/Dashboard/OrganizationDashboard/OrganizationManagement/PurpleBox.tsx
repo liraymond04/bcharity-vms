@@ -1,5 +1,7 @@
 import { MouseEventHandler } from 'react'
 
+import { getFormattedDate } from './VolunteerManagement'
+
 interface PurpleBoxProps {
   selected?: boolean
   userName: string
@@ -15,19 +17,6 @@ const PurpleBox: React.FC<PurpleBoxProps> = ({
   onClick,
   tab
 }) => {
-  const fillZero = (n: number, w: number) => {
-    let str = String(n)
-    for (let i = str.length; i < w; i++) {
-      str = '0' + str
-    }
-    return str
-  }
-
-  const date = new Date(dateCreated)
-  const day = fillZero(date.getDay(), 2)
-  const month = fillZero(date.getMonth(), 2)
-  const year = fillZero(date.getFullYear(), 2)
-
   const boxClassName = selected
     ? 'bg-blue-100 dark:bg-violet-500 scale-105'
     : 'bg-violet-200 dark:bg-Within dark:bg-opacity-10'
@@ -43,7 +32,7 @@ const PurpleBox: React.FC<PurpleBoxProps> = ({
           {tab === 'applications' && 'Date created:'}&nbsp;
         </div>
         <div className="text-sm font-extralight">
-          {`${year}-${month}-${day}`}
+          {getFormattedDate(dateCreated)}
         </div>
       </div>
     </div>

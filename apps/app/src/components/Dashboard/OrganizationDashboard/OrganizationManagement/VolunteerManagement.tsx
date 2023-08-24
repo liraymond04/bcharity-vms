@@ -6,6 +6,23 @@ import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import AllVolunteersTab from './AllVolunteersTab'
 import VolunteerApplicationsTab from './VolunteerApplicationsTab'
 
+export const getFormattedDate = (date: string): string => {
+  const fillZero = (n: number, w: number) => {
+    let str = String(n)
+    for (let i = str.length; i < w; i++) {
+      str = '0' + str
+    }
+    return str
+  }
+
+  const _date = new Date(date)
+  const day = fillZero(_date.getDay(), 2)
+  const month = fillZero(_date.getMonth(), 2)
+  const year = fillZero(_date.getFullYear(), 2)
+
+  return `${year}-${month}-${day}`
+}
+
 /**
  * Component that displays a page to manage volunteer applications. Open applications
  * and application requests are fetched using the {@link useApplications} hook.
@@ -29,26 +46,31 @@ const VolunteerManagementTab: React.FC = () => {
   return (
     <GridLayout>
       <GridItemTwelve>
-        <div className="flex items-center mt-10 px-10">
-          {tabs.map((t, i) => (
-            <p
-              key={i}
-              className={`border-black text-black border-l px-2 ${
-                openTab === i ? 'bg-zinc-300' : 'bg-white'
-              }`}
-              onClick={() => setOpenTab(i)}
-            >
-              {t.title}
-            </p>
-          ))}
-          <div className="flex items-center justify-end pr-20 ml-auto">
+        <div className="flex flex-wrap items-center mt-10 px-10">
+          <div className="flex flex-wrap">
+            {tabs.map((t, i) => (
+              <p
+                key={i}
+                className={`px-3 cursor-pointer border border-zinc-400 grow ${
+                  openTab === i
+                    ? 'bg-zinc-300 dark:bg-brand-600'
+                    : 'bg-white dark:bg-brand-400'
+                }`}
+                onClick={() => setOpenTab(i)}
+              >
+                {t.title}
+              </p>
+            ))}
+          </div>
+
+          <div className="flex items-center shrink-0 justify-end ml-auto pt-2">
             <p>Add a Volunteer</p>
             <PlusCircleIcon className="ml-2 w-8 text-brand-400" />
           </div>
         </div>
         <div className="ml-5">
-          <VolunteerApplicationsTab hidden={openTab !== 0} />
-          <AllVolunteersTab hidden={openTab !== 1} />
+          <AllVolunteersTab hidden={openTab !== 0} />
+          <VolunteerApplicationsTab hidden={openTab !== 1} />
         </div>
       </GridItemTwelve>
     </GridLayout>

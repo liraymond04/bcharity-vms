@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { Card } from '@/components/UI'
 import { getAvatar, VolunteerData } from '@/lib/lens-protocol'
 
+import { getFormattedDate } from './VolunteerManagement'
+
 interface VolunteerApplicationCardProps {
   vol: VolunteerData
 }
@@ -48,14 +50,14 @@ const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
         </div>
       </div>
       <div className="flex">
-        <div className="text-violet-500">location:&nbsp;</div>
+        <div className="text-violet-500">Location:&nbsp;</div>
         <p>{location ?? ''}</p>
 
         {/* placeholder */}
       </div>
       <div className="flex">
         <div className="text-violet-500">Date joined:&nbsp;</div>
-        <p>{vol.dateJoined}</p>
+        <p>{getFormattedDate(vol.dateJoined)}</p>
       </div>
 
       <div className="text-violet-500 pb-2">Active Volunteer Opportunities</div>
@@ -63,11 +65,11 @@ const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
         {vol.currentOpportunities.map((o) => (
           <div
             key={o.id}
-            className="flex items-center justify-between bg-brand-300 rounded-sm"
+            className="flex items-center space-x-1 justify-between bg-brand-300 text-black rounded-md p-1"
           >
             <p>{o.startDate}</p>
             <p>{o.name}</p>
-            <p></p>
+            <p>{o.hoursPerWeek} VHR</p>
           </div>
         ))}
       </div>
