@@ -20,8 +20,8 @@ export const getFormattedDate = (date: string): string => {
   }
 
   const _date = new Date(date)
-  const day = fillZero(_date.getDay(), 2)
-  const month = fillZero(_date.getMonth(), 2)
+  const day = fillZero(_date.getDate(), 2)
+  const month = fillZero(_date.getMonth() + 1, 2)
   const year = fillZero(_date.getFullYear(), 2)
 
   return `${year}-${month}-${day}`

@@ -8,7 +8,13 @@ import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import { checkAuth, lensClient } from '@/lib/lens-protocol'
-import { getOpportunityMetadata } from '@/lib/metadata'
+import {
+  InvalidMetadataException,
+  isPost,
+  OpportunityMetadata,
+  OpportunityMetadataBuilder
+} from '@/lib/metadata'
+import { logIgnoreWarning } from '@/lib/metadata/get/logIgnoreWarning'
 
 import Error from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
@@ -70,7 +76,18 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ids = getOpportunityMetadata(postData).map((p) => p.post_id)
+    const ids = postData
+      .filter(isPost)
+      .map((post) => {
+        try {
+          return new OpportunityMetadataBuilder(post).build()
+        } catch (e) {
+          logIgnoreWarning(post, e as InvalidMetadataException)
+          return null
+        }
+      })
+      .filter((o): o is OpportunityMetadata => o !== null && o.id === id)
+      .map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])
