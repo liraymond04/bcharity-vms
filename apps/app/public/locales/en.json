@@ -201,6 +201,41 @@
           "filter": "Filter: ",
           "refresh": "Refresh"
         },
+        "management": {
+          "all": {
+            "title": "All volunteers",
+            "search": "Search",
+            "filter": "Filter:",
+            "volunteer-information": "Volunteer Information",
+            "bio": "Bio:",
+            "location": "Location:",
+            "date-joined": "Date joined:",
+            "active": "Active Volunteer Opportunities",
+            "completed": "Completed volunteer opportunities"
+          },
+          "applications": {
+            "title": "Volunteer Applications",
+            "search": "Search",
+            "filter": "Filter:",
+            "volunteer-information": "Volunteer Information",
+            "wants-to": " wants to work with your organization",
+            "bio": "Bio:",
+            "location": "Location:",
+            "date-created": "Date created:",
+            "resume": "Resume:",
+            "link-to-resume": "Link to resume PDF",
+            "description": "Description:",
+            "reject": "Reject",
+            "accept": "Accept"
+          },
+          "tabs": {
+            "all": "All Volunteers",
+            "applications": "Volunteer Applications"
+          },
+          "add": "Add a Volunteer",
+          "date-joined": "Date joined:",
+          "date-created": "Date created:"
+        },
         "column-defs": {
           "opportunity": {
             "name": "Name",
@@ -235,9 +270,14 @@
           "cancel": "Cancel"
         },
         "tabs": {
+          "organization": "ORGANIZATION",
           "home": "Home",
+          "management": "MANAGEMENT",
           "projects": "Projects",
+          "recruitment": "RECRUITMENT",
+          "applications": "Applications",
           "verify": "Verify VHR",
+          "settings-group": "SETTINGS",
           "settings": "User Settings"
         },
         "home": {
@@ -274,9 +314,14 @@
           "filter": "Filter: "
         },
         "tabs": {
+          "volunteer": "VOLUNTEER",
           "home": "Home",
+          "explore": "EXPLORE",
           "projects": "Projects",
+          "manage": "MANAGE",
+          "applications": "Applications",
           "log-vhr": "Log VHR",
+          "settings-group": "SETTINGS",
           "settings": "User Settings"
         },
         "home": {

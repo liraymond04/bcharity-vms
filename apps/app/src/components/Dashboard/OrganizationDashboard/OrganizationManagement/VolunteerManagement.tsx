@@ -1,5 +1,6 @@
 import { PlusCircleIcon } from '@heroicons/react/outline'
 import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { GridRefreshButton } from '@/components/Shared'
@@ -32,14 +33,17 @@ export const getFormattedDate = (date: string): string => {
  * {@link AllVolunteersTab}, while "Volunteer Applications" displays {@link VolunteerApplicationsTab}.
  */
 const VolunteerManagementTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.management'
+  })
   const [openTab, setOpenTab] = useState(0)
 
   const tabs = [
     {
-      title: 'All Volunteers'
+      title: t('tabs.all')
     },
     {
-      title: 'Volunteer Applications'
+      title: t('tabs.applications')
     }
   ]
 
@@ -80,7 +84,7 @@ const VolunteerManagementTab: React.FC = () => {
           <GridRefreshButton className="mx-2" onClick={handleRefetch} />
 
           <div className="flex items-center shrink-0 justify-end ml-auto pt-2">
-            <p>Add a Volunteer</p>
+            <p suppressHydrationWarning>{t('add')}</p>
             <PlusCircleIcon className="ml-2 w-8 text-brand-400" />
           </div>
         </div>
