@@ -15,7 +15,13 @@ import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
 import getTokenImage from '@/lib/getTokenImage'
 import { checkAuth, lensClient } from '@/lib/lens-protocol'
-import { getCauseMetadata } from '@/lib/metadata'
+import {
+  CauseMetadata,
+  CauseMetadataBuilder,
+  InvalidMetadataException,
+  isPost
+} from '@/lib/metadata'
+import { logIgnoreWarning } from '@/lib/metadata/get/logIgnoreWarning'
 
 import Error from './Error'
 import { IPublishCauseFormProps } from './PublishCauseModal'
@@ -85,7 +91,18 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
     currencyData?.find((c) => c.address === values.currency)?.symbol ?? 'WMATIC'
 
   useEffect(() => {
-    const ids = getCauseMetadata(postData).map((p) => p.post_id)
+    const ids = postData
+      .filter(isPost)
+      .map((post) => {
+        try {
+          return new CauseMetadataBuilder(post).build()
+        } catch (e) {
+          logIgnoreWarning(post, e as InvalidMetadataException)
+          return null
+        }
+      })
+      .filter((o): o is CauseMetadata => o !== null && o.id === id)
+      .map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])
