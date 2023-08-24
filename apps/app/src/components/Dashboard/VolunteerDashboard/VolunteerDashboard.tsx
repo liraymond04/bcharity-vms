@@ -41,7 +41,7 @@ const VolunteerDashboard: React.FC = () => {
 
   const tabs: IDashboardTab[] = [
     {
-      label: 'VOLUNTEER',
+      label: t('volunteer'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
@@ -52,7 +52,7 @@ const VolunteerDashboard: React.FC = () => {
       component: <VolunteerHomeTab />
     },
     {
-      label: 'EXPLORE',
+      label: t('explore'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
@@ -68,14 +68,14 @@ const VolunteerDashboard: React.FC = () => {
       component: <VolunteerCausesTab />
     },
     {
-      label: 'MANAGE',
+      label: t('manage'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true
     },
     //Placeholder for Applications component
     {
-      label: 'Applications',
+      label: t('applications'),
       icon: <ClipboardCheckIcon className="inline" />,
       component: <div></div>
     },
@@ -85,7 +85,7 @@ const VolunteerDashboard: React.FC = () => {
       component: <VolunteerLogHoursTab />
     },
     {
-      label: 'SETTINGS',
+      label: t('settings-group'),
       icon: <div></div>,
       component: <div></div>,
       isGroup: true

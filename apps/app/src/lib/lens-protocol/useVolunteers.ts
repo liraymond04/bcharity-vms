@@ -22,10 +22,25 @@ import {
 import { logIgnoreWarning } from '../metadata/get/logIgnoreWarning'
 import lensClient from './lensClient'
 
+/**
+ * Volunteer data provided to application
+ */
 export type VolunteerData = {
+  /**
+   * Lens profile fragment of volunteer
+   */
   profile: ProfileFragment
+  /**
+   * Array of accepted volunteer applications
+   */
   currentOpportunities: OpportunityMetadata[]
+  /**
+   * Array of accepted log VHR requests
+   */
   completedOpportunities: LogVhrRequestMetadata[]
+  /**
+   * ISO date string of when volunteer application accepted
+   */
   dateJoined: string
 }
 

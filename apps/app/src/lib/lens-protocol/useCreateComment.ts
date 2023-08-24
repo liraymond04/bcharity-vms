@@ -57,7 +57,7 @@ export interface CreateCommentReturn {
 }
 
 /**
- * A hook that wraps createCommentTypedData {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#createPostTypedData}
+ * A hook that wraps {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#createPostTypedData | createCommentTypedData}
  * to simplify to process of metadata upload with the thirdweb storage react hooks sdk,
  * signing, and broadcasting the transaction
  *

@@ -4,15 +4,24 @@ import { useTranslation } from 'react-i18next'
 import { Card } from '@/components/UI'
 import { getAvatar, VolunteerData } from '@/lib/lens-protocol'
 
-interface VolunteerApplicationCardProps {
+import { getFormattedDate } from './VolunteerManagement'
+
+/**
+ * Properties of {@link VolunteerDataCard}
+ */
+export interface VolunteerDataCardProps {
+  /**
+   * Volunteer data to display
+   */
   vol: VolunteerData
 }
 
-const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
-  vol
-}) => {
+/**
+ * Component that displays a styled card for an individual volunteer.
+ */
+const VolunteerDataCard: React.FC<VolunteerDataCardProps> = ({ vol }) => {
   const { t } = useTranslation('common', {
-    keyPrefix: 'components.dashboard.organization.volunteer-managment'
+    keyPrefix: 'components.dashboard.organization.management.all'
   })
 
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
@@ -24,8 +33,11 @@ const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
 
   return (
     <Card className="pt-10 pl-10 pr-10 justify-center">
-      <div className="justify-center font-black text-3xl py-4">
-        Volunteer Information
+      <div
+        className="justify-center font-black text-3xl py-4"
+        suppressHydrationWarning
+      >
+        {t('volunteer-information')}
       </div>
 
       <div className="justify-start flex">
@@ -43,36 +55,44 @@ const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
           />
         )}
         <div className="flex justify-between py-3 pl-5">
-          <div className="text-violet-500">bio:&nbsp;</div>
+          <div className="text-violet-500" suppressHydrationWarning>
+            {t('bio')}&nbsp;
+          </div>
           <p>{vol.profile.bio}</p>
         </div>
       </div>
       <div className="flex">
-        <div className="text-violet-500">location:&nbsp;</div>
+        <div className="text-violet-500" suppressHydrationWarning>
+          {t('location')}&nbsp;
+        </div>
         <p>{location ?? ''}</p>
 
         {/* placeholder */}
       </div>
       <div className="flex">
-        <div className="text-violet-500">Date joined:&nbsp;</div>
-        <p>{vol.dateJoined}</p>
+        <div className="text-violet-500" suppressHydrationWarning>
+          {t('date-joined')}&nbsp;
+        </div>
+        <p>{getFormattedDate(vol.dateJoined)}</p>
       </div>
 
-      <div className="text-violet-500 pb-2">Active Volunteer Opportunities</div>
+      <div className="text-violet-500 pb-2" suppressHydrationWarning>
+        {t('active')}
+      </div>
       <div>
         {vol.currentOpportunities.map((o) => (
           <div
             key={o.id}
-            className="flex items-center justify-between bg-brand-300 rounded-sm"
+            className="flex items-center space-x-1 justify-between bg-brand-300 text-black rounded-md p-1"
           >
             <p>{o.startDate}</p>
             <p>{o.name}</p>
-            <p></p>
+            <p>{o.hoursPerWeek} VHR</p>
           </div>
         ))}
       </div>
-      <div className="text-violet-500 pb-2">
-        Completed volunteer opportunities
+      <div className="text-violet-500 pb-2" suppressHydrationWarning>
+        {t('completed')}
       </div>
       <div>
         {vol.completedOpportunities.map((o) => (

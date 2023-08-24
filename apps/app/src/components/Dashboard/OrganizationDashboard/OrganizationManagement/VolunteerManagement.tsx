@@ -1,54 +1,99 @@
 import { PlusCircleIcon } from '@heroicons/react/outline'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import { GridRefreshButton } from '@/components/Shared'
 
-import AllVolunteersTab from './AllVolunteersTab'
-import VolunteerApplicationsTab from './VolunteerApplicationsTab'
+import AllVolunteersTab, { AllRef } from './AllVolunteersTab'
+import VolunteerApplicationsTab, {
+  ApplicationsRef
+} from './VolunteerApplicationsTab'
+
+export const getFormattedDate = (date: string): string => {
+  const fillZero = (n: number, w: number) => {
+    let str = String(n)
+    for (let i = str.length; i < w; i++) {
+      str = '0' + str
+    }
+    return str
+  }
+
+  const _date = new Date(date)
+  const day = fillZero(_date.getDay(), 2)
+  const month = fillZero(_date.getMonth(), 2)
+  const year = fillZero(_date.getFullYear(), 2)
+
+  return `${year}-${month}-${day}`
+}
 
 /**
- * Component that displays a page to manage volunteer applications. Open applications
- * and application requests are fetched using the {@link useApplications} hook.
- *
- * Applications are accepted/rejected by adding a comment under the application post
- * using the {@link useCreateComment} hook and the {@link PostTags.Application.Accept}
- * or {@link PostTags.Application.REJECT} metadata tag.
+ * Component that renders a page for managing volunteers and volunteer applications.
+ * The selected tabs render their respective pages: "All Volunteers" displays the
+ * {@link AllVolunteersTab}, while "Volunteer Applications" displays {@link VolunteerApplicationsTab}.
  */
 const VolunteerManagementTab: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'components.dashboard.organization.management'
+  })
   const [openTab, setOpenTab] = useState(0)
 
   const tabs = [
     {
-      title: 'All Volunteers'
+      title: t('tabs.all')
     },
     {
-      title: 'Volunteer Applications'
+      title: t('tabs.applications')
     }
   ]
+
+  const allRef = useRef<AllRef>(null)
+  const applicationsRef = useRef<ApplicationsRef>(null)
+
+  const handleRefetch = () => {
+    if (openTab === 0 && allRef.current) {
+      allRef.current.refetch()
+    }
+    if (openTab === 1 && applicationsRef.current) {
+      applicationsRef.current.refetch()
+    }
+  }
 
   return (
     <GridLayout>
       <GridItemTwelve>
-        <div className="flex items-center mt-10 px-10">
-          {tabs.map((t, i) => (
-            <p
-              key={i}
-              className={`border-black text-black border-l px-2 ${
-                openTab === i ? 'bg-zinc-300' : 'bg-white'
-              }`}
-              onClick={() => setOpenTab(i)}
-            >
-              {t.title}
-            </p>
-          ))}
-          <div className="flex items-center justify-end pr-20 ml-auto">
-            <p>Add a Volunteer</p>
+        <div className="flex flex-wrap items-center mt-10 px-10">
+          <div className="flex flex-wrap">
+            {tabs.map((t, i) => (
+              <p
+                key={i}
+                className={`px-3 cursor-pointer border border-zinc-400 grow ${
+                  openTab === i
+                    ? 'bg-zinc-300 dark:bg-brand-600'
+                    : 'bg-white dark:bg-brand-400'
+                }`}
+                onClick={() => setOpenTab(i)}
+              >
+                {t.title}
+              </p>
+            ))}
+          </div>
+
+          <div className="grow" />
+
+          <GridRefreshButton className="mx-2" onClick={handleRefetch} />
+
+          <div className="flex items-center shrink-0 justify-end ml-auto pt-2">
+            <p suppressHydrationWarning>{t('add')}</p>
             <PlusCircleIcon className="ml-2 w-8 text-brand-400" />
           </div>
         </div>
         <div className="ml-5">
-          <VolunteerApplicationsTab hidden={openTab !== 0} />
-          <AllVolunteersTab hidden={openTab !== 1} />
+          <AllVolunteersTab hidden={openTab !== 0} ref={allRef} />
+          <VolunteerApplicationsTab
+            hidden={openTab !== 1}
+            ref={applicationsRef}
+          />
         </div>
       </GridItemTwelve>
     </GridLayout>
