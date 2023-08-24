@@ -1,9 +1,9 @@
-import { PlusCircleIcon } from '@heroicons/react/outline'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { GridRefreshButton } from '@/components/Shared'
+import AddVolunteerModal from '@/components/Shared/AddVolunteerModal'
 
 import AllVolunteersTab, { AllRef } from './AllVolunteersTab'
 import VolunteerApplicationsTab, {
@@ -83,10 +83,7 @@ const VolunteerManagementTab: React.FC = () => {
 
           <GridRefreshButton className="mx-2" onClick={handleRefetch} />
 
-          <div className="flex items-center shrink-0 justify-end ml-auto pt-2">
-            <p suppressHydrationWarning>{t('add')}</p>
-            <PlusCircleIcon className="ml-2 w-8 text-brand-400" />
-          </div>
+          <AddVolunteerModal />
         </div>
         <div className="ml-5">
           <AllVolunteersTab hidden={openTab !== 0} ref={allRef} />

@@ -506,5 +506,13 @@
   "components.dashboard.organization.management.tabs.applications": "志愿者申请",
   "components.dashboard.organization.management.add": "添加志愿者",
   "components.dashboard.organization.management.date-joined": "加入日期：",
-  "components.dashboard.organization.management.date-created": "创建日期："
+  "components.dashboard.organization.management.date-created": "创建日期：",
+  "components.dashboard.organization.management.add-volunteer.title": "添加志愿者",
+  "components.dashboard.organization.management.add-volunteer.opportunity-id": "机会ID",
+  "components.dashboard.organization.management.add-volunteer.opportunity-id-invalid": "机会 ID 无效",
+  "components.dashboard.organization.management.add-volunteer.handle": "志愿者手柄",
+  "components.dashboard.organization.management.add-volunteer.handle-invalid": "句柄无效。",
+  "components.dashboard.organization.management.add-volunteer.submit": "提交",
+  "components.dashboard.organization.management.add-volunteer.cancel": "取消",
+  "components.dashboard.organization.management.applications.manual": "由组织手动添加的应用程序"
 }
