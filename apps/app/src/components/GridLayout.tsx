@@ -38,7 +38,9 @@ export const GridItemFour: FC<GridLayoutProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`lg:col-span-4 md:col-span-12 col-span-12 ${className}`}>
+    <div
+      className={`lg:col-span-4 md:col-span-12 col-span-12 flex items-center justify-center${className}`}
+    >
       {children}
     </div>
   )
