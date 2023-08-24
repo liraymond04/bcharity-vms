@@ -13,10 +13,23 @@ import { DashboardDropDown } from '../../VolunteerDashboard'
 import PurpleBox from './PurpleBox'
 import VolunteerApplicationCard from './VolunteerApplicationCard'
 
-interface IVolunteerApplicationsTabProps {
+/**
+ * Properties of {@link VolunteerApplicationsTab}
+ */
+export interface IVolunteerApplicationsTabProps {
+  /**
+   * Whether the component should be shown
+   */
   hidden: boolean
 }
 
+/**
+ * Component that displays page for volunteer applications tab in {@link VolunteerManagementTab}.
+ *
+ * Applications are fetched using the {@link useApplications} hook, and application decisions are
+ * made by making a comment on the application with the {@link useCreateComment} hook, and the
+ * metadata tags {@link PostTags.Application.Accept} or {@link PostTags.Application.REJECT}.
+ */
 const VolunteerApplicationsTab: React.FC<IVolunteerApplicationsTabProps> = ({
   hidden
 }) => {

@@ -10,13 +10,35 @@ import { ApplicationMetadata } from '@/lib/metadata'
 
 import { getFormattedDate } from './VolunteerManagement'
 
-interface VolunteerApplicationCardProps {
+/**
+ * Properties of {@link VolunteerApplicationCard}
+ */
+export interface VolunteerApplicationCardProps {
+  /**
+   * Metadata of application post
+   */
   application: ApplicationMetadata
+  /**
+   * Function to run if application is accepted
+   */
   onAccept: VoidFunction
+  /**
+   * Function to run if application is rejected
+   */
   onReject: VoidFunction
+  /**
+   * Whether there is data loading
+   */
   pending?: boolean
 }
 
+/**
+ * Component that displays a styled card for an individual application.
+ *
+ * The profile data of the volunteer applying to the application is fetched
+ * using the Lens {@link https://docs.lens.xyz/docs/get-profile#using-lensclient-sdk | profile.fetch}
+ * method, and the profile ID provided by the application metadata.
+ */
 const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
   application,
   onAccept,

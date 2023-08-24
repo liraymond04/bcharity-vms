@@ -6,13 +6,20 @@ import { getAvatar, VolunteerData } from '@/lib/lens-protocol'
 
 import { getFormattedDate } from './VolunteerManagement'
 
-interface VolunteerApplicationCardProps {
+/**
+ * Properties of {@link VolunteerDataCard}
+ */
+export interface VolunteerDataCardProps {
+  /**
+   * Volunteer data to display
+   */
   vol: VolunteerData
 }
 
-const VolunteerDataCard: React.FC<VolunteerApplicationCardProps> = ({
-  vol
-}) => {
+/**
+ * Component that displays a styled card for an individual volunteer.
+ */
+const VolunteerDataCard: React.FC<VolunteerDataCardProps> = ({ vol }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.volunteer-managment'
   })

@@ -24,12 +24,9 @@ export const getFormattedDate = (date: string): string => {
 }
 
 /**
- * Component that displays a page to manage volunteer applications. Open applications
- * and application requests are fetched using the {@link useApplications} hook.
- *
- * Applications are accepted/rejected by adding a comment under the application post
- * using the {@link useCreateComment} hook and the {@link PostTags.Application.Accept}
- * or {@link PostTags.Application.REJECT} metadata tag.
+ * Component that renders a page for managing volunteers and volunteer applications.
+ * The selected tabs render their respective pages: "All Volunteers" displays the
+ * {@link AllVolunteersTab}, while "Volunteer Applications" displays {@link VolunteerApplicationsTab}.
  */
 const VolunteerManagementTab: React.FC = () => {
   const [openTab, setOpenTab] = useState(0)

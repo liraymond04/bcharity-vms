@@ -2,14 +2,38 @@ import { MouseEventHandler } from 'react'
 
 import { getFormattedDate } from './VolunteerManagement'
 
-interface PurpleBoxProps {
+/**
+ * Properties of {@link PurpleBox}
+ */
+export interface PurpleBoxProps {
+  /**
+   * Whether the current component has been selected
+   */
   selected?: boolean
+  /**
+   * Profile handle of volunteer
+   */
   userName: string
+  /**
+   * Date of volunteer join date or application created
+   */
   dateCreated: string
+  /**
+   * Function to run when the component is clicked
+   */
   onClick?: MouseEventHandler<HTMLDivElement>
+  /**
+   * String identifier for which tab the item is from
+   */
   tab?: string
 }
 
+/**
+ * Component to display individual items for use in a list.
+ *
+ * Used in {@link VolunteerManagementTab} to display volunteers
+ * and pending applications.
+ */
 const PurpleBox: React.FC<PurpleBoxProps> = ({
   selected,
   userName,

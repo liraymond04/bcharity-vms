@@ -11,10 +11,22 @@ import { DashboardDropDown } from '../../VolunteerDashboard'
 import PurpleBox from './PurpleBox'
 import VolunteerDataCard from './VolunteerDataCard'
 
-interface IAllVolunteersTabProps {
+/**
+ * Properties of {@link AllVolunteersTab}
+ */
+export interface IAllVolunteersTabProps {
+  /**
+   * Whether the component should be shown
+   */
   hidden: boolean
 }
 
+/**
+ * Component that displays page for accepted volunteers tab in {@link VolunteerManagementTab}.
+ *
+ * Volunteers are fetched using the {@link useVolunteers} hook, given the organization's
+ * profile.
+ */
 const AllVolunteersTab: React.FC<IAllVolunteersTabProps> = ({ hidden }) => {
   const { currentUser: profile } = useAppPersistStore()
 

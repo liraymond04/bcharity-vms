@@ -8,7 +8,7 @@ import OrganizationCauses from './OrganizationCauses'
 import OrganizationDashboard from './OrganizationDashboard'
 import OrganizationHome from './OrganizationHome'
 import * as OrganizationLogVHR from './OrganizationLogVHR'
-import VolunteerManagement from './OrganizationManagement/VolunteerManagement'
+import * as VolunteerManagement from './OrganizationManagement'
 import OrganizationVHR from './OrganizationVHR'
 
 const ColumnDefs = {
