@@ -25,7 +25,6 @@ import { Form } from '@/components/UI/Form'
 import { Modal } from '@/components/UI/Modal'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import i18n from '@/i18n'
 import {
   checkAuth,
   getSignature,
@@ -63,45 +62,6 @@ interface OrgGridTab {
   inactiveString: string
   filter: (data: OpportunityMetadata) => boolean
 }
-
-const keyPrefix = 'components.dashboard.organization.vhr'
-const getTranslation = (key: string) => {
-  return i18n.t(`common:${keyPrefix}.${key}`)
-}
-
-const organizationGridTabs: OrgGridTab[] = [
-  {
-    name: getTranslation('active-posting'),
-    inactiveString: getTranslation('active-inactive'),
-    filter: (p) => {
-      const [y, m, d] = p.endDate.split('-')
-      return (
-        p.type === PostTags.OrgPublish.Opportunity &&
-        (!p.endDate ||
-          new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() >
-            new Date().getTime())
-      )
-    }
-  },
-  {
-    name: getTranslation('drafts'),
-    inactiveString: getTranslation('drafts-inactive'),
-    filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
-  },
-  {
-    name: getTranslation('inactive'),
-    inactiveString: getTranslation('inactive-inactive'),
-    filter: (p) => {
-      const [y, m, d] = p.endDate.split('-')
-      return (
-        p.type === PostTags.OrgPublish.Opportunity &&
-        p.endDate !== '' &&
-        new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() <
-          new Date().getTime()
-      )
-    }
-  }
-]
 
 interface FormProps {
   causeDescription: string
@@ -147,6 +107,40 @@ const OrganizationVHRTab: React.FC = () => {
     keyPrefix: 'components.dashboard.organization.vhr'
   })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+
+  const organizationGridTabs: OrgGridTab[] = [
+    {
+      name: t('active-posting'),
+      inactiveString: t('active-inactive'),
+      filter: (p) => {
+        const [y, m, d] = p.endDate.split('-')
+        return (
+          p.type === PostTags.OrgPublish.Opportunity &&
+          (!p.endDate ||
+            new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() >
+              new Date().getTime())
+        )
+      }
+    },
+    {
+      name: t('drafts'),
+      inactiveString: t('drafts-inactive'),
+      filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
+    },
+    {
+      name: t('inactive'),
+      inactiveString: t('inactive-inactive'),
+      filter: (p) => {
+        const [y, m, d] = p.endDate.split('-')
+        return (
+          p.type === PostTags.OrgPublish.Opportunity &&
+          p.endDate !== '' &&
+          new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() <
+            new Date().getTime()
+        )
+      }
+    }
+  ]
 
   const { currentUser: profile } = useAppPersistStore()
 
@@ -495,8 +489,7 @@ const OrganizationVHRTab: React.FC = () => {
         rowData={data}
         columnDefs={makeOrgVHRColumnDefs({
           onPublishNowClick:
-            organizationGridTabs[selectedTabIndex].name ===
-            getTranslation('drafts')
+            organizationGridTabs[selectedTabIndex].name === t('drafts')
               ? onPublishDraft
               : undefined,
           onEditClick: onEdit,
@@ -665,8 +658,7 @@ const OrganizationVHRTab: React.FC = () => {
             publisher={profile}
             id={currentModifyId}
             isDraft={
-              organizationGridTabs[selectedTabIndex].name ===
-              getTranslation('drafts')
+              organizationGridTabs[selectedTabIndex].name === t('drafts')
             }
             defaultValues={getFormDefaults(currentModifyId)}
           />
