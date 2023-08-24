@@ -17,7 +17,9 @@ export const GridLayout: FC<Props> = ({ children, className = '' }) => {
 
 export const GridItemFour: FC<Props> = ({ children, className = '' }) => {
   return (
-    <div className={`lg:col-span-4 md:col-span-12 col-span-12 ${className}`}>
+    <div
+      className={`lg:col-span-4 md:col-span-12 col-span-12 align-middle justify-center items-center flex  ${className}`}
+    >
       {children}
     </div>
   )

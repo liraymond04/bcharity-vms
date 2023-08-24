@@ -9,9 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
 import { formatLocation } from '@/lib/formatLocation'
-import getAvatar from '@/lib/getAvatar'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import usePublication from '@/lib/lens-protocol/usePublication'
+import { getAvatar, lensClient, usePublication } from '@/lib/lens-protocol'
 import {
   CauseMetadata,
   CauseMetadataBuilder,

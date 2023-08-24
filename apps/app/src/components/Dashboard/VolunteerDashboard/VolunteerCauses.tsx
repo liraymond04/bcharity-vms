@@ -14,11 +14,13 @@ import GridRefreshButton from '@/components/Shared/GridRefreshButton'
 import Progress from '@/components/Shared/Progress'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
-import lensClient from '@/lib/lens-protocol/lensClient'
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
-import { CauseMetadata, isPost } from '@/lib/metadata'
-import { PostTags } from '@/lib/metadata'
-import { getCauseMetadata } from '@/lib/metadata'
+import { lensClient, useExplorePublications } from '@/lib/lens-protocol'
+import {
+  CauseMetadata,
+  getCauseMetadata,
+  isPost,
+  PostTags
+} from '@/lib/metadata'
 import testSearch from '@/lib/search'
 import { useWalletBalance } from '@/lib/useBalance'
 import { useAppPersistStore } from '@/store/app'

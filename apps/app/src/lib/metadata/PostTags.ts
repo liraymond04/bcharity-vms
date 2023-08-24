@@ -53,7 +53,11 @@ export enum Application {
   /**
    * Tag to use for rejecting a request
    */
-  REJECT = 'ORGANIZATION_REJECT_APPLICATION'
+  REJECT = 'ORGANIZATION_REJECT_APPLICATION',
+  /**
+   * Tag to use for accepting a request
+   */
+  Accept = 'ORGANIZATION_REJECT_APPLICATION'
 }
 
 /**
@@ -61,7 +65,7 @@ export enum Application {
  */
 export enum VhrRequest {
   /**
-   * Tags realted to making and verifying VHR requests for a volunteer opportunity
+   * Tags related to making and verifying VHR requests for a volunteer opportunity
    */
   Opportunity = 'VHR_REQUEST_OPPORTUNITY',
   Reject = 'VHR_REJECT_REQUEST'

@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CURRENCIES } from '@/constants'
 import { formatLocation } from '@/lib/formatLocation'
-import getAvatar from '@/lib/getAvatar'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { getAvatar, lensClient } from '@/lib/lens-protocol'
 import { CauseMetadata, isComment, isPost, PostTags } from '@/lib/metadata'
 
 import Progress from '../Shared/Progress'

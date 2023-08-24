@@ -7,8 +7,7 @@ import { FileInput } from '@/components/UI/FileInput'
 import { Input } from '@/components/UI/Input'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import lensClient from '@/lib/lens-protocol/lensClient'
+import { checkAuth, lensClient } from '@/lib/lens-protocol'
 import { getOpportunityMetadata } from '@/lib/metadata'
 
 import Error from './Error'
@@ -41,7 +40,7 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ids = getOpportunityMetadata(postData).map((p) => p.id)
+    const ids = getOpportunityMetadata(postData).map((p) => p.post_id)
 
     setPublicationIds(ids)
   }, [id, postData])
@@ -120,6 +119,34 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
               value={values.description}
               disabled
             />
+            <div className="flex-row space-x-96">
+              <label
+                style={{
+                  display: 'inline-block',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  style={{
+                    appearance: 'none',
+                    backgroundColor: values.applicationRequired
+                      ? 'purple'
+                      : 'transparent',
+                    border: '1px solid grey',
+                    width: '25px',
+                    height: '25px'
+                  }}
+                  disabled
+                />
+                <span style={{ marginLeft: '12px' }} suppressHydrationWarning>
+                  {t('registration-required')}
+                </span>
+              </label>
+            </div>
             <FileInput
               defaultImageIPFS={values.imageUrl ?? ''}
               disabled

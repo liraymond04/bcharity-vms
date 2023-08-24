@@ -5,7 +5,7 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import useExplorePublications from '@/lib/lens-protocol/useExplorePublications'
+import { useExplorePublications } from '@/lib/lens-protocol'
 import { CauseMetadata } from '@/lib/metadata'
 import { PostTags } from '@/lib/metadata'
 import { getCauseMetadata } from '@/lib/metadata'
@@ -94,23 +94,26 @@ const Causes: NextPage = () => {
         </p>
       </div>
       {loading ? (
-        <div className="flex justify-center">
+        <div className="flex justify-center  p-5">
           <Spinner />
         </div>
       ) : (
-        <GridLayout>
-          {posts
-            .filter(
-              (post) =>
-                testSearch(post.name, searchValue) &&
-                (selectedCategory === '' || post.category === selectedCategory)
-            )
-            .map((post) => (
-              <GridItemFour key={post.id}>
-                <CauseCard cause={post} />
-              </GridItemFour>
-            ))}
-        </GridLayout>
+        <div className="items-center justify-center align-middle flex">
+          <GridLayout>
+            {posts
+              .filter(
+                (post) =>
+                  testSearch(post.name, searchValue) &&
+                  (selectedCategory === '' ||
+                    post.category === selectedCategory)
+              )
+              .map((post) => (
+                <GridItemFour key={post.id}>
+                  <CauseCard cause={post} />
+                </GridItemFour>
+              ))}
+          </GridLayout>
+        </div>
       )}
       {exploreError && (
         <Error

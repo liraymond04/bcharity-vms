@@ -20,19 +20,13 @@ import { Button } from '@/components/UI/Button'
 import { Card } from '@/components/UI/Card'
 import { Spinner } from '@/components/UI/Spinner'
 import { TextArea } from '@/components/UI/TextArea'
-import {
-  getSignature,
-  lensClient,
-  useEnabledCurrencies,
-  usePostData
-} from '@/lib/lens-protocol'
-import checkAuth from '@/lib/lens-protocol/checkAuth'
-import {
-  CauseMetadata,
-  getCauseMetadata,
-  isPost,
-  PostTags
-} from '@/lib/metadata'
+import { checkAuth, getSignature } from '@/lib/lens-protocol'
+import lensClient from '@/lib/lens-protocol/lensClient'
+import useEnabledCurrencies from '@/lib/lens-protocol/useEnabledCurrencies'
+import usePostData from '@/lib/lens-protocol/usePostData'
+import { CauseMetadata, isPost } from '@/lib/metadata'
+import { PostTags } from '@/lib/metadata'
+import { getCauseMetadata } from '@/lib/metadata'
 import {
   AttributeData,
   MetadataDisplayType,

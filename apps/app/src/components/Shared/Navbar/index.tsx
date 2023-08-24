@@ -50,6 +50,13 @@ const useScreenSize = () => {
   return screenSize
 }
 
+/**
+ * A component that displays a Navbar
+ *
+ * Handles routing to multiple pages, login and profile management
+ *
+ * Page items shrink to hamburger menu on smaller screens
+ */
 const Navbar: FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.navbar'
@@ -77,7 +84,7 @@ const Navbar: FC = () => {
   }, [currentUser, isAuthenticated])
 
   return (
-    <div className="sticky z-40 top-0 flex justify-between bg-accent-content dark:bg-info-content bg-opacity-80 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
+    <div className="sticky z-40 top-0 flex justify-between bg-accent-content dark:bg-info-content bg-opacity-100 max-h-20 border-b-2 border-gray-100 dark:border-violet-950">
       <div className="flex items-center">
         <Link href="/" aria-current={pathname == '/' ? 'page' : undefined}>
           <img

@@ -11,22 +11,41 @@ export interface UsePublicationParams {
   publicationId?: string
 }
 
+export interface UsePublicationReturn {
+  /**
+   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.PublicationFragment.html | PublicationFragment} data
+   * associated with the publication, or undefined if the data is not ready
+   */
+  data: PublicationFragment | undefined
+  /**
+   * Whether or not the data is loading
+   */
+  loading: boolean
+  /**
+   * The error message if there was an error fetching the data
+   */
+  error: string
+  /**
+   * A function to trigger a refetch of the data
+   */
+  refetch: VoidFunction
+}
+
 /**
  * React hook to fetch publication data by id
  *
  * Also see {@link https://lens-protocol.github.io/lens-sdk/classes/_lens_protocol_client.Publication.html#fetch}
  *
  * @param params The params for the hook
- * @returns `data` - The publication data as a PublicationFragment \
- *          `loading` - Whether or not the data is ready \
- *          `error` - An error message if the request failed
  */
-const usePublication = ({ publicationId }: UsePublicationParams) => {
-  const [loading, setLoading] = useState(true)
+const usePublication = ({
+  publicationId
+}: UsePublicationParams): UsePublicationReturn => {
+  const [loading, setLoading] = useState(false)
   const [data, setData] = useState<PublicationFragment>()
   const [error, setError] = useState('')
 
-  useEffect(() => {
+  const refetch = () => {
     if (!publicationId) return
 
     setLoading(true)
@@ -41,13 +60,17 @@ const usePublication = ({ publicationId }: UsePublicationParams) => {
       .finally(() => {
         setLoading(false)
       })
+  }
+
+  useEffect(() => {
+    refetch()
   }, [publicationId])
 
   return {
     loading,
     data,
     error,
-    fetch
+    refetch
   }
 }
 

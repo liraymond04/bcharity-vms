@@ -26,7 +26,8 @@
     "generic-back": ". Please try again.",
     "profiles": "Could not get profiles!",
     "expected-organization": "Profile is not an organization!",
-    "expected-volunteer": "Profile is not a volunteer!"
+    "expected-volunteer": "Profile is not a volunteer!",
+    "invalid-file-type": "Invalid file format"
   },
   "components": {
     "causes": {
@@ -96,6 +97,7 @@
           "category": "Category",
           "website": "Website (leave empty if not linking to external opportunity)",
           "description": "Activity Description",
+          "registration-required": "Registration required?",
           "image": "Image (optional): "
         },
         "goal": {
@@ -134,6 +136,7 @@
           "website-invalid": "You must enter a valid website",
           "description": "Activity Description",
           "description-placeholder": "Tell use more about this volunteer oppoortunity",
+          "registration-required": "Registration required?",
           "image": "Image (optional): "
         },
         "publish-cause": {
@@ -166,6 +169,20 @@
           "website-invalid": "You must enter a valid website",
           "description": "Activity Description",
           "description-placeholder": "Tell use more about this volunteer oppoortunity",
+          "publish-now": "Publish Now?",
+          "registration-required": "Registration required?",
+          "image": "Image (optional): "
+        },
+        "publish-opportunity-draft": {
+          "title": "Publish Draft",
+          "name": "Volunteer opportunity name",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "hours": "Expected number of hours",
+          "category": "Category",
+          "website": "Website (leave empty if not linking to external opportunity)",
+          "description": "Activity Description",
+          "registration-required": "Registration required?",
           "image": "Image (optional): "
         },
         "vhr-goal": {

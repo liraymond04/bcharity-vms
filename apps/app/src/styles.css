@@ -41,6 +41,19 @@ table {
     background-color: #2d2d4d; /* Monotone dark blue color */
     background-image: none;
   }
+  .darkprofilegradient {
+    background-color: #2d2d4d; /* Monotone dark blue color */
+    background-image: radial-gradient(
+        ellipse at 10% 20%,
+        rgba(206, 187, 248, 0.4) 1%,
+        rgba(45, 45, 77, 0.16) 50%
+      ),
+      radial-gradient(
+        ellipse at 90% 80%,
+        rgba(223, 230, 254, 0.4) 1%,
+        rgba(45, 45, 77, 0.16) 50%
+      );
+  }
 }
 
 .shimmer {
