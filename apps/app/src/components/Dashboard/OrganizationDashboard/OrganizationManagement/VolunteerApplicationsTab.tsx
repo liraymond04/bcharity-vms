@@ -1,5 +1,5 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { useMemo, useState } from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react'
 
 import { GridItemSix, GridLayout } from '@/components/GridLayout'
 import { ClearFilters } from '@/components/Shared'
@@ -12,6 +12,17 @@ import { useAppPersistStore } from '@/store/app'
 import { DashboardDropDown } from '../../VolunteerDashboard'
 import PurpleBox from './PurpleBox'
 import VolunteerApplicationCard from './VolunteerApplicationCard'
+
+/**
+ * Reference to the {@link VolunteerApplicationsTab} component;
+ */
+export interface ApplicationsRef {
+  /**
+   * Function to refetch applications
+   * @returns
+   */
+  refetch: () => void
+}
 
 /**
  * Properties of {@link VolunteerApplicationsTab}
@@ -30,13 +41,18 @@ export interface IVolunteerApplicationsTabProps {
  * made by making a comment on the application with the {@link useCreateComment} hook, and the
  * metadata tags {@link PostTags.Application.Accept} or {@link PostTags.Application.REJECT}.
  */
-const VolunteerApplicationsTab: React.FC<IVolunteerApplicationsTabProps> = ({
-  hidden
-}) => {
+const VolunteerApplicationsTab = forwardRef<
+  ApplicationsRef | null,
+  IVolunteerApplicationsTabProps
+>(({ hidden }, ref) => {
   const { currentUser: profile } = useAppPersistStore()
   const { createComment } = useCreateComment()
 
   const { loading, data, error, refetch } = useApplications({ profile })
+
+  useImperativeHandle(ref, () => ({
+    refetch
+  }))
 
   const [selectedId, setSelectedId] = useState<string>('')
 
@@ -190,6 +206,8 @@ const VolunteerApplicationsTab: React.FC<IVolunteerApplicationsTabProps> = ({
       </GridLayout>
     </div>
   )
-}
+})
+
+VolunteerApplicationsTab.displayName = 'VolunteerApplicationsTab'
 
 export default VolunteerApplicationsTab

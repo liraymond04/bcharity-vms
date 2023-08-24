@@ -1,10 +1,13 @@
 import { PlusCircleIcon } from '@heroicons/react/outline'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import { GridRefreshButton } from '@/components/Shared'
 
-import AllVolunteersTab from './AllVolunteersTab'
-import VolunteerApplicationsTab from './VolunteerApplicationsTab'
+import AllVolunteersTab, { AllRef } from './AllVolunteersTab'
+import VolunteerApplicationsTab, {
+  ApplicationsRef
+} from './VolunteerApplicationsTab'
 
 export const getFormattedDate = (date: string): string => {
   const fillZero = (n: number, w: number) => {
@@ -40,6 +43,18 @@ const VolunteerManagementTab: React.FC = () => {
     }
   ]
 
+  const allRef = useRef<AllRef>(null)
+  const applicationsRef = useRef<ApplicationsRef>(null)
+
+  const handleRefetch = () => {
+    if (openTab === 0 && allRef.current) {
+      allRef.current.refetch()
+    }
+    if (openTab === 1 && applicationsRef.current) {
+      applicationsRef.current.refetch()
+    }
+  }
+
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -60,14 +75,21 @@ const VolunteerManagementTab: React.FC = () => {
             ))}
           </div>
 
+          <div className="grow" />
+
+          <GridRefreshButton className="mx-2" onClick={handleRefetch} />
+
           <div className="flex items-center shrink-0 justify-end ml-auto pt-2">
             <p>Add a Volunteer</p>
             <PlusCircleIcon className="ml-2 w-8 text-brand-400" />
           </div>
         </div>
         <div className="ml-5">
-          <AllVolunteersTab hidden={openTab !== 0} />
-          <VolunteerApplicationsTab hidden={openTab !== 1} />
+          <AllVolunteersTab hidden={openTab !== 0} ref={allRef} />
+          <VolunteerApplicationsTab
+            hidden={openTab !== 1}
+            ref={applicationsRef}
+          />
         </div>
       </GridItemTwelve>
     </GridLayout>
