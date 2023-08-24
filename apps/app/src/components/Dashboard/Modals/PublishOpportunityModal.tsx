@@ -20,6 +20,7 @@ import {
 import { MetadataVersion } from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 
+import { getFormattedDate } from '../OrganizationDashboard/OrganizationManagement/VolunteerManagement'
 import Error from './Error'
 
 /**
@@ -213,9 +214,9 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
     setIsPending(false)
   }
 
-  const [minDate, setMinDate] = useState<string>(
-    new Date().toLocaleDateString()
-  )
+  const currentDay = getFormattedDate(new Date().toISOString())
+
+  const [minDate, setMinDate] = useState<string>(currentDay)
 
   return (
     <GradientModal
@@ -246,7 +247,7 @@ const PublishOpportunityModal: React.FC<IPublishOpportunityModalProps> = ({
               label={t('start-date')}
               type="date"
               placeholder="yyyy-mm-dd"
-              min={new Date().toLocaleDateString()}
+              min={currentDay}
               error={!!errors.startDate?.type}
               {...register('startDate', {
                 required: true

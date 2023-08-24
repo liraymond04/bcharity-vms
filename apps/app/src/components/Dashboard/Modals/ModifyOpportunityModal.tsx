@@ -19,6 +19,7 @@ import {
 import { MetadataVersion } from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 
+import { getFormattedDate } from '../OrganizationDashboard/OrganizationManagement/VolunteerManagement'
 import ErrorComponent from './Error'
 import { IPublishOpportunityFormProps } from './PublishOpportunityModal'
 
@@ -179,6 +180,8 @@ const ModifyOpportunityModal: React.FC<IModifyOpportunityModalProps> = ({
     setIsPending(false)
   }
 
+  const currentDay = getFormattedDate(new Date().toISOString())
+
   const [minDate, setMinDate] = useState<string>(
     new Date().toLocaleDateString()
   )
@@ -212,7 +215,7 @@ const ModifyOpportunityModal: React.FC<IModifyOpportunityModalProps> = ({
               label={t('start-date')}
               type="date"
               placeholder="yyyy-mm-dd"
-              min={new Date().toLocaleDateString()}
+              min={currentDay}
               error={!!errors.startDate?.type}
               {...register('startDate', {
                 required: true
