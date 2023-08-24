@@ -7,6 +7,7 @@ import getProfilesOwnedBy from './getProfilesOwnedBy'
 import getSignature, { TypedData } from './getSignature'
 import lensClient from './lensClient'
 import { UseApplicationsParams, UseApplicationsReturn } from './useApplications'
+import useApplications from './useApplications'
 import useBookmark, {
   UseBookmarkParams,
   UseBookmarkReturn
@@ -58,6 +59,7 @@ export {
   getSignature,
   isValidHandle,
   lensClient,
+  useApplications,
   useBookmark,
   useCausesDonatedTo,
   useCreateComment,
