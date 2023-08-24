@@ -1,3 +1,4 @@
+import AddVolunteerModal from './AddVolunteerModal'
 import BookmarkButton, { BookmarkButtonProps } from './BookmarkButton'
 import ChooseFile, { ChooseFileProps } from './ChooseFile'
 import ClearFilters, { ClearFiltersProps } from './ClearFilters'
@@ -22,6 +23,7 @@ import TranslateButton from './TranslateButton'
 import Uniswap, { UniswapProps } from './Uniswap'
 
 export {
+  AddVolunteerModal,
   BookmarkButton,
   ChooseFile,
   ClearFilters,

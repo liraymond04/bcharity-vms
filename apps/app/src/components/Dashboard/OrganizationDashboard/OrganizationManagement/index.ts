@@ -1,9 +1,13 @@
-import AllVolunteersTab, { IAllVolunteersTabProps } from './AllVolunteersTab'
+import AllVolunteersTab, {
+  AllRef,
+  IAllVolunteersTabProps
+} from './AllVolunteersTab'
 import PurpleBox, { PurpleBoxProps } from './PurpleBox'
 import VolunteerApplicationCard, {
   VolunteerApplicationCardProps
 } from './VolunteerApplicationCard'
 import VolunteerApplicationsTab, {
+  ApplicationsRef,
   IVolunteerApplicationsTabProps
 } from './VolunteerApplicationsTab'
 import VolunteerDataCard, { VolunteerDataCardProps } from './VolunteerDataCard'
@@ -19,6 +23,8 @@ export {
 }
 
 export type {
+  AllRef,
+  ApplicationsRef,
   IAllVolunteersTabProps,
   IVolunteerApplicationsTabProps,
   PurpleBoxProps,

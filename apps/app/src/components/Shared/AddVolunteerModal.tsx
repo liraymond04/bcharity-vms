@@ -21,14 +21,23 @@ import { Button } from '../UI/Button'
 import { Form } from '../UI/Form'
 import { Modal } from '../UI/Modal'
 
-export interface IAddVolunteerModalProps {}
-
 export interface IAddVolunteerFormProps {
   opportunityID: string
   handle: string
 }
 
-const AddVolunteerModal: FC<IAddVolunteerModalProps> = ({}) => {
+/**
+ * Component that displays a button for manually adding a volunteer application.
+ *
+ * An application is made by creating a comment with the {@link useCreateComment}
+ * hook under the volunteer opportunity with the metadata tag {@link PostTags.Application.Apply}.
+ * The manual attribute is set to true, and the volunteer's profile ID is added
+ * to the description of the application, and no resume is passed.
+ *
+ * The organization ID is verified using the Lens {@link https://docs.lens.xyz/docs/get-publication | publication.fetch} method,
+ * and the volunteer's profile ID is verified using the Lens {@link getProfile} hook.
+ */
+const AddVolunteerModal: FC = () => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.dashboard.organization.management.add-volunteer'
   })
@@ -100,7 +109,6 @@ const AddVolunteerModal: FC<IAddVolunteerModalProps> = ({}) => {
 
     try {
       if (!currentUser) throw Error(e('profile-null'))
-      console.log(formData)
 
       await checkAuth(currentUser.ownedBy)
 

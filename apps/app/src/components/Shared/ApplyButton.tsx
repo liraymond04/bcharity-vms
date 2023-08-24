@@ -42,7 +42,11 @@ export interface IApplyFormProps {
 
 /**
  * Component to display a button that opens a modal with a form to
- * make an application to a volunteer opportunity
+ * make an application to a volunteer opportunity.
+ *
+ * An application is made by creating a comment with the {@link createComment}
+ * hook under the volunteer opportunity with the metadata tag {@link PostTags.Application.Apply}.
+ * The manual attribute is set to false.
  */
 const ApplyButton: FC<ApplyButtonProps> = ({
   publicationId,

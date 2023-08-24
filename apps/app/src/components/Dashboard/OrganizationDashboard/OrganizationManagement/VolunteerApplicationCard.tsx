@@ -38,6 +38,10 @@ export interface VolunteerApplicationCardProps {
  * The profile data of the volunteer applying to the application is fetched
  * using the Lens {@link https://docs.lens.xyz/docs/get-profile#using-lensclient-sdk | profile.fetch}
  * method, and the profile ID provided by the application metadata.
+ *
+ * Non manual applications use the profile ID of the poster of the publication,
+ * and manual applications use the profile ID provided in the description of
+ * the application.
  */
 const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
   application,
