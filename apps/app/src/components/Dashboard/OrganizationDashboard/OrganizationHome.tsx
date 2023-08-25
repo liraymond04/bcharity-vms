@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
+import { Spinner } from '@/components/UI'
 import { Card } from '@/components/UI/Card'
 import { getAvatar, getProfile, lensClient } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
@@ -88,34 +89,32 @@ const OrganizationHome: React.FC = () => {
       <GridItemTwelve>
         <Card>
           <div className="p-1">
-            {
+            {!profile ? (
+              <Spinner className="m-4" />
+            ) : (
               <div className="flex flex-row">
                 <div className="flex flex-col items-center space-y-5 align-middle w-3/12 ml-8 mt-10 ">
                   <div className="flex flex-col items-center space-y-2">
                     <img
                       className="rounded-full"
-                      src={getAvatar(currentUser)}
+                      src={getAvatar(profile)}
                       alt="Rounded avatar"
                     />
                     <div className="flex text-lg truncate text-violet-500">
                       <p suppressHydrationWarning>
                         {t('id')}
-                        {currentUser.id}
+                        {profile.id}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex">
                     <h1 suppressHydrationWarning>{t('followers')}</h1>
-                    <div className="ml-1">
-                      {currentUser.stats.totalFollowers}
-                    </div>
+                    <div className="ml-1">{profile.stats.totalFollowers}</div>
                   </div>
                   <div className="flex">
                     <h1 suppressHydrationWarning>{t('following')}</h1>
-                    <div className="ml-1">
-                      {currentUser.stats.totalFollowing}
-                    </div>
+                    <div className="ml-1">{profile.stats.totalFollowing}</div>
                   </div>
 
                   <div className="flex items-center">
@@ -173,7 +172,7 @@ const OrganizationHome: React.FC = () => {
                   <div className="justify-left w-full">
                     <div className=" h-10">
                       <p className=" text-3xl text-white-600 flex items-left mt-10 ">
-                        {currentUser?.handle}
+                        {profile?.handle}
                       </p>
                       {getSlug('location') !== '' && (
                         <div className="flex flex-row space-x-2">
@@ -193,13 +192,13 @@ const OrganizationHome: React.FC = () => {
                         {t('about')}
                       </div>
                       <div className=" bg-accent-content  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
-                        {currentUser.bio}
+                        {profile.bio}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            }
+            )}
           </div>
         </Card>
       </GridItemTwelve>
