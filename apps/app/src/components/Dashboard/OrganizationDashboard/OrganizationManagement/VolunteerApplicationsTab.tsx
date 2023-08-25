@@ -1,11 +1,18 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { forwardRef, useImperativeHandle, useMemo, useState } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemSix, GridLayout } from '@/components/GridLayout'
 import { ClearFilters } from '@/components/Shared'
 import { Card, ErrorMessage, Spinner } from '@/components/UI'
-import { checkAuth, useCreateComment } from '@/lib/lens-protocol'
+import { testSearch } from '@/lib'
+import { checkAuth, lensClient, useCreateComment } from '@/lib/lens-protocol'
 import useApplications from '@/lib/lens-protocol/useApplications'
 import { buildMetadata, PostTags } from '@/lib/metadata'
 import { useAppPersistStore } from '@/store/app'
@@ -68,8 +75,39 @@ const VolunteerApplicationsTab = forwardRef<
   const [verifyOrRejectError, setVerifyOrRejectError] = useState('')
 
   const [searchValue, setSearchValue] = useState('')
-  const [categories] = useState<Set<string>>(new Set())
+  const [categories, setCategories] = useState<Set<string>>(new Set())
   const [selectedCategory, setSelectedCategory] = useState<string>('')
+
+  // cache profile handle fetch results
+  const [profileId, setProfileId] = useState<Map<string, string>>(new Map())
+
+  // get profile handles (mostly for manual applications, since they give profile IDs)
+  useEffect(() => {
+    const fetch = async () => {
+      const profiles = new Set<string>()
+      const profileIds = new Map<string, string>()
+      data.forEach(async (p) => {
+        let profile = p.from.handle
+        if (p.manual) {
+          try {
+            const result = await lensClient().profile.fetch({
+              profileId: p.description
+            })
+            if (!result) throw Error()
+            profile = result.handle
+            profileIds.set(p.description, result.handle)
+            setProfileId(profileIds)
+          } catch (error) {
+            if (error instanceof Error) {
+            }
+          }
+        }
+        profiles.add(profile)
+      })
+      setCategories(profiles)
+    }
+    fetch()
+  }, [data])
 
   const setIdPending = (id: string) => {
     const newPendingIds = { ...pendingIds, [id]: true }
@@ -175,22 +213,33 @@ const VolunteerApplicationsTab = forwardRef<
                 <Spinner />
               ) : (
                 <>
-                  {data.map((item) => {
-                    return (
-                      <PurpleBox
-                        key={item.post_id}
-                        selected={selectedId === item.post_id}
-                        userName={item.from.name ?? item.from.handle}
-                        dateCreated={item.createdAt}
-                        tab="applications"
-                        onClick={() => {
-                          setSelectedId(
-                            selectedId === item.post_id ? '' : item.post_id
-                          )
-                        }}
-                      />
-                    )
-                  })}
+                  {data
+                    .filter((item) => {
+                      let profile = item.from.handle
+                      let exists = profileId.get(item.description)
+                      if (item.manual && exists) profile = exists
+                      let result = true
+                      if (searchValue !== '')
+                        result = testSearch(profile, searchValue)
+                      if (selectedCategory === '') return result
+                      return result && profile === selectedCategory
+                    })
+                    .map((item) => {
+                      return (
+                        <PurpleBox
+                          key={item.post_id}
+                          selected={selectedId === item.post_id}
+                          userName={item.from.name ?? item.from.handle}
+                          dateCreated={item.createdAt}
+                          tab="applications"
+                          onClick={() => {
+                            setSelectedId(
+                              selectedId === item.post_id ? '' : item.post_id
+                            )
+                          }}
+                        />
+                      )
+                    })}
                 </>
               )}
 
