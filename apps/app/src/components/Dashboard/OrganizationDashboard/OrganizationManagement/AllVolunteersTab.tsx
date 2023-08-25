@@ -1,10 +1,17 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { forwardRef, useImperativeHandle, useMemo, useState } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemSix, GridLayout } from '@/components/GridLayout'
 import { ClearFilters } from '@/components/Shared'
 import { Card, ErrorMessage, Spinner } from '@/components/UI'
+import { testSearch } from '@/lib'
 import { useVolunteers } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
@@ -59,8 +66,16 @@ const AllVolunteersTab = forwardRef<AllRef | null, IAllVolunteersTabProps>(
     }, [data, selectedId])
 
     const [searchValue, setSearchValue] = useState('')
-    const [categories] = useState<Set<string>>(new Set())
+    const [categories, setCategories] = useState<Set<string>>(new Set())
     const [selectedCategory, setSelectedCategory] = useState<string>('')
+
+    useEffect(() => {
+      const profiles = new Set<string>()
+      data.forEach((p) => {
+        profiles.add(p.profile.handle)
+      })
+      setCategories(profiles)
+    }, [data])
 
     return (
       <div className={`${hidden ? 'hidden' : ''} pt-5`}>
@@ -111,24 +126,33 @@ const AllVolunteersTab = forwardRef<AllRef | null, IAllVolunteersTabProps>(
                   <Spinner />
                 ) : (
                   <>
-                    {data.map((item) => {
-                      return (
-                        <PurpleBox
-                          key={item.profile.id}
-                          selected={selectedId === item.profile.id}
-                          userName={item.profile.name ?? item.profile.handle}
-                          dateCreated={item.dateJoined}
-                          tab="all"
-                          onClick={() => {
-                            setSelectedId(
-                              selectedId === item.profile.id
-                                ? ''
-                                : item.profile.id
-                            )
-                          }}
-                        />
+                    {data
+                      .filter((op) =>
+                        testSearch(op.profile.handle, searchValue)
                       )
-                    })}
+                      .filter(
+                        (op) =>
+                          selectedCategory === '' ||
+                          op.profile.handle === selectedCategory
+                      )
+                      .map((item) => {
+                        return (
+                          <PurpleBox
+                            key={item.profile.id}
+                            selected={selectedId === item.profile.id}
+                            userName={item.profile.name ?? item.profile.handle}
+                            dateCreated={item.dateJoined}
+                            tab="all"
+                            onClick={() => {
+                              setSelectedId(
+                                selectedId === item.profile.id
+                                  ? ''
+                                  : item.profile.id
+                              )
+                            }}
+                          />
+                        )
+                      })}
                   </>
                 )}
 

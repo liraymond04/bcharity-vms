@@ -6,7 +6,6 @@ import {
   useMemo,
   useState
 } from 'react'
-import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 import { GridItemSix, GridLayout } from '@/components/GridLayout'
@@ -100,7 +99,6 @@ const VolunteerApplicationsTab = forwardRef<
             setProfileId(profileIds)
           } catch (error) {
             if (error instanceof Error) {
-              toast.error(error.message)
             }
           }
         }
