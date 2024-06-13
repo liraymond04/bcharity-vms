@@ -8,7 +8,9 @@ import lensClient from './lensClient'
  */
 const getProfilesOwnedBy = async (address: string) => {
   const allOwnedProfiles = await lensClient().profile.fetchAll({
-    ownedBy: [address]
+    where: {
+      ownedBy: [address]
+    }
   })
 
   return allOwnedProfiles.items

@@ -50,7 +50,7 @@ const MenuItems: FC = () => {
 
   const { disconnect } = useDisconnect()
 
-  const { profiles } = useAppStore()
+  const { profiles, setProfiles } = useAppStore()
   const { isAuthenticated, currentUser, setCurrentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
@@ -79,7 +79,7 @@ const MenuItems: FC = () => {
                 as="img"
                 src={getAvatar(currentUser)}
                 className="w-8 h-8 rounded-full border cursor-pointer dark:border-gray-700/80"
-                alt={currentUser?.handle}
+                alt={currentUser?.handle?.localName}
               />
               <Transition
                 show={open}
@@ -106,7 +106,7 @@ const MenuItems: FC = () => {
                     <div className="truncate">
                       <Slug
                         className="font-bold"
-                        slug={currentUser?.handle}
+                        slug={currentUser?.handle?.localName}
                         prefix="@"
                       />
                     </div>
@@ -184,9 +184,11 @@ const MenuItems: FC = () => {
                                 height={20}
                                 width={20}
                                 src={getAvatar(profile)}
-                                alt={profile?.handle}
+                                alt={profile.id}
                               />
-                              <div className="truncate">{profile?.handle}</div>
+                              <div className="truncate">
+                                {profile?.handle?.localName}
+                              </div>
                             </button>
                           </div>
                         ))}
@@ -206,6 +208,7 @@ const MenuItems: FC = () => {
                       }
                       setShowLoginModal(false)
                       setCurrentUser(null)
+                      setProfiles([])
                       Cookies.remove('accessToken')
                       Cookies.remove('refreshToken')
                       localStorage.removeItem('bcharity.store')

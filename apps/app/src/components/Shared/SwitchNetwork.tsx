@@ -4,7 +4,7 @@ import { FC } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { CHAIN_ID } from 'src/constants'
-import { useSwitchNetwork } from 'wagmi'
+import { useSwitchChain } from 'wagmi'
 
 /**
  * Properties of {@link SwitchNetwork}
@@ -27,7 +27,7 @@ const SwitchNetwork: FC<SwitchNetworkProps> = ({ className = '' }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'components.shared.switch-network'
   })
-  const { switchNetwork } = useSwitchNetwork()
+  const { switchChain } = useSwitchChain()
 
   return (
     <Button
@@ -36,8 +36,8 @@ const SwitchNetwork: FC<SwitchNetworkProps> = ({ className = '' }) => {
       variant="danger"
       icon={<SwitchHorizontalIcon className="w-4 h-4" />}
       onClick={() => {
-        if (switchNetwork) {
-          switchNetwork(CHAIN_ID)
+        if (switchChain) {
+          switchChain({ chainId: CHAIN_ID })
         } else {
           toast.error(t('toast'))
         }
