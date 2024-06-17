@@ -1,10 +1,9 @@
-import { ProfileFragment } from '@lens-protocol/client'
 import {
-  MarketplaceMetadataAttribute,
-  MarketplaceMetadataAttributeDisplayType,
-  textOnly,
-  TextOnlyMetadata
-} from '@lens-protocol/metadata'
+  MetadataAttributeType,
+  ProfileFragment,
+  PublicationMetadataDisplayType,
+  PublicationMetadataMainFocusType // Ensure this is the correct type or replace with the appropriate one
+} from '@lens-protocol/client'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
@@ -18,33 +17,13 @@ import checkAuth from './checkAuth'
 import useCreateComment from './useCreateComment'
 
 export interface UseLogHoursParams {
-  /**
-   * The id of the publication that created the request
-   */
   publicationId: string
-  /**
-   * The organization that published this opportunity
-   */
   organizationId: string
 }
 
 export interface UseLogHoursReturn {
-  /**
-   * Whether or not the request to log hours is pending
-   */
   isLoading: boolean
-  /**
-   * An error message if the log hours failed
-   */
   error: string
-  /**
-   *
-   * @param profile The profile of the user trying to log hours
-   * @param hoursToVerify The number of hours to log
-   * @param comments Any comments
-   * @param onSuccess Callback function to be trigged on succes
-   * @returns
-   */
   logHours: (
     profile: ProfileFragment | null,
     hoursToVerify: string,
@@ -53,28 +32,19 @@ export interface UseLogHoursReturn {
   ) => Promise<void>
 }
 
-/**
- * A react hook to handle making VHR log requests with a comment
- *
- * @param params The params for the requests
- * @returns
- * @example A log hours button
- * // Adapted from LogHoursButton.tsx
- * ```
- * const { error, isLoading, logHours } = useLogHours({
- *   publicationId,
- *   organizationId
- * })
- * // ...
- * const onSubmit = async (formData: IVhrVerificationFormProps) => {
- *   await logHours(
- *     currentUser,
- *     formData.hoursToVerify,
- *     formData.comments,
- *     onCancel
- *   )
- * }
- */
+// Define a custom type for metadata
+type PublicationMetadataInput = {
+  version: string
+  metadata_id: string
+  content: string
+  locale: string
+  tags: string[]
+  mainContentFocus: PublicationMetadataMainFocusType
+  name: string
+  attributes: MetadataAttributeType[]
+  appId: string
+}
+
 const useLogHours = (params: UseLogHoursParams): UseLogHoursReturn => {
   const { t: e } = useTranslation('common', {
     keyPrefix: 'errors'
@@ -106,27 +76,27 @@ const useLogHours = (params: UseLogHoursParams): UseLogHoursReturn => {
       comments
     }
 
-    const attributes: MarketplaceMetadataAttribute[] = Object.entries(data).map(
+    const attributes: MetadataAttributeType[] = Object.entries(data).map(
       ([k, v]) => {
         return {
           traitType: k,
           value: v,
-          displayType: MarketplaceMetadataAttributeDisplayType.STRING
+          displayType: PublicationMetadataDisplayType.String // Use the correct type for displayType
         }
       }
     )
 
-    const metadata: TextOnlyMetadata = textOnly({
-      marketplace: {
-        name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
-        attributes
-      },
-      id: v4(),
+    const metadata: PublicationMetadataInput = {
+      version: '2.0.0',
+      metadata_id: v4(),
       content: `#${PostTags.VhrRequest.Opportunity} #${params.organizationId}`,
       locale: getUserLocale(),
       tags: [PostTags.VhrRequest.Opportunity, params.organizationId],
+      mainContentFocus: PublicationMetadataMainFocusType.TextOnly,
+      name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
+      attributes,
       appId: APP_NAME
-    })
+    }
 
     try {
       await checkAuth(profile.ownedBy.address)
