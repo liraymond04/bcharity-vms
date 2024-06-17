@@ -1,14 +1,13 @@
 import {
-  CollectModuleParams,
-  isRelayerError,
-  PublicationMetadataV2Input,
-  ReferenceModuleParams,
-  RelayerResultFragment
+  PublicationStatsInput,
+  RelayErrorFragment,
+  RelaySuccessFragment
 } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { useTranslation } from 'react-i18next'
 
+import { config } from './config'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
@@ -24,24 +23,7 @@ export interface CreateCommentParams {
    * The profile id of the profile creating the comment
    */
   profileId: string
-  /**
-   * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.PublicationMetadataV2Input.html | PublicationMetadataV2Input} for the comment
-   */
-  metadata: PublicationMetadataV2Input
-  /**
-   * {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.CollectModuleParams.html | CollectModuleParams} for the comment
-   *
-   * Defaults to
-   * { freeCollectModule: { followerOnly: false } },
-   */
-  collectModule?: CollectModuleParams
-  /**
-   * {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.ReferenceModuleParams.html | ReferenceModuleParams } for the comment
-   *
-   * Defaults to
-   * { followerOnlyReferenceModule: false }
-   */
-  referenceModule?: ReferenceModuleParams
+  metadata: PublicationStatsInput
 }
 
 /**
@@ -53,7 +35,9 @@ export interface CreateCommentReturn {
    * @param params The {@link CreateCommentParams} for the request
    * @returns
    */
-  createComment: (params: CreateCommentParams) => Promise<RelayerResultFragment>
+  createComment: (
+    params: CreateCommentParams
+  ) => Promise<RelayErrorFragment | RelaySuccessFragment>
 }
 
 /**
@@ -77,10 +61,8 @@ const useCreateComment = (): CreateCommentReturn => {
 
   const createComment = async ({
     publicationId,
-    profileId,
-    metadata,
-    collectModule = { freeCollectModule: { followerOnly: false } },
-    referenceModule = { followerOnlyReferenceModule: false }
+    //profileId,
+    metadata
   }: CreateCommentParams) => {
     if (!sdk) throw new Error(e('metadata-upload-fail'))
 
@@ -93,12 +75,9 @@ const useCreateComment = (): CreateCommentReturn => {
     console.log(contentURI)
 
     const typedDataResult =
-      await lensClient().publication.createCommentTypedData({
-        publicationId,
-        profileId,
-        contentURI,
-        collectModule,
-        referenceModule
+      await lensClient().publication.createOnchainCommentTypedData({
+        commentOn: publicationId,
+        contentURI
       })
 
     if (typedDataResult.isFailure()) {
@@ -106,18 +85,17 @@ const useCreateComment = (): CreateCommentReturn => {
     }
 
     const signature = await signTypedData(
+      config,
       getSignature(typedDataResult.value.typedData)
     )
 
-    const broadcastResult = await lensClient().transaction.broadcast({
+    const broadcastResult = await lensClient().transaction.broadcastOnchain({
       id: typedDataResult.value.id,
       signature
     })
 
     if (broadcastResult.isFailure()) {
       throw new Error(broadcastResult.error.message)
-    } else if (isRelayerError(broadcastResult.value)) {
-      throw new Error(broadcastResult.value.reason)
     } else {
       return broadcastResult.value
     }
