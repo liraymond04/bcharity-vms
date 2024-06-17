@@ -1,8 +1,5 @@
-import {
-  PublicationStatsInput,
-  RelayErrorFragment,
-  RelaySuccessFragment
-} from '@lens-protocol/client'
+import { RelayErrorFragment, RelaySuccessFragment } from '@lens-protocol/client'
+import { TextOnlyMetadata } from '@lens-protocol/metadata'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +13,7 @@ import lensClient from './lensClient'
  */
 export interface CreatePostParams {
   profileId: string //this is unused, not sure where it would go
-  metadata: PublicationStatsInput
+  metadata: TextOnlyMetadata
 }
 
 /**

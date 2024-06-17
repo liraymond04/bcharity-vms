@@ -1,8 +1,5 @@
-import {
-  PublicationStatsInput,
-  RelayErrorFragment,
-  RelaySuccessFragment
-} from '@lens-protocol/client'
+import { RelayErrorFragment, RelaySuccessFragment } from '@lens-protocol/client'
+import { TextOnlyMetadata } from '@lens-protocol/metadata'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +20,7 @@ export interface CreateCommentParams {
    * The profile id of the profile creating the comment
    */
   profileId: string
-  metadata: PublicationStatsInput
+  metadata: TextOnlyMetadata
 }
 
 /**

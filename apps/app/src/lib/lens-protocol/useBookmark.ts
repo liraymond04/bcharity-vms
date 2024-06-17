@@ -1,11 +1,13 @@
 import {
   // MetadataAttributeInput,
-  ProfileFragment,
-  PublicationMetadataMainFocusType,
-  PublicationStatsInput
+  ProfileFragment
 } from '@lens-protocol/client'
+import { textOnly, TextOnlyMetadata } from '@lens-protocol/metadata'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { v4 } from 'uuid'
+
+import { APP_NAME } from '@/constants'
 
 // import { v4 } from 'uuid'
 // import { APP_NAME } from '@/constants'
@@ -157,22 +159,17 @@ const useBookmark = (params: UseBookmarkParams): UseBookmarkReturn => {
 
     // should be fine to remove this part if attributes is no longer part of metadata?
     // const attributes: MetadataAttributeInput[] = []
-    const metadata: PublicationStatsInput = {
-      metadata: {
-        locale: getUserLocale(),
-        tags: { all: [params.postTag] },
-        mainContentFocus: [PublicationMetadataMainFocusType.TextOnly]
-      }
-      // version: '2.0.0',
-      // metadata_id: v4(),
-      // content: `#${params.postTag}`,
-      // locale: getUserLocale(),
-      // tags: [params.postTag],
-      // mainContentFocus: PublicationMainFocus.TextOnly,
-      // name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
-      // attributes,
-      // appId: APP_NAME
-    }
+    const metadata: TextOnlyMetadata = textOnly({
+      marketplace: {
+        name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
+        attributes: []
+      },
+      locale: getUserLocale(),
+      id: v4(),
+      content: `#${params.postTag}`,
+      tags: [params.postTag],
+      appId: APP_NAME
+    })
 
     try {
       await checkAuth(params.profile.ownedBy.toString(), params.profile.id)
