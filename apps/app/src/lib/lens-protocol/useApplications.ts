@@ -1,4 +1,8 @@
-import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
+import {
+  ProfileFragment,
+  PublicationCommentOn,
+  PublicationType
+} from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,18 +24,24 @@ interface GetIsRequestHandledParams {
 }
 
 const getIsRequestHandled = (params: GetIsRequestHandledParams) => {
+  const commentID: PublicationCommentOn = {
+    id: params.commentId
+  }
+
   return lensClient()
     .publication.fetchAll({
-      commentsOf: params.commentId,
-      metadata: {
-        tags: {
-          oneOf: [PostTags.Application.REJECT, PostTags.Application.Accept]
+      where: {
+        commentOn: commentID,
+        metadata: {
+          tags: {
+            oneOf: [PostTags.Application.REJECT, PostTags.Application.Accept]
+          }
         }
       }
     })
     .then((values) => {
       const filtered = values.items.filter(
-        (value) => value.profile.id == params.profileId && !value.hidden
+        (value) => value.by.id == params.profileId && !value.isHidden
       )
       return filtered.length > 0
     })
@@ -42,9 +52,14 @@ interface getApplicationCommentsParams {
 }
 
 const getApplicationComments = (params: getApplicationCommentsParams) => {
+  const publicationID: PublicationCommentOn = {
+    id: params.publicationId
+  }
   return lensClient().publication.fetchAll({
-    commentsOf: params.publicationId,
-    metadata: { tags: { all: [PostTags.Application.Apply] } }
+    where: {
+      commentOn: publicationID,
+      metadata: { tags: { all: [PostTags.Application.Apply] } }
+    }
   })
 }
 
@@ -106,9 +121,11 @@ const useApplications = ({
 
     lensClient()
       .publication.fetchAll({
-        profileId: profile.id,
-        publicationTypes: [PublicationTypes.Post],
-        metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
+        where: {
+          from: [profile.id],
+          publicationTypes: [PublicationType.Post],
+          metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
+        }
       })
       .then((res) => {
         ops = getOpportunityMetadata(res.items)
@@ -146,7 +163,7 @@ const useApplications = ({
         postsComments.forEach((postComments, i) => {
           const filteredPosts = postComments.items
             .filter(isComment)
-            .filter((p) => !p.hidden && !statusMap[p.id])
+            .filter((p) => !p.isHidden && !statusMap[p.id])
 
           filteredPosts.forEach((post) => {
             try {

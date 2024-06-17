@@ -1,4 +1,8 @@
-import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
+import {
+  OpenActionFilter,
+  ProfileFragment,
+  PublicationType
+} from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
 import {
@@ -18,10 +22,15 @@ interface getCollectedPostIdsParams {
 }
 
 const getCollectedPostIds = (params: getCollectedPostIdsParams) => {
+  const address: OpenActionFilter = {
+    address: params.profile.ownedBy.address
+  }
   return lensClient()
     .publication.fetchAll({
-      collectedBy: params.profile.ownedBy,
-      publicationTypes: [PublicationTypes.Comment]
+      where: {
+        withOpenActions: [address],
+        publicationTypes: [PublicationType.Comment]
+      }
     })
     .then((res) => res.items.map((i) => i.id))
 }
@@ -34,12 +43,14 @@ interface getRejectedPostIdsParams {
 const getIsRequestRejected = (params: getRejectedPostIdsParams) => {
   return lensClient()
     .publication.fetchAll({
-      commentsOf: params.commentId,
-      metadata: { tags: { oneOf: [PostTags.VhrRequest.Reject] } }
+      where: {
+        publicationIds: [params.commentId],
+        metadata: { tags: { oneOf: [PostTags.VhrRequest.Reject] } }
+      }
     })
     .then((values) => {
       const filtered = values.items.filter((value) => {
-        return value.profile.id == params.profileId
+        return value.by.id == params.profileId
       })
       return filtered.length > 0
     })
@@ -51,8 +62,10 @@ interface getVHRRequestCommentsParams {
 
 const getVHRRequestComments = (params: getVHRRequestCommentsParams) => {
   return lensClient().publication.fetchAll({
-    commentsOf: params.publicationId,
-    metadata: { tags: { all: [PostTags.VhrRequest.Opportunity] } }
+    where: {
+      publicationIds: [params.publicationId],
+      metadata: { tags: { all: [PostTags.VhrRequest.Opportunity] } }
+    }
   })
 }
 
@@ -91,9 +104,11 @@ const useVHRRequests = ({ profile }: UseVHRRequestsParams) => {
 
     lensClient()
       .publication.fetchAll({
-        profileId: profile.id,
-        publicationTypes: [PublicationTypes.Post],
-        metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
+        where: {
+          from: [profile.id],
+          publicationTypes: [PublicationType.Post],
+          metadata: { tags: { all: [PostTags.OrgPublish.Opportunity] } }
+        }
       })
       .then((res) => {
         ops = getOpportunityMetadata(res.items)
@@ -139,7 +154,7 @@ const useVHRRequests = ({ profile }: UseVHRRequestsParams) => {
             .filter(isComment)
             .filter((p) => {
               const accepted = !!collectedPostsIds.find((id) => p.id === id)
-              return !(rejectedPostMap[p.id] || accepted) && !p.hidden
+              return !(rejectedPostMap[p.id] || accepted) && !p.isHidden
             })
 
           filteredPosts.forEach((post) => {
