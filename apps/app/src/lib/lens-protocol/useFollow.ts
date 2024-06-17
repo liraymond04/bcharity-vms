@@ -1,7 +1,8 @@
-import { isRelayerError, RelayerResultFragment } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { config } from '@/lib/config'
 
 import checkAuth from './checkAuth'
 import getSignature from './getSignature'
@@ -34,11 +35,11 @@ export interface UseFollowReturn {
   /**
    * The function to execute to follow a user
    */
-  followUser: () => Promise<RelayerResultFragment | undefined>
+  followUser: () => any
   /**
    * The function to execute to follow a user
    */
-  unfollowUser: () => Promise<RelayerResultFragment | undefined>
+  unfollowUser: () => any
 }
 
 /**
@@ -84,15 +85,10 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
     setIsLoading(true)
     try {
       if (followerAddress) {
-        const result = await lensClient().profile.doesFollow({
-          followInfos: [
-            {
-              followerAddress,
-              profileId: id
-            }
-          ]
+        const result = await lensClient().profile.followers({
+          of: id
         })
-        setFollowing(result[0].follows)
+        setFollowing(result.items.some((item) => item.id === followerAddress))
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -119,25 +115,24 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
     }
     setIsLoading(true)
     try {
-      await checkAuth(params.followerAddress)
+      await checkAuth(params.followerAddress, params.profileId)
 
       const typedDataResult = await lensClient().profile.createFollowTypedData({
-        follow: [{ profile: params.profileId }]
+        follow: [{ profileId: params.profileId }]
       })
 
       const signature = await signTypedData(
+        config,
         getSignature(typedDataResult.unwrap().typedData)
       )
 
-      const broadcastResult = await lensClient().transaction.broadcast({
+      const broadcastResult = await lensClient().transaction.broadcastOnchain({
         id: typedDataResult.unwrap().id,
         signature: signature
       })
 
       if (broadcastResult.isFailure()) {
         setError(broadcastResult.error.message)
-      } else if (isRelayerError(broadcastResult.value)) {
-        setError(broadcastResult.value.reason)
       } else {
         setFollowing(true)
         return broadcastResult.value
@@ -165,26 +160,25 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
     setIsLoading(true)
     setError('')
     try {
-      await checkAuth(params.followerAddress)
+      await checkAuth(params.followerAddress, params.profileId)
 
       const typedDataResult =
         await lensClient().profile.createUnfollowTypedData({
-          profile: params.profileId
+          unfollow: [params.profileId]
         })
 
       const signature = await signTypedData(
+        config,
         getSignature(typedDataResult.unwrap().typedData)
       )
 
-      const broadcastResult = await lensClient().transaction.broadcast({
+      const broadcastResult = await lensClient().transaction.broadcastOnchain({
         id: typedDataResult.unwrap().id,
         signature: signature
       })
 
       if (broadcastResult.isFailure()) {
         setError(broadcastResult.error.message)
-      } else if (isRelayerError(broadcastResult.value)) {
-        setError(broadcastResult.value.reason)
       } else {
         setFollowing(false)
         return broadcastResult.value
