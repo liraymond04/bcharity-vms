@@ -1,10 +1,10 @@
 import {
   CommentFragment,
   isCommentPublication,
-  isPostPublication,
+  OpenActionFilter,
   PostFragment,
   ProfileFragment,
-  PublicationTypes
+  PublicationType
 } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -58,10 +58,15 @@ interface getCollectedPostIdsParams {
 }
 
 const getCollectedPosts = (params: getCollectedPostIdsParams) => {
+  const address: OpenActionFilter = {
+    address: params.profile.ownedBy.address
+  }
   return lensClient()
     .publication.fetchAll({
-      collectedBy: params.profile.ownedBy,
-      publicationTypes: [PublicationTypes.Comment]
+      where: {
+        withOpenActions: [address],
+        publicationTypes: [PublicationType.Comment]
+      }
     })
     .then((res) => res.items)
 }
@@ -123,10 +128,12 @@ export const useVolunteers = ({
 
     const apAcceptCommentsData = (
       await lensClient().publication.fetchAll({
-        profileId: profile.id,
-        publicationTypes: [PublicationTypes.Comment],
-        metadata: {
-          tags: { all: [PostTags.Application.Accept] }
+        where: {
+          from: [profile.id],
+          publicationTypes: [PublicationType.Comment],
+          metadata: {
+            tags: { all: [PostTags.Application.Accept] }
+          }
         }
       })
     ).items.filter(isCommentPublication)
@@ -137,12 +144,22 @@ export const useVolunteers = ({
 
     const opData: PostFragment[] = []
 
+    const isValidPostFragment = (
+      obj: {} | PostFragment
+    ): obj is PostFragment => {
+      return (
+        obj &&
+        '__typename' in obj &&
+        (obj as PostFragment).__typename === 'Post'
+      )
+    }
+
     opData.push(
-      ...apAcceptCommentsData.map((d) => d.mainPost).filter(isPostPublication)
+      ...apAcceptCommentsData.map((d) => d.root).filter(isValidPostFragment)
     )
 
     opData.push(
-      ...vhrCollectData.map((d) => d.mainPost).filter(isPostPublication)
+      ...vhrCollectData.map((d) => d.root).filter(isValidPostFragment)
     )
 
     const ops = getOpportunityMetadata(opData)
@@ -162,12 +179,23 @@ export const useVolunteers = ({
     // vhr request comment -> opportunity post
 
     const filteredApAcceptComments = apAcceptCommentsData
-      .filter((a) => opMap.has(a.mainPost.id))
-      .filter((a) => !!a.commentOn && isCommentPublication(a.commentOn))
+      .filter((a) => {
+        if (isValidPostFragment(a.root)) {
+          return opMap.has(a.root.id)
+        }
+        return false
+      })
+      .filter((a) => {
+        // Ensure that 'a.commentOn' exists and is a 'CommentPublication'
+        return !!a.commentOn && isCommentPublication(a.commentOn)
+      })
 
-    const filteredColData = vhrCollectData.filter((a) =>
-      opMap.has(a.mainPost.id)
-    )
+    const filteredColData = vhrCollectData.filter((a) => {
+      if (isValidPostFragment(a.root)) {
+        return opMap.has(a.root.id)
+      }
+      return false
+    })
 
     const dateJoinedMap = new Map<string, string>([
       ...filteredApAcceptComments
@@ -179,7 +207,7 @@ export const useVolunteers = ({
     ])
 
     const applications = filteredApAcceptComments
-      .map((a) => [a.commentOn, a.mainPost] as [CommentFragment, PostFragment])
+      .map((a) => [a.commentOn, a.root] as [CommentFragment, PostFragment])
       .map(([a, opPost]) => {
         try {
           const opId = opPost.id
@@ -205,19 +233,22 @@ export const useVolunteers = ({
     const vhrRequests = filteredColData
       .map((a) => {
         try {
-          const op = opMap.get(a.mainPost.id)
-          if (!op) throw new InvalidMetadataException('Invalid metadata') // exception should never be thrown because it is filtered with opMap.has(a.mainPost.id) but here just in case
-          return new LogVhrRequestMetadataBuilder(a, op).build()
+          if (isValidPostFragment(a.root)) {
+            const op = opMap.get(a.root.id)
+            if (!op) throw new InvalidMetadataException('Invalid metadata')
+            return new LogVhrRequestMetadataBuilder(a, op).build()
+          }
         } catch (e) {
           if (e instanceof InvalidMetadataException) {
             logIgnoreWarning(a, e)
           } else {
             console.error(e)
           }
-          return null
         }
+        return null
       })
       .filter((a): a is LogVhrRequestMetadata => !!a)
+
     const volunteerDataMap = new Map<string, VolunteerData>()
 
     applications.forEach((a) => {
