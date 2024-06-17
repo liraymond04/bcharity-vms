@@ -1,8 +1,8 @@
 import {
+  AnyPublicationFragment,
   CommentFragment,
   MirrorFragment,
-  PostFragment,
-  PublicationFragment
+  PostFragment
 } from '@lens-protocol/client'
 
 /**
@@ -38,13 +38,13 @@ import {
  * ```
  */
 
-export const isPost = (p: PublicationFragment): p is PostFragment =>
+export const isPost = (p: AnyPublicationFragment): p is PostFragment =>
   p.__typename === 'Post'
 
 /**
  * {@link isPost}, but for comments
  */
-export const isComment = (p: PublicationFragment): p is CommentFragment =>
+export const isComment = (p: AnyPublicationFragment): p is CommentFragment =>
   p.__typename === 'Comment'
-export const isMirror = (p: PublicationFragment): p is MirrorFragment =>
+export const isMirror = (p: AnyPublicationFragment): p is MirrorFragment =>
   p.__typename === 'Mirror'
