@@ -1,3 +1,4 @@
+import { isRelaySuccess } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -133,6 +134,8 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
 
       if (broadcastResult.isFailure()) {
         setError(broadcastResult.error.message)
+      } else if (!isRelaySuccess(broadcastResult.value)) {
+        setError(broadcastResult.value.reason)
       } else {
         setFollowing(true)
         return broadcastResult.value
@@ -179,6 +182,8 @@ const useFollow = (params: UseFollowParams): UseFollowReturn => {
 
       if (broadcastResult.isFailure()) {
         setError(broadcastResult.error.message)
+      } else if (!isRelaySuccess(broadcastResult.value)) {
+        setError(broadcastResult.value.reason)
       } else {
         setFollowing(false)
         return broadcastResult.value
