@@ -74,7 +74,7 @@ const VolunteerHomeTab: React.FC = () => {
             console.error('ERROR: Handle is null!')
             return
           }
-          setUserHandle(currentUser.handle.fullHandle)
+          setUserHandle(currentUser.handle.localName)
 
           const userProfile = await lensClient().profile.fetch({
             forProfileId: currentUser?.id

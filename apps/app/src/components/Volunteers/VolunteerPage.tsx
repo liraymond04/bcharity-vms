@@ -93,17 +93,19 @@ const VolunteerPage: NextPage = () => {
     opportunity: OpportunityMetadata
   ) => {
     const accepted = await lensClient().publication.fetchAll({
-      commentsOf: item.id,
-      metadata: {
-        tags: {
-          oneOf: [PostTags.Application.Accept]
+      where: {
+        commentOn: { id: item.id },
+        metadata: {
+          tags: {
+            oneOf: [PostTags.Application.Accept]
+          }
         }
       }
     })
 
     return (
       accepted.items.filter(
-        (item) => item.profile.id === opportunity.from.id && !item.hidden
+        (item) => item.by.id === opportunity.from.id && !item.isHidden
       ).length > 0
     )
   }
@@ -113,17 +115,19 @@ const VolunteerPage: NextPage = () => {
     opportunity: OpportunityMetadata
   ) => {
     const rejected = await lensClient().publication.fetchAll({
-      commentsOf: item.id,
-      metadata: {
-        tags: {
-          oneOf: [PostTags.Application.REJECT]
+      where: {
+        commentOn: { id: item.id },
+        metadata: {
+          tags: {
+            oneOf: [PostTags.Application.REJECT]
+          }
         }
       }
     })
 
     return (
       rejected.items.filter(
-        (item) => item.profile.id === opportunity.from.id && !item.hidden
+        (item) => item.by.id === opportunity.from.id && !item.isHidden
       ).length > 0
     )
   }
@@ -133,17 +137,19 @@ const VolunteerPage: NextPage = () => {
       if (opportunity?.post_id && currentUser?.id) {
         try {
           const result = await lensClient().publication.fetchAll({
-            commentsOf: opportunity.post_id,
-            metadata: {
-              tags: {
-                oneOf: [PostTags.Application.Apply]
+            where: {
+              commentOn: { id: opportunity.post_id },
+              metadata: {
+                tags: {
+                  oneOf: [PostTags.Application.Apply]
+                }
               }
             }
           })
 
           // get latest application
           const latestApplication = result.items
-            .filter((item) => !item.hidden)
+            .filter((item) => !item.isHidden)
             .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
             .pop()
 
@@ -153,7 +159,7 @@ const VolunteerPage: NextPage = () => {
             throw Error(e('incorrect-publication-type'))
 
           // Found application
-          if (latestApplication.profile.id === currentUser.id) {
+          if (latestApplication.by.id === currentUser.id) {
             setApplied(true)
 
             // check if user application was accepted/rejected here
@@ -207,7 +213,7 @@ const VolunteerPage: NextPage = () => {
             </div>
           </div>
           <div className="flex space-x-3 items-center">
-            <Slug prefix="@" slug={opportunity.from.handle} />
+            <Slug prefix="@" slug={opportunity.from.handle?.localName} />
             <FollowButton followId={opportunity.from.id} />
           </div>
           <div className="pt-6 pb-4">{opportunity.description}</div>
