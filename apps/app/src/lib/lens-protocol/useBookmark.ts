@@ -1,15 +1,16 @@
 import {
-  MetadataAttributeInput,
-  ProfileFragment,
-  PublicationMainFocus,
-  PublicationMetadataV2Input
+  // MetadataAttributeInput,
+  ProfileFragment
 } from '@lens-protocol/client'
+import { textOnly, TextOnlyMetadata } from '@lens-protocol/metadata'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import { APP_NAME } from '@/constants'
 
+// import { v4 } from 'uuid'
+// import { APP_NAME } from '@/constants'
 import getUserLocale from '../getUserLocale'
 import { isComment } from '../metadata'
 import checkAuth from './checkAuth'
@@ -112,19 +113,13 @@ const useBookmark = (params: UseBookmarkParams): UseBookmarkReturn => {
     publicationId: string
   ) => {
     const result = await lensClient().publication.fetchAll({
-      commentsOf: publicationId,
-      metadata: {
-        tags: {
-          oneOf: [params.postTag]
-        }
-      }
+      where: { publicationIds: [publicationId] }
     })
 
     const comments = result.items
       .filter(isComment)
       .filter(
-        (comment) =>
-          !comment.hidden && comment.profile.ownedBy === profile.ownedBy
+        (comment) => !comment.isHidden && comment.root === profile.ownedBy
       )
 
     return comments
@@ -162,21 +157,22 @@ const useBookmark = (params: UseBookmarkParams): UseBookmarkReturn => {
     setIsLoading(true)
     setError('')
 
-    const attributes: MetadataAttributeInput[] = []
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: v4(),
-      content: `#${params.postTag}`,
+    // should be fine to remove this part if attributes is no longer part of metadata?
+    // const attributes: MetadataAttributeInput[] = []
+    const metadata: TextOnlyMetadata = textOnly({
+      marketplace: {
+        name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
+        attributes: []
+      },
       locale: getUserLocale(),
+      id: v4(),
+      content: `#${params.postTag}`,
       tags: [params.postTag],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${params.postTag} by ${params.profile.handle} for publication ${params.publicationId}`,
-      attributes,
       appId: APP_NAME
-    }
+    })
 
     try {
-      await checkAuth(params.profile.ownedBy)
+      await checkAuth(params.profile.ownedBy.toString(), params.profile.id)
 
       const comments = await getComments(params.profile, params.publicationId)
       if (comments.length > 0) {
@@ -212,14 +208,12 @@ const useBookmark = (params: UseBookmarkParams): UseBookmarkReturn => {
     setError('')
 
     try {
-      await checkAuth(params.profile.ownedBy)
+      await checkAuth(params.profile.ownedBy.toString(), params.profile.id)
 
       const comments = await getComments(params.profile, params.publicationId)
 
       const results = await Promise.all(
-        comments.map((c) =>
-          lensClient().publication.hide({ publicationId: c.id })
-        )
+        comments.map((c) => lensClient().publication.hide({ for: c.id }))
       )
 
       let success = true

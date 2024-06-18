@@ -1,5 +1,5 @@
-import { PublicationFragment } from '@lens-protocol/client'
-import { useEffect, useState } from 'react'
+import { AnyPublicationFragment } from '@lens-protocol/client'
+import { useCallback, useEffect, useState } from 'react'
 
 import lensClient from './lensClient'
 
@@ -16,7 +16,7 @@ export interface UsePublicationReturn {
    * The {@link https://lens-protocol.github.io/lens-sdk/types/_lens_protocol_client.PublicationFragment.html | PublicationFragment} data
    * associated with the publication, or undefined if the data is not ready
    */
-  data: PublicationFragment | undefined
+  data: AnyPublicationFragment | undefined
   /**
    * Whether or not the data is loading
    */
@@ -42,15 +42,15 @@ const usePublication = ({
   publicationId
 }: UsePublicationParams): UsePublicationReturn => {
   const [loading, setLoading] = useState(false)
-  const [data, setData] = useState<PublicationFragment>()
+  const [data, setData] = useState<AnyPublicationFragment>()
   const [error, setError] = useState('')
 
-  const refetch = () => {
+  const refetch = useCallback(() => {
     if (!publicationId) return
 
     setLoading(true)
     lensClient()
-      .publication.fetch({ publicationId })
+      .publication.fetch({ forId: publicationId })
       .then((data) => {
         if (data) setData(data)
       })
@@ -60,11 +60,11 @@ const usePublication = ({
       .finally(() => {
         setLoading(false)
       })
-  }
+  }, [publicationId])
 
   useEffect(() => {
     refetch()
-  }, [publicationId])
+  }, [publicationId, refetch])
 
   return {
     loading,
