@@ -4,7 +4,7 @@ import {
   PencilAltIcon,
   UserIcon
 } from '@heroicons/react/outline'
-import { ProfileFragment, PublicationTypes } from '@lens-protocol/client'
+import { ProfileFragment, PublicationType } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -65,7 +65,7 @@ const Organization: NextPage = () => {
     refetch: refetchPostData
   } = usePostData(profile?.id, {
     profileId: currentUser?.id,
-    publicationTypes: [PublicationTypes.Post],
+    publicationTypes: [PublicationType.Post],
     metadata: {
       tags: {
         oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
@@ -207,9 +207,12 @@ const Organization: NextPage = () => {
   }, [username, isReady])
 
   const getSlug = (key: string) => {
+    if (profile?.metadata == null) {
+      return ''
+    }
     const item =
-      profile?.attributes &&
-      profile.attributes.filter((item) => item.key === key).at(0)
+      profile?.metadata.attributes &&
+      profile.metadata.attributes.filter((item) => item.key === key).at(0)
     if (item) {
       return item.value
     }
@@ -259,7 +262,7 @@ const Organization: NextPage = () => {
                             >
                               <UserIcon className="h-6 w-6 mb-1 mr-2" />
                               {`${t('followers').toLocaleUpperCase()} ${
-                                profile.stats.totalFollowers
+                                profile.stats.followers
                               }`}
                             </div>
                             <div
@@ -268,7 +271,7 @@ const Organization: NextPage = () => {
                             >
                               <PencilAltIcon className="h-6 w-6 mb-1 mr-2" />
                               {`${t('posts').toLocaleUpperCase()} ${
-                                profile.stats.totalPosts
+                                profile.stats.posts
                               }`}
                             </div>
                             <div className="flex items-center mx-4">
@@ -284,7 +287,11 @@ const Organization: NextPage = () => {
                         <div className="ml-4">
                           <div className="flex items-center mb-4">
                             <p className="md:text-4xl text-xl font-bold text-white-600 flex items-left">
-                              {profile.name ? profile.name : profile.handle}
+                              {profile.metadata
+                                ? profile.metadata.displayName
+                                  ? profile.metadata.displayName
+                                  : profile.handle?.fullHandle
+                                : profile.handle?.fullHandle}
                             </p>
                             <p className="border-2 border-gray-300 ml-4 px-2 py-1 text-gray-400 font-semibold">
                               ORG
@@ -364,7 +371,7 @@ const Organization: NextPage = () => {
                           </div>
                           <div className="bg-gray-50 dark:darkgradient w-full min-h-[400px] border border-gray-400 dark:border-black rounded-md mb-8">
                             <div className="w-full text-gray-600 dark:text-white text-xl p-5">
-                              {profile.bio}
+                              {profile.metadata ? profile.metadata.bio : null}
                             </div>
                           </div>
                         </div>
