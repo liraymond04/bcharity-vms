@@ -49,7 +49,7 @@ const FollowButton: FC<FollowButtonProps> = ({
 
   const { currentUser } = useAppPersistStore()
   const { following, isLoading, error, followUser, unfollowUser } = useFollow({
-    followerAddress: currentUser?.ownedBy ?? '',
+    followerAddress: (currentUser?.ownedBy ?? '').toString(),
     profileId: followId
   })
 

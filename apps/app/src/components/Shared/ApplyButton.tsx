@@ -106,7 +106,7 @@ const ApplyButton: FC<ApplyButtonProps> = ({
       if (!currentUser) throw Error(e('profile-null'))
       console.log(formData)
 
-      await checkAuth(currentUser.ownedBy)
+      await checkAuth(currentUser.ownedBy.address)
 
       const resumeUrl = (await upload({ data: [resume] }))[0]
 
