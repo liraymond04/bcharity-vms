@@ -38,10 +38,10 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
                       index == 0
                         ? 'text-[#FFD600]'
                         : index == 1
-                        ? 'text-[#CCCCCC]'
-                        : index == 2
-                        ? 'text-[#8E5E00]'
-                        : 'text-[#A3A3A3]'
+                          ? 'text-[#CCCCCC]'
+                          : index == 2
+                            ? 'text-[#8E5E00]'
+                            : 'text-[#A3A3A3]'
                     } `}
                   >
                     {value.handle}

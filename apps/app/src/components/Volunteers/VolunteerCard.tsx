@@ -59,7 +59,7 @@ const VolunteerCard: React.FC<IVolunteerCardProps> = ({ post }) => {
           </div>
           <div className="relative mx-5 mt-3 mb-1 max-w-[15vw]">
             <div className="font-bold text-2xl line-clamp-1">{post?.name}</div>
-            <div className="text-xs">{post?.from.handle}</div>
+            <div className="text-xs">{post?.from.handle?.localName}</div>
             <div className="text-xs">{post?.startDate}</div>
             <div className="line-clamp-2 text-sm mt-1">{post?.description}</div>
             {post?.website && (

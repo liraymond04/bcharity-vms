@@ -49,7 +49,7 @@ const VHRs: NextPage = () => {
       profiles = profiles.filter(
         (profile) => isVerified(profile.id) === verified
       )
-      item.handle = profiles[0]?.handle
+      item.handle = profiles[0]?.handle?.localName || ''
       if (profiles.length > 0) {
         item.avatar = getAvatar(profiles[0])
         arr.push(item)

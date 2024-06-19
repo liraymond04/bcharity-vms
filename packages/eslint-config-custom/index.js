@@ -16,9 +16,9 @@ module.exports = {
     'react/prop-types': 'off',
     'react/no-unescaped-entities': 'off',
     'react/jsx-no-useless-fragment': 2,
-    'no-unused-vars': 'warn',
     'unused-imports/no-unused-imports': 'error',
     '@next/next/no-html-link-for-pages': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/ban-ts-comment': 'off', // turn warn
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-use-before-define': ['off'],

@@ -1,7 +1,7 @@
 import { GridItemFour, GridLayout } from '@components/GridLayout'
 import SEO from '@components/utils/SEO'
 import { SearchIcon } from '@heroicons/react/outline'
-import { PublicationSortCriteria } from '@lens-protocol/client'
+import { ExplorePublicationsOrderByType } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-cool-inview'
@@ -60,13 +60,14 @@ const Volunteers: NextPage = () => {
     fetchMore
   } = useExplorePublications(
     {
-      sortCriteria: PublicationSortCriteria.Latest,
-      metadata: {
-        tags: {
-          oneOf: [PostTags.OrgPublish.Opportunity]
+      orderBy: ExplorePublicationsOrderByType.Latest,
+      where: {
+        metadata: {
+          tags: {
+            oneOf: [PostTags.OrgPublish.Opportunity]
+          }
         }
-      },
-      noRandomize: true
+      }
     },
     true
   )
@@ -80,7 +81,7 @@ const Volunteers: NextPage = () => {
       if (post.type === PostTags.OrgPublish.OpportunityDraft) return
       _posts.push(post)
       if (post.category) _categories.add(post.category)
-      if (post.from.handle) _Orgs.add(post.from.handle)
+      if (post.from.handle) _Orgs.add(post.from.handle.localName)
     })
     setPosts(_posts)
     setCategories(_categories)
@@ -164,7 +165,8 @@ const Volunteers: NextPage = () => {
             (post) =>
               testSearch(post.name, searchValue) &&
               (selectedCategory === '' || post.category === selectedCategory) &&
-              (selectedOrg === '' || post.from.handle === selectedOrg)
+              (selectedOrg === '' ||
+                post.from.handle?.localName === selectedOrg)
           )
           .map((post) => (
             <GridItemFour key={post.id}>
