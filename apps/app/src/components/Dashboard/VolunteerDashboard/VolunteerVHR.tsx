@@ -1,8 +1,8 @@
 import { SearchIcon } from '@heroicons/react/outline'
 import {
-  PublicationSortCriteria,
-  PublicationsQueryRequest,
-  PublicationTypes
+  ExplorePublicationsOrderByType,
+  PublicationsRequest,
+  PublicationType
 } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -75,17 +75,19 @@ const VolunteerVHRTab: React.FC = () => {
     refetch
   } = useExplorePublications(
     {
-      sortCriteria: PublicationSortCriteria.Latest,
-      metadata: {
-        tags: { oneOf: [PostTags.OrgPublish.Opportunity] }
-      },
-      noRandomize: true
+      orderBy: ExplorePublicationsOrderByType.Latest,
+      where: {
+        metadata: {
+          tags: { oneOf: [PostTags.OrgPublish.Opportunity] }
+        }
+        // noRandomize: true
+      }
     },
     true
   )
 
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
-    currentUser?.ownedBy ?? ''
+    currentUser?.ownedBy.address ?? ''
   )
 
   useEffect(() => {
@@ -102,22 +104,34 @@ const VolunteerVHRTab: React.FC = () => {
   }, [postData])
   useEffect(() => {
     if (profile) {
-      const param: PublicationsQueryRequest = {
-        metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
-        profileId: profile.id,
-        publicationTypes: [PublicationTypes.Post]
+      const param: PublicationsRequest = {
+        where: {
+          metadata: { tags: { all: [PostTags.OrgPublish.VHRGoal] } },
+          from: [profile.id],
+          publicationTypes: [PublicationType.Post]
+        }
       }
 
       lensClient()
         .publication.fetchAll(param)
         .then((data) => {
-          setVhrGoal(
-            parseFloat(
-              data.items[0] && isPost(data.items[0])
-                ? data.items[0].metadata.attributes[0]?.value ?? '0'
-                : '0'
-            )
-          )
+          // setVhrGoal(
+          //   parseFloat(
+          //     data.items[0] && isPost(data.items[0])
+          //       ? data.items[0].metadata.attributes[0]?.value ?? '0'
+          //       : '0'
+          //   )
+          // )
+          if (data.items[0] && isPost(data.items[0])) {
+            const attributes = data.items[0].metadata?.attributes
+            if (attributes && attributes[0]) {
+              setVhrGoal(parseFloat(attributes[0].value ?? '0'))
+            } else {
+              setVhrGoal(0)
+            }
+          } else {
+            setVhrGoal(0)
+          }
         })
     }
   }, [profile])

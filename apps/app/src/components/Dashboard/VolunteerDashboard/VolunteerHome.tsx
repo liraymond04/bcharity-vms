@@ -1,8 +1,5 @@
-import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
-import {
-  PublicationsQueryRequest,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { AnyPublicationFragment, ProfileFragment } from '@lens-protocol/client'
+import { PublicationsRequest, PublicationType } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +28,7 @@ const VolunteerHome: React.FC = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
-  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
+  const [postdata, setpostdata] = useState<AnyPublicationFragment[]>([])
   const [profile, setProfile] = useState<ProfileFragment>()
   useEffect(() => {
     if (currentUser?.id) {
@@ -55,9 +52,11 @@ const VolunteerHome: React.FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      const param: PublicationsQueryRequest = {
-        profileId: currentUser.id,
-        publicationTypes: [PublicationTypes.Post]
+      const param: PublicationsRequest = {
+        where: {
+          from: [currentUser.id],
+          publicationTypes: [PublicationType.Post]
+        }
       }
 
       lensClient()
@@ -72,14 +71,15 @@ const VolunteerHome: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
-      setSearchAddress(currentUser.ownedBy)
+      setSearchAddress(currentUser.ownedBy.address)
     }
   }, [currentUser, isAuthenticated])
 
   const getSlug = (key: string) => {
     const item =
-      profile?.attributes &&
-      profile.attributes.filter((item) => item.key === key).at(0)
+      profile && profile.metadata && profile?.metadata.attributes
+        ? profile.metadata.attributes.filter((item) => item.key === key).at(0)
+        : null
     if (item) {
       return item.value
     }
@@ -112,12 +112,12 @@ const VolunteerHome: React.FC = () => {
 
                   <div className="flex">
                     <h1 suppressHydrationWarning>{t('followers')}</h1>
-                    <div className="ml-1">{profile.stats.totalFollowers}</div>
+                    <div className="ml-1">{profile.stats.followers}</div>
                   </div>
 
                   <div className="flex">
                     <h1 suppressHydrationWarning>{t('following')}</h1>
-                    <div className="ml-1">{profile.stats.totalFollowing}</div>
+                    <div className="ml-1">{profile.stats.following}</div>
                   </div>
 
                   <div className="flex items-center">
@@ -175,14 +175,14 @@ const VolunteerHome: React.FC = () => {
                   <div className="justify-left w-full ">
                     <div className=" h-10">
                       <p className=" text-3xl text-white-600 flex items-left mt-10">
-                        {profile?.handle}
+                        {profile?.handle?.fullHandle}
                       </p>
                       <div>
                         <Link href="">
                           <div className="truncate">
                             <Slug
                               className="font-bold"
-                              slug={profile?.handle}
+                              slug={profile?.handle?.fullHandle}
                               prefix="@"
                             />
                           </div>
@@ -212,7 +212,7 @@ const VolunteerHome: React.FC = () => {
                                             alt="Rounded avatar"
                                           />
                                           <div>
-                                            {profile.handle}
+                                            {profile.handle?.fullHandle}
                                             <Link href="">
                                               <div className="text-sm float-right top-0 mb-5">
                                                 <p className="text-gray-900 leading-none"></p>
@@ -223,7 +223,9 @@ const VolunteerHome: React.FC = () => {
                                               <div className="truncate">
                                                 <Slug
                                                   className="font-bold"
-                                                  slug={profile?.handle}
+                                                  slug={
+                                                    profile?.handle?.fullHandle
+                                                  }
                                                   prefix="@"
                                                 />
                                               </div>
@@ -233,7 +235,9 @@ const VolunteerHome: React.FC = () => {
                                       </div>
                                     </div>
                                     <p className="text-gray-700 text-sm mt-10  dark:text-white">
-                                      {post.metadata.content}
+                                      {'content' in post.metadata
+                                        ? post.metadata.content
+                                        : ''}
                                     </p>
                                   </div>
 

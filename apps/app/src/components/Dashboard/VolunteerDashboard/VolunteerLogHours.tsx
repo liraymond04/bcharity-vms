@@ -5,7 +5,7 @@ import {
   LinkIcon,
   ViewListIcon
 } from '@heroicons/react/outline'
-import { PostFragment, PublicationTypes } from '@lens-protocol/client'
+import { PostFragment, PublicationType } from '@lens-protocol/client'
 import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -48,7 +48,7 @@ const VolunteerLogHours: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
 
   const { loading, data, error, refetch } = usePostData(profile?.id, {
-    publicationTypes: [PublicationTypes.Comment],
+    publicationTypes: [PublicationType.Comment],
     metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
   })
   const [metaData, setMetaData] = useState<OpportunityMetadata[]>([])
@@ -58,8 +58,8 @@ const VolunteerLogHours: React.FC = () => {
   useEffect(() => {
     const _metaData = data
       .filter(isComment)
-      .map((v) => v.mainPost)
-      .filter((v): v is PostFragment => v.__typename === 'Post')
+      .map((v) => v.root)
+      .filter((v): v is PostFragment => v === PublicationType.Post)
 
     setMetaData(getOpportunityMetadata(_metaData))
     setIndice(resetIndice())
