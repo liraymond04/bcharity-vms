@@ -1,9 +1,9 @@
 import { SearchIcon } from '@heroicons/react/outline'
-import { PostFragment, PublicationSortCriteria } from '@lens-protocol/client'
 import {
-  PublicationsQueryRequest,
-  PublicationTypes
+  ExplorePublicationsOrderByType,
+  PostFragment
 } from '@lens-protocol/client'
+import { PublicationsRequest, PublicationType } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -61,7 +61,9 @@ const VolunteerCauses: React.FC = () => {
 
   const [GoalModalOpen, setGoalModalOpen] = useState(false)
 
-  const { isLoading, data } = useWalletBalance(currentUser?.ownedBy ?? '')
+  const { isLoading, data } = useWalletBalance(
+    currentUser?.ownedBy.address ?? ''
+  )
 
   const {
     data: postData,
@@ -70,33 +72,40 @@ const VolunteerCauses: React.FC = () => {
     refetch
   } = useExplorePublications(
     {
-      sortCriteria: PublicationSortCriteria.Latest,
-      metadata: {
-        tags: { oneOf: [PostTags.OrgPublish.Cause] }
-      },
-      noRandomize: true
+      orderBy: ExplorePublicationsOrderByType.Latest,
+      where: {
+        metadata: {
+          tags: { oneOf: [PostTags.OrgPublish.Cause] }
+        }
+        // noRandomize: true
+      }
     },
     true
   )
 
   useEffect(() => {
     if (currentUser) {
-      const param: PublicationsQueryRequest = {
-        metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
-        profileId: currentUser.id,
-        publicationTypes: [PublicationTypes.Post]
+      const param: PublicationsRequest = {
+        where: {
+          metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
+          from: [currentUser.id],
+          publicationTypes: [PublicationType.Post]
+        }
       }
 
       lensClient()
         .publication.fetchAll(param)
         .then((data) => {
-          setDonationsGoal(
-            parseFloat(
-              data.items[0] && isPost(data.items[0])
-                ? data.items[0].metadata.attributes[0]?.value ?? '0'
-                : '0'
-            )
-          )
+          if (data.items[0] && isPost(data.items[0])) {
+            const attributes = data.items[0].metadata?.attributes
+            if (attributes && attributes[0]) {
+              setDonationsGoal(parseFloat(attributes[0].value ?? '0'))
+            } else {
+              setDonationsGoal(0)
+            }
+          } else {
+            setDonationsGoal(0)
+          }
         })
     }
   }, [currentUser])
@@ -117,7 +126,7 @@ const VolunteerCauses: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
-      setSearchAddress(currentUser.ownedBy)
+      setSearchAddress(currentUser.ownedBy.address)
     }
   }, [currentUser, isAuthenticated])
 
