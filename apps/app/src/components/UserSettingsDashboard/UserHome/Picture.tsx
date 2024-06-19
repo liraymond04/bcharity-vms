@@ -5,6 +5,7 @@ import { signTypedData } from '@wagmi/core'
 import { ChangeEvent, FC, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
+import { useConfig } from 'wagmi'
 
 import ChooseFile from '@/components/Shared/ChooseFile'
 import { Button } from '@/components/UI/Button'
@@ -52,24 +53,23 @@ const Picture: FC<PictureProps> = ({ profile }) => {
       setUploading(false)
     }
   }
-
+  const config = useConfig()
   const editPicture = async (avatar: string | undefined) => {
     setIsLoading(true)
     try {
-      await checkAuth(profile?.ownedBy ?? '')
+      await checkAuth(profile?.ownedBy?.address ?? '')
       if (!avatar) return toast.error(t('avatar-empty'))
 
       const typedDataResult =
-        await lensClient().profile.createSetProfileImageURITypedData({
-          url: avatar,
-          profileId: profile?.id ?? ''
+        await lensClient().profile.createSetProfileMetadataTypedData({
+          metadataURI: avatar
         })
-
       const signature = await signTypedData(
+        config,
         getSignature(typedDataResult.unwrap().typedData)
       )
 
-      const broadcastResult = await lensClient().transaction.broadcast({
+      const broadcastResult = await lensClient().transaction.broadcastOnchain({
         id: typedDataResult.unwrap().id,
         signature: signature
       })

@@ -4,6 +4,7 @@ import { signMessage, signTypedData } from '@wagmi/core'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useConfig } from 'wagmi'
 import { polygon, polygonMumbai } from 'wagmi/chains'
 
 import { Button } from '@/components/UI/Button'
@@ -53,12 +54,12 @@ const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
 
   const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState<boolean>()
-
+  const config = useConfig()
   const setAvatar = async (contractAddress: string, tokenId: string) => {
     setIsLoading(true)
     try {
-      const result = await lensClient().nfts.ownershipChallenge({
-        ethereumAddress: profile?.ownedBy ?? '',
+      const result = await lensClient().nfts.fetchGalleries({
+        for: profile?.id ?? '',
         nfts: [
           {
             tokenId,
@@ -69,12 +70,12 @@ const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
       })
 
       const _signature = await signMessage({
-        message: result.unwrap().text
+        config: config,
+        parameters: { message: result.name }
       })
 
       const typedDataResult =
-        await lensClient().profile.createSetProfileImageURITypedData({
-          profileId: profile?.id ?? '',
+        await lensClient().profile.createSetProfileMetadataTypedData({
           nftData: {
             id: result.unwrap().id,
             signature: _signature
@@ -82,10 +83,11 @@ const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
         })
 
       const signature = await signTypedData(
+        config,
         getSignature(typedDataResult.unwrap().typedData)
       )
 
-      const broadcastResult = await lensClient().transaction.broadcast({
+      const broadcastResult = await lensClient().transaction.broadcastOnchain({
         id: typedDataResult.unwrap().id,
         signature: signature
       })
@@ -98,7 +100,7 @@ const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
     }
     setIsLoading(false)
   }
-
+  
   return (
     <Form
       form={form}
@@ -139,8 +141,8 @@ const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
         placeholder="0x277f5959e22f94d5bd4c2cc0a77c4c71f31da3ac"
         error={!!errors.contractAddress?.type}
         value={
-          profile?.picture?.__typename === 'NftImage'
-            ? profile?.picture?.contractAddress
+          profile?.metadata?.picture?.__typename === 'NftImage'
+            ? profile?.metadata?.picture?.collection?.address
             : undefined
         }
         {...register('contractAddress', {
@@ -158,8 +160,8 @@ const NFTPicture: FC<NFTPictureProps> = ({ profile }) => {
         placeholder="1"
         error={!!errors.tokenId?.type}
         value={
-          profile?.picture?.__typename === 'NftImage'
-            ? profile?.picture?.tokenId
+          profile?.metadata?.picture?.__typename === 'NftImage'
+            ? profile?.metadata?.picture?.tokenId
             : undefined
         }
         {...(register('tokenId'),

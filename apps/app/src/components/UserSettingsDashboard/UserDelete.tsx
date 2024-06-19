@@ -27,7 +27,7 @@ const DeleteProfileSection: React.FC = () => {
 
   const handleClick = () => {
     if (currentUser) {
-      checkAuth(currentUser.ownedBy)
+      checkAuth(currentUser.ownedBy.address)
         .then(() =>
           lensClient().profile.createBurnProfileTypedData({
             profileId: currentUser!.id
@@ -39,7 +39,7 @@ const DeleteProfileSection: React.FC = () => {
         .catch((err) => console.log(err))
     }
   }
-
+  burn
   const onCompleted = () => {
     setIsAuthenticated(false)
     setCurrentUser(null)

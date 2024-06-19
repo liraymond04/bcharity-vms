@@ -9,15 +9,13 @@ import { Spinner } from '@/components/UI/Spinner'
 import { getProfile } from '@/lib/lens-protocol'
 import { useAppPersistStore } from '@/store/app'
 
-import NFTPicture from './NFTPicture'
 import Picture from './Picture'
 
 /**
  * Component with two tabs that lets the user set their profile picture
- * with an image file or an NFT.
+ * with an image file
  *
  * Setting the profile picture with an image file is handled with {@link Picture},
- * and setting the profile picture with an NFT is handled with {@link NFTPicture}.
  *
  * This component is used in {@link VolunteerHomeTab} to set the user's profile
  * picture.
@@ -46,7 +44,7 @@ const SelectAvatar: FC = () => {
   interface TypeButtonProps {
     name: string
     icon: ReactNode
-    type: 'NFT' | 'AVATAR'
+    type: 'AVATAR'
   }
 
   const TypeButton: FC<TypeButtonProps> = ({ name, icon, type }) => (
@@ -81,17 +79,8 @@ const SelectAvatar: FC = () => {
             type="AVATAR"
             name={t('upload-avatar')}
           />
-          <TypeButton
-            icon={<PhotographIcon className="w-5 h-5" />}
-            type="NFT"
-            name={t('nft-avatar')}
-          />
         </div>
-        {settingsType === 'NFT' ? (
-          <NFTPicture profile={profile} />
-        ) : (
-          <Picture profile={profile} />
-        )}
+        <Picture profile={profile} />
       </CardBody>
     </Card>
   )
