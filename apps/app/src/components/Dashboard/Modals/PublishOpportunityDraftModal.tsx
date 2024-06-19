@@ -112,7 +112,7 @@ const PublishOpportunityDraftModal: React.FC<
         }
       )
 
-      await checkAuth(publisher.ownedBy)
+      await checkAuth(publisher.ownedBy.address)
       await createPost({
         profileId: publisher.id,
         metadata
