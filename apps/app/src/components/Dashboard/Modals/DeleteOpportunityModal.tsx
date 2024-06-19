@@ -1,4 +1,4 @@
-import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
+import { AnyPublicationFragment, ProfileFragment } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -47,7 +47,7 @@ export interface IDeleteOpportunityModalProps {
   /**
    * List of the posts to be deleted
    */
-  postData: PublicationFragment[]
+  postData: AnyPublicationFragment[]
 }
 
 /**
@@ -107,12 +107,10 @@ const DeleteOpportunityModal: React.FC<IDeleteOpportunityModalProps> = ({
       return
     }
 
-    checkAuth(publisher.ownedBy)
+    checkAuth(publisher.ownedBy.address)
       .then(() =>
         Promise.all(
-          publicationIds.map((id) =>
-            lensClient().publication.hide({ publicationId: id })
-          )
+          publicationIds.map((id) => lensClient().publication.hide({ for: id }))
         )
       )
       .then((res) => {

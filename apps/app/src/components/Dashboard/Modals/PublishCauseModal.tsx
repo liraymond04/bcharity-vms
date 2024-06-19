@@ -164,7 +164,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
 
   useEffect(() => {
     setSelectedCurrencySymol(
-      currencyData?.find((c) => c.address === currency)?.symbol ?? 'WMATIC'
+      currencyData?.find((c) => c.name === currency)?.symbol ?? 'WMATIC'
     )
   }, [currency, currencyData])
 
@@ -221,11 +221,12 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
         }
       }
 
-      await checkAuth(publisher.ownedBy)
+      await checkAuth(publisher.ownedBy.address)
       await createPost({
         profileId: publisher.id,
-        metadata,
-        collectModule: collectModuleParams
+        metadata
+        // collectModule: collectModuleParams
+        // in lensProtocol/useCreatePost.ts there is only 2 params (profleId and metadata) ~ line 14
       })
 
       reset()
@@ -277,7 +278,7 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <FormDropdown
               label={t('selected-currency')}
-              options={currencyData?.map((c) => c.address) ?? []}
+              options={currencyData?.map((c) => c.name) ?? []}
               displayedOptions={currencyData?.map((c) => c.name) ?? []}
               {...register('currency')}
             />

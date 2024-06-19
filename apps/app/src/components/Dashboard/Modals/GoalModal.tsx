@@ -1,5 +1,5 @@
-import { PublicationMetadataV2Input } from '@lens-protocol/client'
 import { ProfileFragment as Profile } from '@lens-protocol/client'
+import { TextOnlyMetadata } from '@lens-protocol/metadata'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -93,15 +93,18 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
       return
     }
 
-    const metadata: PublicationMetadataV2Input =
-      buildMetadata<GoalMetadataRecord>(publisher, [PostTags.OrgPublish.Goal], {
+    const metadata: TextOnlyMetadata = buildMetadata<GoalMetadataRecord>(
+      publisher,
+      [PostTags.OrgPublish.Goal],
+      {
         ...data,
         version: MetadataVersion.GoalMetadataVersion['1.0.0'],
         type: PostTags.OrgPublish.Goal
-      })
+      }
+    )
 
     try {
-      await checkAuth(publisher.ownedBy)
+      await checkAuth(publisher.ownedBy.address)
 
       await createPost({ profileId: publisher.id, metadata })
 
