@@ -91,18 +91,23 @@ const VolunteerApplicationsTab = forwardRef<
         if (p.manual) {
           try {
             const result = await lensClient().profile.fetch({
-              profileId: p.description
+              forProfileId: p.description
             })
             if (!result) throw Error()
             profile = result.handle
-            profileIds.set(p.description, result.handle)
+            profileIds.set(
+              p.description,
+              profile ? profile.fullHandle : 'No handle for this profile'
+            )
             setProfileId(profileIds)
           } catch (error) {
             if (error instanceof Error) {
             }
           }
         }
-        profiles.add(profile)
+        profiles.add(
+          profile ? profile.fullHandle : 'No handle for this profile'
+        )
       })
       setCategories(profiles)
     }
@@ -124,7 +129,7 @@ const VolunteerApplicationsTab = forwardRef<
     setIdPending(selectedId)
 
     try {
-      await checkAuth(profile.ownedBy)
+      await checkAuth(profile.ownedBy.address)
 
       const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
 
@@ -146,7 +151,7 @@ const VolunteerApplicationsTab = forwardRef<
     setIdPending(selectedId)
 
     try {
-      await checkAuth(profile.ownedBy)
+      await checkAuth(profile.ownedBy.address)
 
       const metadata = buildMetadata(profile, [PostTags.Application.REJECT], {})
 
@@ -215,12 +220,15 @@ const VolunteerApplicationsTab = forwardRef<
                 <>
                   {data
                     .filter((item) => {
-                      let profile = item.from.handle
+                      let profile = item.from.handle?.fullHandle
                       let exists = profileId.get(item.description)
                       if (item.manual && exists) profile = exists
                       let result = true
                       if (searchValue !== '')
-                        result = testSearch(profile, searchValue)
+                        result = testSearch(
+                          profile ? profile : item.from.id,
+                          searchValue
+                        )
                       if (selectedCategory === '') return result
                       return result && profile === selectedCategory
                     })
@@ -229,7 +237,7 @@ const VolunteerApplicationsTab = forwardRef<
                         <PurpleBox
                           key={item.post_id}
                           selected={selectedId === item.post_id}
-                          userName={item.from.name ?? item.from.handle}
+                          userName={item.from.id ?? item.from.handle}
                           dateCreated={item.createdAt}
                           tab="applications"
                           onClick={() => {

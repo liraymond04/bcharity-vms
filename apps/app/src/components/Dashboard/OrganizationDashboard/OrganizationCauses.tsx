@@ -1,9 +1,6 @@
 import { PlusCircleIcon } from '@heroicons/react/outline'
 import { PencilIcon } from '@heroicons/react/solid'
-import {
-  PublicationsQueryRequest,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { PublicationsRequest, PublicationType } from '@lens-protocol/client'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { AgGridReact } from 'ag-grid-react'
@@ -14,6 +11,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
+import { useConfig } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import GridRefreshButton from '@/components/Shared/GridRefreshButton'
@@ -99,6 +97,7 @@ const OrganizationCauses: React.FC = () => {
     keyPrefix: 'components.dashboard.organization.causes'
   })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const config = useConfig()
 
   const { currentUser: profile } = useAppPersistStore()
   const { resolvedTheme } = useTheme()
@@ -112,8 +111,10 @@ const OrganizationCauses: React.FC = () => {
   const [currentModifyId, setCurrentModifyId] = useState('')
   const [currentDeleteId, setCurrentDeleteId] = useState('')
   const { data, error, loading, refetch } = usePostData(profile?.id, {
-    metadata: {
-      tags: { all: [PostTags.OrgPublish.Cause] }
+    where: {
+      metadata: {
+        tags: { all: [PostTags.OrgPublish.Cause] }
+      }
     }
   })
 
@@ -147,39 +148,42 @@ const OrganizationCauses: React.FC = () => {
         setErrora(undefined)
         if (currentUser) {
           setUserId(currentUser.id)
-          setUserHandle(currentUser.handle)
+          setUserHandle(
+            currentUser.handle ? currentUser.handle.fullHandle : 'No handle yet'
+          )
 
           const userProfile = await lensClient().profile.fetch({
-            profileId: currentUser?.id
+            forProfileId: currentUser?.id
           })
 
           if (userProfile) {
-            setName(userProfile.name || '')
+            setName(userProfile.metadata?.displayName || '')
 
-            if (userProfile.attributes) {
-              const locationAttribute = userProfile.attributes.find(
+            if (userProfile.metadata?.attributes) {
+              const locationAttribute = userProfile.metadata?.attributes.find(
                 (attr) => attr.key === 'location'
               )
               setLocation(locationAttribute?.value || '')
-              const websiteAttribute = userProfile.attributes.find(
+              const websiteAttribute = userProfile.metadata?.attributes.find(
                 (attr) => attr.key === 'website'
               )
               setWebsite(websiteAttribute?.value || '')
-              const discordAttribute = userProfile.attributes.find(
+              const discordAttribute = userProfile.metadata?.attributes.find(
                 (attr) => attr.key === 'discord'
               )
               setDiscord(discordAttribute?.value || '')
-              const twitterAttribute = userProfile.attributes.find(
+              const twitterAttribute = userProfile.metadata?.attributes.find(
                 (attr) => attr.key === 'twitter'
               )
               setTwitter(twitterAttribute?.value || '')
-              const linkedinAttribute = userProfile.attributes.find(
+              const linkedinAttribute = userProfile.metadata?.attributes.find(
                 (attr) => attr.key === 'linkedin'
               )
               setLinkedin(linkedinAttribute?.value || '')
-              const causeDescriptionAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'causeDescription'
-              )
+              const causeDescriptionAttribute =
+                userProfile.metadata?.attributes.find(
+                  (attr) => attr.key === 'causeDescription'
+                )
               setCauseDescription(causeDescriptionAttribute?.value || '')
               form.setValue(
                 'causeDescription',
@@ -187,7 +191,7 @@ const OrganizationCauses: React.FC = () => {
               )
               console.log('descripton', causeDescriptionAttribute)
             }
-            setBio(userProfile.bio || '')
+            setBio(userProfile.metadata?.bio || '')
           }
           console.log('profile', userProfile)
         }
@@ -206,7 +210,7 @@ const OrganizationCauses: React.FC = () => {
     setSubmitError(undefined)
     try {
       if (currentUser) {
-        await checkAuth(currentUser?.ownedBy)
+        await checkAuth(currentUser?.ownedBy.address)
 
         const attributes: AttributeData[] = [
           {
@@ -266,18 +270,21 @@ const OrganizationCauses: React.FC = () => {
 
         const typedDataResult =
           await lensClient().profile.createSetProfileMetadataTypedData({
-            metadata: metadataUrl,
-            profileId: currentUser?.id
+            metadataURI: metadataUrl
+            // profileId: currentUser?.id // doesn't exist in the request object anymore
           })
 
         const signature = await signTypedData(
+          config,
           getSignature(typedDataResult.unwrap().typedData)
         )
 
-        const broadcastResult = await lensClient().transaction.broadcast({
-          id: typedDataResult.unwrap().id,
-          signature: signature
-        })
+        const broadcastResult = await lensClient().transaction.broadcastOnchain(
+          {
+            id: typedDataResult.unwrap().id,
+            signature: signature
+          }
+        )
       }
       setCauseDescription(formData.causeDescription)
       setShowModal(false)
@@ -347,10 +354,12 @@ const OrganizationCauses: React.FC = () => {
   }, [resolvedTheme])
   useEffect(() => {
     if (profile) {
-      const param: PublicationsQueryRequest = {
-        metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
-        profileId: profile.id,
-        publicationTypes: [PublicationTypes.Post]
+      const param: PublicationsRequest = {
+        where: {
+          metadata: { tags: { all: [PostTags.OrgPublish.Goal] } },
+          actedBy: profile.id,
+          publicationTypes: [PublicationType.Post]
+        }
       }
 
       lensClient()
@@ -359,7 +368,11 @@ const OrganizationCauses: React.FC = () => {
           setVhrGoal(
             parseFloat(
               data.items[0] && isPost(data.items[0])
-                ? data.items[0].metadata.attributes[0]?.value ?? '0'
+                ? data.items[0].metadata
+                  ? data.items[0].metadata.attributes
+                    ? data.items[0].metadata.attributes[0]?.value
+                    : '0'
+                  : '0'
                 : '0'
             )
           )
@@ -368,11 +381,11 @@ const OrganizationCauses: React.FC = () => {
   }, [profile])
 
   const { isLoading: isBalanceLoading, data: balanceData } = useWalletBalance(
-    currentUser?.ownedBy ?? ''
+    currentUser?.ownedBy.address ?? ''
   )
 
   const { data: currencyData, error: currencyError } = useEnabledCurrencies(
-    currentUser?.ownedBy
+    currentUser?.ownedBy.address
   )
 
   const onCancel = () => {
@@ -563,7 +576,7 @@ const OrganizationCauses: React.FC = () => {
               open={publishModalOpen}
               onClose={onPublishClose}
               publisher={profile}
-              currencyData={currencyData}
+              currencyData={currencyData?.items}
             />
             <DeleteCauseModal
               open={deleteModalOpen}
@@ -572,14 +585,14 @@ const OrganizationCauses: React.FC = () => {
               id={currentDeleteId}
               postData={data}
               values={getFormDefaults(currentDeleteId)}
-              currencyData={currencyData}
+              currencyData={currencyData?.items}
             />
             <ModifyCauseModal
               open={modifyModalOpen}
               onClose={onModifyClose}
               publisher={profile}
               id={currentModifyId}
-              currencyData={currencyData}
+              currencyData={currencyData?.items}
               defaultValues={getFormDefaults(currentModifyId)}
             />
             <GoalModal

@@ -1,9 +1,6 @@
 import { LocationMarkerIcon } from '@heroicons/react/outline'
-import { ProfileFragment, PublicationFragment } from '@lens-protocol/client'
-import {
-  PublicationsQueryRequest,
-  PublicationTypes
-} from '@lens-protocol/client'
+import { AnyPublicationFragment, ProfileFragment } from '@lens-protocol/client'
+import { PublicationsRequest, PublicationType } from '@lens-protocol/client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,7 +27,7 @@ const OrganizationHome: React.FC = () => {
   const { isAuthenticated, currentUser } = useAppPersistStore()
 
   const [auth, setAuth] = useState<boolean>(false)
-  const [postdata, setpostdata] = useState<PublicationFragment[]>([])
+  const [postdata, setpostdata] = useState<AnyPublicationFragment[]>([])
   const [profile, setProfile] = useState<ProfileFragment>()
   useEffect(() => {
     if (currentUser?.id) {
@@ -53,9 +50,11 @@ const OrganizationHome: React.FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      const param: PublicationsQueryRequest = {
-        profileId: currentUser.id,
-        publicationTypes: [PublicationTypes.Post]
+      const param: PublicationsRequest = {
+        where: {
+          actedBy: currentUser.id,
+          publicationTypes: [PublicationType.Post]
+        }
       }
 
       lensClient()
@@ -70,14 +69,14 @@ const OrganizationHome: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
-      setSearchAddress(currentUser.ownedBy)
+      setSearchAddress(currentUser.ownedBy.address)
     }
   }, [currentUser, isAuthenticated])
 
   const getSlug = (key: string) => {
     const item =
-      profile?.attributes &&
-      profile.attributes.filter((item) => item.key === key).at(0)
+      profile?.metadata?.attributes &&
+      profile.metadata?.attributes.filter((item) => item.key === key).at(0)
     if (item) {
       return item.value
     }
@@ -110,11 +109,11 @@ const OrganizationHome: React.FC = () => {
 
                   <div className="flex">
                     <h1 suppressHydrationWarning>{t('followers')}</h1>
-                    <div className="ml-1">{profile.stats.totalFollowers}</div>
+                    <div className="ml-1">{profile.stats.followers}</div>
                   </div>
                   <div className="flex">
                     <h1 suppressHydrationWarning>{t('following')}</h1>
-                    <div className="ml-1">{profile.stats.totalFollowing}</div>
+                    <div className="ml-1">{profile.stats.following}</div>
                   </div>
 
                   <div className="flex items-center">
@@ -172,7 +171,7 @@ const OrganizationHome: React.FC = () => {
                   <div className="justify-left w-full">
                     <div className=" h-10">
                       <p className=" text-3xl text-white-600 flex items-left mt-10 ">
-                        {profile?.handle}
+                        {profile?.handle?.fullHandle}
                       </p>
                       {getSlug('location') !== '' && (
                         <div className="flex flex-row space-x-2">
@@ -192,7 +191,7 @@ const OrganizationHome: React.FC = () => {
                         {t('about')}
                       </div>
                       <div className=" bg-accent-content  dark:bg-Within dark:bg-opacity-10 dark:text-sky-100 w-full mt-0 h-full border p-2 text-lg  border-gray-400 dark:border-black rounded-md">
-                        {profile.bio}
+                        {profile.metadata?.bio}
                       </div>
                     </div>
                   </div>

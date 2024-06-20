@@ -64,11 +64,13 @@ const Organization: NextPage = () => {
     error: postDataError,
     refetch: refetchPostData
   } = usePostData(profile?.id, {
-    profileId: currentUser?.id,
-    publicationTypes: [PublicationType.Post],
-    metadata: {
-      tags: {
-        oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+    where: {
+      actedBy: currentUser?.id,
+      publicationTypes: [PublicationType.Post],
+      metadata: {
+        tags: {
+          oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+        }
       }
     }
   })
