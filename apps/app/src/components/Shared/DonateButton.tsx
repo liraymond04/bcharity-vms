@@ -1,12 +1,13 @@
 import {
-  CollectModuleParams,
   CommentFragment,
+  LegacyFeeCollectModuleSettingsFragment,
   MetadataAttributeType,
   PostFragment,
-  PublicationMainFocus,
-  ReferenceModuleParams
+  PublicationMetadataMainFocusType,
+  ReferenceModuleInput
 } from '@lens-protocol/client'
 import { PublicationMetadataFilters } from '@lens-protocol/client'
+import { CollectActionModuleInput } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -100,6 +101,8 @@ const DonateButton: FC<DonateButtonProps> = ({
   const [currentContribution, setCurrentContribution] = useState<string>(
     cause.contribution
   )
+
+
   const [formContribution, setFormContribution] =
     useState<string>(currentContribution)
 
@@ -136,16 +139,17 @@ const DonateButton: FC<DonateButtonProps> = ({
       if (!isPost(currentPublication) && !isComment(currentPublication))
         throw Error(e('incorrect-publication-type'))
       if (
-        currentPublication.collectModule.__typename !==
-        'FeeCollectModuleSettings'
+        currentPublication.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["__typename"] !==
+        'LegacyFeeCollectModuleSettings'
       )
         throw Error(e('incorrect-collect-module'))
 
       const balance = await getBalance()
 
+      const currPubAmount = currentPublication.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["amount"]
       setCurrencyEnough(
         parseFloat('${balance}') >
-          parseFloat(currentPublication.collectModule.amount.value)
+          parseFloat(currPubAmount.value)
       )
     } catch (e) {
       if (e instanceof Error) {
@@ -160,17 +164,18 @@ const DonateButton: FC<DonateButtonProps> = ({
     getBalance()
   }, [currentContribution])
 
+  const currPostAmount = post.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["amount"]
   const [_setIsLoading, setSetIsLoading] = useState<boolean>(false)
   const onSet = async () => {
     setError(undefined)
     setSetIsLoading(true)
     try {
       // check if collect amount is original amount
-      if (post.collectModule.__typename !== 'FeeCollectModuleSettings')
+      if (post.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["__typename"] !== 'LegacyFeeCollectModuleSettings')
         throw e('incorrect-collect-module')
       if (
         parseFloat(formContribution) ===
-        parseFloat(post.collectModule.amount.value)
+        parseFloat(currPostAmount.value)
       ) {
         setCurrentPublication(post)
         setCurrentContribution(formContribution)
@@ -194,12 +199,12 @@ const DonateButton: FC<DonateButtonProps> = ({
         })
 
       comments.items
-        .filter((comment) => !comment.hidden)
+        .filter((comment) => !comment.isHidden)
         .every((comment) => {
           if (
             isComment(comment) &&
-            comment.collectModule.__typename === 'FeeCollectModuleSettings' &&
-            parseFloat(comment.collectModule.amount.value) ===
+            comment.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["__typename"] === 'LegacyFeeCollectModuleSettings' &&
+            parseFloat((comment.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["amount"]).value) ===
               parseFloat(formContribution)
           ) {
             hasAmount = true
@@ -221,27 +226,28 @@ const DonateButton: FC<DonateButtonProps> = ({
 
       const metadata: PublicationMetadataFilters = {
         locale: getUserLocale(),
-        mainContentFocus: PublicationMainFocus.TextOnly
+        mainContentFocus: [PublicationMetadataMainFocusType.TextOnly]
       }
 
-      const prevCollectModule = post.collectModule
-      if (prevCollectModule.__typename !== 'FeeCollectModuleSettings') {
+      const prevCollectModule = post.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment
+      if (prevCollectModule.__typename !== 'LegacyFeeCollectModuleSettings') {
         throw Error(e('incorrect-collect-module'))
       }
 
-      const collectModule: CollectModuleParams = {
-        feeCollectModule: {
+      const collectModule: CollectActionModuleInput = {
+        simpleCollectOpenAction: {
           amount: {
-            currency: prevCollectModule.amount.asset.address,
+            currency: prevCollectModule.amount.asset.contract.address,
             value: formContribution
           },
           followerOnly: prevCollectModule.followerOnly,
           recipient: prevCollectModule.recipient,
           referralFee: prevCollectModule.referralFee
-        }
+          }
       }
 
-      const referenceModule: ReferenceModuleParams = {
+
+      const referenceModule: ReferenceModuleInput = {
         followerOnlyReferenceModule: false
       }
 
@@ -319,12 +325,12 @@ const DonateButton: FC<DonateButtonProps> = ({
 
       if (publication === null || !isPost(publication))
         throw Error(e('incorrect-publication-type'))
-      if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
+      if (publication.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["__typename"] !== 'LegacyFeeCollectModuleSettings')
         throw Error(e('incorrect-collect-module'))
 
       total +=
-        publication.stats.totalAmountOfCollects *
-        parseFloat(publication.collectModule.amount.value)
+        publication.stats.collects *
+        parseFloat((publication.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["amount"]).value)
 
       // get comment totals
       const comments = await lensClient().publication.fetchAll({
@@ -345,11 +351,11 @@ const DonateButton: FC<DonateButtonProps> = ({
         .forEach((comment) => {
           if (
             isComment(comment) &&
-            comment.collectModule.__typename === 'FeeCollectModuleSettings'
+            comment.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["__typename"] === 'LegacyFeeCollectModuleSettings'
           )
             total +=
-              comment.stats.totalAmountOfCollects *
-              parseFloat(comment.collectModule.amount.value)
+              comment.stats.collects *
+              parseFloat((comment.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["amount"]).value)
         })
 
       setTotalDonated(total)
@@ -465,9 +471,9 @@ const DonateButton: FC<DonateButtonProps> = ({
               <div className="flex justify-between mt-4">
                 <Uniswap
                   module={
-                    currentPublication.collectModule.__typename ===
-                    'FeeCollectModuleSettings'
-                      ? currentPublication.collectModule
+                    currentPublication.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment["__typename"] ===
+                    'LegacyFeeCollectModuleSettings'
+                      ? currentPublication.openActionModules as unknown as LegacyFeeCollectModuleSettingsFragment
                       : undefined
                   }
                 />
@@ -536,3 +542,4 @@ const DonateButton: FC<DonateButtonProps> = ({
 }
 
 export default DonateButton
+
