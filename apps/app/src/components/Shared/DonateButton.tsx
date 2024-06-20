@@ -1,22 +1,23 @@
 import {
   CollectModuleParams,
   CommentFragment,
-  MetadataAttributeInput,
+  MetadataAttributeType,
   PostFragment,
   PublicationMainFocus,
   ReferenceModuleParams
 } from '@lens-protocol/client'
-import { PublicationMetadataV2Input } from '@lens-protocol/client'
-import { fetchBalance, signTypedData } from '@wagmi/core'
+import { PublicationMetadataFilters } from '@lens-protocol/client'
+import { signTypedData } from '@wagmi/core'
 import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
 
 import Progress from '@/components/Shared/Progress'
-import { APP_NAME, CURRENCIES } from '@/constants'
+import { CURRENCIES } from '@/constants'
 import getTokenImage from '@/lib/getTokenImage'
 import getUserLocale from '@/lib/getUserLocale'
+import { config } from '../config'
 import {
   checkAuth,
   getSignature,
@@ -140,15 +141,10 @@ const DonateButton: FC<DonateButtonProps> = ({
       )
         throw Error(e('incorrect-collect-module'))
 
-      const balance = await fetchBalance({
-        address: `0x${currentUser.ownedBy.substring(2)}`,
-        token: `0x${currentPublication.collectModule.amount.asset.address.substring(
-          2
-        )}`
-      })
+      const balance = await getBalance()
 
       setCurrencyEnough(
-        parseFloat(balance.formatted) >
+        parseFloat('${balance}') >
           parseFloat(currentPublication.collectModule.amount.value)
       )
     } catch (e) {
@@ -185,13 +181,17 @@ const DonateButton: FC<DonateButtonProps> = ({
       let hasAmount = false
 
       const comments = await lensClient().publication.fetchAll({
-        commentsOf: post.id,
-        metadata: {
-          tags: {
-            all: [PostTags.Donate.SetAmount]
+        where: {
+          commentOn: {
+            id: post.id
+          },
+          metadata: {
+            tags: {
+              all: [PostTags.Donate.SetAmount]
+            }
           }
         }
-      })
+        })
 
       comments.items
         .filter((comment) => !comment.hidden)
@@ -215,20 +215,13 @@ const DonateButton: FC<DonateButtonProps> = ({
 
       // create comment with new collect amount
       if (!currentUser) throw Error(e('user-null'))
-      await checkAuth(currentUser.ownedBy)
+      await checkAuth(currentUser.ownedBy.address)
 
-      const attributes: MetadataAttributeInput[] = []
+      const attributes: MetadataAttributeType[] = []
 
-      const metadata: PublicationMetadataV2Input = {
-        version: '2.0.0',
-        metadata_id: v4(),
-        content: `#${PostTags.Donate.SetAmount}`,
+      const metadata: PublicationMetadataFilters = {
         locale: getUserLocale(),
-        tags: [PostTags.Donate.SetAmount],
-        mainContentFocus: PublicationMainFocus.TextOnly,
-        name: `${PostTags.Donate.SetAmount} by ${currentUser?.handle} for publication ${post.id}`,
-        attributes,
-        appId: APP_NAME
+        mainContentFocus: PublicationMainFocus.TextOnly
       }
 
       const prevCollectModule = post.collectModule
@@ -256,14 +249,12 @@ const DonateButton: FC<DonateButtonProps> = ({
         publicationId: post.id,
         profileId: currentUser.id,
         metadata,
-        collectModule,
-        referenceModule
       })
 
-      await lensClient().transaction.waitForIsIndexed(result.txId)
+      //const txHash = await lensClient().transaction.txIdToTxHash(result)
 
       const publication = await lensClient().publication.fetch({
-        txHash: result.txHash
+        forTxHash: post.txHash
       })
 
       if (!publication || !isComment(publication))
@@ -286,18 +277,19 @@ const DonateButton: FC<DonateButtonProps> = ({
     setDonateIsLoading(true)
     try {
       if (!currentUser) throw Error(e('user-null'))
-      await checkAuth(currentUser.ownedBy)
+      await checkAuth(currentUser.ownedBy.address)
 
       const typedDataResult =
-        await lensClient().publication.createCollectTypedData({
-          publicationId: currentPublication.id
+        await lensClient().publication.createLegacyCollectTypedData({
+          on: currentPublication.id
         })
 
       const signature = await signTypedData(
+        config,
         getSignature(typedDataResult.unwrap().typedData)
       )
 
-      const broadcastResult = await lensClient().transaction.broadcast({
+      const broadcastResult = await lensClient().transaction.broadcastOnchain({
         id: typedDataResult.unwrap().id,
         signature: signature
       })
@@ -322,7 +314,7 @@ const DonateButton: FC<DonateButtonProps> = ({
       let total = 0
 
       const publication = await lensClient().publication.fetch({
-        publicationId: post.id
+        forId: post.id
       })
 
       if (publication === null || !isPost(publication))
@@ -336,16 +328,20 @@ const DonateButton: FC<DonateButtonProps> = ({
 
       // get comment totals
       const comments = await lensClient().publication.fetchAll({
-        commentsOf: post.id,
-        metadata: {
-          tags: {
-            all: [PostTags.Donate.SetAmount]
+        where: {
+          commentOn: {
+            id: post.id
+          },
+          metadata: {
+            tags: {
+              all: [PostTags.Donate.SetAmount]
+            }
           }
         }
-      })
+        })
 
       comments.items
-        .filter((comment) => !comment.hidden)
+        .filter((comment) => !comment.isHidden)
         .forEach((comment) => {
           if (
             isComment(comment) &&
@@ -399,7 +395,7 @@ const DonateButton: FC<DonateButtonProps> = ({
             </div>
             <div className="text-gray-500  mt-2 text-2xl font-bold">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 dark:from-brand-400 to-pink-600 dark:to-pink-400 text-2xl">
-                {`@${post.profile.handle}`}
+                {`@${post.by.handle}`}
               </span>
             </div>
             {totalDonatedIsLoading ? (
