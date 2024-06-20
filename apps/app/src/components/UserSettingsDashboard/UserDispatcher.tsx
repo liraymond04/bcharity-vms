@@ -1,7 +1,7 @@
-import { SetDispatcherRequest } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfig } from 'wagmi'
 
 import {
   checkAuth,
@@ -24,42 +24,44 @@ const UserDispatcher: React.FC = () => {
     keyPrefix: 'components.settings.dispatcher'
   })
   const { currentUser } = useAppPersistStore()
-  const [isEnabled, setIsEnabled] = useState(currentUser?.dispatcher !== null)
+  const [isEnabled, setIsEnabled] = useState(currentUser?.signless)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const _getProfile = async () => {
       if (currentUser) {
         const profile = await getProfile({ id: currentUser.id })
-        setIsEnabled(profile?.dispatcher !== null)
+        setIsEnabled(profile?.signless !== null)
         setIsLoading(false)
       }
     }
     _getProfile()
   }, [currentUser])
 
+  const config = useConfig()
   const handleDispatch = async () => {
     setIsLoading(true)
-    const params: SetDispatcherRequest = {
-      profileId: currentUser!.id,
-      enable: !isEnabled
-    }
 
     if (currentUser) {
       try {
-        await checkAuth(currentUser?.ownedBy)
+        await checkAuth(currentUser?.ownedBy.address)
 
         const typedDataResult =
-          await lensClient().profile.createSetDispatcherTypedData(params)
+          await lensClient().profile.createChangeProfileManagersTypedData({
+            approveSignless: !isEnabled
+          })
 
         const signature = await signTypedData(
+          config,
           getSignature(typedDataResult.unwrap().typedData)
         )
 
-        const broadcastResult = await lensClient().transaction.broadcast({
-          id: typedDataResult.unwrap().id,
-          signature: signature
-        })
+        const broadcastResult = await lensClient().transaction.broadcastOnchain(
+          {
+            id: typedDataResult.unwrap().id,
+            signature: signature
+          }
+        )
 
         setIsEnabled(!isEnabled)
       } catch (e) {

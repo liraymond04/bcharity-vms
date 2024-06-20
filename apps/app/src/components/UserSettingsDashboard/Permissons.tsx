@@ -1,15 +1,17 @@
 import {
-  ApprovedAllowanceAmountFragment,
-  CollectModules,
-  FollowModules,
-  ReferenceModules
+  ApprovedAllowanceAmountResultFragment,
+  CollectOpenActionModuleType,
+  FollowModuleType,
+  OpenActionModuleType,
+  ReferenceModuleType
 } from '@lens-protocol/client'
-import { prepareSendTransaction, sendTransaction } from '@wagmi/core'
+import { sendTransaction } from '@wagmi/core'
 import clsx from 'clsx'
 import Link from 'next/link'
 import React, { FC, useEffect } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfig } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Card } from '@/components/UI/Card'
@@ -21,34 +23,36 @@ import HelpTooltip from '../UI/HelpTooltip'
 import { Spinner } from '../UI/Spinner'
 interface Props {
   currency: string
-  collectModule?: CollectModules
-  followModule?: FollowModules
-  referenceModule?: ReferenceModules
+  collectModule?: CollectOpenActionModuleType
+  followModule?: FollowModuleType
+  referenceModule?: ReferenceModuleType
   initValue: string
 }
 
 const getResults = async (Option: string) => {
   return lensClient().modules.approvedAllowanceAmount({
     currencies: [Option],
-    collectModules: [
-      CollectModules.LimitedFeeCollectModule,
-      CollectModules.FeeCollectModule,
-      CollectModules.LimitedTimedFeeCollectModule,
-      CollectModules.TimedFeeCollectModule
+    openActionModules: [
+      OpenActionModuleType.LegacyLimitedFeeCollectModule,
+      OpenActionModuleType.LegacyFeeCollectModule,
+      OpenActionModuleType.LegacyLimitedTimedFeeCollectModule,
+      OpenActionModuleType.LegacyTimedFeeCollectModule
     ],
-    followModules: [FollowModules.FeeFollowModule],
-    referenceModules: [ReferenceModules.FollowerOnlyReferenceModule]
+    followModules: [FollowModuleType.FeeFollowModule],
+    referenceModules: [ReferenceModuleType.FollowerOnlyReferenceModule]
   })
 }
 
 const returnCollectModule = (module: string) => {
-  return CollectModules[module as keyof typeof CollectModules]
+  return CollectOpenActionModuleType[
+    module as keyof typeof CollectOpenActionModuleType
+  ]
 }
 const returnFollowModule = (module: string) => {
-  return FollowModules[module as keyof typeof FollowModules]
+  return FollowModuleType[module as keyof typeof FollowModuleType]
 }
 const returnReferenceModule = (module: string) => {
-  return ReferenceModules[module as keyof typeof ReferenceModules]
+  return ReferenceModuleType[module as keyof typeof ReferenceModuleType]
 }
 
 const AllowanceButton: FC<Props> = ({
@@ -68,23 +72,28 @@ const AllowanceButton: FC<Props> = ({
     setIsCollectActive(initValue !== '0x00')
   }, [initValue])
 
+  const config = useConfig()
   const GenerateAllowance = async (value: string) => {
     const currencyData =
       await lensClient().modules.generateCurrencyApprovalData({
-        currency,
-        value,
-        collectModule,
-        followModule,
-        referenceModule
+        allowance: {
+          currency,
+          value
+        },
+        module: {
+          openActionModule: collectModule as unknown as OpenActionModuleType,
+          followModule,
+          referenceModule
+        }
       })
     const data = currencyData.unwrap()
 
-    const config = await prepareSendTransaction({
-      to: data.to,
-      data: `0x${data.data.substring(2)}`
-    })
+    const toAddress: `0x${string}` = data.to as `0x${string}`
 
-    const { hash } = await sendTransaction(config)
+    const { hash } = await (sendTransaction(config, {
+      to: toAddress,
+      data: `0x${data.data.substring(2)}`
+    }) as any)
 
     return hash
   }
@@ -132,16 +141,18 @@ const Permissons: React.FC = () => {
   )
 
   const [moduleData, setModuleData] = useState<
-    ApprovedAllowanceAmountFragment[]
+    ApprovedAllowanceAmountResultFragment[]
   >([])
 
   useEffect(() => {
     if (currentUser) {
-      checkAuth(currentUser.ownedBy)
+      checkAuth(currentUser.ownedBy.address)
         .then(() => getResults(Option))
         .then((res) => {
           if (res.isSuccess())
-            setModuleData(res.unwrap() as ApprovedAllowanceAmountFragment[])
+            setModuleData(
+              res.unwrap() as ApprovedAllowanceAmountResultFragment[]
+            )
         })
         .catch((err) => console.log(err))
     }
@@ -173,7 +184,7 @@ const Permissons: React.FC = () => {
                       // console.log(res)
                       if (res.isSuccess())
                         setModuleData(
-                          res.unwrap() as ApprovedAllowanceAmountFragment[]
+                          res.unwrap() as ApprovedAllowanceAmountResultFragment[]
                         )
                     })
                     .catch((err) => console.log(err))
@@ -205,7 +216,7 @@ const Permissons: React.FC = () => {
                         <div className="bg-accent-content dark:bg-info-content rounded-xl flex justify-end p-2 items-center">
                           <div className="px-2 pt-2 pb-1">
                             <div className="flex text-s font-normal">
-                              <div className="mr-1">{data.module}</div>
+                              <div className="mr-1">{data.moduleName}</div>
                               <HelpTooltip content="The Fee Collect Module all p-1ows for any follower to collect the associated publication provided they pay a fee set by the poster." />
                             </div>
                             <Link
@@ -213,20 +224,22 @@ const Permissons: React.FC = () => {
                               target="_blank"
                             >
                               <div className="text-s font-normal">
-                                {data.contractAddress}
+                                {data.moduleContract.address}
                               </div>
                             </Link>
                           </div>
                           <div className="grow" />
                           <div className="p-2">
                             <AllowanceButton
-                              currency={data.currency}
-                              collectModule={returnCollectModule(data.module)}
-                              followModule={returnFollowModule(data.module)}
-                              referenceModule={returnReferenceModule(
-                                data.module
+                              currency={data.allowance.asset.name}
+                              collectModule={returnCollectModule(
+                                data.moduleName
                               )}
-                              initValue={data.allowance}
+                              followModule={returnFollowModule(data.moduleName)}
+                              referenceModule={returnReferenceModule(
+                                data.moduleName
+                              )}
+                              initValue={data.allowance.asset.name}
                             />
                           </div>
                         </div>
