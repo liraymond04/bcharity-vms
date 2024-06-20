@@ -1,9 +1,9 @@
 import SEO from '@components/utils/SEO'
 import { SearchIcon } from '@heroicons/react/outline'
 import {
-  ProfileFragment,
-  PublicationSortCriteria,
-  PublicationTypes
+  ExplorePublicationsOrderByType,
+  ExplorePublicationType,
+  ProfileFragment
 } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
@@ -50,14 +50,16 @@ const Organizations: NextPage = () => {
     loading
   } = useExplorePublications(
     {
-      sortCriteria: PublicationSortCriteria.Latest,
-      publicationTypes: [PublicationTypes.Post],
-      metadata: {
-        tags: {
-          oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+      orderBy: ExplorePublicationsOrderByType.Latest,
+      where: {
+        publicationTypes: [ExplorePublicationType.Post],
+        metadata: {
+          tags: {
+            oneOf: [PostTags.OrgPublish.Opportunity, PostTags.OrgPublish.Cause]
+          }
         }
-      },
-      noRandomize: true
+        // noRandomize: true // might be deprecated, not found in the request options anymore
+      }
     },
     true
   )
@@ -68,13 +70,13 @@ const Organizations: NextPage = () => {
 
     const filtered = opportunityOrCausePublications
       .filter(isPost)
-      .filter((p) => !p.hidden)
+      .filter((p) => !p.isHidden)
 
     filtered.forEach((p) => {
-      const id = p.profile.id
+      const id = p.by.id
 
       if (!_profiles[id]) {
-        _profiles[id] = p.profile
+        _profiles[id] = p.by
       }
 
       if (_postings[id] === undefined) {
@@ -132,7 +134,12 @@ const Organizations: NextPage = () => {
       ) : (
         <GridLayout>
           {profiles
-            .filter((profile) => testSearch(profile.handle, searchValue))
+            .filter((profile) =>
+              testSearch(
+                profile.handle ? profile.handle.fullHandle : profile.id,
+                searchValue
+              )
+            ) // not sure if this is the correct decision if handle doesn't exist
             .map((profile) => (
               <GridItemFour key={profile.id}>
                 <OrganizationCard

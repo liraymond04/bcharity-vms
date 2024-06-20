@@ -27,8 +27,9 @@ const VolunteerDataCard: React.FC<VolunteerDataCardProps> = ({ vol }) => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
 
   const location = useMemo(() => {
-    return vol.profile?.attributes?.find((attr) => attr.key === 'location')
-      ?.value
+    return vol.profile?.metadata?.attributes?.find(
+      (attr) => attr.key === 'location'
+    )?.value
   }, [vol])
 
   return (
@@ -42,11 +43,13 @@ const VolunteerDataCard: React.FC<VolunteerDataCardProps> = ({ vol }) => {
 
       <div className="justify-start flex">
         <div className="text-violet-500">
-          {vol.profile.name ?? vol.profile.handle}&nbsp;
+          {vol.profile.handle?.fullHandle ?? vol.profile.id}&nbsp;
         </div>
       </div>
       <div className="flex">
-        {vol.profile.coverPicture !== undefined && (
+        {(vol.profile.metadata
+          ? vol.profile.metadata.coverPicture !== undefined
+          : false) && (
           <img
             className="rounded-sm py-3"
             src={getAvatar(vol.profile)}
@@ -58,7 +61,9 @@ const VolunteerDataCard: React.FC<VolunteerDataCardProps> = ({ vol }) => {
           <div className="text-violet-500" suppressHydrationWarning>
             {t('bio')}&nbsp;
           </div>
-          <p>{vol.profile.bio}</p>
+          <p>
+            {vol.profile.metadata ? vol.profile.metadata.bio : 'No bio yet.'}
+          </p>
         </div>
       </div>
       <div className="flex">

@@ -70,7 +70,7 @@ const VHRVerifyCard: React.FC<IVHRVerifyCardProps> = ({
             VHR
           </p>
         </div>
-        <p className="ml-8 font-bold">{value.from.handle}</p>
+        <p className="ml-8 font-bold">{value.from.handle?.fullHandle}</p>
         <p className="ml-8 font-bold">{value.opportunity.name}</p>
         {pending ? (
           <div className="ml-auto">
