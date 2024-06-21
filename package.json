@@ -21,6 +21,8 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-turbo": "latest",
+    "eslint-config-custom": "workspace:*",
+    "prettier-config-custom": "workspace:*",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "turbo": "^1.10.9"
