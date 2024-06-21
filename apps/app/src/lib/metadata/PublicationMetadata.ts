@@ -94,9 +94,9 @@ export abstract class PublicationMetadataBuilder<
 
     const attributeMap = new Map<string, string>()
 
-    post.metadata.attributes.forEach((fragment) => {
-      if (fragment.traitType !== null && fragment.value !== null) {
-        attributeMap.set(fragment.traitType, fragment.value)
+    post.metadata.attributes?.forEach((fragment) => {
+      if (fragment.type !== null && fragment.value !== null) {
+        attributeMap.set(fragment.type, fragment.value)
       }
     })
 
@@ -120,7 +120,7 @@ export abstract class PublicationMetadataBuilder<
     this.version = version
     this.post_id = post.id
     this.createdAt = post.createdAt
-    this.from = post.profile
+    this.from = post.by
   }
 
   /**

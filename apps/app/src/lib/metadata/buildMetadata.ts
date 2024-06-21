@@ -1,10 +1,10 @@
+import { ProfileFragment } from '@lens-protocol/client'
 import {
-  MetadataAttributeInput,
-  ProfileFragment,
-  PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
+  MarketplaceMetadataAttribute,
+  MarketplaceMetadataAttributeDisplayType,
+  textOnly,
+  TextOnlyMetadata
+} from '@lens-protocol/metadata'
 import { v4 } from 'uuid'
 
 import { APP_NAME } from '@/constants'
@@ -48,15 +48,15 @@ const buildMetadata = <T extends Record<string, string> = {}>(
   tags: string[],
   data: T
 ) => {
-  const attributeInput: MetadataAttributeInput[] = Object.entries(data).map(
-    ([k, v]) => {
-      return {
-        displayType: PublicationMetadataDisplayTypes.String,
-        traitType: k,
-        value: v
-      }
+  const attributeInput: MarketplaceMetadataAttribute[] = Object.entries(
+    data
+  ).map(([k, v]) => {
+    return {
+      displayType: MarketplaceMetadataAttributeDisplayType.STRING,
+      traitType: k,
+      value: v
     }
-  )
+  })
 
   let _content = ''
   let _name = ''
@@ -68,17 +68,17 @@ const buildMetadata = <T extends Record<string, string> = {}>(
 
   _name.concat(`by ${publisher.handle}`)
 
-  const metadata: PublicationMetadataV2Input = {
-    version: '2.0.0',
-    metadata_id: v4(),
+  const metadata: TextOnlyMetadata = textOnly({
+    marketplace: {
+      name: _name,
+      attributes: attributeInput
+    },
+    id: v4(),
     content: _content,
     locale: getUserLocale(),
     tags,
-    mainContentFocus: PublicationMainFocus.TextOnly,
-    name: _name,
-    attributes: attributeInput,
     appId: APP_NAME
-  }
+  })
 
   // console.log('built metadata', metadata)
 
