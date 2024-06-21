@@ -54,7 +54,7 @@ const OrganizationCard: React.FC<IOrganizationCardProps> = ({
         />
         <div className="flex flex-col w-full">
           <div className="flex justify-between">
-            <p>{profile.handle}</p>
+            <p>{profile.handle ? profile.handle.fullHandle : profile.id}</p>
             <DotsHorizontalIcon className="w-4 text-zinc-400" />
           </div>
           <div className="flex">

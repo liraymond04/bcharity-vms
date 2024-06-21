@@ -81,7 +81,7 @@ const AddVolunteerModal: FC = () => {
 
     try {
       const resultPublication = await lensClient().publication.fetch({
-        publicationId: formData.opportunityID
+        forId: formData.opportunityID
       })
 
       if (resultPublication === null) {
@@ -110,7 +110,7 @@ const AddVolunteerModal: FC = () => {
     try {
       if (!currentUser) throw Error(e('profile-null'))
 
-      await checkAuth(currentUser.ownedBy)
+      await checkAuth(currentUser.ownedBy.address)
 
       const metadata = buildMetadata<ApplicationMetadataRecord>(
         currentUser,

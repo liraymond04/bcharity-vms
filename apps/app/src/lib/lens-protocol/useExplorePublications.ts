@@ -1,9 +1,9 @@
 import {
-  ExplorePublicationRequest,
-  PublicationFragment
+  AnyPublicationFragment,
+  ExplorePublicationRequest
 } from '@lens-protocol/client'
 import {
-  Maybe,
+  InputMaybe,
   Scalars
 } from '@lens-protocol/client/dist/declarations/src/graphql/types.generated'
 import { useEffect, useState } from 'react'
@@ -30,9 +30,10 @@ const useExplorePublications = (
 ) => {
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState<PublicationFragment[]>([])
+  const [data, setData] = useState<AnyPublicationFragment[]>([])
   const [error, setError] = useState('')
-  const [cursor, setCursor] = useState<Maybe<Scalars['Cursor']>>(null)
+  const [cursor, setCursor] =
+    useState<InputMaybe<Scalars['Cursor']['input']>>(null)
 
   const refetch = () => {
     setLoading(true)
@@ -40,7 +41,7 @@ const useExplorePublications = (
       .explore.publications(params)
       .then((data) => {
         const filtered = data.items.filter(
-          (item) => !filterVerified || isVerified(item.profile.id)
+          (item) => !filterVerified || isVerified(item.by.id)
         )
         setData(filtered)
         setCursor(data.pageInfo.next)
@@ -64,7 +65,7 @@ const useExplorePublications = (
     try {
       const _data = await lensClient().explore.publications(paramsWithCursor)
       const filtered = _data.items.filter(
-        (item) => !filterVerified || isVerified(item.profile.id)
+        (item) => !filterVerified || isVerified(item.by.id)
       )
 
       setData(data.concat(filtered))

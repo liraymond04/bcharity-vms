@@ -72,7 +72,9 @@ const AllVolunteersTab = forwardRef<AllRef | null, IAllVolunteersTabProps>(
     useEffect(() => {
       const profiles = new Set<string>()
       data.forEach((p) => {
-        profiles.add(p.profile.handle)
+        profiles.add(
+          p.profile.handle ? p.profile.handle.fullHandle : p.profile.id
+        )
       })
       setCategories(profiles)
     }, [data])
@@ -128,19 +130,28 @@ const AllVolunteersTab = forwardRef<AllRef | null, IAllVolunteersTabProps>(
                   <>
                     {data
                       .filter((op) =>
-                        testSearch(op.profile.handle, searchValue)
+                        testSearch(
+                          op.profile.handle
+                            ? op.profile.handle.fullHandle
+                            : op.profile.id,
+                          searchValue
+                        )
                       )
                       .filter(
                         (op) =>
                           selectedCategory === '' ||
-                          op.profile.handle === selectedCategory
+                          (op.profile.handle
+                            ? op.profile.handle.fullHandle === selectedCategory
+                            : op.profile.id === selectedCategory)
                       )
                       .map((item) => {
                         return (
                           <PurpleBox
                             key={item.profile.id}
                             selected={selectedId === item.profile.id}
-                            userName={item.profile.name ?? item.profile.handle}
+                            userName={
+                              item.profile.handle?.fullHandle ?? item.profile.id
+                            }
                             dateCreated={item.dateJoined}
                             tab="all"
                             onClick={() => {

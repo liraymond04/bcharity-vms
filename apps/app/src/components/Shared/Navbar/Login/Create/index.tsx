@@ -1,10 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { Button } from '@components/UI/Button'
 import { ErrorMessage } from '@components/UI/ErrorMessage'
 import { Form, useZodForm } from '@components/UI/Form'
 import { Input } from '@components/UI/Input'
 import { Spinner } from '@components/UI/Spinner'
 import { PlusIcon } from '@heroicons/react/outline'
-import { isRelayerResult } from '@lens-protocol/client'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { object, string } from 'zod'
@@ -74,21 +74,30 @@ const Create: FC<CreateProps> = ({ isModal = false }) => {
         const username = handle.toLowerCase()
         if (isValidHandle(username)) {
           try {
-            const result = await createProfile(username)
-            if (!isRelayerResult(result)) {
-              setErrorMessage(`${result.reason}`)
-              setError(true)
+            if (currentUser !== null) {
+              const result = await createProfile(
+                username,
+                `0x${currentUser.ownedBy.address}`
+              );
+
+              if ('reason' in result) {
+                setErrorMessage(`${result.reason}`);
+                setError(true);
+              } else {
+                setSuccess(true);
+              }
             } else {
-              setSuccess(true)
+              setErrorMessage(e('nullUser'));
+              setError(true);
             }
           } catch (e) {
             if (e instanceof Error) {
-              setErrorMessage(e.message)
-              setError(true)
+              setErrorMessage(e.message);
+              setError(true);
             }
           }
         }
-        setIsPending(false)
+        setIsPending(false);
       }}
     >
       {error && (

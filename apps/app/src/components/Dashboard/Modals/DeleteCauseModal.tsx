@@ -1,7 +1,7 @@
 import {
+  AnyPublicationFragment,
   Erc20Fragment,
-  ProfileFragment,
-  PublicationFragment
+  ProfileFragment
 } from '@lens-protocol/client'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -54,7 +54,7 @@ export interface IDeleteCauseModalProps {
   /**
    * List of the posts to be deleted
    */
-  postData: PublicationFragment[]
+  postData: AnyPublicationFragment[]
   /**
    * Information about the token used in the cause post
    */
@@ -88,7 +88,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
 
   const selectedCurrencySymbol =
-    currencyData?.find((c) => c.address === values.currency)?.symbol ?? 'WMATIC'
+    currencyData?.find((c) => c.name === values.currency)?.symbol ?? 'WMATIC'
 
   useEffect(() => {
     const ids = postData
@@ -122,12 +122,10 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
       return
     }
 
-    checkAuth(publisher.ownedBy)
+    checkAuth(publisher.ownedBy.address)
       .then(() =>
         Promise.all(
-          publicationIds.map((id) =>
-            lensClient().publication.hide({ publicationId: id })
-          )
+          publicationIds.map((id) => lensClient().publication.hide({ for: id }))
         )
       )
       .then((res) => {
@@ -171,8 +169,8 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
               label={t('selected-currency')}
               options={currencyData?.map((c) => c.name) ?? []}
               defaultValue={
-                currencyData?.find((c) => c.address === values.currency)
-                  ?.name ?? ''
+                currencyData?.find((c) => c.name === values.currency)?.name ??
+                ''
               }
             />
 

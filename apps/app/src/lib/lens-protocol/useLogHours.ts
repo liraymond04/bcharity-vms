@@ -1,10 +1,10 @@
+import { ProfileFragment } from '@lens-protocol/client'
 import {
-  MetadataAttributeInput,
-  ProfileFragment,
-  PublicationMainFocus,
-  PublicationMetadataDisplayTypes,
-  PublicationMetadataV2Input
-} from '@lens-protocol/client'
+  MarketplaceMetadataAttribute,
+  MarketplaceMetadataAttributeDisplayType,
+  textOnly,
+  TextOnlyMetadata
+} from '@lens-protocol/metadata'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
@@ -106,30 +106,30 @@ const useLogHours = (params: UseLogHoursParams): UseLogHoursReturn => {
       comments
     }
 
-    const attributes: MetadataAttributeInput[] = Object.entries(data).map(
+    const attributes: MarketplaceMetadataAttribute[] = Object.entries(data).map(
       ([k, v]) => {
         return {
           traitType: k,
           value: v,
-          displayType: PublicationMetadataDisplayTypes.String
+          displayType: MarketplaceMetadataAttributeDisplayType.STRING
         }
       }
     )
 
-    const metadata: PublicationMetadataV2Input = {
-      version: '2.0.0',
-      metadata_id: v4(),
+    const metadata: TextOnlyMetadata = textOnly({
+      marketplace: {
+        name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
+        attributes
+      },
+      id: v4(),
       content: `#${PostTags.VhrRequest.Opportunity} #${params.organizationId}`,
       locale: getUserLocale(),
       tags: [PostTags.VhrRequest.Opportunity, params.organizationId],
-      mainContentFocus: PublicationMainFocus.TextOnly,
-      name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
-      attributes,
       appId: APP_NAME
-    }
+    })
 
     try {
-      await checkAuth(profile.ownedBy)
+      await checkAuth(profile.ownedBy.address)
 
       await createComment({
         profileId: profile.id,

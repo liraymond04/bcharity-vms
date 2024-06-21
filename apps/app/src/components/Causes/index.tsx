@@ -1,6 +1,6 @@
 import SEO from '@components/utils/SEO'
 import { SearchIcon } from '@heroicons/react/outline'
-import { PublicationSortCriteria } from '@lens-protocol/client'
+import { ExplorePublicationsOrderByType } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-cool-inview'
@@ -57,11 +57,13 @@ const Causes: NextPage = () => {
     loading
   } = useExplorePublications(
     {
-      sortCriteria: PublicationSortCriteria.Latest,
-      metadata: {
-        tags: { oneOf: [PostTags.OrgPublish.Cause] }
-      },
-      noRandomize: true
+      orderBy: ExplorePublicationsOrderByType.Latest,
+      where: {
+        metadata: {
+          tags: { oneOf: [PostTags.OrgPublish.Cause] }
+        }
+      }
+      // noRandomize: true // deprecated i believe
     },
     true
   )

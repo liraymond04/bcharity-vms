@@ -1,4 +1,4 @@
-import { FeeCollectModuleSettingsFragment } from '@lens-protocol/client'
+import { LegacyFeeCollectModuleSettingsFragment } from '@lens-protocol/client'
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -11,7 +11,7 @@ export interface UniswapProps {
   /**
    * Fee collecte module used to get currency data
    */
-  module: FeeCollectModuleSettingsFragment | undefined
+  module: LegacyFeeCollectModuleSettingsFragment | undefined
 }
 
 /**
@@ -33,7 +33,7 @@ const Uniswap: FC<UniswapProps> = ({ module }) => {
       <a
         href={getUniswapURL(
           parseFloat(module?.amount?.value ?? ''),
-          module?.amount?.asset?.address ?? ''
+          module?.amount?.asset?.name ?? ''
         )}
         className="flex items-center space-x-1.5 text-xs font-bold text-pink-500"
         target="_blank"

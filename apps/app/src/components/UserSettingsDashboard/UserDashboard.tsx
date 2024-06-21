@@ -1,8 +1,8 @@
 import {
   ArrowLeftIcon,
   GlobeIcon,
-  LockClosedIcon,
-  TrashIcon
+  LockClosedIcon
+  //TrashIcon
 } from '@heroicons/react/outline'
 import { UserIcon } from '@heroicons/react/outline'
 import React from 'react'
@@ -14,7 +14,7 @@ import SideBar2 from '@/components/Sidebar/SideBar2'
 
 import { ITabProps } from '../Sidebar/Sidebar'
 import Permissons from './Permissons'
-import UserDelete from './UserDelete'
+//import UserDelete from './UserDelete'
 import UserDispatcher from './UserDispatcher'
 import UserHome from './UserHome'
 export interface IDashboardTab extends ITabProps {
@@ -47,11 +47,6 @@ const UserDashboard: React.FC = () => {
       label: t('permissions'),
       icon: <LockClosedIcon className="inline" />,
       component: <Permissons />
-    },
-    {
-      label: t('delete-account'),
-      icon: <TrashIcon className="inline" />,
-      component: <UserDelete />
     },
     {
       label: t('back'),

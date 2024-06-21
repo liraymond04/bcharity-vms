@@ -1,5 +1,8 @@
-import { isRelayerError } from '@lens-protocol/client'
+import { isRelaySuccess } from '@lens-protocol/client'
+import { LegacyCollectRequest } from '@lens-protocol/client'
 import { signTypedData } from '@wagmi/core'
+
+import { config } from '@/lib/config'
 
 import getSignature from './getSignature'
 import lensClient from './lensClient'
@@ -15,22 +18,25 @@ import lensClient from './lensClient'
  * @returns The result from broadcasting the transaction
  */
 const createCollect = async (publicationId: string) => {
-  const typedDataResult = await lensClient().publication.createCollectTypedData(
-    { publicationId }
-  )
+  const request: LegacyCollectRequest = {
+    on: publicationId
+  }
+  const typedDataResult =
+    await lensClient().publication.createLegacyCollectTypedData(request)
 
   const signature = await signTypedData(
+    config,
     getSignature(typedDataResult.unwrap().typedData)
   )
 
-  const broadcastResult = await lensClient().transaction.broadcast({
+  const broadcastResult = await lensClient().transaction.broadcastOnchain({
     id: typedDataResult.unwrap().id,
     signature: signature
   })
 
   if (broadcastResult.isFailure()) {
     throw new Error(broadcastResult.error.message)
-  } else if (isRelayerError(broadcastResult.value)) {
+  } else if (!isRelaySuccess(broadcastResult.value)) {
     throw new Error(broadcastResult.value.reason)
   } else {
     return broadcastResult.value

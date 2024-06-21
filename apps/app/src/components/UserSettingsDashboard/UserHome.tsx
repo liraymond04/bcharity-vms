@@ -3,6 +3,7 @@ import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 } from 'uuid'
+import { useConfig } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Input } from '@/components/UI/Input'
@@ -47,6 +48,7 @@ const VolunteerHomeTab: React.FC = () => {
 
   const { mutateAsync: upload } = useStorageUpload()
   const sdk = useSDK()
+  const config = useConfig()
 
   const [error, setError] = useState<Error>()
 
@@ -68,38 +70,44 @@ const VolunteerHomeTab: React.FC = () => {
         setError(undefined)
         if (currentUser) {
           setUserId(currentUser.id)
-          setUserHandle(currentUser.handle)
+          if (!currentUser.handle) {
+            console.error('ERROR: Handle is null!')
+            return
+          }
+          setUserHandle(currentUser.handle.localName)
 
           const userProfile = await lensClient().profile.fetch({
-            profileId: currentUser?.id
+            forProfileId: currentUser?.id
           })
 
           if (userProfile) {
-            setName(userProfile.name || '')
+            setName(userProfile.id || '')
 
-            if (userProfile.attributes) {
-              const locationAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'location'
-              )
-              setLocation(locationAttribute?.value || '')
-              const websiteAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'website'
-              )
-              setWebsite(websiteAttribute?.value || '')
-              const discordAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'discord'
-              )
-              setDiscord(discordAttribute?.value || '')
-              const twitterAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'twitter'
-              )
-              setTwitter(twitterAttribute?.value || '')
-              const linkedinAttribute = userProfile.attributes.find(
-                (attr) => attr.key === 'linkedin'
-              )
-              setLinkedin(linkedinAttribute?.value || '')
+            if (userProfile.metadata) {
+              if (userProfile.metadata.attributes) {
+                const locationAttribute = userProfile.metadata.attributes.find(
+                  (attr) => attr.key === 'location'
+                )
+                setLocation(locationAttribute?.value || '')
+                const websiteAttribute = userProfile.metadata.attributes.find(
+                  (attr) => attr.key === 'website'
+                )
+                setWebsite(websiteAttribute?.value || '')
+                const discordAttribute = userProfile.metadata.attributes.find(
+                  (attr) => attr.key === 'discord'
+                )
+                setDiscord(discordAttribute?.value || '')
+                const twitterAttribute = userProfile.metadata.attributes.find(
+                  (attr) => attr.key === 'twitter'
+                )
+                setTwitter(twitterAttribute?.value || '')
+                const linkedinAttribute = userProfile.metadata.attributes.find(
+                  (attr) => attr.key === 'linkedin'
+                )
+                setLinkedin(linkedinAttribute?.value || '')
+              }
+              setBio(userProfile.metadata.bio || '')
             }
-            setBio(userProfile.bio || '')
           }
           console.log('profile', userProfile)
         }
@@ -119,7 +127,7 @@ const VolunteerHomeTab: React.FC = () => {
 
     try {
       if (currentUser) {
-        await checkAuth(currentUser?.ownedBy)
+        await checkAuth(currentUser?.ownedBy.address)
 
         if (discord.length > 100) throw Error(he('discord'))
         if (twitter.length > 100) throw Error(he('twitter'))
@@ -177,18 +185,21 @@ const VolunteerHomeTab: React.FC = () => {
 
         const typedDataResult =
           await lensClient().profile.createSetProfileMetadataTypedData({
-            metadata: metadataUrl,
-            profileId: currentUser?.id
+            metadataURI: metadataUrl
+            //profileId: currentUser?.id // DEPRECATED, i believe
           })
 
         const signature = await signTypedData(
+          config, // not sure if this is correct, added because signTypedData requires a config param
           getSignature(typedDataResult.unwrap().typedData)
         )
 
-        const broadcastResult = await lensClient().transaction.broadcast({
-          id: typedDataResult.unwrap().id,
-          signature: signature
-        })
+        const broadcastResult = await lensClient().transaction.broadcastOnchain(
+          {
+            id: typedDataResult.unwrap().id,
+            signature: signature
+          }
+        )
       }
       console.log('Profile saved successfully')
     } catch (error) {

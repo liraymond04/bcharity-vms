@@ -33,7 +33,7 @@ const VHRDetailCard: React.FC<IVHRDetailCardProps> = ({ value }) => {
           <div className="flex">
             <LinkIcon className="w-6 inline mr-4 shrink-0" />
             <p className="text-black dark:text-teal-100 font-semibold text-lg whitespace-nowrap text-ellipsis overflow-hidden">
-              {value.from.handle}
+              {value.from.handle?.fullHandle}
             </p>
           </div>
           <p className="ml-10 text-fuchsia-700">{value.from.id}</p>

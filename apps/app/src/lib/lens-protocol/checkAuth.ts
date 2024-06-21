@@ -1,6 +1,7 @@
 import { signMessage } from '@wagmi/core'
 import router from 'next/router'
 
+import { config } from '@/lib/config'
 import { resetCurrentUser } from '@/store/app'
 
 import lensClient from './lensClient'
@@ -33,16 +34,25 @@ const logout = () => {
  * ```
  */
 
-const checkAuth = async (address: string) => {
+// profileId is optional for now cause a lot of legacy code doesn't use it
+const checkAuth = async (address: string, profileId?: string) => {
   try {
     const authenticated = await lensClient().authentication.isAuthenticated()
     if (!authenticated) {
-      const challenge = await lensClient().authentication.generateChallenge(
-        address
-      )
-      const signature = await signMessage({ message: challenge })
+      // Get challenge
+      const challenge = await lensClient().authentication.generateChallenge({
+        for: profileId || null,
+        signedBy: address
+      })
+      // Get signature
+      const signature = await signMessage(config, {
+        message: challenge.text
+      })
 
-      await lensClient().authentication.authenticate(address, signature)
+      await lensClient().authentication.authenticate({
+        id: challenge.id,
+        signature
+      })
     }
   } catch (e) {
     if (e instanceof Error) {

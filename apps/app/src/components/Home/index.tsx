@@ -1,9 +1,9 @@
 import SEO from '@components/utils/SEO'
 import {
+  ExplorePublicationsOrderByType,
   ProfileFragment,
-  PublicationSortCriteria,
-  PublicationsQueryRequest,
-  PublicationTypes
+  PublicationsRequest,
+  PublicationType
 } from '@lens-protocol/client'
 import { NextPage } from 'next'
 import { useEffect, useMemo, useState } from 'react'
@@ -27,13 +27,14 @@ const Home: NextPage = () => {
     loading
   } = useExplorePublications(
     {
-      sortCriteria: PublicationSortCriteria.Latest,
-      metadata: {
-        tags: {
-          oneOf: [PostTags.OrgPublish.Opportunity]
+      orderBy: ExplorePublicationsOrderByType.Latest,
+      where: {
+        metadata: {
+          tags: {
+            oneOf: [PostTags.OrgPublish.Opportunity]
+          }
         }
-      },
-      noRandomize: true
+      }
     },
     true
   )
@@ -58,7 +59,7 @@ const Home: NextPage = () => {
 
     if (uniqueIds.size > 0)
       lensClient()
-        .profile.fetchAll({ profileIds: Array.from(uniqueIds) })
+        .profile.fetchAll({ where: { profileIds: Array.from(uniqueIds) } })
         .then((res) => setProfiles(res.items))
         .catch((err) => {
           console.log(err)
@@ -67,19 +68,21 @@ const Home: NextPage = () => {
   }, [posts])
 
   const generateRequest = (profileId: string) => {
-    const param: PublicationsQueryRequest = {
-      profileId,
-      publicationTypes: [PublicationTypes.Post],
-      metadata: {
-        tags: {
-          oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportunity]
+    const param: PublicationsRequest = {
+      where: {
+        actedBy: profileId,
+        publicationTypes: [PublicationType.Post],
+        metadata: {
+          tags: {
+            oneOf: [PostTags.OrgPublish.Cause, PostTags.OrgPublish.Opportunity]
+          }
         }
       }
     }
 
     return lensClient()
       .publication.fetchAll(param)
-      .then((result) => result.items.filter((res) => !res.hidden).length)
+      .then((result) => result.items.filter((res) => !res.isHidden).length)
   }
 
   useEffect(() => {

@@ -32,12 +32,12 @@ export interface PropsId {
 const getProfile = async (props: PropsHandle | PropsId) => {
   if ('handle' in props) {
     const profileByHandle = await lensClient().profile.fetch({
-      handle: props.handle
+      forHandle: props.handle
     })
     return profileByHandle
   } else {
     const profileById = await lensClient().profile.fetch({
-      profileId: props.id
+      forProfileId: props.id
     })
     return profileById
   }

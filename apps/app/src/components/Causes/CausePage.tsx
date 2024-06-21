@@ -88,35 +88,78 @@ const CausePage: NextPage = () => {
       if (!cause) throw Error('Publication is null!')
 
       const publication = await lensClient().publication.fetch({
-        publicationId: cause.post_id
+        forId: cause.post_id
       })
 
       if (publication === null || !isPost(publication)) {
         throw Error(e('incorrect-publication-type'))
       }
-      if (publication.collectModule.__typename !== 'FeeCollectModuleSettings')
-        throw Error(e('incorrect-collect-module'))
-
-      total +=
-        publication.stats.totalAmountOfCollects *
-        parseFloat(publication.collectModule.amount.value)
+      // TODO: CHECK IF THIS IS THE CORRECT WAY TO ADD UP ALL COLLECT VALUES
+      for (let openModule of publication.openActionModules) {
+        if (
+          openModule.__typename !== 'LegacyAaveFeeCollectModuleSettings' &&
+          openModule.__typename !== 'LegacyERC4626FeeCollectModuleSettings' &&
+          openModule.__typename !== 'LegacyFeeCollectModuleSettings' &&
+          openModule.__typename !== 'LegacyLimitedFeeCollectModuleSettings' &&
+          openModule.__typename !==
+            'LegacyLimitedTimedFeeCollectModuleSettings' &&
+          openModule.__typename !==
+            'LegacyMultirecipientFeeCollectModuleSettings' &&
+          openModule.__typename !== 'LegacySimpleCollectModuleSettings' &&
+          openModule.__typename !== 'LegacyTimedFeeCollectModuleSettings' &&
+          openModule.__typename !==
+            'MultirecipientFeeCollectOpenActionSettings' &&
+          openModule.__typename !== 'SimpleCollectOpenActionSettings'
+        ) {
+          throw Error(e('incorrect-collect-module'))
+        }
+        total +=
+          publication.stats.collects * parseFloat(openModule.amount.value)
+        // if (module.__typename === 'LegacyFreeCollectModuleSettings' || module.__typename === 'LegacyRevertCollectModuleSettings' || module.__typename === 'UnknownOpenActionModuleSettings')
+      }
 
       // get comment totals
       const comments = await lensClient().publication.fetchAll({
-        commentsOf: cause.post_id,
-        metadata: {
-          tags: { all: [PostTags.Donate.SetAmount] }
+        where: {
+          commentOn: { id: cause.post_id },
+          metadata: {
+            tags: { all: [PostTags.Donate.SetAmount] }
+          }
         }
       })
 
       comments.items
-        .filter((p) => !p.hidden)
+        .filter((p) => !p.isHidden)
         .filter(isComment)
         .forEach((comment) => {
-          if (comment.collectModule.__typename === 'FeeCollectModuleSettings')
+          // TODO: CHECK IF THIS IS THE CORRECT WAY TO ADD UP ALL COLLECT VALUES
+          for (let openModule of publication.openActionModules) {
+            if (
+              openModule.__typename !== 'LegacyAaveFeeCollectModuleSettings' &&
+              openModule.__typename !==
+                'LegacyERC4626FeeCollectModuleSettings' &&
+              openModule.__typename !== 'LegacyFeeCollectModuleSettings' &&
+              openModule.__typename !==
+                'LegacyLimitedFeeCollectModuleSettings' &&
+              openModule.__typename !==
+                'LegacyLimitedTimedFeeCollectModuleSettings' &&
+              openModule.__typename !==
+                'LegacyMultirecipientFeeCollectModuleSettings' &&
+              openModule.__typename !== 'LegacySimpleCollectModuleSettings' &&
+              openModule.__typename !== 'LegacyTimedFeeCollectModuleSettings' &&
+              openModule.__typename !==
+                'MultirecipientFeeCollectOpenActionSettings' &&
+              openModule.__typename !== 'SimpleCollectOpenActionSettings'
+            ) {
+              throw Error(e('incorrect-collect-module'))
+            }
             total +=
-              comment.stats.totalAmountOfCollects *
-              parseFloat(comment.collectModule.amount.value)
+              comment.stats.collects * parseFloat(openModule.amount.value)
+          }
+          // if (comment.collectModule.__typename === 'FeeCollectModuleSettings')
+          //   total +=
+          //     comment.stats.totalAmountOfCollects *
+          //     parseFloat(comment.collectModule.amount.value)
         })
 
       setTotalDonated(total)
@@ -214,7 +257,7 @@ const CausePage: NextPage = () => {
                 className="text-xl font-semibold text-gray-600 dark:text-white"
                 suppressHydrationWarning
               >
-                {cause.from.handle} {t('organizing')}
+                {cause.from.handle?.fullHandle} {t('organizing')}
               </div>
             </div>
             <div className="mt-10 text-3xl font-bold " suppressHydrationWarning>
@@ -246,7 +289,7 @@ const CausePage: NextPage = () => {
             </div>
             <div className="flex flex-row">
               <div className="text-2xl font-semibold text-gray-600 dark:text-white">
-                {cause.from.handle}
+                {cause.from.handle?.fullHandle}
                 <div className="text-xl">{formatLocation(cause.location)}</div>
               </div>
             </div>

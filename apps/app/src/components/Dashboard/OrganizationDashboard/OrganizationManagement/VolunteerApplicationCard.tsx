@@ -69,7 +69,7 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
 
     lensClient()
       .profile.fetch({
-        profileId: profileId
+        forProfileId: profileId
       })
       .then((p) => {
         if (p) {
@@ -85,8 +85,9 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
   }, [application.from.id])
 
   const location = useMemo(() => {
-    return userProfile?.attributes?.find((attr) => attr.key === 'location')
-      ?.value
+    return userProfile?.metadata?.attributes?.find(
+      (attr) => attr.key === 'location'
+    )?.value
   }, [userProfile])
 
   return (
@@ -105,7 +106,10 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
         <>
           <div className="justify-start flex">
             <div className="text-violet-500">
-              {userProfile.name ?? userProfile.handle}&nbsp;
+              {
+                userProfile.id ?? userProfile.handle // is id correct here?
+              }
+              &nbsp;
             </div>
             <p suppressHydrationWarning>{t('wants-to')}</p>
           </div>
@@ -123,7 +127,7 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
               <div className="text-violet-500" suppressHydrationWarning>
                 {t('bio')}&nbsp;
               </div>
-              <p>{userProfile.bio}</p>
+              <p>{userProfile.metadata?.bio}</p>
             </div>
           </div>
           <div className="flex">

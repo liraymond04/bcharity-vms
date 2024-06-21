@@ -1,4 +1,4 @@
-import { PublicationFragment } from '@lens-protocol/client'
+import { AnyPublicationFragment } from '@lens-protocol/client'
 
 import { InvalidMetadataException } from '../InvalidMetadataException'
 
@@ -6,7 +6,7 @@ import { InvalidMetadataException } from '../InvalidMetadataException'
  * Simple utility function to log an warning when metadata is ignored because it is invalid
  */
 export const logIgnoreWarning = (
-  post: PublicationFragment,
+  post: AnyPublicationFragment,
   e: InvalidMetadataException
 ) => {
   console.debug(

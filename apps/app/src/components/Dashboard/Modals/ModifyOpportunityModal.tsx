@@ -161,7 +161,7 @@ const ModifyOpportunityModal: React.FC<IModifyOpportunityModalProps> = ({
         }
       )
 
-      await checkAuth(publisher.ownedBy)
+      await checkAuth(publisher.ownedBy.address)
       await createPost({
         profileId: publisher.id,
         metadata

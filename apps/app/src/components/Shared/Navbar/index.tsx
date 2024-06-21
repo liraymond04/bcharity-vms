@@ -15,11 +15,6 @@ const inter500 = Inter({
   weight: ['500']
 })
 
-const inter700 = Inter({
-  subsets: ['latin'],
-  weight: ['700']
-})
-
 const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState<string>('')
 

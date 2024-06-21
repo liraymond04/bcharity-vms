@@ -1,4 +1,5 @@
 import SEO from '@components/utils/SEO'
+import { ChainId } from '@thirdweb-dev/react' // TODO
 import { NextPage } from 'next'
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
@@ -7,6 +8,7 @@ import isVerified from '@/lib/isVerified'
 import { useAppPersistStore } from '@/store/app'
 
 import UserDashboard from './UserDashboard'
+const activeChainId = ChainId.Mainnet
 
 /**
  * Component that displays the user settings page

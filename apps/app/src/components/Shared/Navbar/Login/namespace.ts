@@ -1,7 +1,5 @@
 import Login from '.'
 import * as Create from './Create/namespace'
-import WalletSelector, { WalletSelectorProps } from './WalletSelector'
+import WalletSelector from './WalletSelector'
 
 export { Create, Login, WalletSelector }
-
-export type { WalletSelectorProps }
