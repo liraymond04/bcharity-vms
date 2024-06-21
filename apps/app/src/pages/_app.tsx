@@ -1,6 +1,7 @@
 import '../styles.css'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ThirdwebProvider } from '@thirdweb-dev/react'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { WagmiProvider } from 'wagmi'
@@ -16,15 +17,17 @@ const App = ({ Component, pageProps }: AppProps) => {
     process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID
   )
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="light" attribute="class">
-          <SiteLayout>
-            <Component {...pageProps} />
-          </SiteLayout>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <ThirdwebProvider>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider defaultTheme="light" attribute="class">
+            <SiteLayout>
+              <Component {...pageProps} />
+            </SiteLayout>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </ThirdwebProvider>
   )
 }
 
