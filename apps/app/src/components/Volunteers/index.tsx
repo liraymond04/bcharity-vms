@@ -149,6 +149,7 @@ const Volunteers: NextPage = () => {
                 onClick={() => {
                   setSelectedCategory('')
                   setSelectedOrg('')
+                  setSearchValue('')
                 }}
               />
             </div>
