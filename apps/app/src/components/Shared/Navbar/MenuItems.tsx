@@ -116,7 +116,7 @@ const MenuItems: FC = () => {
                     as={NextLink}
                     href={`/p/${
                       isVerified(currentUser?.id) ? 'organization' : 'volunteer'
-                    }/${currentUser?.handle}`}
+                    }/${currentUser?.handle?.localName}`}
                     className={({ active }: { active: boolean }) =>
                       clsx({ 'dropdown-active': active }, 'menu-item')
                     }
