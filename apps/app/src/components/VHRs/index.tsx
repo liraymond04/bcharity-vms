@@ -70,6 +70,7 @@ const VHRs: NextPage = () => {
       // scraping
       const soup = new JSSoup(html)
       const tag = soup.findAll('td')
+      const fullAddressTag = soup.findAll('span')
       let index = 0
       let items: Item[] = []
       let cur = []
@@ -86,6 +87,21 @@ const VHRs: NextPage = () => {
           }
           index++
         }
+      }
+
+      // change address to non-abbreviated version
+      let i = 0
+      index-- // if there are 30 items, index should be 29
+      let index2 = 0
+      while (i < fullAddressTag.length && index2 <= index) {
+        // console.log(index2 + ": " + items[index2].address)
+        if (fullAddressTag[i].attrs['data-highlight-target'] != undefined) {
+          items[index2].address =
+            fullAddressTag[i].attrs['data-highlight-target']
+          index2++
+          // console.log(index2 - 1 + " Has been changed to: " + items[index2 - 1].address)
+        }
+        i++
       }
 
       sortItems(items, setVolunteerData, setVolunteersIsLoading, false)
