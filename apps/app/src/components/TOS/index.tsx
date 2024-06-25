@@ -29,7 +29,7 @@ const TOS: NextPage = () => {
             {t('updated')}
           </div>
         </section>
-        <section className="flex justify-left items-center border rounded-lg my-10 mx-20 dark:bg-Card">
+        <section className="flex justify-left items-center border rounded-lg my-10 mx-20 bg-purple-100 dark:bg-Card">
           <div className="flex m-8 flex-col space-y-5">
             <div suppressHydrationWarning className="mb-2 text-3xl font-bold">
               {t('table-of-contents')}

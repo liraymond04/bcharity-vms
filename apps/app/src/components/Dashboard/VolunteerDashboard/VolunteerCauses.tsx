@@ -218,7 +218,12 @@ const VolunteerCauses: React.FC = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <ClearFilters onClick={() => setSelectedCategory('')} />
+            <ClearFilters
+              onClick={() => {
+                setSelectedCategory('')
+                setSearchValue('')
+              }}
+            />
           </div>
           <GridRefreshButton onClick={refetch} />
 

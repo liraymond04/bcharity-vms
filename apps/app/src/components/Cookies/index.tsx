@@ -22,7 +22,7 @@ const Cookies: NextPage = () => {
           <div suppressHydrationWarning>{t('updated-on')}</div>
         </div>
       </div>
-      <div className="flex justify-left items-center border my-10 mx-20 dark:bg-Card">
+      <div className="flex justify-left items-center border my-10 mx-20 bg-purple-100 dark:bg-Card">
         <div className="flex my-8 mx-20 flex-col">
           <div className="space-y-3">
             <div suppressHydrationWarning>{t('content.p1')}</div>

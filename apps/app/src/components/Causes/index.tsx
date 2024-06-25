@@ -132,7 +132,12 @@ const Causes: NextPage = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <ClearFilters onClick={() => setSelectedCategory('')} />
+            <ClearFilters
+              onClick={() => {
+                setSelectedCategory('')
+                setSearchValue('')
+              }}
+            />
           </div>
         </div>
         <Divider className="mt-5" />

@@ -31,7 +31,7 @@ const Privacypolicy: NextPage = () => {
       {/* The Private Policy is written here: */}
       <div
         suppressHydrationWarning
-        className="flex justify-left items-center border my-10 mx-32 dark:bg-Card"
+        className="flex justify-left items-center border my-10 mx-32 bg-purple-100 dark:bg-Card"
       >
         <div suppressHydrationWarning className="flex my-8 mx-20 flex-col">
           <div suppressHydrationWarning className="space-y-10"></div>
