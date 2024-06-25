@@ -175,14 +175,14 @@ const VolunteerHome: React.FC = () => {
                   <div className="justify-left w-full ">
                     <div className=" h-10">
                       <p className=" text-3xl text-white-600 flex items-left mt-10">
-                        {profile?.handle?.fullHandle}
+                        {profile?.handle?.localName}
                       </p>
                       <div>
                         <Link href="">
                           <div className="truncate">
                             <Slug
                               className="font-bold"
-                              slug={profile?.handle?.fullHandle}
+                              slug={profile?.handle?.localName}
                               prefix="@"
                             />
                           </div>
@@ -212,7 +212,7 @@ const VolunteerHome: React.FC = () => {
                                             alt="Rounded avatar"
                                           />
                                           <div>
-                                            {profile.handle?.fullHandle}
+                                            {profile.handle?.localName}
                                             <Link href="">
                                               <div className="text-sm float-right top-0 mb-5">
                                                 <p className="text-gray-900 leading-none"></p>
@@ -224,7 +224,7 @@ const VolunteerHome: React.FC = () => {
                                                 <Slug
                                                   className="font-bold"
                                                   slug={
-                                                    profile?.handle?.fullHandle
+                                                    profile?.handle?.localName
                                                   }
                                                   prefix="@"
                                                 />
