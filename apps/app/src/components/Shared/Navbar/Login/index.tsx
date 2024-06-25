@@ -108,13 +108,18 @@ const Login: FC = () => {
                 className="flex items-center justify-between p-3"
                 key={profile.id}
               >
-                <img
-                  className="w-5 h-5 rounded-full border dark:border-gray-700/80"
-                  height={20}
-                  width={20}
-                  src={getAvatar(profile)}
-                  alt={profile?.handle?.localName}
-                />
+                <div className="flex items-center space-x-3">
+                  <img
+                    className="w-5 h-5 rounded-full border dark:border-gray-700/80"
+                    height={20}
+                    width={20}
+                    src={getAvatar(profile)}
+                    alt={profile?.handle?.localName}
+                  />
+                  <div className="font-bold text-left">
+                    {profile?.handle?.localName}
+                  </div>
+                </div>
                 <Button
                   disabled={isLoading && loggingInProfileId === profile.id}
                   onClick={() => handleSign(profile.id)}
