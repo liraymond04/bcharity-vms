@@ -1,4 +1,4 @@
-import { PublicationFragment } from '@lens-protocol/client'
+import { AnyPublicationFragment } from '@lens-protocol/client'
 
 import {
   CauseMetadata,
@@ -17,7 +17,7 @@ import { logIgnoreWarning } from './logIgnoreWarning'
  * @returns filtered CauseMetadata[] with only the most recent posts
  *
  */
-export const getCauseMetadata = (data: PublicationFragment[]) => {
+export const getCauseMetadata = (data: AnyPublicationFragment[]) => {
   const metadata: CauseMetadata[] = data
     .filter(isPost)
     .map((post) => {

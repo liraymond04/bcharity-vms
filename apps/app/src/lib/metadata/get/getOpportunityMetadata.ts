@@ -1,4 +1,4 @@
-import { PublicationFragment } from '@lens-protocol/client'
+import { AnyPublicationFragment } from '@lens-protocol/client'
 
 import {
   InvalidMetadataException,
@@ -17,7 +17,7 @@ import { logIgnoreWarning } from './logIgnoreWarning'
  * @returns filtered OpportunityMetadata[] with only the most recent posts
  *
  */
-export const getOpportunityMetadata = (data: PublicationFragment[]) => {
+export const getOpportunityMetadata = (data: AnyPublicationFragment[]) => {
   const metadata: OpportunityMetadata[] = data
     .filter(isPost)
     .map((post) => {

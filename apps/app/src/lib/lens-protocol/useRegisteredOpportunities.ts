@@ -1,7 +1,7 @@
 import {
   isCommentPublication,
   isPostPublication,
-  PublicationTypes
+  PublicationType
 } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -72,15 +72,17 @@ const useRegisteredOpportunities = ({
 
     try {
       const apData = await lensClient().publication.fetchAll({
-        profileId,
-        publicationTypes: [PublicationTypes.Comment],
-        metadata: { tags: { all: [PostTags.Application.Apply] } }
+        where: {
+          actedBy: profileId,
+          publicationTypes: [PublicationType.Comment],
+          metadata: { tags: { all: [PostTags.Application.Apply] } }
+        }
       })
 
       const applications = apData.items
         .map((a) => {
-          if (!isComment(a) || a.hidden) return
-          const { mainPost } = a
+          if (!isComment(a) || a.isHidden) return
+          const mainPost = a.commentOn
           if (!isPostPublication(mainPost)) return
 
           try {
@@ -101,14 +103,18 @@ const useRegisteredOpportunities = ({
         applications.map(async (a) => {
           const comments = await lensClient()
             .publication.fetchAll({
-              commentsOf: a.post_id,
-              metadata: { tags: { all: [PostTags.Application.Accept] } }
+              where: {
+                commentOn: {
+                  id: a.post_id
+                },
+                metadata: { tags: { all: [PostTags.Application.Accept] } }
+              }
             })
             .then((data) =>
               data.items
                 .filter(isCommentPublication)
-                .filter((c) => !c.hidden)
-                .filter((c) => c.profile.id === a.opportunity.from.id)
+                .filter((c) => !c.isHidden)
+                .filter((c) => c.by.id === a.opportunity.from.id)
             )
 
           approvedMap[a.post_id] = comments.length > 0

@@ -48,8 +48,10 @@ const VolunteerLogHours: React.FC = () => {
   const { currentUser: profile } = useAppPersistStore()
 
   const { loading, data, error, refetch } = usePostData(profile?.id, {
-    publicationTypes: [PublicationType.Comment],
-    metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
+    where: {
+      publicationTypes: [PublicationType.Comment],
+      metadata: { tags: { oneOf: [PostTags.Bookmark.Opportunity] } }
+    }
   })
   const [metaData, setMetaData] = useState<OpportunityMetadata[]>([])
   const [indice, setIndice] = useState<number[]>([])

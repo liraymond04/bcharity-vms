@@ -1,4 +1,4 @@
-import { FetchBalanceResult } from '@wagmi/core'
+import { GetBalanceReturnType } from '@wagmi/core'
 import { useBalance } from 'wagmi'
 
 import { VHR_TOKEN } from '@/constants'
@@ -10,7 +10,7 @@ export interface WalletBalanceReturn {
   /**
    * Balance result and token information
    */
-  data: FetchBalanceResult | undefined
+  data: GetBalanceReturnType | undefined
   /**
    * True if the balance result is being fetched
    */
