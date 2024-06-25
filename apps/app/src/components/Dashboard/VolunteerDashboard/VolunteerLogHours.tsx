@@ -136,6 +136,7 @@ const VolunteerLogHours: React.FC = () => {
         <ClearFilters
           onClick={() => {
             setSelectedCategory('')
+            setSelectedSortBy('')
           }}
         />
         <GridRefreshButton onClick={refetch} />

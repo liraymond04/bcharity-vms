@@ -116,7 +116,7 @@ const LocationFormComponent: React.FC<ILocationFormComponentProps> = ({
                 required
                 {...register('city', {
                   validate: { city: validateCity },
-                  deps: ['province, city']
+                  deps: ['province', 'city']
                 })}
               />
             </div>

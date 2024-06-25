@@ -201,6 +201,7 @@ const VolunteerVHRTab: React.FC = () => {
             <ClearFilters
               onClick={() => {
                 setSelectedCategory('')
+                setSearchValue('')
               }}
             />
           </div>

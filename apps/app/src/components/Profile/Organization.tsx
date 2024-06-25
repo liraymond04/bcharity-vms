@@ -191,7 +191,9 @@ const Organization: NextPage = () => {
     const fetch = async () => {
       try {
         if (!username) throw Error(e('profile-username-invalid'))
-        const result = await getProfile({ handle: username.toString() })
+        const result = await getProfile({
+          handle: `lens/${username.toString()}`
+        })
         if (!result) throw Error(e('profile-fetch-fail'))
         if (!isVerified(result.id)) throw Error(e('expected-organization'))
         setProfile(result)
@@ -292,8 +294,8 @@ const Organization: NextPage = () => {
                               {profile.metadata
                                 ? profile.metadata.displayName
                                   ? profile.metadata.displayName
-                                  : profile.handle?.fullHandle
-                                : profile.handle?.fullHandle}
+                                  : profile.handle?.localName
+                                : profile.handle?.localName}
                             </p>
                             <p className="border-2 border-gray-300 ml-4 px-2 py-1 text-gray-400 font-semibold">
                               ORG
