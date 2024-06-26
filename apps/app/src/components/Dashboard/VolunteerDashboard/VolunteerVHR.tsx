@@ -52,6 +52,9 @@ const VolunteerVHRTab: React.FC = () => {
     keyPrefix: 'components.dashboard.volunteer.vhr'
   })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const { t: v } = useTranslation('common', {
+    keyPrefix: 'components.profile.volunteer'
+  })
 
   const { currentUser: profile } = useAppPersistStore()
   const { currentUser } = useAppPersistStore()
@@ -149,7 +152,7 @@ const VolunteerVHRTab: React.FC = () => {
                     {Number(balanceData?.value)}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised {vhrGoal !== 0 && `out of ${vhrGoal}`}
+                    {v('raised')} {vhrGoal !== 0 && `out of ${vhrGoal}`}
                   </div>
                 </div>
                 <Link
