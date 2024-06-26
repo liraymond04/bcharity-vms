@@ -140,7 +140,8 @@ const VolunteerCauses: React.FC = () => {
   const onGoalOpen = () => {
     setGoalModalOpen(true)
   }
-
+  const vhrValue = Number(data?.value)
+  const displayVHRValue = isNaN(vhrValue) ? 0 : vhrValue
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -152,7 +153,7 @@ const VolunteerCauses: React.FC = () => {
               <>
                 <div className="flex items-center">
                   <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
-                    {Number(data?.value)}
+                    {displayVHRValue}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
                     {v('raised')}{' '}
@@ -169,7 +170,7 @@ const VolunteerCauses: React.FC = () => {
                 </Link>
                 {donationGoal !== 0 && (
                   <Progress
-                    progress={Number(data?.value)}
+                    progress={displayVHRValue}
                     total={donationGoal}
                     className="mt-10 mb-10"
                   />

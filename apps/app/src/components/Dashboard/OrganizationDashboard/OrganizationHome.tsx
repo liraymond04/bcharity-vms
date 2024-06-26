@@ -171,7 +171,7 @@ const OrganizationHome: React.FC = () => {
                   <div className="justify-left w-full">
                     <div className=" h-10">
                       <p className=" text-3xl text-white-600 flex items-left mt-10 ">
-                        {profile?.handle?.fullHandle}
+                        {profile?.handle?.localName}
                       </p>
                       {getSlug('location') !== '' && (
                         <div className="flex flex-row space-x-2">

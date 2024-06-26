@@ -1,5 +1,6 @@
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { useConfig } from 'wagmi'
 
@@ -41,10 +42,9 @@ const UserDispatcher: React.FC = () => {
   const config = useConfig()
   const handleDispatch = async () => {
     setIsLoading(true)
-
     if (currentUser) {
       try {
-        await checkAuth(currentUser?.ownedBy.address)
+        await checkAuth(currentUser?.ownedBy.address, currentUser?.id)
 
         const typedDataResult =
           await lensClient().profile.createChangeProfileManagersTypedData({
@@ -64,8 +64,12 @@ const UserDispatcher: React.FC = () => {
         )
 
         setIsEnabled(!isEnabled)
+        toast.success(
+          `Dispatcher ${isEnabled ? 'disabled' : 'enabled'} successfully`
+        )
       } catch (e) {
         console.log(e)
+        toast.error(t('Error updating dispatcher'))
       }
     }
     setIsLoading(false)
