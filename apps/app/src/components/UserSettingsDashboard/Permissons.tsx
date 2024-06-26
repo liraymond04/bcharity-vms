@@ -140,6 +140,9 @@ const Permissons: React.FC = () => {
     '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
   )
 
+  const [value, setValue] = useState('HTML')
+  const [currValue] = useState(localStorage.getItem('currValue') || value)
+
   const [moduleData, setModuleData] = useState<
     ApprovedAllowanceAmountResultFragment[]
   >([])
@@ -174,14 +177,32 @@ const Permissons: React.FC = () => {
                 {t('description')}
               </div>
               <div className="text-m font-normal p-2" suppressHydrationWarning>
+                {(() => {
+                  switch (currValue) {
+                    case '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889':
+                      return 'Saved Currency: Wrapped Matic.'
+                    case '0x3C68CE8504087f89c640D02d133646d98e64ddd9':
+                      return 'Saved Currency: WETH.'
+                    case '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e':
+                      return 'Saved Currency: USDC.'
+                    case '0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F':
+                      return 'Saved Currency: DAI.'
+                    case '0x7beCBA11618Ca63Ead5605DE235f6dD3b25c530E':
+                      return 'Saved Currency: Toucan Protocal: Nature Carbon Tonne.'
+                    default:
+                      return null
+                  }
+                })()}
+              </div>
+              <div className="text-m font-normal p-2" suppressHydrationWarning>
                 {t('select-currency')}
               </div>
               <select
                 className="ml-2 bg-accent-content dark:bg-info-content rounded-xl border border-gray-300 outline-none disabled:bg-gray-500 disabled:bg-opacity-20 disabled:opacity-60 dark:border-gray-700/80 focus:border-brand-500 focus:ring-brand-400"
+                value={value}
                 onChange={async (e) => {
-                  getResults(e.target.value)
+                  ;-getResults(e.target.value)
                     .then((res) => {
-                      // console.log(res)
                       if (res.isSuccess())
                         setModuleData(
                           res.unwrap() as ApprovedAllowanceAmountResultFragment[]
@@ -189,6 +210,8 @@ const Permissons: React.FC = () => {
                     })
                     .catch((err) => console.log(err))
                   setOptions(e.target.value)
+                  setValue(e.target.value)
+                  localStorage.setItem('currValue', e.target.value)
                 }}
               >
                 <option value="0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889">
@@ -208,6 +231,24 @@ const Permissons: React.FC = () => {
                 </option>
                 flex
               </select>
+              <div className="mt-4" id="valueSwap">
+                {(() => {
+                  switch (value) {
+                    case '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889':
+                      return 'You swapped to Wrapped Matic!'
+                    case '0x3C68CE8504087f89c640D02d133646d98e64ddd9':
+                      return 'You swapped to WETH!'
+                    case '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e':
+                      return 'You swapped to USDC!'
+                    case '0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F':
+                      return 'You swapped to DAI!'
+                    case '0x7beCBA11618Ca63Ead5605DE235f6dD3b25c530E':
+                      return 'You swapped to Toucan Protocal: Nature Carbon Tonne!'
+                    default:
+                      return null
+                  }
+                })()}
+              </div>
               <div className="p-2 w-[75%]">
                 {moduleData.map((data, index) => {
                   return (
@@ -257,3 +298,6 @@ const Permissons: React.FC = () => {
 }
 
 export default Permissons
+function valueFunction(arg0: (v: any) => void) {
+  throw new Error('Function not implemented.')
+}
