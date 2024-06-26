@@ -48,6 +48,9 @@ const VolunteerCauses: React.FC = () => {
     keyPrefix: 'components.dashboard.volunteer.causes'
   })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const { t: v } = useTranslation('common', {
+    keyPrefix: 'components.profile.volunteer'
+  })
 
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
@@ -153,7 +156,8 @@ const VolunteerCauses: React.FC = () => {
                     {displayVHRValue}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised {donationGoal !== 0 && `out of ${donationGoal}`}
+                    {v('raised')}{' '}
+                    {donationGoal !== 0 && `out of ${donationGoal}`}
                   </div>
                 </div>
                 <Link
