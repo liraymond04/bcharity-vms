@@ -44,10 +44,13 @@ const usePostData = (
         }
       })
       .then((data) => {
+        // console.log(JSON.stringify(data))
+        // there is data, but no data.items
         setData(data.items)
       })
       .catch((error) => {
-        setError(error)
+        // the error is not a string
+        setError(JSON.stringify(error))
       })
       .finally(() => {
         setLoading(false)
