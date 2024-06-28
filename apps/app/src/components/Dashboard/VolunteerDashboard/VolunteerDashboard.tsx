@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import GradientWrapper from '@/components/Shared/Gradient/GradientWrapper'
 import Sidebar, { ITabProps } from '@/components/Sidebar/Sidebar'
 
+import VolunteerApplications from './VolunteerApplications'
 import VolunteerCausesTab from './VolunteerCauses'
 import VolunteerHomeTab from './VolunteerHome'
 import VolunteerLogHoursTab from './VolunteerLogHours'
@@ -77,7 +78,7 @@ const VolunteerDashboard: React.FC = () => {
     {
       label: t('applications'),
       icon: <ClipboardCheckIcon className="inline" />,
-      component: <div></div>
+      component: <VolunteerApplications hidden={false} />
     },
     {
       label: t('log-vhr'),
