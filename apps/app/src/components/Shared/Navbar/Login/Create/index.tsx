@@ -77,7 +77,7 @@ const Create: FC<CreateProps> = ({ isModal = false }) => {
             if (currentUser !== null) {
               const result = await createProfile(
                 username,
-                `0x${currentUser.ownedBy.address}`
+                currentUser.ownedBy.address
               );
 
               if ('reason' in result) {
