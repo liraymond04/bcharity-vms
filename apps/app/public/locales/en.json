@@ -652,7 +652,9 @@
         "cancel": "Cancel"
       },
       "choose-file": {
-        "select": "Select file(s)"
+        "select": "Select file(s)",
+        "single-file": "Choose File",
+        "no-file-chosen": "No file chosen"
       },
       "clear-filters": {
         "label": "Clear Filters"

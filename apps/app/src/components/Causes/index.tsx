@@ -41,6 +41,9 @@ import CauseCard from './CauseCard'
  */
 const Causes: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'components.causes' })
+  const { t: s } = useTranslation('common', {
+    keyPrefix: 'components.volunteers'
+  })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
@@ -67,6 +70,8 @@ const Causes: NextPage = () => {
     },
     true
   )
+
+  const tSearch = () => {}
 
   useEffect(() => {
     let _posts: CauseMetadata[] = []
@@ -108,7 +113,7 @@ const Causes: NextPage = () => {
               className="focus:ring-0 border-none outline-none focus:border-none focus:outline-none  bg-transparent rounded-2xl w-[250px]"
               type="text"
               value={searchValue}
-              placeholder="Search"
+              placeholder={`${s('search')}`}
               onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
@@ -127,7 +132,12 @@ const Causes: NextPage = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <ClearFilters onClick={() => setSelectedCategory('')} />
+            <ClearFilters
+              onClick={() => {
+                setSelectedCategory('')
+                setSearchValue('')
+              }}
+            />
           </div>
         </div>
         <Divider className="mt-5" />

@@ -48,6 +48,9 @@ const VolunteerCauses: React.FC = () => {
     keyPrefix: 'components.dashboard.volunteer.causes'
   })
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
+  const { t: v } = useTranslation('common', {
+    keyPrefix: 'components.profile.volunteer'
+  })
 
   const [posts, setPosts] = useState<CauseMetadata[]>([])
   const [categories, setCategories] = useState<Set<string>>(new Set())
@@ -137,7 +140,8 @@ const VolunteerCauses: React.FC = () => {
   const onGoalOpen = () => {
     setGoalModalOpen(true)
   }
-
+  const vhrValue = Number(data?.value)
+  const displayVHRValue = isNaN(vhrValue) ? 0 : vhrValue
   return (
     <GridLayout>
       <GridItemTwelve>
@@ -149,10 +153,11 @@ const VolunteerCauses: React.FC = () => {
               <>
                 <div className="flex items-center">
                   <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
-                    {Number(data?.value)}
+                    {displayVHRValue}
                   </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
-                    VHR raised {donationGoal !== 0 && `out of ${donationGoal}`}
+                    {v('raised')}{' '}
+                    {donationGoal !== 0 && `out of ${donationGoal}`}
                   </div>
                 </div>
                 <Link
@@ -165,7 +170,7 @@ const VolunteerCauses: React.FC = () => {
                 </Link>
                 {donationGoal !== 0 && (
                   <Progress
-                    progress={Number(data?.value)}
+                    progress={displayVHRValue}
                     total={donationGoal}
                     className="mt-10 mb-10"
                   />
@@ -218,7 +223,12 @@ const VolunteerCauses: React.FC = () => {
                 selected={selectedCategory}
               ></DashboardDropDown>
             </div>
-            <ClearFilters onClick={() => setSelectedCategory('')} />
+            <ClearFilters
+              onClick={() => {
+                setSelectedCategory('')
+                setSearchValue('')
+              }}
+            />
           </div>
           <GridRefreshButton onClick={refetch} />
 

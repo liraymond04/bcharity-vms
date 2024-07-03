@@ -58,16 +58,31 @@ const VolunteerLogHours: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([])
 
   useEffect(() => {
+    // console.log(JSON.stringify(data))
+    // data is empty
     const _metaData = data
       .filter(isComment)
       .map((v) => v.root)
       .filter((v): v is PostFragment => v === PublicationType.Post)
 
-    setMetaData(getOpportunityMetadata(_metaData))
-    setIndice(resetIndice())
-    const _categories = new Set<string>()
-    metaData.forEach((v) => _categories.add(v.category))
-    setCategories(Array.from(_categories))
+    // there are problems with usePostData.ts and the data that is passed in
+    // console.log(Object.keys(_metaData).length)
+    if (Object.keys(_metaData).length === 0) {
+      // logic goes into this part
+      // text does not show
+      ;<div className="flex justify-between items-center ml-10">
+        <p className="mx-5 w-[200px] h-[30px] text-ellipsis overflow-hidden whitespace-nowrap">
+          There is no data yet
+        </p>
+      </div>
+    } else {
+      setMetaData(getOpportunityMetadata(_metaData))
+      setIndice(resetIndice())
+      const _categories = new Set<string>()
+      // console.log(JSON.stringify(metaData))
+      metaData.forEach((v) => _categories.add(v.category))
+      setCategories(Array.from(_categories))
+    }
   }, [data])
 
   const resetIndice = () => {
@@ -136,6 +151,7 @@ const VolunteerLogHours: React.FC = () => {
         <ClearFilters
           onClick={() => {
             setSelectedCategory('')
+            setSelectedSortBy('')
           }}
         />
         <GridRefreshButton onClick={refetch} />
