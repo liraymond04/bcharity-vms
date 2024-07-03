@@ -17,7 +17,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID
   )
   return (
-    <ThirdwebProvider>
+    <ThirdwebProvider clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="light" attribute="class">
