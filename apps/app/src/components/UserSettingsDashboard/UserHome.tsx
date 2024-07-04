@@ -45,6 +45,9 @@ const VolunteerHomeTab: React.FC = () => {
   const { t: e } = useTranslation('common', {
     keyPrefix: 'errors'
   })
+  const { t: scf } = useTranslation('common', {
+    keyPrefix: 'components.shared.choose-file'
+  })
 
   const { mutateAsync: upload } = useStorageUpload()
   const sdk = useSDK()
@@ -318,6 +321,7 @@ const VolunteerHomeTab: React.FC = () => {
                 label={t('cover')}
                 type="file"
                 id="cover"
+                // placeholder={scf('no-file-chosen')} doesn't actually change the placeholder text
                 onChange={(event) => {
                   const selectedFile = event.target.files?.[0]
                   setError(undefined)
