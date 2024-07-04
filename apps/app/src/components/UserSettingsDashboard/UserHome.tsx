@@ -130,7 +130,7 @@ const VolunteerHomeTab: React.FC = () => {
 
     try {
       if (currentUser) {
-        await checkAuth(currentUser?.ownedBy.address)
+        await checkAuth(currentUser?.ownedBy.address, currentUser?.id)
 
         if (discord.length > 100) throw Error(he('discord'))
         if (twitter.length > 100) throw Error(he('twitter'))
