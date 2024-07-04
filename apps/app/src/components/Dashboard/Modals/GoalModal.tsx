@@ -78,6 +78,7 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
   } = form
 
   const onCancel = () => {
+    console.log('Form cancelled')
     reset()
     onClose(false)
   }
@@ -104,9 +105,11 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
     )
 
     try {
-      await checkAuth(publisher.ownedBy.address)
-
-      await createPost({ profileId: publisher.id, metadata })
+      checkAuth(publisher.ownedBy?.address, publisher.id)
+      await createPost({
+        profileId: publisher.id,
+        metadata
+      })
 
       reset()
       onClose(true)
@@ -119,18 +122,15 @@ const GoalModal: React.FC<IPublishGoalModalProps> = ({
 
   return (
     <GradientModal
-      title={'title'}
+      title={t('title')}
       open={open}
       onCancel={onCancel}
-      onSubmit={handleSubmit((data) => onSubmit(data))}
+      onSubmit={handleSubmit(onSubmit)}
       submitDisabled={isPending}
     >
       <div className="mx-12">
         {!isPending ? (
-          <Form
-            form={form}
-            onSubmit={() => handleSubmit((data) => onSubmit(data))}
-          >
+          <Form form={form} onSubmit={() => handleSubmit(onSubmit)()}>
             <Input
               label={t('goal')}
               type="number"

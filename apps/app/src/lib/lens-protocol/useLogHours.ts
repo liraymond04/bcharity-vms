@@ -129,7 +129,7 @@ const useLogHours = (params: UseLogHoursParams): UseLogHoursReturn => {
     })
 
     try {
-      await checkAuth(profile.ownedBy.address)
+      await checkAuth(profile.ownedBy.address, profile.id)
 
       await createComment({
         profileId: profile.id,
