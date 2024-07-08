@@ -1,10 +1,10 @@
 import { RelayErrorFragment, RelaySuccessFragment } from '@lens-protocol/client'
 import { TextOnlyMetadata } from '@lens-protocol/metadata'
-import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import { useTranslation } from 'react-i18next'
+import { useConfig } from 'wagmi'
 
-import { config } from './config'
+import uploadToArweave from '../metadata/UploadToArweave'
 import getSignature from './getSignature'
 import lensClient from './lensClient'
 
@@ -42,15 +42,9 @@ export interface CreatePostReturn {
 
 const useCreatePost = (): CreatePostReturn => {
   const { t: e } = useTranslation('common', { keyPrefix: 'errors' })
-  const sdk = useSDK()
-  const { mutateAsync: upload } = useStorageUpload()
-
+  const config = useConfig()
   const createPost = async ({ metadata }: CreatePostParams) => {
-    if (!sdk) throw new Error(e('metadata-upload-fail'))
-
-    const contentURI = sdk?.storage.resolveScheme(
-      (await upload({ data: [metadata] }))[0]
-    )
+    const contentURI = `https://arweave.net/${await uploadToArweave(metadata)}`
 
     if (!contentURI) throw new Error(e('metadata-upload-fail'))
 
@@ -62,20 +56,22 @@ const useCreatePost = (): CreatePostReturn => {
       })
 
     if (typedDataResult.isFailure()) {
+      console.error(typedDataResult.error)
       throw new Error(typedDataResult.error.message)
     }
-
+    const data = typedDataResult.value
     const signature = await signTypedData(
       config,
       getSignature(typedDataResult.value.typedData)
     )
 
     const broadcastResult = await lensClient().transaction.broadcastOnchain({
-      id: typedDataResult.value.id,
+      id: data.id,
       signature
     })
 
     if (broadcastResult.isFailure()) {
+      console.error(broadcastResult.error)
       throw new Error(broadcastResult.error.message)
     } else {
       return broadcastResult.value
