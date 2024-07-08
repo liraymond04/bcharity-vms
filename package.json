@@ -19,12 +19,12 @@
     "daisyui": "^3.5.0",
     "dotenv-cli": "^7.2.1",
     "eslint": "^8.44.0",
+    "eslint-config-custom": "workspace:*",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-turbo": "latest",
-    "eslint-config-custom": "workspace:*",
-    "prettier-config-custom": "workspace:*",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
+    "prettier-config-custom": "workspace:*",
     "turbo": "^1.10.9"
   },
   "dependencies": {
@@ -50,6 +50,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@wagmi/core": "^2.11.2",
     "ag-grid.css": "link:ag-grid-community/styles/ag-grid.css",
+    "axios": "^1.7.2",
     "clsx": "^1.1.1",
     "country-state-city": "^3.1.4",
     "encoding": "^0.1.13",
