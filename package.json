@@ -48,7 +48,7 @@
     "@types/store": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@wagmi/core": "^2.10.2",
+    "@wagmi/core": "^2.11.2",
     "ag-grid.css": "link:ag-grid-community/styles/ag-grid.css",
     "clsx": "^1.1.1",
     "country-state-city": "^3.1.4",
