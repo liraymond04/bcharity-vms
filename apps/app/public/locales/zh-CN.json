@@ -315,6 +315,7 @@
   "components.shared.navbar.login.create.signup": "注册慈善机构",
   "components.shared.navbar.login.create.handle": "处理",
   "components.shared.navbar.login.create.button-signup": "报名",
+  "components.shared.navbar.login.create.button-close": "关闭",
   "components.shared.navbar.login.wallet-selector.sign-in": "使用 Lens 登录",
   "components.shared.navbar.login.wallet-selector.browser": "浏览器钱包",
   "components.shared.navbar.menuitems.logged-in": "登录为",

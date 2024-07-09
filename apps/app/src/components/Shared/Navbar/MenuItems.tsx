@@ -5,6 +5,7 @@ import {
   ArrowCircleRightIcon,
   CogIcon,
   LogoutIcon,
+  PlusCircleIcon,
   SwitchHorizontalIcon,
   UserIcon
 } from '@heroicons/react/outline'
@@ -139,6 +140,22 @@ const MenuItems: FC = () => {
                     </div>
                   </Menu.Item>
 
+                  <Menu.Item
+                    as={NextLink}
+                    href="/"
+                    onClick={() => {
+                      console.log(showCreate)
+                      setShowCreate(true)
+                    }}
+                    className={({ active }: { active: boolean }) =>
+                      clsx({ 'dropdown-active': active }, 'menu-item')
+                    }
+                  >
+                    <div className="flex items-center space-x-1.5">
+                      <PlusCircleIcon className="w-4 h-4" />
+                      <div suppressHydrationWarning>{t('create-profile')}</div>
+                    </div>
+                  </Menu.Item>
                   {profiles?.length > 1 && (
                     <>
                       <div className="custom-divider" />
@@ -262,7 +279,7 @@ const MenuItems: FC = () => {
         }}
       >
         <div className="p-5">
-          <Create isModal />
+          <Create isModal onClose={() => setShowCreate(false)} />
         </div>
       </Modal>
     </>

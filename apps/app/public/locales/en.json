@@ -611,7 +611,8 @@
             "close": "You can close the modal and try signing in again to use your new profile",
             "signup": "Signup Bcharity",
             "handle": "Handle",
-            "button-signup": "Signup"
+            "button-signup": "Signup",
+            "close-button": "Close"
           },
           "wallet-selector": {
             "sign-in": "Sign-In with Lens",
