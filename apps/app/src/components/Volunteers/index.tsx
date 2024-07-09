@@ -110,6 +110,12 @@ const Volunteers: NextPage = () => {
     <>
       <SEO title="Volunteers • BCharity VMS" />
       <div className="mx-auto max-w-screen-xl px-0 sm:px-5">
+        <div className="mt-5">
+          <p className="font-bold text-2xl" suppressHydrationWarning>
+            {t('title')}
+          </p>
+          <Divider className="mt-5" />
+        </div>
         <div className="flex flex-wrap gap-y-5 justify-around items-center mt-10">
           <div className="flex justify-between w-[300px] h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 ml-10 mr-10 dark:bg-Input">
             <input
@@ -155,10 +161,6 @@ const Volunteers: NextPage = () => {
             </div>
           </div>
         </div>
-        <Divider className="mt-5" />
-        <p className="font-bold text-2xl" suppressHydrationWarning>
-          {t('title')}
-        </p>
       </div>
       <GridLayout>
         {posts

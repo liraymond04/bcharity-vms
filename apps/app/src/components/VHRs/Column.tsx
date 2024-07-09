@@ -23,7 +23,7 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
           data.map((value, index) => (
             <div
               key={index}
-              className="flex flex-wrap justify-between overflow-hidden items-center w-[80%] h-[80px] mx-auto my-2 border-b-[1px] border-[#DDDDDD]"
+              className="flex flex-wrap justify-between overflow-hidden items-center w-[80%] h-[80px] mx-auto my-2 border-b-[1px] border-[#a3a3a3]"
             >
               <div className="flex items-center">
                 <div className="ml-2 text-[#7E7E7E]">{index + 1}</div>
@@ -36,9 +36,9 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
                   <div
                     className={`${
                       index == 0
-                        ? 'text-[#FFD600]'
+                        ? 'text-[#d1b628]'
                         : index == 1
-                          ? 'text-[#CCCCCC]'
+                          ? 'text-[#a19f9f]'
                           : index == 2
                             ? 'text-[#8E5E00]'
                             : 'text-[#A3A3A3]'

@@ -1,4 +1,4 @@
-import { polygon, polygonMumbai } from 'wagmi/chains'
+import { polygon, polygonAmoy } from 'wagmi/chains'
 
 // Environments
 export const IS_PRODUCTION = process.env.NODE_ENV === 'production'
@@ -17,6 +17,7 @@ export const GIT_COMMIT_REF = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF
 
 // Misc
 export const CONTACT_EMAIL = 'admin@bcharity.net'
+export const GOOD_API_URL = 'https://good-vms-api.vercel.app/'
 export const PUBLIC_URL = process.env.NEXT_PUBLIC_URL
 export const RELAY_ON =
   PUBLIC_URL === 'https://bcharity.net' ||
@@ -48,7 +49,7 @@ export const ERROR_MESSAGE = 'Something went wrong!'
 export const CONNECT_WALLET = 'Please connect your wallet.'
 export const WRONG_NETWORK = IS_MAINNET
   ? 'Please change network to Polygon mainnet.'
-  : 'Please change network to Polygon Mumbai testnet.'
+  : 'Please change network to Polygon Amoy testnet.'
 export const SIGN_ERROR = 'Failed to sign data'
 
 // URLs
@@ -59,7 +60,7 @@ export const POLYGONSCAN_URL = IS_MAINNET
   : 'https://amoy.polygonscan.com'
 export const CORS_PROXY = 'https://corsproxy.io/?'
 export const VHR_TOP_HOLDERS_URL =
-  'https://mumbai.polygonscan.com/token/tokenholderchart/0x28ee241ab245699968f2980d3d1b1d23120ab8be'
+  'https://amoy.polygonscan.com/token/tokenholderchart/0x28ee241ab245699968f2980d3d1b1d23120ab8be'
 export const RARIBLE_URL = IS_MAINNET
   ? 'https://rarible.com'
   : 'https://rinkeby.rarible.com'
@@ -75,7 +76,7 @@ export const WALLET_CONNECT_PROJECT_ID =
 export const ALCHEMY_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
 export const ALCHEMY_RPC = IS_MAINNET
   ? `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
-  : `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_KEY}`
+  : `https://polygon-amoy.g.alchemy.com/v2/${ALCHEMY_KEY}`
 
 export const INFURA_PROJECT_ID = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID
 export const INFURA_PROJECT_SECRET =
@@ -88,12 +89,12 @@ export const POLYGON_MAINNET = {
   name: 'Polygon Mainnet',
   rpcUrls: { default: 'https://polygon-rpc.com' }
 }
-export const POLYGON_MUMBAI = {
-  ...polygonMumbai,
-  name: 'Polygon Mumbai',
-  rpcUrls: { default: 'https://rpc-mumbai.maticvigil.com' }
+export const POLYGON_AMOY = {
+  ...polygonAmoy,
+  name: 'Polygon Amoy',
+  rpcUrls: { default: 'https://rpc-amoy.polygon.technology' }
 }
-export const CHAIN_ID = IS_MAINNET ? POLYGON_MAINNET.id : POLYGON_MUMBAI.id
+export const CHAIN_ID = IS_MAINNET ? POLYGON_MAINNET.id : POLYGON_AMOY.id
 
 export const ERRORS = {
   notMined:

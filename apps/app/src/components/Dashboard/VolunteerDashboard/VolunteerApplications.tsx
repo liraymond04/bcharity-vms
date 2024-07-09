@@ -175,7 +175,7 @@ const VolunteerApplications = forwardRef<
   return (
     <div className={`${hidden ? 'hidden' : ''} pt-5`}>
       <h1 className="ml-7 text-3xl font-bold pb-3" suppressHydrationWarning>
-        Your Applications
+        {t('title')}
       </h1>
       <div className="ml-7 flex flex-wrap items-center">
         <div className="flex justify-between h-[50px] bg-accent-content items-center rounded-md border-violet-300 border-2 dark:bg-Input">

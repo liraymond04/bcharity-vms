@@ -31,33 +31,34 @@ const usePostData = (
 ) => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<AnyPublicationFragment[]>([])
-  const [error, setError] = useState('')
-  const refetch = () => {
+  const [error, setError] = useState<string | null>(null) // Updated to string or null
+
+  const refetch = async () => {
     setLoading(true)
-    setError('')
-    lensClient()
-      .publication.fetchAll({
+    setError(null) // Updated to null
+    try {
+      const response = await lensClient().publication.fetchAll({
         ...params,
         where: {
           ...params.where,
           from: profileId ? [profileId] : []
         }
       })
-      .then((data) => {
-        // console.log(JSON.stringify(data))
-        // there is data, but no data.items
-        setData(data.items)
-      })
-      .catch((error) => {
-        // the error is not a string
-        setError(JSON.stringify(error))
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+      setData(response.items)
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('An unknown error occurred')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
-  useEffect(refetch, [profileId, params])
+  useEffect(() => {
+    refetch()
+  }, [profileId, params])
 
   return {
     loading,
