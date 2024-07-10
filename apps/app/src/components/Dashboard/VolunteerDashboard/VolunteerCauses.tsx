@@ -162,7 +162,7 @@ const VolunteerCauses: React.FC = () => {
                 </div>
                 <Link
                   href=""
-                  className="text-brand-500 hover:text-brand-600"
+                  className="text-brand-500 hover:text-brand-600 "
                   onClick={onGoalOpen}
                   suppressHydrationWarning
                 >

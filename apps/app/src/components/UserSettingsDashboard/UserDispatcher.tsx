@@ -70,7 +70,7 @@ const UserDispatcher: React.FC = () => {
         )
       } catch (e) {
         console.log(e)
-        toast.error(t('Error updating dispatcher'))
+        toast.error('Error updating dispatcher')
       }
     }
     setIsLoading(false)

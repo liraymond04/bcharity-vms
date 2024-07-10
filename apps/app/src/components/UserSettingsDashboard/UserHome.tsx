@@ -205,6 +205,7 @@ const VolunteerHomeTab: React.FC = () => {
         )
       }
       console.log('Profile saved successfully')
+      console.log('profile', currentUser)
     } catch (error) {
       if (error instanceof Error) {
         setError(error)
@@ -229,6 +230,7 @@ const VolunteerHomeTab: React.FC = () => {
               <div className="flex space-x-1 items-baseline">
                 <div suppressHydrationWarning>{t('profile-id')}</div>{' '}
                 <div className="font-bold text-lg">{userId}</div>
+                {currentUser?.metadata?.bio}
               </div>
               <div className="flex space-x-1 items-baseline">
                 <div suppressHydrationWarning>{t('profile-handle')}</div>{' '}
