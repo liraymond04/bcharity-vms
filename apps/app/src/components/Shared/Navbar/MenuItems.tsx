@@ -279,7 +279,7 @@ const MenuItems: FC = () => {
         }}
       >
         <div className="p-5">
-          <Create isModal />
+          <Create isModal onClose={() => setShowCreate(false)} />
         </div>
       </Modal>
     </>
