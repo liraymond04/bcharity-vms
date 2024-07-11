@@ -62,6 +62,7 @@ const Volunteer: NextPage = () => {
         if (!result) throw Error(e('profile-fetch-fail'))
         if (isVerified(result.id)) throw Error(e('expected-volunteer'))
         setProfile(result)
+        console.log(result)
       } catch (e) {
         if (e instanceof Error) {
           setError(e)
@@ -167,6 +168,7 @@ const Volunteer: NextPage = () => {
                             VOLUNTEER
                           </p>
                         </div>
+                        Location:
                         {getSlug('location') !== '' && (
                           <div className="flex flex-row space-x-2">
                             <LocationMarkerIcon className="w-5" />
@@ -175,8 +177,8 @@ const Volunteer: NextPage = () => {
                             </span>
                           </div>
                         )}
-
                         <div className="flex space-x-3 my-2">
+                          Discord: {getSlug('discord')}
                           {getSlug('discord') !== '' && (
                             <Link
                               href={`https://discord.gg/${getSlug('discord')}`}
@@ -194,6 +196,7 @@ const Volunteer: NextPage = () => {
                               </svg>
                             </Link>
                           )}
+                          Twitter: {getSlug('twitter')}
                           {getSlug('twitter') !== '' && (
                             <Link
                               href={`https://twitter.com/${getSlug('twitter')}`}
@@ -209,6 +212,7 @@ const Volunteer: NextPage = () => {
                               </svg>
                             </Link>
                           )}
+                          LinkedIn: {getSlug('linkedin')}
                           {getSlug('linkedin') !== '' && (
                             <Link
                               href={`https://linkedin.com/in/${getSlug(
