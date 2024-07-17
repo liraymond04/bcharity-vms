@@ -1,13 +1,17 @@
 import SwitchNetwork from '@components/Shared/SwitchNetwork'
 import { Button } from '@components/UI/Button'
 import { XCircleIcon } from '@heroicons/react/solid'
+import { ProfileFragment } from '@lens-protocol/client'
+import { getWalletClient, signMessage } from '@wagmi/core'
 import clsx from 'clsx'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Connector, useAccount, useConnect, useDisconnect } from 'wagmi'
 
 import { CHAIN_ID } from '@/constants'
+import { config } from '@/lib/config'
 import getWalletLogo from '@/lib/getWalletLogo'
+import { getProfilesOwnedBy, lensClient } from '@/lib/lens-protocol'
 import Logger from '@/lib/logger'
 
 /**
@@ -17,8 +21,8 @@ import Logger from '@/lib/logger'
 const WalletSelector: FC = () => {
   const { chain } = useAccount()
 
-  const { connector: activeConnector } = useAccount()
-  const { disconnect } = useDisconnect()
+  const { isConnected, connector: activeConnector } = useAccount()
+  const { disconnectAsync } = useDisconnect()
 
   const { connectors, connectAsync, error, isPending } = useConnect()
 
@@ -32,6 +36,51 @@ const WalletSelector: FC = () => {
     } catch (error) {
       Logger.warn('[Sign Error]', error)
     }
+  }
+
+  const [loginError, setLoginError] = useState<boolean>(false)
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>('')
+  const [profiles, _setProfiles] = useState<ProfileFragment[]>()
+
+  const onLoginClick = async (connector: Connector) => {
+    if (isConnected) {
+      await disconnectAsync()
+    }
+
+    // if (connect instanceof InjectedConnector) {
+    try {
+      setLoginError(false)
+
+      // const walletClient = await connect.getWalletClient()
+      const walletClient = await getWalletClient(config)
+      const address = walletClient.account.address
+
+      const challenge = await lensClient().authentication.generateChallenge({
+        signedBy: address
+      })
+
+      // Get signature
+      const signature = await signMessage(config, {
+        message: challenge.text
+      })
+
+      await lensClient().authentication.authenticate({
+        id: challenge.id,
+        signature
+      })
+
+      if (await lensClient().authentication.isAuthenticated()) {
+        const profiles = await getProfilesOwnedBy(address)
+        _setProfiles(profiles)
+      } else {
+        setLoginErrorMessage('Add profile failed')
+        setLoginError(true)
+      }
+    } catch (e: any) {
+      setLoginErrorMessage(e.message)
+      setLoginError(true)
+    }
+    // }
   }
 
   return activeConnector?.id ? (
@@ -49,7 +98,7 @@ const WalletSelector: FC = () => {
             />
           }
           onClick={() => {
-            disconnect?.()
+            onLoginClick(activeConnector)
           }}
         >
           {t('sign-in')}
