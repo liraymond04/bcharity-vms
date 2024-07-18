@@ -12,10 +12,6 @@ import { config } from '@/lib/config'
 const queryClient = new QueryClient()
 
 const App = ({ Component, pageProps }: AppProps) => {
-  console.log(
-    'using thirdweb client id',
-    process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID
-  )
   return (
     <ThirdwebProvider clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}>
       <WagmiProvider config={config}>

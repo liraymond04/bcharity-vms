@@ -52,6 +52,8 @@ export const WRONG_NETWORK = IS_MAINNET
   : 'Please change network to Polygon Amoy testnet.'
 export const SIGN_ERROR = 'Failed to sign data'
 
+export const VHR_TOKEN = '0x7e6a70e1e1b0cc0af51424bb70d98445a1af5cca'
+
 // URLs
 export const STATIC_ASSETS =
   'https://cdn.statically.io/gh/liraymond04/bcharity-assets/main/images'
@@ -59,8 +61,7 @@ export const POLYGONSCAN_URL = IS_MAINNET
   ? 'https://polygonscan.com'
   : 'https://amoy.polygonscan.com'
 export const CORS_PROXY = 'https://corsproxy.io/?'
-export const VHR_TOP_HOLDERS_URL =
-  'https://amoy.polygonscan.com/token/tokenholderchart/0x7e6a70e1e1b0cc0af51424bb70d98445a1af5cca'
+export const VHR_TOP_HOLDERS_URL = `https://amoy.polygonscan.com/token/tokenholderchart/${VHR_TOKEN}`
 export const RARIBLE_URL = IS_MAINNET
   ? 'https://rarible.com'
   : 'https://rinkeby.rarible.com'
@@ -141,7 +142,6 @@ export const CURRENCIES = {
 }
 
 //VHR and GOOD Conversion
-export const VHR_TOKEN = '0x28EE241ab245699968F2980D3D1b1d23120ab8BE'
 export const GOOD_TOKEN = '0xd21932b453f0dC0918384442D7AaD5B033C4217B'
 export const GIVE_DAI_LP = '0x4373C35bB4E55Dea2dA2Ba695605a768f011b4B9'
 export const DAI_TOKEN = '0xf0728Bfe68B96Eb241603994de44aBC2412548bE'
