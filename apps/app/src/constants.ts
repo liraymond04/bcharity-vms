@@ -60,7 +60,7 @@ export const POLYGONSCAN_URL = IS_MAINNET
   : 'https://amoy.polygonscan.com'
 export const CORS_PROXY = 'https://corsproxy.io/?'
 export const VHR_TOP_HOLDERS_URL =
-  'https://amoy.polygonscan.com/token/tokenholderchart/0x28ee241ab245699968f2980d3d1b1d23120ab8be'
+  'https://amoy.polygonscan.com/token/tokenholderchart/0x7e6a70e1e1b0cc0af51424bb70d98445a1af5cca'
 export const RARIBLE_URL = IS_MAINNET
   ? 'https://rarible.com'
   : 'https://rinkeby.rarible.com'

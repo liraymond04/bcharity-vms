@@ -230,7 +230,6 @@ const VolunteerHomeTab: React.FC = () => {
               <div className="flex space-x-1 items-baseline">
                 <div suppressHydrationWarning>{t('profile-id')}</div>{' '}
                 <div className="font-bold text-lg">{userId}</div>
-                {currentUser?.metadata?.bio}
               </div>
               <div className="flex space-x-1 items-baseline">
                 <div suppressHydrationWarning>{t('profile-handle')}</div>{' '}

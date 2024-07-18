@@ -5,19 +5,35 @@ import {
   ExplorePublicationType,
   ProfileFragment
 } from '@lens-protocol/client'
+import JSSoup from 'jssoup'
 import { NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CORS_PROXY, VHR_TOP_HOLDERS_URL } from '@/constants'
 import { testSearch } from '@/lib'
-import { useExplorePublications } from '@/lib/lens-protocol'
+import isVerified from '@/lib/isVerified'
+import {
+  getAvatar,
+  getProfilesOwnedBy,
+  useExplorePublications
+} from '@/lib/lens-protocol'
 import { isPost, PostTags } from '@/lib/metadata'
 
 import Error from '../Dashboard/Modals/Error'
 import { GridItemFour, GridLayout } from '../GridLayout'
 import Divider from '../Shared/Divider'
 import { Spinner } from '../UI/Spinner'
-import OrganizationCard from './OrganizationCard'
+import OrganizationCardRevised from './OrganizationCardRevised'
+
+export interface Item {
+  index: number
+  address: string
+  handle: string
+  amount: number
+  percentage: string
+  avatar: string
+}
 
 /**
  * A component that displays the browse organizations page.
@@ -44,6 +60,10 @@ const Organizations: NextPage = () => {
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
   const [postings, setPostings] = useState<Record<string, number>>({})
 
+  const [organizationData, setOrganizationData] = useState<Item[]>()
+  const [organizationsIsLoading, setOrganizationsIsLoading] =
+    useState<boolean>(false)
+
   const {
     data: opportunityOrCausePublications,
     error: exploreError,
@@ -64,7 +84,84 @@ const Organizations: NextPage = () => {
     true
   )
 
+  const sortItems = async (
+    items: Item[],
+    setData: (value: SetStateAction<Item[] | undefined>) => void,
+    setIsLoading: (value: SetStateAction<boolean>) => void,
+    verified: boolean
+  ) => {
+    let arr: Item[] = []
+    for (let i = 0; i < items.length; i++) {
+      let item: Item = Object.create(items[i])
+      let profiles = await getProfilesOwnedBy(item.address)
+      profiles = profiles.filter(
+        (profile) => isVerified(profile.id) === verified
+      )
+      item.handle = profiles[0]?.handle?.localName || ''
+      if (profiles.length > 0) {
+        item.avatar = getAvatar(profiles[0])
+        arr.push(item)
+        setData(arr)
+      }
+    }
+    setIsLoading(false)
+  }
+
+  const getHolders = async () => {
+    setOrganizationsIsLoading(true)
+    try {
+      const url = CORS_PROXY + encodeURIComponent(VHR_TOP_HOLDERS_URL)
+      const response = await fetch(url)
+      const html = await response.text()
+
+      // scraping
+      const soup = new JSSoup(html)
+      const tag = soup.findAll('td')
+      const fullAddressTag = soup.findAll('span')
+      let index = 0
+      let items: Item[] = []
+      let cur = []
+      for (let i = 0; i < tag.length; i++) {
+        cur[i % 4] = tag[i].text
+        if (i % 4 === 0 && i !== 0) {
+          items[index] = {
+            index: index,
+            address: cur[1],
+            handle: '',
+            amount: Number(cur[2]?.replace(/,/g, '')),
+            percentage: cur[3],
+            avatar: ''
+          }
+          index++
+        }
+      }
+
+      // change address to non-abbreviated version
+      let i = 0
+      index-- // if there are 30 items, index should be 29
+      let index2 = 0
+      while (i < fullAddressTag.length && index2 <= index) {
+        // console.log(index2 + ": " + items[index2].address)
+        if (fullAddressTag[i].attrs['data-highlight-target'] != undefined) {
+          items[index2].address =
+            fullAddressTag[i].attrs['data-highlight-target']
+          index2++
+          // console.log(index2 - 1 + " Has been changed to: " + items[index2 - 1].address)
+        }
+        i++
+      }
+
+      sortItems(items, setOrganizationData, setOrganizationsIsLoading, true)
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e)
+      }
+      setOrganizationsIsLoading(false)
+    }
+  }
+
   useEffect(() => {
+    getHolders()
     const _profiles: Record<string, ProfileFragment> = {}
     const _postings: Record<string, number> = {}
 
@@ -115,7 +212,6 @@ const Organizations: NextPage = () => {
               <SearchIcon />
             </div>
           </div>
-
           {/* <div className="flex flex-wrap gap-y-5 justify-around w-[420px] items-center">
             <div className="h-[50px] z-10 ">
               <DashboardDropDown
@@ -128,6 +224,7 @@ const Organizations: NextPage = () => {
             <ClearFilters onClick={() => setSelectedCategory('')} />
           </div> */}
         </div>
+        Results for: {searchValue}
       </div>
       {loading ? (
         <div className="flex justify-center p-5">
@@ -135,21 +232,41 @@ const Organizations: NextPage = () => {
         </div>
       ) : (
         <GridLayout>
-          {profiles
-            .filter((profile) =>
-              testSearch(
-                profile.handle ? profile.handle.fullHandle : profile.id,
-                searchValue
-              )
+          {organizationData
+            ?.filter(
+              (
+                profile // data pulled from VHR holder list. if a different list is used
+              ) =>
+                testSearch(
+                  // then the old code/current code can be adapted for said list.
+                  profile.handle ? profile.handle : profile.address,
+                  searchValue
+                )
             ) // not sure if this is the correct decision if handle doesn't exist
             .map((profile) => (
-              <GridItemFour key={profile.id}>
-                <OrganizationCard
-                  profile={profile}
-                  postings={postings[profile.id]}
-                />
+              <GridItemFour key={profile.address}>
+                <OrganizationCardRevised data={organizationData} />
               </GridItemFour>
-            ))}
+            ))
+          /* 
+              old code for documentation
+              {profiles
+                .filter((profile) =>
+                  testSearch(
+                    profile.handle ? profile.handle.fullHandle : profile.id,
+                    searchValue
+                  )
+                ) // not sure if this is the correct decision if handle doesn't exist
+                .map((profile) => (
+                  <GridItemFour key={profile.id}>
+                    <OrganizationCard
+                      profile={profile}
+                      postings={postings[profile.id]}
+                    />
+                  </GridItemFour>
+                ))}
+              */
+          }
         </GridLayout>
       )}
       {exploreError && (

@@ -265,7 +265,7 @@ const OrganizationVHRTab: React.FC = () => {
     setSubmitError(undefined)
     try {
       if (profile) {
-        await checkAuth(profile?.ownedBy.address)
+        await checkAuth(profile?.ownedBy.address, profile?.id)
 
         const attributes: AttributeData[] = [
           {
