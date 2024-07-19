@@ -12,7 +12,6 @@ import { GOOD_API_URL } from '@/constants'
  */
 const uploadToArweave = async (data: any): Promise<string> => {
   try {
-    console.log(`${GOOD_API_URL}/metadata`)
     const upload = await axios.post(`${GOOD_API_URL}/metadata`, { ...data })
     const { id }: { id: string } = upload.data
 
