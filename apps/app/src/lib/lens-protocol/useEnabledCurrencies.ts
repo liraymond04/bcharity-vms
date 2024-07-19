@@ -27,7 +27,7 @@ const useEnabledCurrencies = (address: string | undefined) => {
   useEffect(() => {
     if (!address) return
 
-    checkAuth(address)
+    checkAuth(address, '')
       .then(() => lensClient().modules.fetchCurrencies())
       .then((data) => {
         setData(data)

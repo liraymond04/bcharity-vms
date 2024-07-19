@@ -213,7 +213,7 @@ const OrganizationCauses: React.FC = () => {
     setSubmitError(undefined)
     try {
       if (currentUser) {
-        await checkAuth(currentUser?.ownedBy.address)
+        await checkAuth(currentUser?.ownedBy.address, currentUser.id)
 
         const attributes: AttributeData[] = [
           {

@@ -33,6 +33,39 @@ const WalletSelector: FC = () => {
   const onConnect = async (connector: Connector) => {
     try {
       await connectAsync({ connector })
+      console.log('hj')
+      try {
+        setLoginError(false)
+
+        // const walletClient = await connect.getWalletClient()
+        const walletClient = await getWalletClient(config)
+        const address = walletClient.account.address
+
+        const challenge = await lensClient().authentication.generateChallenge({
+          signedBy: address
+        })
+
+        // Get signature
+        const signature = await signMessage(config, {
+          message: challenge.text
+        })
+
+        await lensClient().authentication.authenticate({
+          id: challenge.id,
+          signature
+        })
+
+        if (await lensClient().authentication.isAuthenticated()) {
+          const profiles = await getProfilesOwnedBy(address)
+          _setProfiles(profiles)
+        } else {
+          setLoginErrorMessage('Add profile failed')
+          setLoginError(true)
+        }
+      } catch (e: any) {
+        setLoginErrorMessage(e.message)
+        setLoginError(true)
+      }
     } catch (error) {
       Logger.warn('[Sign Error]', error)
     }
