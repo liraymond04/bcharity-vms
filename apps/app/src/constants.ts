@@ -17,7 +17,7 @@ export const GIT_COMMIT_REF = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF
 
 // Misc
 export const CONTACT_EMAIL = 'admin@bcharity.net'
-export const GOOD_API_URL = 'https://good-vms-api.vercel.app/'
+export const GOOD_API_URL = process.env.GOOD_API_URL
 export const PUBLIC_URL = process.env.NEXT_PUBLIC_URL
 export const RELAY_ON =
   PUBLIC_URL === 'https://bcharity.net' ||

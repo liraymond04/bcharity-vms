@@ -236,9 +236,9 @@ const Organizations: NextPage = () => {
             ?.filter(
               (
                 profile // data pulled from VHR holder list. if a different list is used
+                // then the old code/current code can be adapted for said list.
               ) =>
                 testSearch(
-                  // then the old code/current code can be adapted for said list.
                   profile.handle ? profile.handle : profile.address,
                   searchValue
                 )
