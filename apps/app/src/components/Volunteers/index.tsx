@@ -73,9 +73,21 @@ const Volunteers: NextPage = () => {
   )
 
   useEffect(() => {
+    {
+      /* 
+    const testPost = PostFragment{
+      asdf
+    }
+    let testbuild = new OpportunityMetadataBuilder(testPost)
+    let testOpp = new OpportunityMetadata(testbuild);
+    */
+    }
+    const categories = ['sport', 'food', 'labor']
+    const organizations = ['org a', 'org b', 'org c']
+
     let _posts: OpportunityMetadata[] = []
-    let _categories: Set<string> = new Set()
-    let _Orgs: Set<string> = new Set()
+    let _categories: Set<string> = new Set(categories)
+    let _Orgs: Set<string> = new Set(organizations)
     const metadata = getOpportunityMetadata(data)
     metadata.forEach((post) => {
       if (post.type === PostTags.OrgPublish.OpportunityDraft) return
@@ -162,6 +174,7 @@ const Volunteers: NextPage = () => {
           </div>
         </div>
       </div>
+      Results for: {searchValue}
       <GridLayout>
         {posts
           .filter(

@@ -387,6 +387,10 @@ const OrganizationCauses: React.FC = () => {
     currentUser?.ownedBy.address ?? ''
   )
 
+  const vhrValue = Number(balanceData?.value)
+  const decimals = Number(balanceData?.decimals)
+  const fixedvhrValue = vhrValue / 10 ** decimals
+  const displayVHRValue = isNaN(fixedvhrValue) ? 0 : fixedvhrValue
   const { data: currencyData, error: currencyError } = useEnabledCurrencies(
     currentUser?.ownedBy.address
   )
@@ -439,11 +443,11 @@ const OrganizationCauses: React.FC = () => {
             ) : (
               <>
                 <div className="flex items-center">
-                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pr-3">
-                    {Number(balanceData?.value)}
-                  </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
                     {v('raised')} {vhrGoal !== 0 && `out of ${vhrGoal}`}
+                  </div>
+                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pr-3">
+                    {displayVHRValue}
                   </div>
                 </div>
                 <Link
@@ -457,7 +461,7 @@ const OrganizationCauses: React.FC = () => {
 
                 {vhrGoal !== 0 && (
                   <Progress
-                    progress={Number(balanceData?.value)}
+                    progress={displayVHRValue}
                     total={vhrGoal}
                     className="mt-10"
                   />
