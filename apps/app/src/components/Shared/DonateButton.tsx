@@ -223,7 +223,7 @@ const DonateButton: FC<DonateButtonProps> = ({
 
       // create comment with new collect amount
       if (!currentUser) throw Error(e('user-null'))
-      await checkAuth(currentUser.ownedBy.address)
+      await checkAuth(currentUser.ownedBy.address, currentUser.id)
 
       const attributes: MetadataAttributeType[] = []
 
@@ -293,7 +293,7 @@ const DonateButton: FC<DonateButtonProps> = ({
     setDonateIsLoading(true)
     try {
       if (!currentUser) throw Error(e('user-null'))
-      await checkAuth(currentUser.ownedBy.address)
+      await checkAuth(currentUser.ownedBy.address, currentUser.id)
 
       const typedDataResult =
         await lensClient().publication.createLegacyCollectTypedData({

@@ -129,7 +129,7 @@ const VolunteerApplicationsTab = forwardRef<
     setIdPending(selectedId)
 
     try {
-      await checkAuth(profile.ownedBy.address)
+      await checkAuth(profile.ownedBy.address, profile.id)
 
       const metadata = buildMetadata(profile, [PostTags.Application.Accept], {})
 
@@ -151,7 +151,7 @@ const VolunteerApplicationsTab = forwardRef<
     setIdPending(selectedId)
 
     try {
-      await checkAuth(profile.ownedBy.address)
+      await checkAuth(profile.ownedBy.address, profile.id)
 
       const metadata = buildMetadata(profile, [PostTags.Application.REJECT], {})
 

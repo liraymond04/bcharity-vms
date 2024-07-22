@@ -209,10 +209,10 @@ const OrganizationVHRTab: React.FC = () => {
             forProfileId: profile?.id
           })
 
+          let user_metadata = userProfile?.metadata
+
           if (userProfile) {
-            setName(
-              userProfile.metadata ? userProfile.metadata.displayName ?? '' : ''
-            )
+            setName(user_metadata?.displayName ?? '')
 
             if (userProfile.metadata?.attributes) {
               const locationAttribute = userProfile.metadata?.attributes.find(
@@ -265,7 +265,7 @@ const OrganizationVHRTab: React.FC = () => {
     setSubmitError(undefined)
     try {
       if (profile) {
-        await checkAuth(profile?.ownedBy.address, profile?.id)
+        await checkAuth(profile?.ownedBy.address, profile.id)
 
         const attributes: AttributeData[] = [
           {
