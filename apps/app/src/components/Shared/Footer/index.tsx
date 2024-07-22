@@ -34,7 +34,7 @@ const Footer: FC = () => {
             </p>
             <p className="mb-4">
               <a
-                href="#/"
+                href="https://www.ecssen.ca/"
                 className="text-neutral-600 dark:text-neutral-200"
                 suppressHydrationWarning
               >
