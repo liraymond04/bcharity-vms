@@ -1,6 +1,9 @@
 import Organizations from '.'
 import OrganizationCard, { IOrganizationCardProps } from './OrganizationCard'
+import OrganizationCardRevised, {
+  IOrganizationCardRevisedProps
+} from './OrganizationCardRevised'
 
-export { OrganizationCard, Organizations }
+export { OrganizationCard, OrganizationCardRevised, Organizations }
 
-export type { IOrganizationCardProps }
+export type { IOrganizationCardProps, IOrganizationCardRevisedProps }
