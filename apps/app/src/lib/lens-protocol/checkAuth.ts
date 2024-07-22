@@ -34,8 +34,7 @@ const logout = () => {
  * ```
  */
 
-// profileId is optional for now cause a lot of legacy code doesn't use it
-const checkAuth = async (address: string, profileId?: string) => {
+const checkAuth = async (address: string, profileId: string) => {
   try {
     const authenticated = await lensClient().authentication.isAuthenticated()
     if (!authenticated) {

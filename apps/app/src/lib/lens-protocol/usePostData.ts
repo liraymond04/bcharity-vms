@@ -57,7 +57,7 @@ const usePostData = (
   }
 
   useEffect(() => {
-    refetch()
+    // refetch()
   }, [profileId, params])
 
   return {

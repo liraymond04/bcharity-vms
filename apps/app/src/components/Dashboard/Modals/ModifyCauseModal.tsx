@@ -166,7 +166,7 @@ const ModifyCauseModal: React.FC<IModifyCauseModalProps> = ({
         }
       }
 
-      await checkAuth(publisher.ownedBy.address)
+      await checkAuth(publisher.ownedBy.address, publisher.id)
 
       await createPost({
         profileId: publisher.id,

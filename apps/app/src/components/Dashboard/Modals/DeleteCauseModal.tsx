@@ -122,7 +122,7 @@ const DeleteCauseModal: React.FC<IDeleteCauseModalProps> = ({
       return
     }
 
-    checkAuth(publisher.ownedBy.address)
+    checkAuth(publisher.ownedBy.address, publisher.id)
       .then(() =>
         Promise.all(
           publicationIds.map((id) => lensClient().publication.hide({ for: id }))
