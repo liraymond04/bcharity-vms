@@ -209,10 +209,10 @@ const OrganizationVHRTab: React.FC = () => {
             forProfileId: profile?.id
           })
 
+          let user_metadata = userProfile?.metadata
+
           if (userProfile) {
-            setName(
-              userProfile.metadata ? userProfile.metadata.displayName ?? '' : ''
-            )
+            setName(user_metadata?.displayName ?? '')
 
             if (userProfile.metadata?.attributes) {
               const locationAttribute = userProfile.metadata?.attributes.find(

@@ -67,7 +67,7 @@ export const testnetVerified = [
   '0x01' /** @lensprotocol.test */,
   '0x02' /** @donosonaumczuk.test */,
   '0x4084' /** @vanboy.test */,
-  '0x03ca' /** @ecslew.test */,
+  '0x02e2' /** @ecslew.test */,
   '0x4056' /** @bcharity.test */,
   '0x4195' /** @orgtest.test */,
   '0x03be' /** @orgtest */,
@@ -80,5 +80,6 @@ export const testnetVerified = [
   '0x88cc' /** @andrewtest.test */,
   '0x88c7' /**kevin.test **/,
   '0x8d08' /** @nahfam.test (May) */,
-  '0x8983' /** @jarvin.test */
+  '0x8983' /** @jarvin.test */,
+  '0x02d4'
 ]

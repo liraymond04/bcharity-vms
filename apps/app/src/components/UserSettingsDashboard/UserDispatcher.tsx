@@ -26,13 +26,15 @@ const UserDispatcher: React.FC = () => {
   })
   const { currentUser } = useAppPersistStore()
   const [isEnabled, setIsEnabled] = useState(currentUser?.signless)
+
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const _getProfile = async () => {
       if (currentUser) {
         const profile = await getProfile({ id: currentUser.id })
-        setIsEnabled(profile?.signless !== null)
+        const signlessEnabled = profile?.signless === true
+        setIsEnabled(signlessEnabled)
         setIsLoading(false)
       }
     }
@@ -45,7 +47,6 @@ const UserDispatcher: React.FC = () => {
     if (currentUser) {
       try {
         await checkAuth(currentUser?.ownedBy.address, currentUser?.id)
-
         const typedDataResult =
           await lensClient().profile.createChangeProfileManagersTypedData({
             approveSignless: !isEnabled
@@ -69,7 +70,7 @@ const UserDispatcher: React.FC = () => {
         )
       } catch (e) {
         console.log(e)
-        toast.error(t('Error updating dispatcher'))
+        toast.error('Error updating dispatcher')
       }
     }
     setIsLoading(false)
