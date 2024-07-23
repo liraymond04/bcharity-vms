@@ -2,7 +2,7 @@ import {
   AnyPublicationFragment,
   PublicationsRequest
 } from '@lens-protocol/client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import lensClient from './lensClient'
 
@@ -32,29 +32,36 @@ const usePostData = (
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<AnyPublicationFragment[]>([])
   const [error, setError] = useState('')
+  const fetched = useRef(false)
+
   const refetch = () => {
-    setLoading(true)
-    setError('')
-    lensClient()
-      .publication.fetchAll({
-        ...params,
-        where: {
-          ...params.where,
-          from: profileId ? [profileId] : []
-        }
-      })
-      .then((data) => {
-        setData(data.items)
-      })
-      .catch((error) => {
-        setError(error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    if (!fetched.current) {
+      setLoading(true)
+      setError('')
+      lensClient()
+        .publication.fetchAll({
+          ...params,
+          where: {
+            ...params.where,
+            from: profileId ? [profileId] : []
+          }
+        })
+        .then((data) => {
+          setData(data.items)
+          fetched.current = true
+        })
+        .catch((error) => {
+          setError(error)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
   }
 
-  useEffect(refetch, [profileId, params])
+  useEffect(() => {
+    refetch()
+  }, [])
 
   return {
     loading,
