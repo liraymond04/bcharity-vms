@@ -29,9 +29,12 @@ importers:
       '@lens-protocol/metadata':
         specifier: ^1.2.0
         version: 1.2.0(zod@3.23.8)
+      '@lens-protocol/react-web':
+        specifier: ^2.3.1
+        version: 2.3.1(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)
       '@lens-protocol/wagmi':
         specifier: ^4.1.3
-        version: 4.1.3(k5ibyoqlzgy2j55wdnc4cyyiiy)
+        version: 4.1.3(buq3t4o2ntzbzqcrf2lu667amy)
       '@next/font':
         specifier: ^14.2.4
         version: 14.2.4(next@13.4.9(@babel/core@7.24.7)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
@@ -107,6 +110,9 @@ importers:
       i18next-browser-languagedetector:
         specifier: ^7.1.0
         version: 7.2.1
+      imagekit:
+        specifier: ^5.0.1
+        version: 5.0.1
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1546,8 +1552,8 @@ packages:
     resolution: {integrity: sha512-HjA8x/U/Q78HRRe19yh8HVKoZ+Iaoo3YZjakJYxR+rw52NHo6jM+VE9b8+7ygkCFXl/EHID5wh/MkXaE/jGyYw==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
-  '@lens-protocol/api-bindings@0.12.2':
-    resolution: {integrity: sha512-Iyosq9w9x4bmB/WhcnnrhnTkRXRCkZT/DIFBDhsxOOtw4YSwDWLDW0pANmKFcShyfM1nDJIyF52Xdnv/YtKcXw==}
+  '@lens-protocol/api-bindings@0.12.3':
+    resolution: {integrity: sha512-lHkdQjU/iD2U6bBsk8SB4N30EWzyxufibkJn6ZXWVzcFBKV7gcQzNEBK9R0OhWc8VSu6mwM11X59Xc10DbcliA==}
     peerDependencies:
       '@apollo/client': ^3.9.5
       '@faker-js/faker': ^7.6.0
@@ -1613,8 +1619,8 @@ packages:
       zod:
         optional: true
 
-  '@lens-protocol/react-web@2.3.0':
-    resolution: {integrity: sha512-wODJPLpeawspHk2C/eA/YDF068jH4PFHNsKEAdwFEuoBQ2PMIM4L85TQJntixSKsU+vtwWSbSXn9tMybufqWnQ==}
+  '@lens-protocol/react-web@2.3.1':
+    resolution: {integrity: sha512-9DdrMRNSr79iYx5a/DAZyPuvW+itSyruXGzmQ3hq3BpA51LeJ7aWfMZWCMsk/6NOdTqiusJSLiVCijkUO/x2uA==}
     peerDependencies:
       '@types/react': ^18.0.0
       '@xmtp/react-sdk': ^3.0.0
@@ -1625,8 +1631,8 @@ packages:
       '@xmtp/react-sdk':
         optional: true
 
-  '@lens-protocol/react@2.3.0':
-    resolution: {integrity: sha512-fTdaINQIn1R9QDZ5vFvNQeb64YCEi1S9kyYxnOtMFfslktRDy2+NhuKcA1NUhi/m9uWL4vwsKdiLYduJ4fm9tw==}
+  '@lens-protocol/react@2.3.1':
+    resolution: {integrity: sha512-cl8JchlUJT/RbHIYaBZ+8oQfbUI/TkSXVjzPoZ1a5QyDeTjrVHcAHzpDMS4R0J+Set9I1VMVFLnOovcQMfwdtg==}
     peerDependencies:
       '@types/react': ^18.0.0
       react: ^18.2.0
@@ -4865,6 +4871,9 @@ packages:
   h3@1.11.1:
     resolution: {integrity: sha512-AbaH6IDnZN6nmbnJOH72y3c5Wwh9P97soSVdGSBbcDACRdkC0FEWf25pzx4f/NuOCK6quHmW18yF2Wx+G4Zi1A==}
 
+  hamming-distance@1.0.0:
+    resolution: {integrity: sha512-hYz2IIKtyuZGfOqCs7skNiFEATf+v9IUNSOaQSr6Ll4JOxxWhOvXvc3mIdCW82Z3xW+zUoto7N/ssD4bDxAWoA==}
+
   has-bigints@1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
 
@@ -4996,6 +5005,10 @@ packages:
     resolution: {integrity: sha512-541xKlUw6jr/6gGuk92F+mYM5zaFAc5ahphvkqvNe2bQ6gVBkd6bfrmVJ2t4KDAfikAYZyIqTnktX3i6/aQDrQ==}
     engines: {node: '>=16.x'}
     hasBin: true
+
+  imagekit@5.0.1:
+    resolution: {integrity: sha512-TKi2k61KcB2q7yp+MAC1IXfrrC/434oZN5AJ7IJjGxrwOSieSTpXMK0GLbA9hwNv1oODjVAWolBX9gKjtmfHrw==}
+    engines: {node: '>=12.0.0'}
 
   immediate@3.0.6:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
@@ -9772,7 +9785,7 @@ snapshots:
       '@json-rpc-tools/types': 1.7.6
       '@pedrouid/environment': 1.0.1
 
-  '@lens-protocol/api-bindings@0.12.2(@apollo/client@3.10.5(@types/react@18.3.3)(graphql@16.8.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)':
+  '@lens-protocol/api-bindings@0.12.3(@apollo/client@3.10.5(@types/react@18.3.3)(graphql@16.8.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@apollo/client': 3.10.5(@types/react@18.3.3)(graphql@16.8.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@lens-protocol/domain': 0.12.0
@@ -9908,10 +9921,10 @@ snapshots:
     optionalDependencies:
       zod: 3.23.8
 
-  '@lens-protocol/react-web@2.3.0(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)':
+  '@lens-protocol/react-web@2.3.1(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)':
     dependencies:
       '@lens-protocol/domain': 0.12.0
-      '@lens-protocol/react': 2.3.0(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)
+      '@lens-protocol/react': 2.3.1(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)
       '@lens-protocol/shared-kernel': 0.12.0
       '@lens-protocol/storage': 0.8.1
       react: 18.2.0
@@ -9930,7 +9943,7 @@ snapshots:
       - utf-8-validate
       - wait-for-expect
 
-  '@lens-protocol/react@2.3.0(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)':
+  '@lens-protocol/react@2.3.1(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)':
     dependencies:
       '@apollo/client': 3.10.5(@types/react@18.3.3)(graphql@16.8.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@ethersproject/abstract-signer': 5.7.0
@@ -9943,7 +9956,7 @@ snapshots:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/providers': 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@ethersproject/wallet': 5.7.0
-      '@lens-protocol/api-bindings': 0.12.2(@apollo/client@3.10.5(@types/react@18.3.3)(graphql@16.8.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      '@lens-protocol/api-bindings': 0.12.3(@apollo/client@3.10.5(@types/react@18.3.3)(graphql@16.8.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@lens-protocol/blockchain-bindings': 0.10.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@lens-protocol/domain': 0.12.0
       '@lens-protocol/metadata': 1.2.0(zod@3.23.8)
@@ -9985,10 +9998,10 @@ snapshots:
       tslib: 2.6.3
       zod: 3.23.8
 
-  '@lens-protocol/wagmi@4.1.3(k5ibyoqlzgy2j55wdnc4cyyiiy)':
+  '@lens-protocol/wagmi@4.1.3(buq3t4o2ntzbzqcrf2lu667amy)':
     dependencies:
       '@ethersproject/providers': 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@lens-protocol/react-web': 2.3.0(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)
+      '@lens-protocol/react-web': 2.3.1(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)
       '@lens-protocol/shared-kernel': 0.12.0
       '@tanstack/react-query': 5.45.0(react@18.2.0)
       viem: 2.14.0(bufferutil@4.0.8)(typescript@5.1.6)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -15043,6 +15056,8 @@ snapshots:
     transitivePeerDependencies:
       - uWebSockets.js
 
+  hamming-distance@1.0.0: {}
+
   has-bigints@1.0.2: {}
 
   has-flag@3.0.0: {}
@@ -15166,6 +15181,17 @@ snapshots:
   image-size@1.1.1:
     dependencies:
       queue: 6.0.2
+
+  imagekit@5.0.1:
+    dependencies:
+      axios: 1.7.2
+      form-data: 4.0.0
+      hamming-distance: 1.0.0
+      lodash: 4.17.21
+      tslib: 2.6.3
+      uuid: 8.3.2
+    transitivePeerDependencies:
+      - debug
 
   immediate@3.0.6: {}
 
