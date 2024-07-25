@@ -193,6 +193,7 @@ const VolunteerHome: React.FC = () => {
                     <div className="h-[60vh]">
                       <div className="overflow-y-scroll w-full mt-20 h-full border border-sky-200 dark:bg-Within dark:border-black rounded-md bg-teal-50">
                         <div className="w-full">
+                          {profile?.metadata?.bio}
                           {postdata.map((post, index) => {
                             if (isPost(post))
                               return (

@@ -1,20 +1,14 @@
+import { MetadataAttributeType, profile } from '@lens-protocol/metadata'
 import { useSDK, useStorageUpload } from '@thirdweb-dev/react'
 import { signTypedData } from '@wagmi/core'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { v4 } from 'uuid'
 import { useConfig } from 'wagmi'
 
 import { GridItemTwelve, GridLayout } from '@/components/GridLayout'
 import { Input } from '@/components/UI/Input'
 import { TextArea } from '@/components/UI/TextArea'
 import { checkAuth, getSignature, lensClient } from '@/lib/lens-protocol'
-import {
-  AttributeData,
-  MetadataDisplayType,
-  MetadataVersion,
-  ProfileMetadata
-} from '@/lib/types'
 import validImageExtension from '@/lib/validImageExtension'
 import { useAppPersistStore } from '@/store/app'
 
@@ -22,7 +16,6 @@ import { Button } from '../UI/Button'
 import { Card } from '../UI/Card'
 import { ErrorMessage } from '../UI/ErrorMessage'
 import { Spinner } from '../UI/Spinner'
-import SelectAvatar from './UserHome/SelectAvatar'
 
 /**
  * Component that displays a tab page for editing the current profile's
@@ -45,8 +38,8 @@ const VolunteerHomeTab: React.FC = () => {
   const { t: e } = useTranslation('common', {
     keyPrefix: 'errors'
   })
-  const { t: scf } = useTranslation('common', {
-    keyPrefix: 'components.shared.choose-file'
+  const { t: avt } = useTranslation('common', {
+    keyPrefix: 'components.settings.home.select-avatar'
   })
 
   const { mutateAsync: upload } = useStorageUpload()
@@ -64,6 +57,7 @@ const VolunteerHomeTab: React.FC = () => {
   const [twitter, setTwitter] = useState<string>('')
   const [linkedin, setLinkedin] = useState<string>('')
   const [cover, setCover] = useState<File | null>(null)
+  const [avatar, setAvatar] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -113,6 +107,7 @@ const VolunteerHomeTab: React.FC = () => {
             }
           }
           console.log('profile', userProfile)
+          console.log(userProfile?.metadata?.picture)
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -136,6 +131,7 @@ const VolunteerHomeTab: React.FC = () => {
         if (twitter.length > 100) throw Error(he('twitter'))
         if (linkedin.length > 100) throw Error(he('linkedin'))
 
+        /*
         const attributes: AttributeData[] = [
           {
             displayType: MetadataDisplayType.string,
@@ -168,17 +164,59 @@ const VolunteerHomeTab: React.FC = () => {
             key: 'linkedin'
           }
         ]
+        */
 
-        const avatarUrl = cover ? (await upload({ data: [cover] }))[0] : null
+        const coverUrl = cover
+          ? (await upload({ data: [cover] }))[0]
+          : undefined
+        const avatarUrl = avatar
+          ? (await upload({ data: [avatar] }))[0]
+          : undefined
 
-        const metadata: ProfileMetadata = {
+        /*
+        const metadata= {
           version: MetadataVersion.ProfileMetadataVersions['1.0.0'],
           metadata_id: v4(),
           name,
           bio,
-          cover_picture: avatarUrl,
+          cover_picture: coverUrl,
           attributes
         }
+          */
+
+        const metadata = profile({
+          name,
+          bio,
+          picture: avatarUrl,
+          coverPicture: coverUrl,
+          attributes: [
+            {
+              type: MetadataAttributeType.STRING,
+              value: website,
+              key: 'website'
+            },
+            {
+              type: MetadataAttributeType.STRING,
+              value: location,
+              key: 'location'
+            },
+            {
+              type: MetadataAttributeType.STRING,
+              value: discord,
+              key: 'discord'
+            },
+            {
+              type: MetadataAttributeType.STRING,
+              value: twitter,
+              key: 'twitter'
+            },
+            {
+              type: MetadataAttributeType.STRING,
+              value: linkedin,
+              key: 'linkedin'
+            }
+          ]
+        })
 
         const metadataUrl = sdk?.storage.resolveScheme(
           (await upload({ data: [metadata] }))[0]
@@ -230,7 +268,6 @@ const VolunteerHomeTab: React.FC = () => {
               <div className="flex space-x-1 items-baseline">
                 <div suppressHydrationWarning>{t('profile-id')}</div>{' '}
                 <div className="font-bold text-lg">{userId}</div>
-                {currentUser?.metadata?.bio}
               </div>
               <div className="flex space-x-1 items-baseline">
                 <div suppressHydrationWarning>{t('profile-handle')}</div>{' '}
@@ -336,6 +373,24 @@ const VolunteerHomeTab: React.FC = () => {
                 }}
               />
             </div>
+            <div>
+              <Input
+                suppressHydrationWarning
+                label={avt('upload-avatar')}
+                type="file"
+                id="avatar"
+                onChange={(event) => {
+                  const selectedFile = event.target.files?.[0]
+                  setError(undefined)
+
+                  if (selectedFile && validImageExtension(selectedFile.name)) {
+                    setAvatar(selectedFile)
+                  } else {
+                    setError(Error(e('invalid-file-type')))
+                  }
+                }}
+              />
+            </div>
             <div className="flex justify-end">
               <Button
                 className="my-5"
@@ -351,9 +406,11 @@ const VolunteerHomeTab: React.FC = () => {
           </form>
         </Card>
       </GridItemTwelve>
+      {/*}
       <GridItemTwelve>
         <SelectAvatar />
       </GridItemTwelve>
+      */}
     </GridLayout>
   )
 }

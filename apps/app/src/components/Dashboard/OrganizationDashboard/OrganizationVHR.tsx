@@ -265,7 +265,7 @@ const OrganizationVHRTab: React.FC = () => {
     setSubmitError(undefined)
     try {
       if (profile) {
-        await checkAuth(profile?.ownedBy.address)
+        await checkAuth(profile?.ownedBy.address, profile.id)
 
         const attributes: AttributeData[] = [
           {
@@ -476,6 +476,11 @@ const OrganizationVHRTab: React.FC = () => {
     profile?.ownedBy.address ?? ''
   )
 
+  const vhrValue = Number(balanceData?.value)
+  const decimals = Number(balanceData?.decimals)
+  const fixedvhrValue = vhrValue / 10 ** decimals
+  const displayVHRValue = isNaN(fixedvhrValue) ? 0 : fixedvhrValue
+
   const getHeight = () => {
     const data = postMetadata.filter(
       organizationGridTabs[selectedTabIndex].filter
@@ -529,11 +534,11 @@ const OrganizationVHRTab: React.FC = () => {
             ) : (
               <>
                 <div className="flex items-center">
-                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
-                    {Number(balanceData?.value)}
-                  </div>
                   <div className="text-2xl font-bold text-black dark:text-white sm:text-4xl mt-8">
                     {v('raised')} {vhrGoal !== 0 && `out of ${vhrGoal}`}
+                  </div>
+                  <div className="text-3xl font-extrabold text-purple-500 dark:text-white sm:text-7xl pl-10 pr-3">
+                    {displayVHRValue}
                   </div>
                 </div>
                 <Link

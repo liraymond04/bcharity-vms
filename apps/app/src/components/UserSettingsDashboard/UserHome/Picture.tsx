@@ -57,7 +57,7 @@ const Picture: FC<PictureProps> = ({ profile }) => {
   const editPicture = async (avatar: string | undefined) => {
     setIsLoading(true)
     try {
-      await checkAuth(profile?.ownedBy?.address ?? '')
+      await checkAuth(profile?.ownedBy?.address ?? '', profile?.id ?? '')
       if (!avatar) return toast.error(t('avatar-empty'))
 
       const typedDataResult =

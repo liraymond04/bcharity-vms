@@ -139,7 +139,9 @@ const VolunteerVHRTab: React.FC = () => {
     }
   }, [profile])
   const vhrValue = Number(balanceData?.value)
-  const displayVHRValue = isNaN(vhrValue) ? 0 : vhrValue
+  const decimals = Number(balanceData?.decimals)
+  const fixedvhrValue = vhrValue / 10 ** decimals
+  const displayVHRValue = isNaN(fixedvhrValue) ? 0 : fixedvhrValue
   return (
     <GridLayout>
       <GridItemTwelve>

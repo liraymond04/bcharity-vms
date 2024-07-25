@@ -78,7 +78,7 @@ const OrganizationLogVHRTab: React.FC = () => {
     setIdPending(id)
 
     try {
-      await checkAuth(profile.ownedBy.address)
+      await checkAuth(profile.ownedBy.address, profile.id)
       await createCollect(id)
     } catch (e: any) {
       setVerifyOrRejectError(e?.message ?? e)
@@ -93,7 +93,7 @@ const OrganizationLogVHRTab: React.FC = () => {
     setIdPending(id)
 
     try {
-      await checkAuth(profile.ownedBy.address)
+      await checkAuth(profile.ownedBy.address, profile.id)
 
       const metadata = buildMetadata(profile, [PostTags.VhrRequest.Reject], {})
 

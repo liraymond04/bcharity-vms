@@ -110,7 +110,7 @@ const AddVolunteerModal: FC = () => {
     try {
       if (!currentUser) throw Error(e('profile-null'))
 
-      await checkAuth(currentUser.ownedBy.address)
+      await checkAuth(currentUser.ownedBy.address, currentUser.id)
 
       const metadata = buildMetadata<ApplicationMetadataRecord>(
         currentUser,

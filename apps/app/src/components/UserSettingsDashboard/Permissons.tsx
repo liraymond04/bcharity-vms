@@ -149,7 +149,7 @@ const Permissons: React.FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      checkAuth(currentUser.ownedBy.address)
+      checkAuth(currentUser.ownedBy.address, currentUser.id)
         .then(() => getResults(Option))
         .then((res) => {
           if (res.isSuccess())
