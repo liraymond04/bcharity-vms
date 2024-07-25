@@ -129,7 +129,6 @@ export abstract class PublicationMetadataBuilder<
    */
 
   protected getAttribute(key: string, optional?: { default: string }) {
-    console.log('ss', this.attributeMap)
     const value = this.attributeMap.get(key)
     if (value === undefined) {
       if (optional) return optional.default
