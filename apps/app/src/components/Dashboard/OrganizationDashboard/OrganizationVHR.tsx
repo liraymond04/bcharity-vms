@@ -152,7 +152,12 @@ const OrganizationVHRTab: React.FC = () => {
   const { data, error, loading, refetch } = usePostData(profile?.id, {
     where: {
       metadata: {
-        tags: { all: [PostTags.OrgPublish.Opportunity] }
+        tags: {
+          oneOf: [
+            PostTags.OrgPublish.Opportunity,
+            PostTags.OrgPublish.OpportunityDraft
+          ]
+        }
       }
     }
   })
