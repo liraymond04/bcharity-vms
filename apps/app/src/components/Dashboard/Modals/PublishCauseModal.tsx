@@ -278,8 +278,12 @@ const PublishCauseModal: React.FC<IPublishCauseModalProps> = ({
             />
             <FormDropdown
               label={t('selected-currency')}
-              options={currencyData?.map((c) => c.name) ?? []}
-              displayedOptions={currencyData?.map((c) => c.name) ?? []}
+              options={Array.from(
+                new Set(currencyData?.map((c) => c.name) ?? [])
+              )}
+              displayedOptions={Array.from(
+                new Set(currencyData?.map((c) => c.name) ?? [])
+              )}
               {...register('currency')}
             />
 
