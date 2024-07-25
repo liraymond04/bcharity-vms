@@ -2,7 +2,7 @@ import {
   AnyPublicationFragment,
   PublicationsRequest
 } from '@lens-protocol/client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import lensClient from './lensClient'
 
@@ -32,10 +32,10 @@ const usePostData = (
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<AnyPublicationFragment[]>([])
   const [error, setError] = useState('')
-  const fetched = useRef(false)
+  const [fetched, setFetched] = useState(false)
 
   const refetch = () => {
-    if (!fetched.current) {
+    if (!fetched) {
       setLoading(true)
       setError('')
       lensClient()
@@ -48,7 +48,7 @@ const usePostData = (
         })
         .then((data) => {
           setData(data.items)
-          fetched.current = true
+          setFetched(true)
         })
         .catch((error) => {
           setError(error)
@@ -57,6 +57,7 @@ const usePostData = (
           setLoading(false)
         })
     }
+    setFetched(false)
   }
 
   useEffect(() => {
