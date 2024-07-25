@@ -83,5 +83,6 @@ export const testnetVerified = [
   '0x8983' /** @jarvin.test */,
   '0x02d4',
   '0x02f0' /** @zurizheng.test */,
-  '0x0350'
+  '0x0350',
+  '0x02ee' /** @miltonh.test */
 ]
