@@ -32,7 +32,14 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
                   alt="Profile avatar"
                   className="object-cover w-10 h-10 mx-4 rounded-full"
                 />
-                <a href={`/user/${value.handle}`} target="_blank">
+                <a
+                  href={
+                    label === 'Organizations'
+                      ? `/p/organization/${value.handle}`
+                      : `/p/volunteer/${value.handle}`
+                  }
+                  target="_blank"
+                >
                   <div
                     className={`${
                       index == 0
@@ -48,6 +55,7 @@ const Column: FC<Props> = ({ label, data, isLoading }) => {
                   </div>
                 </a>
               </div>
+
               <div className="text-[#A3A3A3] text-sm ml-auto">
                 {value.amount} VHR
               </div>
