@@ -70,6 +70,7 @@ export const testnetVerified = [
   '0x02e2' /** @ecslew.test */,
   '0x4056' /** @bcharity.test */,
   '0x4195' /** @orgtest.test */,
+  '0x03be' /** @orgtest */,
   '0x3196' /** @kevinnn.test */,
   '0x4353' /** @checkmark0guy.test */,
   '0x40d2' /** @anothertest.test */,
