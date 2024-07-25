@@ -6,6 +6,8 @@ import {
 } from '@lens-protocol/client'
 import { useEffect, useState } from 'react'
 
+import { useAppPersistStore } from '@/store/app'
+
 import checkAuth from './checkAuth'
 import lensClient from './lensClient'
 
@@ -24,10 +26,13 @@ const useEnabledCurrencies = (address: string | undefined) => {
   const [cursor, setCursor] =
     useState<InputMaybe<Scalars['Cursor']['input']>>(null)
 
+  const { currentUser: profile } = useAppPersistStore()
+
   useEffect(() => {
     if (!address) return
+    if (!profile?.id) return
 
-    checkAuth(address, '')
+    checkAuth(address, profile?.id)
       .then(() => lensClient().modules.fetchCurrencies())
       .then((data) => {
         setData(data)
