@@ -64,7 +64,8 @@ export const MetadataVersion = {
 export enum MetadataDisplayType {
   number = 'number',
   string = 'string',
-  date = 'date'
+  date = 'date',
+  STRING = 'STRING'
 }
 
 /**
