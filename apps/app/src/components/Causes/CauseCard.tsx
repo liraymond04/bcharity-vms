@@ -191,7 +191,7 @@ const CauseCard: React.FC<ICauseCardProps> = ({ cause }) => {
                 suppressHydrationWarning
               >
                 {totalDonated}{' '}
-                {CURRENCIES[cause.currency as keyof typeof CURRENCIES].symbol}{' '}
+                {CURRENCIES[cause.currency as keyof typeof CURRENCIES]?.symbol}{' '}
                 {t('raised')} {cause.goal}
               </p>
             </div>

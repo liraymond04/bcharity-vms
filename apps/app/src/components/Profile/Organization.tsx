@@ -63,7 +63,7 @@ const Organization: NextPage = () => {
     loading,
     error: postDataError,
     refetch: refetchPostData
-  } = usePostData(profile?.id, {
+  } = usePostData(currentUser?.id, {
     where: {
       actedBy: currentUser?.id,
       publicationTypes: [PublicationType.Post],
@@ -225,7 +225,9 @@ const Organization: NextPage = () => {
 
   return (
     <>
-      <SEO title={`${profile?.handle ?? ''} - Organization • BCharity VMS`} />
+      <SEO
+        title={`${profile?.handle?.localName ?? ''} - Organization • BCharity VMS`}
+      />
       <div className="dark:darkprofilegradient">
         <GridLayout>
           <GridItemTwelve>

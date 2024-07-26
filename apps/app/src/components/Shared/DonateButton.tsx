@@ -95,7 +95,7 @@ const DonateButton: FC<DonateButtonProps> = ({
   const [showModal, setShowModal] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
   const selectedCurrencySymbol =
-    CURRENCIES[cause.currency as keyof typeof CURRENCIES].symbol
+    CURRENCIES[cause.currency as keyof typeof CURRENCIES]?.symbol
 
   const [currentContribution, setCurrentContribution] = useState<string>(
     cause.contribution

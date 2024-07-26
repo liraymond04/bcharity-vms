@@ -316,7 +316,7 @@ const CausePage: NextPage = () => {
                   <div className="text-xl font-bold text-black dark:text-white sm:text-xl mt-8 break-all pr-2">
                     {`${
                       CURRENCIES[cause.currency as keyof typeof CURRENCIES]
-                        .symbol
+                        ?.symbol
                     } raised out of ${cause.goal}`}
                   </div>
                 </div>
