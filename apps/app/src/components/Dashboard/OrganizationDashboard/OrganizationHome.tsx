@@ -95,7 +95,7 @@ const OrganizationHome: React.FC = () => {
                 <div className="flex flex-col items-center space-y-5 align-middle w-3/12 ml-8 mt-10 ">
                   <div className="flex flex-col items-center space-y-2">
                     <img
-                      className="rounded-full"
+                      className="w-[100px] h-[100px] rounded-full object-cover"
                       src={getAvatar(profile)}
                       alt="Rounded avatar"
                     />
