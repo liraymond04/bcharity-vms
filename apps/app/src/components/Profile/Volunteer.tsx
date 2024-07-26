@@ -113,7 +113,7 @@ const Volunteer: NextPage = () => {
                     <div className="w-2/5 grow">
                       <div className="flex flex-col justify-center space-y-8 items-center mb-12">
                         <img
-                          className="w-1/2 rounded-full"
+                          className="w-80 h-80 object-cover rounded-full border dark:border-gray-700/80"
                           src={getAvatar(profile)}
                           alt="Rounded avatar"
                         />

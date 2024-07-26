@@ -245,7 +245,7 @@ const Organizations: NextPage = () => {
             ) // not sure if this is the correct decision if handle doesn't exist
             .map((profile) => (
               <GridItemFour key={profile.address}>
-                <OrganizationCardRevised data={organizationData} />
+                <OrganizationCardRevised data={profile} />
               </GridItemFour>
             ))
           /* 

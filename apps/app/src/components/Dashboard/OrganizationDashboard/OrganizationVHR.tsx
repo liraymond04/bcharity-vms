@@ -118,7 +118,7 @@ const OrganizationVHRTab: React.FC = () => {
         const [y, m, d] = p.endDate.split('-')
         return (
           p.type === PostTags.OrgPublish.Opportunity &&
-          (!p.endDate ||
+          (p.endDate === '_EMPTY_VALUE' ||
             new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() >
               new Date().getTime())
         )
@@ -127,7 +127,15 @@ const OrganizationVHRTab: React.FC = () => {
     {
       name: t('drafts'),
       inactiveString: t('drafts-inactive'),
-      filter: (p) => p.type === PostTags.OrgPublish.OpportunityDraft
+      filter: (p) => {
+        const [y, m, d] = p.endDate.split('-')
+        return (
+          p.type === PostTags.OrgPublish.OpportunityDraft &&
+          (p.endDate === '_EMPTY_VALUE' ||
+            new Date(parseInt(y), parseInt(m) - 1, parseInt(d)).getTime() >
+              new Date().getTime())
+        )
+      }
     },
     {
       name: t('inactive'),
