@@ -402,7 +402,7 @@ const OrganizationCauses: React.FC = () => {
 
   useEffect(() => {
     if (currencyError) {
-      toast.error(currencyError)
+      toast.error(currencyError.toString())
     }
   }, [currencyError])
 

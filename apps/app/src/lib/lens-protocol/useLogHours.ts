@@ -1,7 +1,7 @@
 import { ProfileFragment } from '@lens-protocol/client'
 import {
-  MarketplaceMetadataAttribute,
-  MarketplaceMetadataAttributeDisplayType,
+  MetadataAttributeType,
+  StringAttribute,
   textOnly,
   TextOnlyMetadata
 } from '@lens-protocol/metadata'
@@ -106,21 +106,19 @@ const useLogHours = (params: UseLogHoursParams): UseLogHoursReturn => {
       comments
     }
 
-    const attributes: MarketplaceMetadataAttribute[] = Object.entries(data).map(
-      ([k, v]) => {
-        return {
-          traitType: k,
-          value: v,
-          displayType: MarketplaceMetadataAttributeDisplayType.STRING
-        }
+    const attributes: StringAttribute[] = Object.entries(data).map(([k, v]) => {
+      return {
+        key: k,
+        value: v,
+        type: MetadataAttributeType.STRING
       }
-    )
+    })
 
     const metadata: TextOnlyMetadata = textOnly({
       marketplace: {
-        name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`,
-        attributes
+        name: `${PostTags.VhrRequest.Opportunity} by ${profile.handle} for publication ${params.publicationId}`
       },
+      attributes,
       id: v4(),
       content: `#${PostTags.VhrRequest.Opportunity} #${params.organizationId}`,
       locale: getUserLocale(),

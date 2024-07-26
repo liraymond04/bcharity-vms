@@ -1,7 +1,7 @@
 import { ProfileFragment } from '@lens-protocol/client'
 import {
-  MarketplaceMetadataAttribute,
-  MarketplaceMetadataAttributeDisplayType,
+  MetadataAttributeType,
+  StringAttribute,
   textOnly,
   TextOnlyMetadata
 } from '@lens-protocol/metadata'
@@ -48,15 +48,19 @@ const buildMetadata = <T extends Record<string, string> = {}>(
   tags: string[],
   data: T
 ) => {
-  const attributeInput: MarketplaceMetadataAttribute[] = Object.entries(
-    data
-  ).map(([k, v]) => {
-    return {
-      displayType: MarketplaceMetadataAttributeDisplayType.STRING,
-      traitType: k,
-      value: v
+  const attributeInput: StringAttribute[] = Object.entries(data).map(
+    ([k, v]) => {
+      let value = '_EMPTY_VALUE'
+      if (v) {
+        value = v
+      }
+      return {
+        type: MetadataAttributeType.STRING,
+        key: k,
+        value: value
+      }
     }
-  })
+  )
 
   let _content = ''
   let _name = ''
@@ -69,10 +73,7 @@ const buildMetadata = <T extends Record<string, string> = {}>(
   _name.concat(`by ${publisher.handle}`)
 
   const metadata: TextOnlyMetadata = textOnly({
-    marketplace: {
-      name: _name,
-      attributes: attributeInput
-    },
+    attributes: attributeInput,
     id: v4(),
     content: _content,
     locale: getUserLocale(),

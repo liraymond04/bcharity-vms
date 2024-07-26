@@ -95,8 +95,8 @@ export abstract class PublicationMetadataBuilder<
     const attributeMap = new Map<string, string>()
 
     post.metadata.attributes?.forEach((fragment) => {
-      if (fragment.type !== null && fragment.value !== null) {
-        attributeMap.set(fragment.type, fragment.value)
+      if (fragment.key !== null && fragment.value !== null) {
+        attributeMap.set(fragment.key, fragment.value)
       }
     })
 
