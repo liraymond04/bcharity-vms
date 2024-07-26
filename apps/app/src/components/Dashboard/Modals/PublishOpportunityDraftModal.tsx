@@ -107,8 +107,8 @@ const PublishOpportunityDraftModal: React.FC<
           category: values.category,
           website: values.website,
           description: values.description,
-          imageUrl: values.imageUrl,
-          applicationRequired: values.applicationRequired ? 'true' : 'false'
+          applicationRequired: values.applicationRequired ? 'true' : 'false',
+          imageUrl: values.imageUrl
         }
       )
 
